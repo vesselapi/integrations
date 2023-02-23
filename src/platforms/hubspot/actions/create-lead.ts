@@ -1,5 +1,3 @@
-import { action } from '../../../sdk'
+import { action } from '../../../sdk';
 
-export const createLead = action('create-lead', async () => {
-    
-})
+export const createLead = action('create-lead', async () => {});

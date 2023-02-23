@@ -1,3 +1,3 @@
-import { platform } from '../../sdk'
+import { platform } from '../../sdk';
 
-export const hubspot = platform('hubspot', {})
+export const hubspot = platform('hubspot', {});

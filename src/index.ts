@@ -1,2 +1,2 @@
-export * from './sdk'
-export * from './platforms'
+export * from './platforms';
+export * from './sdk';
