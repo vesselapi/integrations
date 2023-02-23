@@ -1,3 +1,6 @@
-import { platform } from '../../sdk';
+import { createLead } from './actions/create-lead';
+import hubspot from './platform';
 
-export const hubspot = platform('hubspot', {});
+hubspot.actions.register([createLead]);
+
+export default hubspot;
