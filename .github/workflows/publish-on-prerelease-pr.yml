@@ -55,6 +55,6 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: yarn
       - run: yarn build
-      - run: npm publish --next
+      - run: npm publish --next --access public
         env:
           NODE_AUTH_TOKEN: '${{ secrets.NPM_TOKEN }}'
