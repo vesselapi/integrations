@@ -2,6 +2,7 @@ export type Fetch = typeof fetch
 
 export type Auth = {
   getAccessToken: () => Promise<string>;
+  getConnectionSecrets: () => Promise<{}>
 };
 
 export type AuthConfig = {};
