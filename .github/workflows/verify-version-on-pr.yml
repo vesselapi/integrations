@@ -25,7 +25,7 @@ jobs:
           PR_VERSION: ${{steps.pr-version.outputs.version}}
           BASE_VERSION: ${{steps.base-version.outputs.version}}
         with:
-          script: require('./.github/workflows/versioning.js').assert.isUnchanged()
+          script: require('./.github/workflows/versioning.js').assert.isUnchanged({github, context, core})
   verify-version-for-release:
     if: contains(github.event.pull_request.labels.*.name, 'release')
     runs-on: ubuntu-latest
@@ -48,7 +48,7 @@ jobs:
           PR_VERSION: ${{steps.pr-version.outputs.version}}
           BASE_VERSION: ${{steps.base-version.outputs.version}}
         with:
-          script: require('./.github/workflows/versioning.js').assert.isValidRelease()
+          script: require('./.github/workflows/versioning.js').assert.isValidRelease({github, context, core})
   verify-version-for-prerelease:
     if: contains(github.event.pull_request.labels.*.name, 'prerelease')
     runs-on: ubuntu-latest
@@ -71,7 +71,7 @@ jobs:
           PR_VERSION: ${{steps.pr-version.outputs.version}}
           BASE_VERSION: ${{steps.base-version.outputs.version}}
         with:
-          script: require('./.github/workflows/versioning.js').assert.isValidPrerelease()
+          script: require('./.github/workflows/versioning.js').assert.isValidPrerelease({github, context, core})
   fail-on-prerelease:
     if: contains(github.event.pull_request.labels.*.name, 'prerelease')
     runs-on: ubuntu-latest
@@ -79,4 +79,4 @@ jobs:
       - uses: actions/github-script@v6
         with:
           script: |
-            core.setFailed(`[${process.env.PWD}] PR with a prerelease label cannot be merged. Remove the label or change it to a release label and adjust the version as needed to fix.`)
+            core.setFailed(`PR with a prerelease label cannot be merged. Remove the label or change it to a release label and adjust the version as needed to fix.`)

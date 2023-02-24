@@ -1,9 +1,10 @@
 const semver = require("semver")
+
 const { PR_VERSION: pr, BASE_VERSION: base } = process.env
 
 exports.assert = {}
 
-exports.assert.isValidPrerelease = () => {
+exports.assert.isValidPrerelease = ({ github, context, core }) => {
   const pr_clean = pr.replace(/\-.+$/, '')
   const pr_is_greater = semver.gt(pr_clean, base)
 
@@ -20,7 +21,7 @@ exports.assert.isValidPrerelease = () => {
   }
 }
 
-exports.assert.isValidRelease = () => {
+exports.assert.isValidRelease = ({ github, context, core }) => {
   const pr_is_greater = semver.gt(pr, base)
   if (pr_is_greater) {
     core.debug(`Success, the pr version (${pr}) is higher than the base version (${base}).`)
@@ -35,7 +36,7 @@ exports.assert.isValidRelease = () => {
   }
 }
 
-exports.assert.isUnchanged = () => {
+exports.assert.isUnchanged = ({ github, context, core }) => {
   if (pr.trim() === base.trim()) {
     core.debug(`Success, the pr version (${pr}) is the same as the base version (${base}).`)
   } else {
