@@ -12,7 +12,7 @@ jobs:
         with:
           ref: main
       - uses: martinbeentjes/npm-get-version-action@main
-        id: base-version
+        id: main-version
       - uses: actions/checkout@v3
       - uses: martinbeentjes/npm-get-version-action@main
         id: pr-version
@@ -23,7 +23,7 @@ jobs:
       - uses: actions/github-script@v6
         env:
           PR_VERSION: ${{steps.pr-version.outputs.current-version}}
-          BASE_VERSION: ${{steps.base-version.outputs.current-version}}
+          MAIN_VERSION: ${{steps.main-version.outputs.current-version}}
         with:
           script: require('./.github/workflows/versioning.js').assert.isValidPrerelease({github, context, core})
   publish-prerelease:

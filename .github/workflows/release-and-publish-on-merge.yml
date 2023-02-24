@@ -10,13 +10,12 @@ jobs:
       exists: ${{ steps.check-tag.outputs.exists }}
     steps:
       - uses: actions/checkout@v3
-      - name: Get Current Version
+      - uses: martinbeentjes/npm-get-version-action@main
         id: get-version
-        run: echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
       - uses: mukunku/tag-exists-action@v1.1.0
         id: check-tag
         with:
-          tag: v${{ steps.get-version.outputs.version }}
+          tag: v${{ steps.get-version.outputs.current-version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   release:
@@ -26,17 +25,15 @@ jobs:
     runs-on: 'ubuntu-latest'
     steps:
       - uses: actions/checkout@v3
-      - name: Get Current Version
+      - uses: martinbeentjes/npm-get-version-action@main
         id: get-version
-        run: echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
-      - name: Create Release
-        uses: actions/create-release@v1
+      - uses: actions/create-release@v1
         id: create-release
         with:
           draft: false
           prerelease: false
-          release_name: v${{ steps.get-version.outputs.version}}
-          tag_name: v${{ steps.get-version.outputs.version}}
+          release_name: v${{ steps.get-version.outputs.current-version}}
+          tag_name: v${{ steps.get-version.outputs.current-version}}
         env:
           GITHUB_TOKEN: ${{ github.token }}
   publish:

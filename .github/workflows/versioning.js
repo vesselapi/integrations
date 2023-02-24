@@ -1,17 +1,17 @@
 const semver = require("semver")
 
-const { PR_VERSION: pr, BASE_VERSION: base } = process.env
+const { PR_VERSION: pr, MAIN_VERSION: main } = process.env
 
 exports.assert = {}
 
 exports.assert.isValidPrerelease = ({ github, context, core }) => {
   const pr_clean = pr.replace(/\-.+$/, '')
-  const pr_is_greater = semver.gt(pr_clean, base)
+  const pr_is_greater = semver.gt(pr_clean, main)
 
   if (pr_is_greater) {
-    core.debug(`The pr version (${pr} -> ${pr_clean}) is higher than the base version (${base}).`)
+    core.debug(`The pr version (${pr} -> ${pr_clean}) is higher than the main version (${main}).`)
   } else {
-    core.setFailed(`The pr version (${pr}) is not greater than the base version (${base}). A pull request labeled with 'prerelease' must have a valid version bump.`)
+    core.setFailed(`The pr version (${pr}) is not greater than the main version (${main}). A pull request labeled with 'prerelease' must have a valid version bump.`)
   }
   const pr_is_prerelease = semver.prerelease(pr) !== null
   if (pr_is_prerelease) {
@@ -22,11 +22,11 @@ exports.assert.isValidPrerelease = ({ github, context, core }) => {
 }
 
 exports.assert.isValidRelease = ({ github, context, core }) => {
-  const pr_is_greater = semver.gt(pr, base)
+  const pr_is_greater = semver.gt(pr, main)
   if (pr_is_greater) {
-    core.debug(`Success, the pr version (${pr}) is higher than the base version (${base}).`)
+    core.debug(`Success, the pr version (${pr}) is higher than the main version (${main}).`)
   } else {
-    core.setFailed(`The pr version (${pr}) is not greater than the base version (${base}). A pull request labeled with 'release' must have a valid version bump.`)
+    core.setFailed(`The pr version (${pr}) is not greater than the main version (${main}). A pull request labeled with 'release' must have a valid version bump.`)
   }
   const pr_is_prerelease = semver.prerelease(pr) !== null
   if (!pr_is_prerelease) {
@@ -37,9 +37,9 @@ exports.assert.isValidRelease = ({ github, context, core }) => {
 }
 
 exports.assert.isUnchanged = ({ github, context, core }) => {
-  if (pr.trim() === base.trim()) {
-    core.debug(`Success, the pr version (${pr}) is the same as the base version (${base}).`)
+  if (pr.trim() === main.trim()) {
+    core.debug(`Success, the pr version (${pr}) is the same as the main version (${main}).`)
   } else {
-    core.setFailed(`The pr version (${pr}) is not the same as the base version (${base}). A pull request without a 'release' or 'prerelease' label cannot include a version bump.`)
+    core.setFailed(`The pr version (${pr}) is not the same as the main version (${main}). A pull request without a 'release' or 'prerelease' label cannot include a version bump.`)
   }
 }
