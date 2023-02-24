@@ -4,10 +4,11 @@ import { Action, AuthConfig, Platform, PlatformClient } from './types';
 export type PlatformOptions = {
   auth: AuthConfig;
   client: PlatformClient;
+  actions: Action<any>[];
 };
 
 export const platform = (name: string, options: PlatformOptions): Platform => {
-  let actions: Action<any>[] = [];
+  let actions: Action<any>[] = options.actions;
   return {
     name,
     auth: options.auth,

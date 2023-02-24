@@ -1,6 +1,13 @@
-import { createLead } from './actions/create-lead';
-import hubspot from './platform';
+import { platform } from '../../sdk';
+import createLead from './actions/create-lead';
+import findLead from './actions/find-lead';
+import client from './client';
 
-hubspot.actions.register([createLead]);
-
-export default hubspot;
+export default platform('hubspot', {
+  auth: {
+    type: 'oauth',
+    apply: () => {},
+  },
+  client,
+  actions: [createLead, findLead],
+});

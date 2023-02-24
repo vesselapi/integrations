@@ -7,4 +7,4 @@ const client: PlatformClient = {
   },
 };
 
-export default client
+export default client;

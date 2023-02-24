@@ -1,13 +1,12 @@
 import zod from 'zod';
 import { action } from '../../../sdk';
-import hubspot from '../platform';
 
 type Input = {
   id: string;
 };
 
 // QUESTION: Add/group-by resource?
-export const findLead = action<Input>(
+export default action<Input>(
   'find-lead',
   {
     resource: 'lead',
@@ -16,13 +15,13 @@ export const findLead = action<Input>(
       id: zod.string(),
     }),
   },
-  async (input, auth) => {
-    const token = await auth.getAccessToken()
+  async ({ auth, fetch }) => {
+    const token = await auth.getAccessToken();
     await fetch('https://hubspot.com/lead', {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    const created = await hubspot.fetch('');
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const created = await fetch('');
   },
 );

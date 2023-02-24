@@ -1,10 +1,14 @@
 import { action } from '../../../sdk';
-import hubspot from '../platform'
 
 // QUESTION: Add/group-by resource?
-export const createLead = action('create-lead', {
-  resource: 'lead',
-  mutation: true
-}, async () => {
-  const created = await hubspot.fetch('https://hubspot.com/leads')
-});
+export default action(
+  'create-lead',
+  {
+    resource: 'lead',
+    mutation: true,
+  },
+  async ({ input, auth, fetch }) => {
+    const apiToken = auth.getAccessToken();
+    const created = await fetch('https://hubspot.com/leads');
+  },
+);
