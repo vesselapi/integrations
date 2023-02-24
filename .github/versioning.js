@@ -2,9 +2,7 @@ const semver = require("semver")
 
 const { PR_VERSION: pr, MAIN_VERSION: main } = process.env
 
-exports.assert = {}
-
-exports.assert.isValidPrerelease = ({ github, context, core }) => {
+const assertIsValidPrerelease = ({ github, context, core }) => {
   const pr_clean = pr.replace(/\-.+$/, '')
   const pr_is_greater = semver.gt(pr_clean, main)
 
@@ -21,7 +19,7 @@ exports.assert.isValidPrerelease = ({ github, context, core }) => {
   }
 }
 
-exports.assert.isValidRelease = ({ github, context, core }) => {
+const assertIsValidRelease = ({ github, context, core }) => {
   const pr_is_greater = semver.gt(pr, main)
   if (pr_is_greater) {
     core.debug(`Success, the pr version (${pr}) is higher than the main version (${main}).`)
@@ -36,10 +34,21 @@ exports.assert.isValidRelease = ({ github, context, core }) => {
   }
 }
 
-exports.assert.isUnchanged = ({ github, context, core }) => {
+const assertIsUnchanged = ({ github, context, core }) => {
   if (pr.trim() === main.trim()) {
     core.debug(`Success, the pr version (${pr}) is the same as the main version (${main}).`)
   } else {
     core.setFailed(`The pr version (${pr}) is not the same as the main version (${main}). A pull request without a 'release' or 'prerelease' label cannot include a version bump.`)
+  }
+}
+
+exports.verify = ({ github, context, core }) => {
+  const labels = (github.context.payload?.pull_request?.labels ?? []).map(l => l.name.toLowerCase())
+  if (labels.includes('prerelease')) {
+    assertIsValidPrerelease({ github, context, core })
+  } else if (labels.includes('release')) {
+    assertIsValidRelease({ github, context, core })
+  } else {
+    assertIsUnchanged({ github, context, core })
   }
 }

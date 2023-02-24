@@ -4,7 +4,7 @@ on:
     branches: [main]
     types: [labeled, unlabeled, opened, synchronize]
 jobs:
-  verify-prerelease-version:
+  publish-prerelease:
     if: contains(github.event.pull_request.labels.*.name, 'prerelease')
     runs-on: ubuntu-latest
     steps:
@@ -19,22 +19,14 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
+          registry-url: 'https://registry.npmjs.org'
       - run: yarn add semver
       - uses: actions/github-script@v6
         env:
           PR_VERSION: ${{steps.pr-version.outputs.current-version}}
           MAIN_VERSION: ${{steps.main-version.outputs.current-version}}
         with:
-          script: require('./.github/workflows/versioning.js').assert.isValidPrerelease({github, context, core})
-  publish-prerelease:
-    runs-on: ubuntu-latest
-    needs: verify-prerelease-version
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          registry-url: 'https://registry.npmjs.org'
+          script: require('./.github/workflows/versioning.js').verify({github, context, core})
       - run: yarn
       - run: yarn build
       - run: npm publish --next --access public

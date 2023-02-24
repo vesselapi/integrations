@@ -4,7 +4,7 @@ on:
     branches: [main]
     types: [labeled, unlabeled, opened, synchronize]
 jobs:
-  verify-version-is-unchanged:
+  verify-version:
     if: "!contains(github.event.pull_request.labels.*.name, 'release') && !contains(github.event.pull_request.labels.*.name, 'prerelease')"
     runs-on: ubuntu-latest
     steps:
@@ -25,54 +25,9 @@ jobs:
           PR_VERSION: ${{steps.pr-version.outputs.current-version}}
           MAIN_VERSION: ${{steps.main-version.outputs.current-version}}
         with:
-          script: require('./.github/workflows/versioning.js').assert.isUnchanged({github, context, core})
-  verify-version-for-release:
-    if: contains(github.event.pull_request.labels.*.name, 'release')
-    runs-on: ubuntu-latest
-    name: Verify version for Release
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: main
-      - uses: martinbeentjes/npm-get-version-action@main
-        id: main-version
-      - uses: actions/checkout@v3
-      - uses: martinbeentjes/npm-get-version-action@main
-        id: pr-version
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - run: yarn add semver
-      - uses: actions/github-script@v6
-        env:
-          PR_VERSION: ${{steps.pr-version.outputs.current-version}}
-          MAIN_VERSION: ${{steps.main-version.outputs.current-version}}
-        with:
-          script: require('./.github/workflows/versioning.js').assert.isValidRelease({github, context, core})
-  verify-version-for-prerelease:
-    if: contains(github.event.pull_request.labels.*.name, 'prerelease')
-    runs-on: ubuntu-latest
-    name: Verify version for Prerelease
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: main
-      - uses: martinbeentjes/npm-get-version-action@main
-        id: main-version
-      - uses: actions/checkout@v3
-      - uses: martinbeentjes/npm-get-version-action@main
-        id: pr-version
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - run: yarn add semver
-      - uses: actions/github-script@v6
-        env:
-          PR_VERSION: ${{steps.pr-version.outputs.current-version}}
-          MAIN_VERSION: ${{steps.main-version.outputs.current-version}}
-        with:
-          script: require('./.github/workflows/versioning.js').assert.isValidPrerelease({github, context, core})
-  fail-on-prerelease:
+          script: |
+            require('./.github/versioning.js').verify({github, context, core})
+  block-prerelease:
     if: contains(github.event.pull_request.labels.*.name, 'prerelease')
     runs-on: ubuntu-latest
     steps:
