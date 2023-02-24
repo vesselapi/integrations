@@ -2,6 +2,8 @@
 
 Thank you for investing your time in contributing to our integrations package!
 
+TODO: Talk more about how to contribute...
+
 ## CI/CD
 
 In short, developers are responsible for changing the version of the package (via the _package.json_) in their PRs but github actions will verify the version change, build, release, and publish.

@@ -15,7 +15,7 @@ export default action<Input>(
       id: zod.string(),
     }),
   },
-  async ({ auth, fetch }) => {
+  async ({ input, auth, fetch }) => {
     const token = await auth.getAccessToken();
     await fetch('https://hubspot.com/lead', {
       headers: {
