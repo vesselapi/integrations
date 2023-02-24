@@ -25,7 +25,7 @@ jobs:
           PR_VERSION: ${{steps.pr-version.outputs.version}}
           BASE_VERSION: ${{steps.base-version.outputs.version}}
         with:
-          script: require('./.github/workflows/versioning.js').assert.isUnchanged({github, context, core})
+          script: require('./versioning.js').assert.isUnchanged({github, context, core})
   verify-version-for-release:
     if: contains(github.event.pull_request.labels.*.name, 'release')
     runs-on: ubuntu-latest
@@ -48,7 +48,7 @@ jobs:
           PR_VERSION: ${{steps.pr-version.outputs.version}}
           BASE_VERSION: ${{steps.base-version.outputs.version}}
         with:
-          script: require('./.github/workflows/versioning.js').assert.isValidRelease({github, context, core})
+          script: require('./versioning.js').assert.isValidRelease({github, context, core})
   verify-version-for-prerelease:
     if: contains(github.event.pull_request.labels.*.name, 'prerelease')
     runs-on: ubuntu-latest
@@ -71,7 +71,7 @@ jobs:
           PR_VERSION: ${{steps.pr-version.outputs.version}}
           BASE_VERSION: ${{steps.base-version.outputs.version}}
         with:
-          script: require('./.github/workflows/versioning.js').assert.isValidPrerelease({github, context, core})
+          script: require('./versioning.js').assert.isValidPrerelease({github, context, core})
   fail-on-prerelease:
     if: contains(github.event.pull_request.labels.*.name, 'prerelease')
     runs-on: ubuntu-latest
