@@ -26,7 +26,7 @@ jobs:
           MAIN_VERSION: ${{steps.main-version.outputs.current-version}}
         with:
           script: |
-            require('./.github/versioning.js').verify({github, context, core})
+            require('./.github/versioning.js').verify({ github, context, core })
   block-prerelease:
     if: contains(github.event.pull_request.labels.*.name, 'prerelease')
     runs-on: ubuntu-latest
