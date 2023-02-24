@@ -45,10 +45,10 @@ const assertIsUnchanged = ({ github, context, core }) => {
 exports.verify = ({ github, context, core }) => {
   const labels = (context.payload?.pull_request?.labels ?? []).map(l => l.name.toLowerCase())
   if (labels.includes('prerelease')) {
-    assertIsValidPrerelease({ github, context, core })
-  } else if (labels.includes('release')) {
-    assertIsValidRelease({ github, context, core })
-  } else {
-    assertIsUnchanged({ github, context, core })
+    return assertIsValidPrerelease({ github, context, core })
   }
+  if (labels.includes('release')) {
+    return assertIsValidRelease({ github, context, core })
+  }
+  assertIsUnchanged({ github, context, core })
 }
