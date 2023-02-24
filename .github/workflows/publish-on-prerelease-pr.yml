@@ -26,7 +26,7 @@ jobs:
           PR_VERSION: ${{steps.pr-version.outputs.current-version}}
           MAIN_VERSION: ${{steps.main-version.outputs.current-version}}
         with:
-          script: require('./.github/workflows/versioning.js').verify({ github, context, core })
+          script: require('./.github/versioning.js').verify({ github, context, core })
       - run: yarn
       - run: yarn build
       - run: npm publish --next --access public
