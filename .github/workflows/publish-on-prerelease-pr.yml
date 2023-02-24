@@ -9,41 +9,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Get Pull Request Version
+      - uses: martinbeentjes/npm-get-version-action@main
         id: pr-version
-        run: echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
       - uses: actions/checkout@v3
         with:
           ref: main
-      - name: Get Base Version
+      - uses: martinbeentjes/npm-get-version-action@main
         id: base-version
-        run: echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
       - uses: actions/setup-node@v3
         with:
           node-version: 18
       - run: yarn add semver
       - uses: actions/github-script@v6
         env:
-          PR_VERSION: ${{steps.pr-version.outputs.version}}
-          BASE_VERSION: ${{steps.base-version.outputs.version}}
+          PR_VERSION: ${{steps.pr-version.outputs.current-version}}
+          BASE_VERSION: ${{steps.base-version.outputs.current-version}}
         with:
-          script: |
-            const semver = require("semver")
-            const { PR_VERSION: pr, BASE_VERSION: base } = process.env
-            const pr_clean = pr.replace(/\-.+$/, '')
-            const pr_is_greater = semver.gt(pr_clean, base)
-
-            if (pr_is_greater) {
-              core.debug(`The pr version (${pr} -> ${pr_clean}) is higher than the base version (${base}).`)
-            } else {
-              core.setFailed(`The pr version (${pr}) is not greater than the base version (${base}). A pull request labeled with 'prerelease' must have a valid version bump.`)
-            }
-            const pr_is_prerelease = semver.prerelease(pr) !== null
-            if (pr_is_prerelease) {
-              core.debug(`The pr version (${pr}) is a prerelease.`)
-            } else {
-              core.setFailed(`The pr version (${pr}) is not a prerelease. A pull request labeled with 'prerelease' must have a valid prerelease version (1.2.3-rc.1).`)
-            }
+          script: require('./versioning').assert.isValidPrerelease()
   publish-prerelease:
     runs-on: ubuntu-latest
     needs: verify-prerelease-version
