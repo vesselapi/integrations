@@ -9,13 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: martinbeentjes/npm-get-version-action@main
-        id: pr-version
-      - uses: actions/checkout@v3
         with:
           ref: main
       - uses: martinbeentjes/npm-get-version-action@main
         id: base-version
+      - uses: actions/checkout@v3
+      - uses: martinbeentjes/npm-get-version-action@main
+        id: pr-version
       - uses: actions/setup-node@v3
         with:
           node-version: 18
@@ -32,13 +32,13 @@ jobs:
     name: Verify version for Release
     steps:
       - uses: actions/checkout@v3
-      - uses: martinbeentjes/npm-get-version-action@main
-        id: pr-version
-      - uses: actions/checkout@v3
         with:
           ref: main
       - uses: martinbeentjes/npm-get-version-action@main
         id: base-version
+      - uses: actions/checkout@v3
+      - uses: martinbeentjes/npm-get-version-action@main
+        id: pr-version
       - uses: actions/setup-node@v3
         with:
           node-version: 18
@@ -55,13 +55,13 @@ jobs:
     name: Verify version for Prerelease
     steps:
       - uses: actions/checkout@v3
-      - uses: martinbeentjes/npm-get-version-action@main
-        id: pr-version
-      - uses: actions/checkout@v3
         with:
           ref: main
       - uses: martinbeentjes/npm-get-version-action@main
         id: base-version
+      - uses: actions/checkout@v3
+      - uses: martinbeentjes/npm-get-version-action@main
+        id: pr-version
       - uses: actions/setup-node@v3
         with:
           node-version: 18
