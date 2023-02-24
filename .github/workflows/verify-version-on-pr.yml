@@ -25,7 +25,7 @@ jobs:
           PR_VERSION: ${{steps.pr-version.outputs.version}}
           BASE_VERSION: ${{steps.base-version.outputs.version}}
         with:
-          script: require('./versioning').assert.isUnchanged()
+          script: require('./.github/workflows/versioning').assert.isUnchanged()
   verify-version-for-release:
     if: contains(github.event.pull_request.labels.*.name, 'release')
     runs-on: ubuntu-latest
@@ -48,7 +48,7 @@ jobs:
           PR_VERSION: ${{steps.pr-version.outputs.version}}
           BASE_VERSION: ${{steps.base-version.outputs.version}}
         with:
-          script: require('./versioning').assert.isValidRelease()
+          script: require('./.github/workflows/versioning').assert.isValidRelease()
   verify-version-for-prerelease:
     if: contains(github.event.pull_request.labels.*.name, 'prerelease')
     runs-on: ubuntu-latest
@@ -71,7 +71,7 @@ jobs:
           PR_VERSION: ${{steps.pr-version.outputs.version}}
           BASE_VERSION: ${{steps.base-version.outputs.version}}
         with:
-          script: require('./versioning').assert.isValidPrerelease()
+          script: require('./.github/workflows/versioning').assert.isValidPrerelease()
   fail-on-prerelease:
     if: contains(github.event.pull_request.labels.*.name, 'prerelease')
     runs-on: ubuntu-latest

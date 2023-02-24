@@ -25,7 +25,7 @@ jobs:
           PR_VERSION: ${{steps.pr-version.outputs.current-version}}
           BASE_VERSION: ${{steps.base-version.outputs.current-version}}
         with:
-          script: require('./versioning').assert.isValidPrerelease()
+          script: require('./.github/workflows/versioning').assert.isValidPrerelease()
   publish-prerelease:
     runs-on: ubuntu-latest
     needs: verify-prerelease-version
