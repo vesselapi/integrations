@@ -1,0 +1,34 @@
+name: Publish Prerelease
+on:
+  pull_request:
+    branches: [main]
+    types: [labeled, unlabeled, opened, synchronize]
+jobs:
+  publish-prerelease:
+    if: contains(github.event.pull_request.labels.*.name, 'prerelease')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+      - uses: martinbeentjes/npm-get-version-action@main
+        id: main-version
+      - uses: actions/checkout@v3
+      - uses: martinbeentjes/npm-get-version-action@main
+        id: pr-version
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: 'https://registry.npmjs.org'
+      - run: yarn add semver
+      - uses: actions/github-script@v6
+        env:
+          PR_VERSION: ${{steps.pr-version.outputs.current-version}}
+          MAIN_VERSION: ${{steps.main-version.outputs.current-version}}
+        with:
+          script: require('./.github/versioning.js').verify({ github, context, core })
+      - run: yarn
+      - run: yarn build
+      - run: npm publish --next --access public
+        env:
+          NODE_AUTH_TOKEN: '${{ secrets.NPM_TOKEN }}'

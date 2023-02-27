@@ -1,0 +1,53 @@
+name: 'Release'
+on:
+  push:
+    branches: [main]
+jobs:
+  check:
+    name: 'Check if release is needed'
+    runs-on: 'ubuntu-latest'
+    outputs:
+      exists: ${{ steps.check-tag.outputs.exists }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: martinbeentjes/npm-get-version-action@main
+        id: get-version
+      - uses: mukunku/tag-exists-action@v1.1.0
+        id: check-tag
+        with:
+          tag: v${{ steps.get-version.outputs.current-version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  release:
+    name: 'Release'
+    needs: check
+    if: needs.check.outputs.exists == 'false'
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@v3
+      - uses: martinbeentjes/npm-get-version-action@main
+        id: get-version
+      - uses: actions/create-release@v1
+        id: create-release
+        with:
+          draft: false
+          prerelease: false
+          release_name: v${{ steps.get-version.outputs.current-version}}
+          tag_name: v${{ steps.get-version.outputs.current-version}}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+  publish:
+    runs-on: ubuntu-latest
+    needs: check
+    if: needs.check.outputs.exists == 'false'
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: 'https://registry.npmjs.org'
+      - run: yarn
+      - run: yarn build
+      - run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: '${{ secrets.NPM_TOKEN }}'
