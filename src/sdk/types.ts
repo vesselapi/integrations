@@ -22,7 +22,7 @@ export type StandardAuthConfig = {
  * https://github.com/lelylan/simple-oauth2/blob/fbb295b1ae0ea998bcdf4ad22a6ef2fcf6930d12/API.md#new-authorizationcodeoptions
  */
 export type OAuth2AuthConfig = {
-  type: 'oauth2'
+  type: 'oauth2';
   authUrl: string;
   tokenUrl: string;
   /**
