@@ -1,18 +1,28 @@
 import { isArray, merge } from 'radash';
 import { Action, AuthConfig, Platform, PlatformClient } from './types';
 
+export type PlatformDisplayOptions = {
+  name: string;
+  icon: string;
+};
+
 export type PlatformOptions = {
   auth: AuthConfig;
   client: PlatformClient;
   actions: Action<any>[];
+  display: PlatformDisplayOptions;
 };
 
-export const platform = (name: string, options: PlatformOptions): Platform => {
+export const platform = (id: string, options: PlatformOptions): Platform => {
   let actions: Action<any>[] = options.actions;
   return {
-    name,
+    id,
     auth: options.auth,
     client: options.client,
+    display: {
+      name: options.display.name,
+      iconURI: options.display.icon,
+    },
     actions: {
       register: (listOrItem) => {
         actions = merge(

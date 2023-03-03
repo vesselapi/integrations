@@ -28,8 +28,13 @@ export interface PlatformClient {
   request: (options: HTTPOptions, auth: Auth) => Promise<any>;
 }
 
+export type PlatformDisplayConfig = {
+  name: string
+  iconURI: string
+}
+
 export type Platform = {
-  name: string;
+  id: string;
   auth: AuthConfig;
   client: PlatformClient;
   actions: {
@@ -37,6 +42,7 @@ export type Platform = {
     find: (info: { name: string }) => Action<any> | null;
   };
   fetch: Fetch;
+  display: PlatformDisplayConfig
 };
 
 export type ActionFunction<TInput extends {}> = (props: {
