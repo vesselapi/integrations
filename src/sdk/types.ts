@@ -5,7 +5,39 @@ export type Auth = {
   getConnectionSecrets: () => Promise<{}>;
 };
 
-export type AuthConfig = {};
+export type AuthQuestionType = 'string' | 'select';
+export type AuthQuestion = {
+  type: AuthQuestionType;
+  id: string;
+  label: string;
+};
+
+export type StandardAuthConfig = {
+  type: 'standard';
+  questions?: AuthQuestion[]; // Used by the FE to render form fields. E.g. Asking for Api token
+};
+
+/**
+ * OAUTH2: Many of the options defined here follow the simple auth package
+ * https://github.com/lelylan/simple-oauth2/blob/fbb295b1ae0ea998bcdf4ad22a6ef2fcf6930d12/API.md#new-authorizationcodeoptions
+ */
+export type OAuth2AuthConfig = {
+  type: 'oauth2'
+  authUrl: string;
+  tokenUrl: string;
+  /**
+   * Depending on the end platform wrote their OAuth, the clientId and
+   * clientSecret could be requested in the Auth header using Basic Auth
+   * or provided in the body params.
+   */
+  tokenAuth?: 'header' | 'body'; //  defaults to 'body';
+  /**
+   * Defaults to ' '. The scope separator may differ between platforms.
+   * Used by the FE to render form fields before OAuth login
+   */
+  scopeSeparator?: ',' | ' ';
+  questions?: AuthQuestion[]; //
+};
 
 export type Json =
   | string
@@ -29,20 +61,20 @@ export interface PlatformClient {
 }
 
 export type PlatformDisplayConfig = {
-  name: string
-  iconURI: string
-}
+  name: string;
+  iconURI: string;
+};
 
 export type Platform = {
   id: string;
-  auth: AuthConfig;
+  auth: StandardAuthConfig | OAuth2AuthConfig;
   client: PlatformClient;
   actions: {
     register: (actions: Action<any> | Action<any>[]) => void;
     find: (info: { name: string }) => Action<any> | null;
   };
   fetch: Fetch;
-  display: PlatformDisplayConfig
+  display: PlatformDisplayConfig;
 };
 
 export type ActionFunction<TInput extends {}> = (props: {

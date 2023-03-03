@@ -1,16 +1,18 @@
 import { isArray, merge } from 'radash';
-import { Action, AuthConfig, Platform, PlatformClient } from './types';
-
-export type PlatformDisplayOptions = {
-  name: string;
-  icon: string;
-};
+import {
+  Action,
+  OAuth2AuthConfig,
+  Platform,
+  PlatformClient,
+  PlatformDisplayConfig,
+  StandardAuthConfig,
+} from './types';
 
 export type PlatformOptions = {
-  auth: AuthConfig;
+  auth: StandardAuthConfig | OAuth2AuthConfig;
   client: PlatformClient;
   actions: Action<any>[];
-  display: PlatformDisplayOptions;
+  display: PlatformDisplayConfig;
 };
 
 export const platform = (id: string, options: PlatformOptions): Platform => {
@@ -19,10 +21,7 @@ export const platform = (id: string, options: PlatformOptions): Platform => {
     id,
     auth: options.auth,
     client: options.client,
-    display: {
-      name: options.display.name,
-      iconURI: options.display.icon,
-    },
+    display: options.display,
     actions: {
       register: (listOrItem) => {
         actions = merge(
