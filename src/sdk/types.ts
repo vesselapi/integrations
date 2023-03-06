@@ -23,8 +23,8 @@ export type StandardAuthConfig = {
  */
 export type OAuth2AuthConfig = {
   type: 'oauth2';
-  authUrl: string;
-  tokenUrl: string;
+  authUrl: `https://${string}`;
+  tokenUrl: `https://${string}`;
   /**
    * Depending on the end platform wrote their OAuth, the clientId and
    * clientSecret could be requested in the Auth header using Basic Auth
@@ -37,6 +37,14 @@ export type OAuth2AuthConfig = {
    */
   scopeSeparator?: ',' | ' ';
   questions?: AuthQuestion[]; //
+  defaultScopes: string[];
+  url: (arg: {
+    answers: Record<string, string>;
+    scopes: string[];
+    clientId: string;
+    redirectUrl: string;
+    state: Record<string, string>;
+  }) => `https://${string}`;
 };
 
 export type Json =
