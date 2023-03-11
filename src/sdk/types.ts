@@ -1,5 +1,9 @@
 export type Fetch = typeof fetch;
 
+export type RequestFunction = (options: HTTPOptions) => Promise<any>;
+
+export type HttpsUrl = `https://${string}`;
+
 export type Auth = {
   getAccessToken: () => Promise<string>;
   getConnectionSecrets: () => Promise<{}>;
@@ -15,6 +19,10 @@ export type AuthQuestion = {
 export type StandardAuthConfig = {
   type: 'standard';
   questions?: AuthQuestion[]; // Used by the FE to render form fields. E.g. Asking for Api token
+  apply: (
+    options: HTTPOptions,
+    auth: { answers: Record<string, string> },
+  ) => HTTPOptions;
 };
 
 /**
@@ -23,8 +31,8 @@ export type StandardAuthConfig = {
  */
 export type OAuth2AuthConfig = {
   type: 'oauth2';
-  authUrl: `https://${string}`;
-  tokenUrl: `https://${string}`;
+  authUrl: HttpsUrl;
+  tokenUrl: HttpsUrl;
   /**
    * Depending on the end platform wrote their OAuth, the clientId and
    * clientSecret could be requested in the Auth header using Basic Auth
@@ -37,14 +45,17 @@ export type OAuth2AuthConfig = {
    */
   scopeSeparator?: ',' | ' ';
   questions?: AuthQuestion[]; //
-  defaultScopes: string[];
   url: (arg: {
     answers: Record<string, string>;
     scopes: string[];
     clientId: string;
     redirectUrl: string;
     state: Record<string, string>;
-  }) => `https://${string}`;
+  }) => HttpsUrl;
+  apply: (
+    options: HTTPOptions,
+    auth: { accessToken: string; answers: Record<string, string> },
+  ) => HTTPOptions;
 };
 
 export type Json =
@@ -73,25 +84,53 @@ export type PlatformDisplayConfig = {
   iconURI: string;
 };
 
-export type Platform = {
+type Unary<F extends Function> = F extends (args: infer A) => any ? A : never;
+
+export type Platform<TActions extends Record<string, Action<any, any>>> = {
   id: string;
-  auth: StandardAuthConfig | OAuth2AuthConfig;
-  client: PlatformClient;
-  actions: {
-    register: (actions: Action<any> | Action<any>[]) => void;
-    find: (info: { name: string }) => Action<any> | null;
+  support: {
+    passthrough: boolean;
   };
-  fetch: Fetch;
+  auth: StandardAuthConfig | OAuth2AuthConfig;
+  rawActions: Action<any, any>[];
+  actions: {
+    [Key in keyof TActions]: TActions[Key] extends Action<
+      infer TInput,
+      infer TOutput
+    >
+      ? DirectlyInvokedAction<TInput, TOutput>
+      : never;
+  };
+  request?: RequestFunction;
   display: PlatformDisplayConfig;
 };
 
-export type ActionFunction<TInput extends {}> = (props: {
+export type ActionFunction<TInput extends {}, TOutput extends {}> = (props: {
   input: TInput;
   auth: Auth;
-  fetch: Fetch;
-}) => Promise<any>;
+}) => Promise<TOutput>;
 
-export type Action<TInput extends {}> = {
+export type Action<TInput extends {}, TOutput extends {}> = {
   name: string;
-  func: ActionFunction<TInput>;
+  func: ActionFunction<TInput, TOutput>;
 };
+
+export type DirectlyInvokedAction<TInput extends {}, TOutput extends {}> = (
+  input: TInput,
+) => Promise<TOutput>;
+
+export type UnifiedCrmLead = { name: string }
+
+export type CrmUnification = {
+  findLead: Action<{ id: string }, UnifiedCrmLead>
+}
+
+// 
+// REMOVE ME
+//
+
+const x = {} as any as Platform<{
+  getLead: Action<{ id: string }, { name: string }>;
+}>;
+
+x.actions.getLead({ id: '' });

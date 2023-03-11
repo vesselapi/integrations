@@ -1,42 +1,82 @@
-import { isArray, merge } from 'radash';
+import { mapValues } from 'radash';
 import {
   Action,
+  DirectlyInvokedAction,
+  HTTPOptions,
   OAuth2AuthConfig,
   Platform,
-  PlatformClient,
   PlatformDisplayConfig,
   StandardAuthConfig,
 } from './types';
 
-export type PlatformOptions = {
+export type PlatformOptions<
+  TActions extends {
+    [Key in keyof TActions]: TActions[Key] extends Action<
+      infer TInput,
+      infer TOutput
+    >
+      ? Action<TInput, TOutput>
+      : never;
+  },
+> = {
   auth: StandardAuthConfig | OAuth2AuthConfig;
-  client: PlatformClient;
-  actions: Action<any>[];
+  actions: TActions;
   display: PlatformDisplayConfig;
+  request?: (options: HTTPOptions) => Promise<any>;
 };
 
-export const platform = (id: string, options: PlatformOptions): Platform => {
-  let actions: Action<any>[] = options.actions;
+export const platform = <
+  TActions extends {
+    [Key in keyof TActions]: TActions[Key] extends Action<
+      infer TInput,
+      infer TOutput
+    >
+      ? Action<TInput, TOutput>
+      : never;
+  },
+>(
+  id: string,
+  options: PlatformOptions<TActions>,
+): Platform<TActions> => {
+  const wrapAction =
+    <
+      TInput extends {},
+      TOutput extends {},
+      TAction extends Action<TInput, TOutput>,
+    >(
+      action: TAction,
+    ): DirectlyInvokedAction<TInput, TOutput> =>
+    async (input) => {
+      return await action.func({
+        input,
+        auth: {
+          getAccessToken: async () => '',
+          getConnectionSecrets: async () => {
+            return {};
+          },
+        },
+      });
+    };
+
   return {
     id,
-    auth: options.auth,
-    client: options.client,
-    display: options.display,
-    actions: {
-      register: (listOrItem) => {
-        actions = merge(
-          actions,
-          isArray(listOrItem) ? listOrItem : [listOrItem],
-          (x) => x.name,
-        ).slice();
-      },
-      find: (info) => {
-        return actions.find((x) => x.name === info.name) ?? null;
-      },
+    request: options.request,
+    support: {
+      passthrough: !!options.request,
     },
-    fetch: async () => {
-      // TODO: Implement with retries/auth
-      return {} as any;
+    auth: options.auth,
+    display: options.display,
+    rawActions: Object.values(options.actions),
+    actions: mapValues(
+      options.actions as Record<string, Action<{}, {}>>,
+      wrapAction,
+    ) as {
+      [Key in keyof TActions]: TActions[Key] extends Action<
+        infer TInput,
+        infer TOutput
+      >
+        ? DirectlyInvokedAction<TInput, TOutput>
+        : never;
     },
   };
 };
