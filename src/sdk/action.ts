@@ -1,4 +1,3 @@
-import { isFunction } from 'radash';
 import { infer as ZodInfer, ZodType } from 'zod';
 import { Action, ActionFunction } from './types';
 
@@ -9,34 +8,20 @@ export type ActionOptions<TZodSchema extends ZodType<any, any, any>> = {
   mutation?: boolean;
 };
 
-export function action<TInput extends {}, TOutput extends {}>(
-  name: string,
-  func: ActionFunction<TInput, TOutput>,
-): Action<TInput, TOutput>;
-
-export function action<
+export const action = <
+  TName extends string,
   TZodSchema extends ZodType<any, any, any>,
   TOutput extends {},
 >(
-  name: string,
+  name: TName,
   options: ActionOptions<TZodSchema>,
   func: ActionFunction<ZodInfer<TZodSchema>, TOutput>,
-): Action<ZodInfer<TZodSchema>, TOutput>;
-
-export function action<
-  TZodSchema extends ZodType<any, any, any>,
-  TInput extends {},
-  TOutput extends {},
->(
-  name: string,
-  optionsOrFunc: ActionOptions<TZodSchema> | ActionFunction<TInput, TOutput>,
-  func?: ActionFunction<TInput, TOutput>,
-): Action<TInput, TOutput> {
+): Action<TName, ZodInfer<TZodSchema>, TOutput> => {
   return {
     name,
-    func: (isFunction(optionsOrFunc) ? optionsOrFunc : func!) as ActionFunction<
-      TInput,
-      TOutput
-    >,
+    schema: options.schema,
+    resource: options.resource,
+    mutation: options.mutation,
+    func,
   };
-}
+};

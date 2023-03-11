@@ -1,3 +1,5 @@
+import { ZodType } from 'zod';
+
 export type Fetch = typeof fetch;
 
 export type RequestFunction = (options: HTTPOptions) => Promise<any>;
@@ -86,15 +88,18 @@ export type PlatformDisplayConfig = {
 
 type Unary<F extends Function> = F extends (args: infer A) => any ? A : never;
 
-export type Platform<TActions extends Record<string, Action<any, any>>> = {
+export type Platform<
+  TActions extends Record<string, Action<string, any, any>>,
+> = {
   id: string;
   support: {
     passthrough: boolean;
   };
   auth: StandardAuthConfig | OAuth2AuthConfig;
-  rawActions: Action<any, any>[];
+  rawActions: Action<string, any, any>[];
   actions: {
     [Key in keyof TActions]: TActions[Key] extends Action<
+      string,
       infer TInput,
       infer TOutput
     >
@@ -105,32 +110,35 @@ export type Platform<TActions extends Record<string, Action<any, any>>> = {
   display: PlatformDisplayConfig;
 };
 
-export type ActionFunction<TInput extends {}, TOutput extends {}> = (props: {
-  input: TInput;
-  auth: Auth;
-}) => Promise<TOutput>;
+export type ActionFunction<
+  TInput extends {},
+  TOutput extends {} | null,
+> = (props: { input: TInput; auth: Auth }) => Promise<TOutput>;
 
-export type Action<TInput extends {}, TOutput extends {}> = {
-  name: string;
+export type Action<
+  TName extends string,
+  TInput extends {},
+  TOutput extends {} | null,
+> = {
+  name: TName;
+  schema: ZodType<any, any, any>;
+  resource?: string;
+  scopes?: string[];
+  mutation?: boolean;
   func: ActionFunction<TInput, TOutput>;
 };
 
-export type DirectlyInvokedAction<TInput extends {}, TOutput extends {}> = (
-  input: TInput,
-) => Promise<TOutput>;
+export type DirectlyInvokedAction<
+  TInput extends {},
+  TOutput extends {} | null,
+> = (input: TInput) => Promise<TOutput>;
 
-export type UnifiedCrmLead = { name: string }
-
-export type CrmUnification = {
-  findLead: Action<{ id: string }, UnifiedCrmLead>
-}
-
-// 
+//
 // REMOVE ME
 //
 
 const x = {} as any as Platform<{
-  getLead: Action<{ id: string }, { name: string }>;
+  getLead: Action<string, { id: string }, { name: string }>;
 }>;
 
 x.actions.getLead({ id: '' });

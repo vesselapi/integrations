@@ -12,10 +12,11 @@ import {
 export type PlatformOptions<
   TActions extends {
     [Key in keyof TActions]: TActions[Key] extends Action<
+      string,
       infer TInput,
       infer TOutput
     >
-      ? Action<TInput, TOutput>
+      ? Action<string, TInput, TOutput>
       : never;
   },
 > = {
@@ -28,10 +29,11 @@ export type PlatformOptions<
 export const platform = <
   TActions extends {
     [Key in keyof TActions]: TActions[Key] extends Action<
+      string,
       infer TInput,
       infer TOutput
     >
-      ? Action<TInput, TOutput>
+      ? Action<string, TInput, TOutput>
       : never;
   },
 >(
@@ -42,7 +44,7 @@ export const platform = <
     <
       TInput extends {},
       TOutput extends {},
-      TAction extends Action<TInput, TOutput>,
+      TAction extends Action<string, TInput, TOutput>,
     >(
       action: TAction,
     ): DirectlyInvokedAction<TInput, TOutput> =>
@@ -68,10 +70,11 @@ export const platform = <
     display: options.display,
     rawActions: Object.values(options.actions),
     actions: mapValues(
-      options.actions as Record<string, Action<{}, {}>>,
+      options.actions as Record<string, Action<string, {}, {}>>,
       wrapAction,
     ) as {
       [Key in keyof TActions]: TActions[Key] extends Action<
+        string,
         infer TInput,
         infer TOutput
       >
