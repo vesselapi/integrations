@@ -38,7 +38,7 @@ export const platform = (id: string, options: PlatformOptions): Platform => {
   const defaultAuth = auths.filter((a) => a.default === true);
   if (defaultAuth.length !== 1) {
     throw new Error(
-      'One and only one auth must be the default when using multiple auth types: ',
+      'One and only one auth must be the default when using multiple auth types',
     );
   }
   return {
