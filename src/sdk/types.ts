@@ -15,7 +15,11 @@ export type AuthQuestion = {
 export type StandardAuthConfig = {
   type: 'standard';
   default: boolean;
-  questions?: AuthQuestion[]; // Used by the FE to render form fields. E.g. Asking for Api token
+  /**
+   * Used by the FE to render form fields.
+   * E.g. Asking for Api token
+   */
+  questions: AuthQuestion[];
 };
 
 /**
@@ -38,7 +42,7 @@ export type OAuth2AuthConfig = {
    * Used by the FE to render form fields before OAuth login
    */
   scopeSeparator?: ',' | ' ';
-  questions?: AuthQuestion[]; //
+  questions: AuthQuestion[];
   defaultScopes: string[];
   url: (arg: {
     answers: Record<string, string>;

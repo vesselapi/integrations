@@ -8,7 +8,6 @@ export default platform('hubspot', {
   auth: auth.oauth2({
     authUrl: 'https://app.hubspot.com/oauth/authorize',
     tokenUrl: 'https://api.hubapi.com/oauth/v1/token',
-    questions: [],
     defaultScopes: [
       'crm.lists.write',
       'crm.lists.read',
