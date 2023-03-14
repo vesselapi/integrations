@@ -20,12 +20,25 @@ export type PlatformOptions = {
 
 export const platform = (id: string, options: PlatformOptions): Platform => {
   let actions: Action<any>[] = options.actions;
-  const auths = isArray(options.auth) ? options.auth : [options.auth];
+  const auths = isArray(options.auth)
+    ? options.auth
+    : [
+        {
+          ...options.auth,
+          default: true,
+        },
+      ];
   const types = auths.map((a) => a.type);
   if (unique(types).length !== auths.length) {
     throw new Error(
       'Multiple auth strategies of the same type were provided: ' +
         types.join(', '),
+    );
+  }
+  const defaultAuth = auths.filter((a) => a.default === true);
+  if (defaultAuth.length !== 1) {
+    throw new Error(
+      'One and only one auth must be the default when using multiple auth types: ',
     );
   }
   return {

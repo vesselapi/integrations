@@ -14,6 +14,7 @@ export type AuthQuestion = {
 
 export type StandardAuthConfig = {
   type: 'standard';
+  default: boolean;
   questions?: AuthQuestion[]; // Used by the FE to render form fields. E.g. Asking for Api token
 };
 
@@ -23,6 +24,7 @@ export type StandardAuthConfig = {
  */
 export type OAuth2AuthConfig = {
   type: 'oauth2';
+  default: boolean;
   authUrl: `https://${string}`;
   tokenUrl: `https://${string}`;
   /**
