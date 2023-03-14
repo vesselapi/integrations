@@ -75,7 +75,7 @@ export type PlatformDisplayConfig = {
 
 export type Platform = {
   id: string;
-  auth: StandardAuthConfig | OAuth2AuthConfig;
+  auth: (StandardAuthConfig | OAuth2AuthConfig)[];
   client: PlatformClient;
   actions: {
     register: (actions: Action<any> | Action<any>[]) => void;

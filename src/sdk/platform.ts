@@ -1,4 +1,4 @@
-import { isArray, merge } from 'radash';
+import { isArray, merge, unique } from 'radash';
 import {
   Action,
   OAuth2AuthConfig,
@@ -9,7 +9,10 @@ import {
 } from './types';
 
 export type PlatformOptions = {
-  auth: StandardAuthConfig | OAuth2AuthConfig;
+  auth:
+    | StandardAuthConfig
+    | OAuth2AuthConfig
+    | (StandardAuthConfig | OAuth2AuthConfig)[];
   client: PlatformClient;
   actions: Action<any>[];
   display: PlatformDisplayConfig;
@@ -17,9 +20,17 @@ export type PlatformOptions = {
 
 export const platform = (id: string, options: PlatformOptions): Platform => {
   let actions: Action<any>[] = options.actions;
+  const auths = isArray(options.auth) ? options.auth : [options.auth];
+  const types = auths.map((a) => a.type);
+  if (unique(types).length !== auths.length) {
+    throw new Error(
+      'Multiple auth strategies of the same type were provided: ' +
+        types.join(', '),
+    );
+  }
   return {
     id,
-    auth: options.auth,
+    auth: auths,
     client: options.client,
     display: options.display,
     actions: {
