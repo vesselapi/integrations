@@ -14,6 +14,7 @@ export type AuthQuestion = {
 
 export type StandardAuthConfig = {
   type: 'standard';
+  default: boolean;
   questions?: AuthQuestion[]; // Used by the FE to render form fields. E.g. Asking for Api token
 };
 
@@ -23,6 +24,7 @@ export type StandardAuthConfig = {
  */
 export type OAuth2AuthConfig = {
   type: 'oauth2';
+  default: boolean;
   authUrl: `https://${string}`;
   tokenUrl: `https://${string}`;
   /**
@@ -75,7 +77,7 @@ export type PlatformDisplayConfig = {
 
 export type Platform = {
   id: string;
-  auth: StandardAuthConfig | OAuth2AuthConfig;
+  auth: (StandardAuthConfig | OAuth2AuthConfig)[];
   client: PlatformClient;
   actions: {
     register: (actions: Action<any> | Action<any>[]) => void;
