@@ -5,6 +5,7 @@ export type Auth = {
   getConnectionSecrets: () => Promise<{}>;
 };
 
+export type HttpsUrl = `https://${string}`;
 export type AuthQuestionType = 'string' | 'select';
 export type AuthQuestion = {
   type: AuthQuestionType;
@@ -36,14 +37,13 @@ export type OAuth2AuthConfig = {
    * clientSecret could be requested in the Auth header using Basic Auth
    * or provided in the body params.
    */
-  tokenAuth?: 'header' | 'body'; //  defaults to 'body';
+  tokenAuth: 'header' | 'body'; //  defaults to 'body';
   /**
    * Defaults to ' '. The scope separator may differ between platforms.
    * Used by the FE to render form fields before OAuth login
    */
-  scopeSeparator?: ',' | ' ';
+  scopeSeparator: ',' | ' ';
   questions: AuthQuestion[];
-  defaultScopes: string[];
   url: (arg: {
     answers: Record<string, string>;
     scopes: string[];

@@ -1,28 +1,51 @@
-import { AuthQuestion, OAuth2AuthConfig, StandardAuthConfig } from './types';
+import {
+  AuthQuestion,
+  HttpsUrl,
+  OAuth2AuthConfig,
+  StandardAuthConfig,
+} from './types';
 
 export const auth = {
-  oauth2: (
-    config: Omit<OAuth2AuthConfig, 'type' | 'url' | 'default' | 'questions'> & {
-      url?: OAuth2AuthConfig['url'];
-      default?: boolean;
-      questions?: AuthQuestion[];
-    },
-  ): OAuth2AuthConfig => ({
-    ...config,
-    url: config.url ?? (() => config.tokenUrl),
-    default: config.default ?? false,
+  oauth2: (options: {
+    authUrl: HttpsUrl;
+    tokenUrl: HttpsUrl;
+    default?: boolean;
+    scopeSeparator?: OAuth2AuthConfig['scopeSeparator'];
+    tokenAuth?: OAuth2AuthConfig['tokenAuth'];
+    questions?: AuthQuestion[];
+  }): OAuth2AuthConfig => ({
     type: 'oauth2',
-    questions: config.questions ?? [],
-  }),
-  standard: (
-    config: Omit<StandardAuthConfig, 'type' | 'default' | 'questions'> & {
-      default?: boolean;
-      questions?: AuthQuestion[];
+    authUrl: options.authUrl,
+    tokenUrl: options.tokenUrl,
+    tokenAuth: options.tokenAuth ?? 'body',
+    default: options.default ?? false,
+    scopeSeparator: options.scopeSeparator ?? ' ',
+    questions: options.questions ?? [],
+    url: ({ scopes, clientId, redirectUrl, state }) => {
+      const query = [
+        ['client_id', clientId],
+        ['redirect_uri', redirectUrl],
+        ['scope', scopes.join('+')],
+        ['state', JSON.stringify(state)],
+      ]
+        .map((x) => x.join('='))
+        .join('&');
+      return `${options.authUrl}?${query}`;
     },
-  ): StandardAuthConfig => ({
-    ...config,
-    default: config.default ?? false,
+  }),
+  apiToken: (options: {
+    questions?: AuthQuestion[];
+    default?: boolean;
+  }): StandardAuthConfig => ({
     type: 'standard',
-    questions: config.questions ?? [],
+    default: options.default ?? false,
+    questions: [
+      {
+        type: 'string',
+        id: 'api-key',
+        label: 'API key',
+      },
+      ...(options.questions ?? []),
+    ],
   }),
 };
