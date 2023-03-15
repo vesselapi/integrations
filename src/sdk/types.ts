@@ -1,9 +1,13 @@
+import { ZodType } from 'zod';
+
 export type Fetch = typeof fetch;
 
 export type Auth = {
   getAccessToken: () => Promise<string>;
   getConnectionSecrets: () => Promise<{}>;
 };
+
+export type RequestFunction = (options: HTTPOptions) => Promise<any>;
 
 export type HttpsUrl = `https://${string}`;
 export type AuthQuestionType = 'string' | 'select';
@@ -30,8 +34,8 @@ export type StandardAuthConfig = {
 export type OAuth2AuthConfig = {
   type: 'oauth2';
   default: boolean;
-  authUrl: `https://${string}`;
-  tokenUrl: `https://${string}`;
+  authUrl: HttpsUrl;
+  tokenUrl: HttpsUrl;
   /**
    * Depending on the end platform wrote their OAuth, the clientId and
    * clientSecret could be requested in the Auth header using Basic Auth
@@ -50,7 +54,7 @@ export type OAuth2AuthConfig = {
     clientId: string;
     redirectUrl: string;
     state: Record<string, string>;
-  }) => `https://${string}`;
+  }) => HttpsUrl;
 };
 
 export type Json =
@@ -79,25 +83,44 @@ export type PlatformDisplayConfig = {
   iconURI: string;
 };
 
-export type Platform = {
+export type Platform<
+  TActions extends Record<string, Action<string, any, any>>,
+> = {
   id: string;
   auth: (StandardAuthConfig | OAuth2AuthConfig)[];
-  client: PlatformClient;
+  rawActions: Action<string, any, any>[];
   actions: {
-    register: (actions: Action<any> | Action<any>[]) => void;
-    find: (info: { name: string }) => Action<any> | null;
+    [Key in keyof TActions]: TActions[Key] extends Action<
+      string,
+      infer TInput,
+      infer TOutput
+    >
+      ? DirectlyInvokedAction<TInput, TOutput>
+      : never;
   };
-  fetch: Fetch;
+  request?: RequestFunction;
   display: PlatformDisplayConfig;
 };
 
-export type ActionFunction<TInput extends {}> = (props: {
-  input: TInput;
-  auth: Auth;
-  fetch: Fetch;
-}) => Promise<any>;
+export type ActionFunction<
+  TInput extends {},
+  TOutput extends {} | null,
+> = (props: { input: TInput; auth: Auth }) => Promise<TOutput>;
 
-export type Action<TInput extends {}> = {
-  name: string;
-  func: ActionFunction<TInput>;
+export type Action<
+  TName extends string,
+  TInput extends {},
+  TOutput extends {} | null,
+> = {
+  name: TName;
+  schema: ZodType<any, any, any>;
+  resource?: string;
+  scopes?: string[];
+  mutation?: boolean;
+  func: ActionFunction<TInput, TOutput>;
 };
+
+export type DirectlyInvokedAction<
+  TInput extends {},
+  TOutput extends {} | null,
+> = (input: TInput, auth?: Auth) => Promise<TOutput>;

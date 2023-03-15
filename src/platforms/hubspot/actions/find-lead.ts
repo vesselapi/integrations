@@ -1,27 +1,31 @@
-import zod from 'zod';
+import { z } from 'zod';
 import { action } from '../../../sdk';
 
-type Input = {
-  id: string;
-};
-
-// QUESTION: Add/group-by resource?
-export default action<Input>(
+export default action(
   'find-lead',
   {
     resource: 'lead',
     mutation: false,
-    schema: zod.object({
-      id: zod.string(),
+    schema: z.object({
+      id: z.string(),
     }),
+    scopes: [
+      'crm.objects.deals.write',
+      'crm.objects.deals.read',
+      'crm.schemas.deals.write',
+      'crm.schemas.deals.read',
+    ],
   },
-  async ({ input, auth, fetch }) => {
-    const token = await auth.getAccessToken();
+  async ({ input, auth }) => {
+    // Using auth to get accessToken
+    const accessToken = await auth.getAccessToken();
     await fetch('https://hubspot.com/lead', {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
-    const created = await fetch('');
+    return {
+      power: 3,
+    };
   },
 );

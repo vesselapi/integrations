@@ -1,7 +1,6 @@
 import { auth, platform } from '../../sdk';
 import createLead from './actions/create-lead';
 import findLead from './actions/find-lead';
-import client from './client';
 import { icon } from './icon';
 
 export default platform('hubspot', {
@@ -13,6 +12,9 @@ export default platform('hubspot', {
     name: 'HubSpot',
     iconURI: icon,
   },
-  client,
-  actions: [createLead, findLead],
+  request: async (options) => {},
+  actions: {
+    createLead,
+    findLead,
+  },
 });
