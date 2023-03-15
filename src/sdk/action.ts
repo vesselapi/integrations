@@ -1,7 +1,7 @@
-import { infer as ZodInfer, ZodType } from 'zod';
+import { z } from 'zod';
 import { Action, ActionFunction } from './types';
 
-export type ActionOptions<TZodSchema extends ZodType<any, any, any>> = {
+export type ActionOptions<TZodSchema extends z.ZodType<any, any, any>> = {
   schema: TZodSchema;
   resource?: string;
   scopes?: string[];
@@ -10,13 +10,13 @@ export type ActionOptions<TZodSchema extends ZodType<any, any, any>> = {
 
 export const action = <
   TName extends string,
-  TZodSchema extends ZodType<any, any, any>,
+  TZodSchema extends z.ZodType<any, any, any>,
   TOutput extends {},
 >(
   name: TName,
   options: ActionOptions<TZodSchema>,
-  func: ActionFunction<ZodInfer<TZodSchema>, TOutput>,
-): Action<TName, ZodInfer<TZodSchema>, TOutput> => {
+  func: ActionFunction<z.infer<TZodSchema>, TOutput>,
+): Action<TName, z.infer<TZodSchema>, TOutput> => {
   return {
     name,
     schema: options.schema,
