@@ -113,7 +113,7 @@ export type Action<
   TOutput extends {} | null,
 > = {
   name: TName;
-  schema: ZodType<any, any, any>;
+  schema: ZodType<TInput>;
   resource?: string;
   scopes?: string[];
   mutation?: boolean;
