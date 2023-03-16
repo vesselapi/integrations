@@ -53,7 +53,7 @@ export type OAuth2AuthConfig = {
     scopes: string[];
     clientId: string;
     redirectUrl: string;
-    state: Record<string, string>;
+    state: string;
   }) => HttpsUrl;
 };
 
