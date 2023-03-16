@@ -26,7 +26,7 @@ export const auth = {
         ['client_id', clientId],
         ['redirect_uri', redirectUrl],
         ['scope', scopes.join('+')],
-        ['state', JSON.stringify(state)],
+        ['state', state],
       ]
         .map((x) => x.join('='))
         .join('&');
