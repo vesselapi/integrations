@@ -124,3 +124,18 @@ export type DirectlyInvokedAction<
   TInput extends {},
   TOutput extends {} | null,
 > = (input: TInput, auth?: Auth) => Promise<TOutput>;
+
+export type UnifiedAction<
+  TName extends string,
+  TVertical extends string,
+  TInput extends {},
+  TOutput extends {} | null,
+> = Action<TName, TInput, TOutput> & {
+  integrationId: string;
+  vertical: TVertical;
+};
+
+export type Unification<TVertical extends string = string> = {
+  vertical: TVertical;
+  actions: UnifiedAction<string, TVertical, any, any>[];
+};
