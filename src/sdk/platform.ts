@@ -75,15 +75,7 @@ export const platform = <
     async (input, auth) => {
       return await action.func({
         input,
-        // TODO: figure out how to generate the auth here (or delete this if we can't)
-        auth: auth ?? {
-          getAccessToken: async () => {
-            return 'foo';
-          },
-          getConnectionSecrets: async () => {
-            return {};
-          },
-        },
+        auth,
       });
     };
 

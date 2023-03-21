@@ -18,7 +18,7 @@ export default action(
   },
   async ({ input, auth }) => {
     // Using auth to get accessToken
-    const accessToken = await auth.getAccessToken();
+    const accessToken = await auth.getTokenString();
     await fetch('https://hubspot.com/lead', {
       headers: {
         Authorization: `Bearer ${accessToken}`,

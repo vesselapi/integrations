@@ -2,10 +2,33 @@ import { ZodType } from 'zod';
 
 export type Fetch = typeof fetch;
 
-export type Auth = {
-  getAccessToken: () => Promise<string>;
-  getConnectionSecrets: () => Promise<{}>;
+export type OAuth2Token = {
+  type: 'oauth2';
+  accessToken: string;
+  refreshToken: string;
 };
+
+export type StandardToken = {
+  type: 'standard';
+  apiToken: string;
+};
+
+type BaseAuth = {
+  getTokenString: () => Promise<string>;
+  retry: <T extends (...args: any) => Promise<any>>(func: T) => ReturnType<T>;
+};
+
+export type OAuth2Auth = BaseAuth & {
+  type: 'oauth2';
+  getToken: () => Promise<OAuth2Token>;
+};
+
+export type StandardAuth = BaseAuth & {
+  type: 'standard';
+  getToken: () => Promise<StandardToken>;
+};
+
+export type Auth = OAuth2Auth | StandardAuth;
 
 export type RequestFunction = (options: HTTPOptions) => Promise<any>;
 
@@ -123,7 +146,7 @@ export type Action<
 export type DirectlyInvokedAction<
   TInput extends {},
   TOutput extends {} | null,
-> = (input: TInput, auth?: Auth) => Promise<TOutput>;
+> = (input: TInput, auth: Auth) => Promise<TOutput>;
 
 export type UnifiedAction<
   TName extends string,
