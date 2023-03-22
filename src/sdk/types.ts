@@ -15,7 +15,9 @@ export type StandardToken = {
 
 type BaseAuth = {
   getTokenString: () => Promise<string>;
-  retry: <T extends (...args: any) => Promise<any>>(func: T) => ReturnType<T>;
+  retry: <T extends (...args: any) => Promise<Response>>(
+    func: T,
+  ) => ReturnType<T>;
 };
 
 export type OAuth2Auth = BaseAuth & {
@@ -122,6 +124,13 @@ export type Platform<
       : never;
   };
   request?: RequestFunction;
+  isRetryableAuthResponse?: ({
+    response,
+    auth,
+  }: {
+    response: Response;
+    auth: Auth;
+  }) => boolean;
   display: PlatformDisplayConfig;
 };
 
