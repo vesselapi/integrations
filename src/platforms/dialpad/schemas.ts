@@ -55,6 +55,37 @@ export const dialpadContactSchema = z.object({
   type: z.enum(['shared', 'local']),
   urls: z.array(z.string()),
 });
+export const dialpadContactCreateSchema = dialpadContactSchema
+  .partial()
+  .required({
+    first_name: true,
+    last_name: true,
+  })
+  .omit({
+    id: true,
+    owner_id: true,
+    // The first email and phone number are used as the primary email and phone
+    primary_email: true,
+    primary_phone: true,
+    type: true,
+  });
+export const dialpadContactUpdateSchema = dialpadContactSchema
+  .partial()
+  .required({
+    first_name: true,
+    last_name: true,
+  })
+  .omit({
+    id: true,
+    owner_id: true,
+    // The first email and phone number are used as the primary email and phone
+    primary_email: true,
+    primary_phone: true,
+    type: true,
+  })
+  .extend({
+    uid: z.string(),
+  });
 
 export const routingBreadcrumbSchema = z
   .object({
@@ -137,6 +168,8 @@ export const dialpadCallSchema = z
 export type DialpadModules = 'users' | 'calls' | 'contacts';
 export type DialpadUser = z.infer<typeof dialpadUserSchema>;
 export type DialpadContact = z.infer<typeof dialpadContactSchema>;
+export type DialpadContactCreate = z.infer<typeof dialpadContactCreateSchema>;
+export type DialpadContactUpdate = z.infer<typeof dialpadContactUpdateSchema>;
 export type DialpadCall = z.infer<typeof dialpadCallSchema>;
 export type AnyDialpadObject = DialpadUser | DialpadContact | DialpadCall;
 
@@ -159,6 +192,8 @@ export interface DialpadClient extends PlatformClient {
   contacts: {
     find: ClientAction<FindObjectInput, DialpadContact>;
     list: ClientAction<ListObjectInput, ListOutput<DialpadContact>>;
+    create: ClientAction<DialpadContactCreate, DialpadContact>;
+    update: ClientAction<DialpadContactUpdate, DialpadContact>;
   };
   calls: {
     find: ClientAction<FindObjectInput, DialpadCall>;
