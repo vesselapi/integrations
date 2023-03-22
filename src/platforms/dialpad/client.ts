@@ -5,10 +5,8 @@ import {
   dialpadCallSchema,
   DialpadClient,
   DialpadContactCreate,
-  dialpadContactCreateSchema,
   dialpadContactSchema,
   DialpadContactUpdate,
-  dialpadContactUpdateSchema,
   DialpadModules,
   dialpadUserSchema,
   listResponseSchema,
@@ -81,11 +79,11 @@ const makeClient = (): DialpadClient => {
       list: listObject('contacts', listResponseSchema(dialpadContactSchema)),
       create: createObject<DialpadContactCreate>(
         'contacts',
-        dialpadContactCreateSchema,
+        dialpadContactSchema,
       ),
       update: updateObject<DialpadContactUpdate>(
         'contacts',
-        dialpadContactUpdateSchema,
+        dialpadContactSchema,
       ),
     },
     calls: {
