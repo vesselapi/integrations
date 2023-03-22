@@ -17,7 +17,7 @@ export default action(
     ],
   },
   async ({ input, auth }) => {
-    const apiToken = auth.getAccessToken();
+    const apiToken = await auth.getTokenString();
     const created = await fetch('https://hubspot.com/leads');
     return {};
   },

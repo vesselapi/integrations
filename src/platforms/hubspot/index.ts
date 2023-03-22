@@ -13,6 +13,9 @@ export default platform('hubspot', {
     iconURI: icon,
   },
   request: async (options) => {},
+  isRetryableAuthResponse: ({ response }) => {
+    return response.status === 401;
+  },
   actions: {
     createLead,
     findLead,
