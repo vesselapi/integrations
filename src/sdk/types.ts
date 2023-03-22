@@ -30,8 +30,6 @@ export type StandardAuth = BaseAuth & {
 
 export type Auth = OAuth2Auth | StandardAuth;
 
-export type RequestFunction = (options: HTTPOptions) => Promise<any>;
-
 export type HttpsUrl = `https://${string}`;
 export type AuthQuestionType = 'string' | 'select';
 export type AuthQuestion = {
@@ -95,16 +93,6 @@ export type Json =
   | Json[]
   | null;
 
-export type HTTPOptions = {
-  // url: string;
-  // path: string;
-  // method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'OPTIONS' | 'HEAD' | 'DELETE';
-  // headers: Record<string, string>;
-  // query: Record<string, string>;
-  // params: Record<string, string>;
-  // body: string | Json;
-};
-
 export interface PlatformClient {
   passthrough: (auth: Auth, params: any) => Promise<any>;
 }
@@ -114,6 +102,7 @@ export type PlatformDisplayConfig = {
   iconURI: string;
 };
 
+export type PlatformConstants = Record<string, any>;
 export type Platform<
   TActions extends Record<string, Action<string, any, any>>,
   TClient extends PlatformClient,
@@ -123,6 +112,7 @@ export type Platform<
   auth: (StandardAuthConfig | OAuth2AuthConfig)[];
   rawActions: Action<string, any, any>[];
   client: TClient;
+  constants: PlatformConstants;
   actions: {
     [Key in keyof TActions]: TActions[Key] extends Action<
       string,

@@ -1,0 +1,152 @@
+import { z } from 'zod';
+import { Auth, PlatformClient } from '../../sdk/types';
+
+export const listResponseSchema = (itemSchema: z.ZodSchema<any>) =>
+  z
+    .object({
+      items: z.array(itemSchema),
+    })
+    .passthrough();
+
+export const dialpadUserSchema = z
+  .object({
+    admin_office_ids: z.array(z.string()),
+    company_id: z.string(),
+    country: z.string(),
+    date_active: z.string(),
+    date_added: z.string(),
+    do_not_disturb: z.boolean(),
+    emails: z.array(z.string()),
+    first_name: z.string(),
+    id: z.string(),
+    image_url: z.string(),
+    is_admin: z.boolean(),
+    is_available: z.boolean(),
+    is_on_duty: z.boolean(),
+    is_online: z.boolean(),
+    is_super_admin: z.boolean(),
+    language: z.string(),
+    last_name: z.string(),
+    license: z.string(),
+    muted: z.boolean(),
+    office_id: z.string(),
+    phone_numbers: z.array(z.string()),
+    state: z.string(),
+    timezone: z.string(),
+  })
+  .passthrough();
+
+export const dialpadContactSchema = z.object({
+  id: z.string(),
+  first_name: z.string(),
+  last_name: z.string(),
+  company_name: z.string(),
+  display_name: z.string(),
+  emails: z.array(z.string()),
+  extension: z.string(),
+  job_title: z.string(),
+  owner_id: z.string(),
+  phones: z.array(z.string()),
+  primary_email: z.string(),
+  primary_phone: z.string(),
+  type: z.enum(['shared', 'local']),
+  urls: z.array(z.string()),
+});
+
+export const routingBreadcrumbSchema = z
+  .object({
+    breadcrumb_type: z.string(),
+    date: z.number(),
+    request: z
+      .object({
+        body: z.string(),
+        headers: z.string(),
+        method: z.string(),
+        url: z.string(),
+      })
+      .passthrough(),
+    response: z
+      .object({
+        body: z.string(),
+        headers: z.string(),
+        status_code: z.number(),
+      })
+      .passthrough(),
+    target_id: z.number(),
+    target_type: z.string(),
+    url: z.string(),
+  })
+  .passthrough();
+
+export const dialpadCallSchema = z
+  .object({
+    admin_call_recording_share_links: z.array(z.string()),
+    call_id: z.number(),
+    call_recording_ids: z.array(z.number()),
+    call_recording_share_links: z.array(z.string()),
+    contact: dialpadContactSchema,
+    csat_recording_urls: z.array(z.string()),
+    csat_score: z.string(),
+    csat_transcriptions: z.string(),
+    custom_data: z.string(),
+    date_connected: z.number(),
+    date_ended: z.number(),
+    date_rang: z.number(),
+    date_started: z.number(),
+    direction: z.enum(['inbound', 'outbound']),
+    duration: z.number(),
+    entry_point_call_id: z.number(),
+    entry_point_target: dialpadContactSchema,
+    external_number: z.string(),
+    group_id: z.string(),
+    internal_number: z.string(),
+    is_transferred: z.boolean(),
+    labels: z.array(z.string()),
+    master_call_id: z.number(),
+    mos_score: z.number(),
+    operator_call_id: z.number(),
+    proxy_target: dialpadContactSchema,
+    recording_url: z.array(z.string()),
+    routing_breadcrumbs: z.array(routingBreadcrumbSchema),
+    screen_recording_urls: z.array(z.string()),
+    state: z.string(),
+    target: dialpadContactSchema,
+    total_duration: z.number(),
+    transcription_text: z.string(),
+    voicemail_link: z.string(),
+    voicemail_recording_id: z.string(),
+    voicemail_share_link: z.string(),
+    was_recorded: z.boolean(),
+  })
+  .passthrough();
+
+export type DialpadModules = 'users' | 'calls' | 'contacts';
+export type DialpadUser = z.infer<typeof dialpadUserSchema>;
+export type DialpadContact = z.infer<typeof dialpadContactSchema>;
+export type DialpadCall = z.infer<typeof dialpadCallSchema>;
+export type AnyDialpadObject = DialpadUser | DialpadContact | DialpadCall;
+
+export type FindObjectInput = { id: string };
+export type ListObjectInput = { page?: number; per_page?: number };
+export type ListOutput<T> = {
+  items: T[];
+};
+type ClientAction<InputType, OutputType> = (
+  auth: Auth,
+  args: InputType,
+) => Promise<OutputType>;
+
+export interface DialpadClient extends PlatformClient {
+  users: {
+    find: ClientAction<FindObjectInput, DialpadUser>;
+    list: ClientAction<ListObjectInput, ListOutput<DialpadUser>>;
+  };
+  contacts: {
+    find: ClientAction<FindObjectInput, DialpadContact>;
+    list: ClientAction<ListObjectInput, ListOutput<DialpadContact>>;
+  };
+  calls: {
+    find: ClientAction<FindObjectInput, DialpadCall>;
+    list: ClientAction<ListObjectInput, ListOutput<DialpadCall>>;
+  };
+}

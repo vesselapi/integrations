@@ -13,5 +13,6 @@ export default platform('aircall', {
     name: 'Aircall',
     iconURI: icon,
   },
+  constants: {},
   actions: {},
 });
