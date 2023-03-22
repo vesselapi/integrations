@@ -1,6 +1,7 @@
 import { isArray, mapValues, unique } from 'radash';
 import {
   Action,
+  Auth,
   DirectlyInvokedAction,
   HTTPOptions,
   OAuth2AuthConfig,
@@ -26,6 +27,13 @@ export type PlatformOptions<
     | (StandardAuthConfig | OAuth2AuthConfig)[];
   actions: TActions;
   display: PlatformDisplayConfig;
+  isRetryableAuthResponse?: ({
+    response,
+    auth,
+  }: {
+    response: Response;
+    auth: Auth;
+  }) => boolean;
   request?: (options: HTTPOptions) => Promise<any>;
 };
 
@@ -75,15 +83,7 @@ export const platform = <
     async (input, auth) => {
       return await action.func({
         input,
-        // TODO: figure out how to generate the auth here (or delete this if we can't)
-        auth: auth ?? {
-          getAccessToken: async () => {
-            return 'foo';
-          },
-          getConnectionSecrets: async () => {
-            return {};
-          },
-        },
+        auth,
       });
     };
 
@@ -92,6 +92,7 @@ export const platform = <
     auth: authConfigs,
     display: options.display,
     request: options.request,
+    isRetryableAuthResponse: options.isRetryableAuthResponse,
     rawActions: Object.values(options.actions),
     actions: mapValues(
       options.actions as Record<string, Action<string, {}, {}>>,
