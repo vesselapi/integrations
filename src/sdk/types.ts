@@ -1,4 +1,4 @@
-import { ZodType } from 'zod';
+import { z } from 'zod';
 
 export type Fetch = typeof fetch;
 
@@ -15,9 +15,7 @@ export type StandardToken = {
 
 type BaseAuth = {
   getTokenString: () => Promise<string>;
-  retry: <T extends (...args: any) => Promise<Response>>(
-    func: T,
-  ) => ReturnType<T>;
+  retry: <T extends () => Promise<Response>>(func: T) => ReturnType<T>;
 };
 
 export type OAuth2Auth = BaseAuth & {
@@ -136,16 +134,16 @@ export type Platform<
 
 export type ActionFunction<
   TInput extends {},
-  TOutput extends {} | null,
+  TOutput extends {} | null | void,
 > = (props: { input: TInput; auth: Auth }) => Promise<TOutput>;
 
 export type Action<
   TName extends string,
   TInput extends {},
-  TOutput extends {} | null,
+  TOutput extends {} | null | void,
 > = {
   name: TName;
-  schema: ZodType<TInput>;
+  schema: z.ZodType<TInput>;
   resource?: string;
   scopes?: string[];
   mutation?: boolean;
@@ -154,7 +152,7 @@ export type Action<
 
 export type DirectlyInvokedAction<
   TInput extends {},
-  TOutput extends {} | null,
+  TOutput extends {} | null | void,
 > = (input: TInput, auth: Auth) => Promise<TOutput>;
 
 export type UnifiedAction<
@@ -171,3 +169,23 @@ export type Unification<TVertical extends string = string> = {
   vertical: TVertical;
   actions: UnifiedAction<string, TVertical, any, any>[];
 };
+
+export type ClientResult<TResponse extends object> =
+  | {
+      data: TResponse;
+      error: null;
+    }
+  | {
+      data: null;
+      error:
+        | {
+            type: 'http';
+            body: object;
+            status: number;
+          }
+        | {
+            type: 'zod';
+            zodError: z.ZodError;
+            original: unknown;
+          };
+    };

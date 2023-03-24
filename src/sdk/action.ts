@@ -11,7 +11,7 @@ export type ActionOptions<TZodSchema extends z.ZodType<any, any, any>> = {
 export const action = <
   TName extends string,
   TZodSchema extends z.ZodType<any, any, any>,
-  TOutput extends {},
+  TOutput extends {} | null | void,
 >(
   name: TName,
   options: ActionOptions<TZodSchema>,
