@@ -93,10 +93,10 @@ export type Json =
 export type HTTPOptions = {
   path: string;
   method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'OPTIONS' | 'HEAD' | 'DELETE';
-  headers: Record<string, string>;
-  query: Record<string, string>;
-  params: Record<string, string>;
-  body: string | Json;
+  headers?: Record<string, string>;
+  query?: Record<string, string>;
+  params?: Record<string, string>;
+  body?: string | Json;
 };
 
 export interface PlatformClient {
