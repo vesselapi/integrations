@@ -33,10 +33,12 @@ export const auth = {
       return `${options.authUrl}?${query}`;
     },
   }),
-  apiToken: (options: {
-    questions?: AuthQuestion[];
-    default?: boolean;
-  }): StandardAuthConfig => ({
+  apiToken: (
+    options: {
+      questions?: AuthQuestion[];
+      default?: boolean;
+    } = {},
+  ): StandardAuthConfig => ({
     type: 'standard',
     default: options.default ?? false,
     questions: [

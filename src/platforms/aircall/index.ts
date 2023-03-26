@@ -14,10 +14,13 @@ import findCall from './actions/calls/find';
 import listCall from './actions/calls/list';
 
 export default platform('aircall', {
-  auth: auth.oauth2({
-    authUrl: 'https://dashboard.aircall.io/oauth/authorize',
-    tokenUrl: 'https://api.aircall.io/v1/oauth/token',
-  }),
+  auth: [
+    auth.oauth2({
+      authUrl: 'https://dashboard.aircall.io/oauth/authorize',
+      tokenUrl: 'https://api.aircall.io/v1/oauth/token',
+    }),
+    auth.apiToken(),
+  ],
   display: {
     name: 'Aircall',
     iconURI: icon,
