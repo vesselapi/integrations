@@ -1,23 +1,28 @@
 import { z } from 'zod';
 import { action } from '../../../../sdk';
 import client from '../../client';
-import { AircallUser } from '../../types';
 
 export default action(
-  'users-find',
+  'users-call-start',
   {
-    resource: 'user',
+    resource: 'users',
     mutation: false,
     schema: z.object({
       id: z.string(),
+      number_id: z.number(),
+      to: z.string(),
     }),
     scopes: [],
   },
-  async ({ input, auth }): Promise<{ user: AircallUser }> => {
+  async ({ input, auth }): Promise<void> => {
     return await client.request(
       {
-        path: `users/${input.id}`,
-        method: 'GET',
+        path: `users/${input.id}/calls`,
+        method: 'POST',
+        body: {
+          number_id: input.number_id,
+          to: input.to,
+        },
       },
       auth,
     );
