@@ -14,7 +14,7 @@ export default action(
     }),
     scopes: [],
   },
-  async ({ input, auth }): Promise<void> => {
+  async ({ input, auth }): Promise<{}> => {
     return await client.request(
       {
         path: `users/${input.id}/calls`,
