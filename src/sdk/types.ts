@@ -184,7 +184,7 @@ export type ClientResult<TResponse extends object> =
             status: number;
           }
         | {
-            type: 'zod';
+            type: 'validation';
             zodError: z.ZodError;
             original: unknown;
           };

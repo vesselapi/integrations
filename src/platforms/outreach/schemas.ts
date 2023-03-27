@@ -1,4 +1,4 @@
-import * as custom from '@/sdk/zod';
+import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
 // const outreachRelationship = (
@@ -157,12 +157,12 @@ export const outreachUser = z
   })
   .passthrough();
 
-// export const outreachListUsersResponse = z.intersection(
-//   z.object({
-//     data: z.array(outreachUser),
-//   }),
-//   outreachPaginatedResponse,
-// );
+export const outreachListUsersResponse = z.intersection(
+  z.object({
+    data: z.array(outreachUser),
+  }),
+  outreachPaginatedResponse,
+);
 
 export const outreachMailbox = z
   .object({
@@ -217,7 +217,7 @@ export const outreachSequence = z
 //   outreachPaginatedResponse,
 // );
 
-const outreachSequenceState = z
+export const outreachSequenceState = z
   .object({
     id: z.number(),
     attributes: z.object({}).passthrough(),

@@ -1,5 +1,5 @@
 import { client } from '@/platforms/outreach/client';
-import { action } from '@/sdk';
+import { action, ActionClientError } from '@/sdk';
 import { z } from 'zod';
 
 export default action(
@@ -8,21 +8,17 @@ export default action(
     resource: 'users',
     mutation: false,
     schema: z.object({
-      id: z.string(),
+      id: z.number(),
     }),
-    scopes: [
-      'crm.objects.deals.write',
-      'crm.objects.deals.read',
-      'crm.schemas.deals.write',
-      'crm.schemas.deals.read',
-    ],
+    scopes: [],
   },
   async ({ input, auth }) => {
     const result = await client.users.get(auth, { id: input.id });
 
     if (result.error) {
-      return null;
+      throw ActionClientError.fromClientResult(result.error);
     }
-    // return await client.users.get(auth, { id: input.id });
+
+    return result.data;
   },
 );
