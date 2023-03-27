@@ -8,11 +8,9 @@ export class ActionError extends Error {
   }
 }
 
-export class ActionClientError<
-  TReason extends ClientResult<any>['error'],
-> extends ActionError {
-  reason: TReason;
-  constructor(message: string, reason: TReason) {
+export class ActionClientError extends ActionError {
+  reason: ClientResult<any>['error'];
+  constructor(message: string, reason: ClientResult<any>['error']) {
     super(message);
     this.reason = reason;
     this.name = 'ActionClientError';

@@ -1,27 +1,6 @@
 import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
-// const outreachRelationship = (
-//   { nullish }: { nullish: boolean } = { nullish: false },
-// ) => {
-//   let data: ZodSchema = z
-//     .object({
-//       id: z.string(),
-//     })
-//     .passthrough();
-
-//   let relationship: ZodSchema = z
-//     .object({
-//       data: nullish ? data.nullish() : data,
-//     })
-//     .passthrough();
-
-//   if (nullish) {
-//     return relationship.nullish();
-//   }
-//   return relationship;
-// };
-
 const outreachRelationship = z
   .object({
     data: z
@@ -78,25 +57,6 @@ export const outreachProspect = z
   })
   .passthrough();
 
-// export const outreachGetProspectsResponse = z.intersection(
-//   z.object({
-//     data: z.array(outreachProspect),
-//   }),
-//   outreachPaginatedResponse,
-// );
-
-// export const outreachGetProspectResponse = z.object({
-//   data: outreachProspect,
-// });
-
-// export const outreachCreateProspectsResponse = z.object({
-//   data: outreachProspect,
-// });
-
-// export const outreachUpdateProspectsResponse = z.object({
-//   data: outreachProspect,
-// });
-
 export const outreachAccount = z
   .object({
     id: z.number(),
@@ -122,13 +82,6 @@ export const outreachAccount = z
   })
   .passthrough();
 
-// export const outreachGetAccountsResponse = z.intersection(
-//   z.object({
-//     data: z.array(outreachAccount),
-//   }),
-//   outreachPaginatedResponse,
-// );
-
 export const outreachEmailAddress = z
   .object({
     id: z.number(),
@@ -136,10 +89,6 @@ export const outreachEmailAddress = z
     relationships: z.object({}).passthrough(),
   })
   .passthrough();
-
-// export const outreachCreateEmailAddressResponse = z.object({
-//   data: outreachEmailAddress,
-// });
 
 export const outreachUser = z
   .object({
@@ -178,13 +127,6 @@ export const outreachMailbox = z
   })
   .passthrough();
 
-// export const outreachListMailboxesResponse = z.intersection(
-//   z.object({
-//     data: z.array(outreachMailbox),
-//   }),
-//   outreachPaginatedResponse,
-// );
-
 export const outreachSequence = z
   .object({
     id: z.number(),
@@ -210,13 +152,6 @@ export const outreachSequence = z
   })
   .passthrough();
 
-// export const outreachSequencesResponse = z.intersection(
-//   z.object({
-//     data: z.array(outreachSequence),
-//   }),
-//   outreachPaginatedResponse,
-// );
-
 export const outreachSequenceState = z
   .object({
     id: z.number(),
@@ -230,10 +165,6 @@ export const outreachSequenceState = z
       .passthrough(),
   })
   .passthrough();
-
-// export const outreachSequenceStateResponse = z.object({
-//   data: outreachSequenceState,
-// });
 
 export const outreachMailing = z
   .object({
@@ -262,14 +193,3 @@ export const outreachMailing = z
       .passthrough(),
   })
   .passthrough();
-
-// export const outreachMailingsResponse = z.intersection(
-//   z.object({
-//     data: z.array(outreachMailing),
-//   }),
-//   outreachPaginatedResponse,
-// );
-
-// export const outreachGetMailingResponse = z.object({
-//   data: outreachMailing,
-// });
