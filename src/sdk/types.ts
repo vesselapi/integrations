@@ -110,8 +110,9 @@ export type PlatformDisplayConfig = {
 export type Platform<
   TActions extends Record<string, Action<string, any, any>>,
   TClient extends PlatformClient,
+  TId extends string,
 > = {
-  id: string;
+  id: TId;
   auth: (StandardAuthConfig | OAuth2AuthConfig)[];
   rawActions: Action<string, any, any>[];
   client: TClient;

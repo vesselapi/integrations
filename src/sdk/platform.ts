@@ -49,10 +49,11 @@ export const platform = <
       : never;
   },
   TClient extends PlatformClient,
+  TId extends string,
 >(
-  id: string,
+  id: TId,
   options: PlatformOptions<TActions, TClient>,
-): Platform<TActions, TClient> => {
+): Platform<TActions, TClient, string> => {
   const authConfigs = isArray(options.auth)
     ? options.auth
     : [

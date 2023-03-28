@@ -1,5 +1,11 @@
+import aircall from '@/platforms/aircall';
+import hubspot from '@/platforms/hubspot';
 import outreach from '@/platforms/outreach';
-import aircall from './aircall';
-import hubspot from './hubspot';
 
-export const integrations = [hubspot, aircall, outreach];
+export const integrations = {
+  outreach,
+  aircall,
+  hubspot,
+};
+
+export const integrationsList = [hubspot, aircall, outreach];
