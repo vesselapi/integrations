@@ -15,7 +15,7 @@ export type StandardToken = {
 
 type BaseAuth = {
   getTokenString: () => Promise<string>;
-  retry: <T extends () => Promise<Response>>(func: T) => ReturnType<T>;
+  retry: (func: () => Promise<Response>) => Promise<Response>;
 };
 
 export type OAuth2Auth = BaseAuth & {
@@ -42,10 +42,8 @@ export type AuthQuestion = {
 
 export type RetryableCheckFunction = ({
   response,
-  auth,
 }: {
   response: Response;
-  auth: Auth;
 }) => boolean;
 
 export type StandardAuthConfig = {
