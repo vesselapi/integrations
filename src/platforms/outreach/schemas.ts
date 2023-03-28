@@ -193,3 +193,15 @@ export const outreachMailing = z
       .passthrough(),
   })
   .passthrough();
+
+export type OutreachProspect = z.infer<typeof outreachProspect>;
+export type OutreachAccount = z.infer<typeof outreachAccount>;
+export type OutreachEmailAddress = z.infer<typeof outreachEmailAddress>;
+export type OutreachUser = z.infer<typeof outreachUser>;
+export type OutreachListUsersResponse = z.infer<
+  typeof outreachListUsersResponse
+>;
+export type OutreachMailbox = z.infer<typeof outreachMailbox>;
+export type OutreachSequence = z.infer<typeof outreachSequence>;
+export type OutreachSequenceState = z.infer<typeof outreachSequenceState>;
+export type OutreachMailing = z.infer<typeof outreachMailing>;

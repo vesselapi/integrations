@@ -89,16 +89,17 @@ export type Json =
   | null;
 
 export type HTTPOptions = {
-  path: string;
-  method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'OPTIONS' | 'HEAD' | 'DELETE';
-  headers: Record<string, string>;
-  query: Record<string, string>;
-  params: Record<string, string>;
-  body: string | Json;
+  // url: string;
+  // path: string;
+  // method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'OPTIONS' | 'HEAD' | 'DELETE';
+  // headers: Record<string, string>;
+  // query: Record<string, string>;
+  // params: Record<string, string>;
+  // body: string | Json;
 };
 
 export interface PlatformClient {
-  request: (options: HTTPOptions, auth: Auth) => Promise<any>;
+  passthrough: (auth: Auth, params: any) => Promise<ClientResult<any>>;
 }
 
 export type PlatformDisplayConfig = {
@@ -108,10 +109,12 @@ export type PlatformDisplayConfig = {
 
 export type Platform<
   TActions extends Record<string, Action<string, any, any>>,
+  TClient extends PlatformClient,
 > = {
   id: string;
   auth: (StandardAuthConfig | OAuth2AuthConfig)[];
   rawActions: Action<string, any, any>[];
+  client: TClient;
   actions: {
     [Key in keyof TActions]: TActions[Key] extends Action<
       string,
@@ -121,7 +124,6 @@ export type Platform<
       ? DirectlyInvokedAction<TInput, TOutput>
       : never;
   };
-  request?: RequestFunction;
   isRetryableAuthResponse?: ({
     response,
     auth,

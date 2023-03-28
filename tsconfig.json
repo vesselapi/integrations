@@ -9,6 +9,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/platforms/outreach/client"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

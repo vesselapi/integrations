@@ -9,94 +9,32 @@ import {
   outreachSequenceState,
   outreachUser,
 } from '@/platforms/outreach/schemas';
-import { Auth, ClientResult } from '@/sdk';
+import { makeRequestFactory } from '@/sdk/client';
 import { mapKeys, shake } from 'radash';
 import { z } from 'zod';
 
 export const BASE_URL = 'https://api.outreach.io/api/v2';
 const DEFAULT_PAGE_SIZE = 100;
 
-const request =
-  <TPath, THeaders, TBody, TQuery, TMethod, TResponse extends object>({
-    url,
-    method,
-    schema,
-    headers,
-    json,
-    query,
-  }: {
-    url: (args: TPath) => `${typeof BASE_URL}/${string}`;
-    method:
-      | 'get'
-      | 'post'
-      | 'put'
-      | 'delete'
-      | 'patch'
-      | ((args: TMethod) => 'get' | 'post' | 'put' | 'delete' | 'patch');
-    schema: z.ZodSchema<TResponse>;
-    headers?: (args: THeaders) => Record<string, string>;
-    json?: (args: TBody) => Record<string, unknown>;
-    query?: (args: TQuery) => Record<string, string>;
-  }) =>
-  async (
-    auth: Auth,
-    args: TPath & THeaders & TBody & TQuery & TMethod,
-  ): Promise<ClientResult<TResponse>> => {
-    const queryString = query
-      ? new URLSearchParams(query(args)).toString()
-      : '';
-
-    const fullUrl = url(args) + (queryString ? `?${queryString}` : '');
-
-    const response = await auth.retry(
-      async () =>
-        await fetch(fullUrl, {
-          method: typeof method === 'string' ? method : method(args),
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${await auth.getTokenString()}`,
-            ...headers?.(args),
-          },
-          body: json ? JSON.stringify(json(args)) : undefined,
-        }),
-    );
-
-    const body = await response.json();
-
-    if (!response.ok) {
-      return {
-        data: null,
-        error: {
-          type: 'http',
-          body,
-          status: response.status,
+const request = makeRequestFactory(
+  BASE_URL,
+  ({ auth, fullUrl, method, headers, json }) =>
+    async () =>
+      await fetch(fullUrl, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await auth.getTokenString()}`,
+          ...headers,
         },
-      };
-    }
-
-    const zodResult = await schema.safeParseAsync(body);
-    if (!zodResult.success) {
-      return {
-        data: null,
-        error: {
-          type: 'validation',
-          zodError: zodResult.error,
-          original: body,
-        },
-      };
-    }
-
-    await schema.parseAsync(body);
-    return {
-      error: null,
-      data: await schema.parseAsync(body),
-    };
-  };
+        body: json ? JSON.stringify(json) : undefined,
+      }),
+);
 
 export const client = {
   users: {
     get: request({
-      url: ({ id }: { id: number }) => `${BASE_URL}/users/${id}`,
+      url: ({ id }: { id: number }) => `/users/${id}`,
       method: 'get',
       schema: z
         .object({
@@ -106,7 +44,7 @@ export const client = {
     }),
     list: request({
       url: ({ cursor }: { cursor?: `${typeof BASE_URL}/${string}` }) =>
-        cursor ?? `${BASE_URL}/users`,
+        cursor ?? `/users`,
       method: 'get',
       query: () => ({ count: 'false', 'page[size]': `${DEFAULT_PAGE_SIZE}` }),
       schema: z.intersection(
@@ -121,7 +59,7 @@ export const client = {
   },
   prospects: {
     get: request({
-      url: ({ id }: { id: number }) => `${BASE_URL}/prospects/${id}`,
+      url: ({ id }: { id: number }) => `/prospects/${id}`,
       method: 'get',
       schema: z
         .object({
@@ -131,7 +69,7 @@ export const client = {
     }),
     list: request({
       url: ({ cursor }: { cursor?: `${typeof BASE_URL}/${string}` }) =>
-        cursor ?? `${BASE_URL}/prospects`,
+        cursor ?? `/prospects`,
       query: ({ filters }: { filters?: { emails: string } }) => {
         return {
           count: 'false',
@@ -150,7 +88,7 @@ export const client = {
       ),
     }),
     create: request({
-      url: () => `${BASE_URL}/prospects`,
+      url: () => `/prospects`,
       json: (prospect: {
         attributes: {
           firstName?: string;
@@ -189,7 +127,7 @@ export const client = {
         .passthrough(),
     }),
     update: request({
-      url: ({ id }: { id: number }) => `${BASE_URL}/prospects/${id}`,
+      url: ({ id }: { id: number }) => `/prospects/${id}`,
       json: (prospect: {
         id: number;
         attributes: {
@@ -214,7 +152,7 @@ export const client = {
   },
   accounts: {
     get: request({
-      url: ({ id }: { id: number }) => `${BASE_URL}/accounts/${id}`,
+      url: ({ id }: { id: number }) => `/accounts/${id}`,
       method: 'get',
       schema: z
         .object({
@@ -247,7 +185,7 @@ export const client = {
   },
   mailings: {
     get: request({
-      url: ({ id }: { id: number }) => `${BASE_URL}/mailings/${id}`,
+      url: ({ id }: { id: number }) => `/mailings/${id}`,
       method: 'get',
       schema: z
         .object({
@@ -257,7 +195,7 @@ export const client = {
     }),
     list: request({
       url: ({ cursor }: { cursor?: `${typeof BASE_URL}/${string}` }) =>
-        cursor ?? `${BASE_URL}/mailings`,
+        cursor ?? `/mailings`,
       method: 'get',
       query: () => ({ count: 'false', 'page[size]': `${DEFAULT_PAGE_SIZE}` }),
       schema: z.intersection(
@@ -272,7 +210,7 @@ export const client = {
   },
   sequences: {
     get: request({
-      url: ({ id }: { id: number }) => `${BASE_URL}/sequences/${id}`,
+      url: ({ id }: { id: number }) => `/sequences/${id}`,
       method: 'get',
       schema: z
         .object({
@@ -282,7 +220,7 @@ export const client = {
     }),
     list: request({
       url: ({ cursor }: { cursor?: `${typeof BASE_URL}/${string}` }) =>
-        cursor ?? `${BASE_URL}/sequences`,
+        cursor ?? `/sequences`,
       method: 'get',
       query: () => ({ count: 'false', 'page[size]': `${DEFAULT_PAGE_SIZE}` }),
       schema: z.intersection(
@@ -297,7 +235,7 @@ export const client = {
   },
   sequenceStates: {
     create: request({
-      url: () => `${BASE_URL}/sequenceStates`,
+      url: () => `/sequenceStates`,
       json: (sequenceState: {
         relationships: {
           prospect: {
@@ -336,7 +274,7 @@ export const client = {
   mailboxes: {
     list: request({
       url: ({ cursor }: { cursor?: `${typeof BASE_URL}/${string}` }) =>
-        cursor ?? `${BASE_URL}/mailboxes`,
+        cursor ?? `/mailboxes`,
       method: 'get',
       schema: z.intersection(
         z
@@ -350,7 +288,7 @@ export const client = {
   },
   emailAddresses: {
     create: request({
-      url: () => `${BASE_URL}/emailAddresses`,
+      url: () => `/emailAddresses`,
       json: (emailAddress: {
         attributes: {
           email: string;
@@ -375,14 +313,15 @@ export const client = {
     }),
   },
   passthrough: request({
-    url: ({ url }: { url: `${typeof BASE_URL}/${string}` }) => url,
+    url: ({ url }: { url: `${typeof BASE_URL}/${string}` | `/${string}` }) =>
+      url,
     method: ({
       method,
     }: {
       method: 'get' | 'post' | 'put' | 'delete' | 'patch';
     }) => method,
-    query: ({ query }: { query: Record<string, string> }) => query,
-    json: ({ body }: { body: Record<string, unknown> }) => body,
+    query: ({ query }: { query?: Record<string, string> }) => query ?? {},
+    json: ({ body }: { body?: Record<string, unknown> }) => body ?? {},
     schema: z.any(),
   }),
 };
