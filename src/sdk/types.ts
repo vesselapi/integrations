@@ -40,6 +40,14 @@ export type AuthQuestion = {
   label: string;
 };
 
+export type RetryableCheckFunction = ({
+  response,
+  auth,
+}: {
+  response: Response;
+  auth: Auth;
+}) => boolean;
+
 export type StandardAuthConfig = {
   type: 'standard';
   default: boolean;
@@ -48,6 +56,7 @@ export type StandardAuthConfig = {
    * E.g. Asking for Api token
    */
   questions: AuthQuestion[];
+  isRetryable: RetryableCheckFunction;
 };
 
 /**
@@ -78,6 +87,7 @@ export type OAuth2AuthConfig = {
     redirectUrl: string;
     state: string;
   }) => HttpsUrl;
+  isRetryable: RetryableCheckFunction;
 };
 
 export type Json =
@@ -99,7 +109,7 @@ export type HTTPOptions = {
 };
 
 export interface PlatformClient {
-  passthrough: (auth: Auth, params: any) => Promise<ClientResult<any>>;
+  passthrough: (auth: Auth, params: any) => Promise<any>;
 }
 
 export type PlatformDisplayConfig = {
@@ -125,13 +135,6 @@ export type Platform<
       ? DirectlyInvokedAction<TInput, TOutput>
       : never;
   };
-  isRetryableAuthResponse?: ({
-    response,
-    auth,
-  }: {
-    response: Response;
-    auth: Auth;
-  }) => boolean;
   display: PlatformDisplayConfig;
 };
 
@@ -172,23 +175,3 @@ export type Unification<TVertical extends string = string> = {
   vertical: TVertical;
   actions: UnifiedAction<string, TVertical, any, any>[];
 };
-
-export type ClientResult<TResponse extends object> =
-  | {
-      data: TResponse;
-      error: null;
-    }
-  | {
-      data: null;
-      error:
-        | {
-            type: 'http';
-            body: object;
-            status: number;
-          }
-        | {
-            type: 'validation';
-            zodError: z.ZodError;
-            original: unknown;
-          };
-    };

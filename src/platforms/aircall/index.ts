@@ -1,4 +1,4 @@
-import { auth, ClientResult, platform } from '../../sdk';
+import { auth, platform } from '../../sdk';
 import { icon } from './icon';
 
 export default platform('aircall', {
@@ -7,7 +7,7 @@ export default platform('aircall', {
     tokenUrl: 'https://api.aircall.io/v1/oauth/token',
   }),
   client: {
-    passthrough: async () => ({} as ClientResult<any>),
+    passthrough: async () => ({} as any),
   },
   display: {
     name: 'Aircall',

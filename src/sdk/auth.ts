@@ -2,6 +2,7 @@ import {
   AuthQuestion,
   HttpsUrl,
   OAuth2AuthConfig,
+  RetryableCheckFunction,
   StandardAuthConfig,
 } from './types';
 
@@ -13,6 +14,7 @@ export const auth = {
     scopeSeparator?: OAuth2AuthConfig['scopeSeparator'];
     tokenAuth?: OAuth2AuthConfig['tokenAuth'];
     questions?: AuthQuestion[];
+    isRetryable?: RetryableCheckFunction;
   }): OAuth2AuthConfig => ({
     type: 'oauth2',
     authUrl: options.authUrl,
@@ -32,6 +34,8 @@ export const auth = {
         .join('&');
       return `${options.authUrl}?${query}`;
     },
+    isRetryable:
+      options.isRetryable ?? (({ response }) => response.status === 401),
   }),
   apiToken: (options: {
     questions?: AuthQuestion[];
@@ -47,5 +51,6 @@ export const auth = {
       },
       ...(options.questions ?? []),
     ],
+    isRetryable: ({ response }) => response.status === 401,
   }),
 };

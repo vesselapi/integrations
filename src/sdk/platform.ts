@@ -1,7 +1,6 @@
 import { isArray, mapValues, unique } from 'radash';
 import {
   Action,
-  Auth,
   DirectlyInvokedAction,
   OAuth2AuthConfig,
   Platform,
@@ -28,13 +27,6 @@ export type PlatformOptions<
     | (StandardAuthConfig | OAuth2AuthConfig)[];
   actions: TActions;
   display: PlatformDisplayConfig;
-  isRetryableAuthResponse?: ({
-    response,
-    auth,
-  }: {
-    response: Response;
-    auth: Auth;
-  }) => boolean;
   client: TClient;
 };
 
@@ -95,7 +87,6 @@ export const platform = <
     client: options.client,
     auth: authConfigs,
     display: options.display,
-    isRetryableAuthResponse: options.isRetryableAuthResponse,
     rawActions: Object.values(options.actions),
     actions: mapValues(
       options.actions as Record<string, Action<string, {}, {}>>,

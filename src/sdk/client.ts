@@ -1,4 +1,5 @@
-import { Auth, ClientResult } from '@/sdk/types';
+import { IntegrationError } from '@/sdk/error';
+import { Auth } from '@/sdk/types';
 import { z } from 'zod';
 
 export const makeRequestFactory = <TBaseUrl extends string>(
@@ -50,7 +51,7 @@ export const makeRequestFactory = <TBaseUrl extends string>(
     async (
       auth: Auth,
       args: TPath & THeaders & TBody & TQuery & TMethod,
-    ): Promise<ClientResult<z.infer<TResponseSchema>>> => {
+    ): Promise<z.infer<TResponseSchema>> => {
       const queryString = query
         ? new URLSearchParams(query(args)).toString()
         : '';
@@ -73,34 +74,29 @@ export const makeRequestFactory = <TBaseUrl extends string>(
         }),
       );
 
-      const body = await response.json();
-
       if (!response.ok) {
-        return {
-          data: null,
-          error: {
-            type: 'http',
-            body,
-            status: response.status,
-          },
-        };
+        throw new IntegrationError('HTTP error in client', {
+          type: 'http',
+          bodyText: await response.text(),
+          status: response.status,
+        });
       }
+
+      const body = await response.json();
 
       const zodResult = await schema.safeParseAsync(body);
       if (!zodResult.success) {
-        return {
-          data: null,
-          error: {
-            type: 'validation',
-            zodError: zodResult.error,
-            original: body,
-          },
-        };
+        // For now, we log an error when validation fails on responses.
+        // In the future, we may stop doing this once our schemas are robust
+        // enough.
+        //
+        // We may also support an injectable logger object.
+        console.error('Validation failed on client response', {
+          zodError: zodResult.error,
+        });
+        return body as z.infer<TResponseSchema>;
       }
 
-      return {
-        error: null,
-        data: await schema.parseAsync(body),
-      };
+      return zodResult.data;
     };
 };

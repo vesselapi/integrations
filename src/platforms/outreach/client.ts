@@ -91,15 +91,15 @@ export const client = {
       url: () => `/prospects`,
       json: (prospect: {
         attributes: {
-          firstName?: string;
-          lastName?: string;
-          occupation?: string;
-          addressCity?: string;
-          addressCountry?: string;
-          addressState?: string;
-          addressStreet?: string;
-          addressStreet2?: string;
-          addressZip?: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          occupation?: string | null;
+          addressCity?: string | null;
+          addressCountry?: string | null;
+          addressState?: string | null;
+          addressStreet?: string | null;
+          addressStreet2?: string | null;
+          addressZip?: string | null;
           emails?: string[];
         };
         relationships: {
@@ -131,15 +131,15 @@ export const client = {
       json: (prospect: {
         id: number;
         attributes: {
-          firstName?: string;
-          lastName?: string;
-          occupation?: string;
-          addressCity?: string;
-          addressCountry?: string;
-          addressState?: string;
-          addressStreet?: string;
-          addressStreet2?: string;
-          addressZip?: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          occupation?: string | null;
+          addressCity?: string | null;
+          addressCountry?: string | null;
+          addressState?: string | null;
+          addressStreet?: string | null;
+          addressStreet2?: string | null;
+          addressZip?: string | null;
         };
       }) => ({ data: { type: 'prospect', ...prospect } }),
       method: 'patch',

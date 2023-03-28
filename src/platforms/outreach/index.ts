@@ -27,9 +27,6 @@ export default platform('outreach', {
     iconURI: icon,
   },
   client,
-  isRetryableAuthResponse: ({ response }) => {
-    return response.status === 401;
-  },
   actions: {
     getAccount,
     listAccounts,

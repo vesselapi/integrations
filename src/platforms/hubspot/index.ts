@@ -1,4 +1,4 @@
-import { auth, ClientResult, platform } from '../../sdk';
+import { auth, platform } from '../../sdk';
 import createLead from './actions/create-lead';
 import findLead from './actions/find-lead';
 import { icon } from './icon';
@@ -13,10 +13,7 @@ export default platform('hubspot', {
     iconURI: icon,
   },
   client: {
-    passthrough: async () => ({} as ClientResult<any>),
-  },
-  isRetryableAuthResponse: ({ response }) => {
-    return response.status === 401;
+    passthrough: async () => ({} as any),
   },
   actions: {
     createLead,

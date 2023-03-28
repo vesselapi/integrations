@@ -1,6 +1,6 @@
 import { outreachUrl } from '@/platforms/outreach/actions/validators';
 import { client } from '@/platforms/outreach/client';
-import { action, ActionClientError } from '@/sdk';
+import { action } from '@/sdk';
 import { z } from 'zod';
 
 export default action(
@@ -19,15 +19,9 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    const result = await client.prospects.list(auth, {
+    return await client.prospects.list(auth, {
       cursor: input.cursor,
       filters: input.filters,
     });
-
-    if (result.error) {
-      throw ActionClientError.fromClientResult(result.error);
-    }
-
-    return result.data;
   },
 );

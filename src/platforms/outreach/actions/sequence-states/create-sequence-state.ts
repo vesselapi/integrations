@@ -1,5 +1,5 @@
 import { client } from '@/platforms/outreach/client';
-import { action, ActionClientError } from '@/sdk';
+import { action } from '@/sdk';
 import { z } from 'zod';
 
 export default action(
@@ -17,7 +17,7 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    const result = await client.sequenceStates.create(auth, {
+    return await client.sequenceStates.create(auth, {
       relationships: {
         prospect: {
           data: { id: input.relationships.prospectId, type: 'prospect' },
@@ -30,11 +30,5 @@ export default action(
         },
       },
     });
-
-    if (result.error) {
-      throw ActionClientError.fromClientResult(result.error);
-    }
-
-    return result.data;
   },
 );
