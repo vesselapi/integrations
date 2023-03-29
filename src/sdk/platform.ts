@@ -1,11 +1,10 @@
 import { isArray, mapValues, unique } from 'radash';
 import {
   Action,
-  Auth,
   DirectlyInvokedAction,
-  HTTPOptions,
   OAuth2AuthConfig,
   Platform,
+  PlatformClient,
   PlatformDisplayConfig,
   StandardAuthConfig,
 } from './types';
@@ -20,6 +19,7 @@ export type PlatformOptions<
       ? Action<string, TInput, TOutput>
       : never;
   },
+  TClient extends PlatformClient,
 > = {
   auth:
     | StandardAuthConfig
@@ -27,14 +27,7 @@ export type PlatformOptions<
     | (StandardAuthConfig | OAuth2AuthConfig)[];
   actions: TActions;
   display: PlatformDisplayConfig;
-  isRetryableAuthResponse?: ({
-    response,
-    auth,
-  }: {
-    response: Response;
-    auth: Auth;
-  }) => boolean;
-  request?: (options: HTTPOptions) => Promise<any>;
+  client: TClient;
 };
 
 export const platform = <
@@ -47,10 +40,12 @@ export const platform = <
       ? Action<string, TInput, TOutput>
       : never;
   },
+  TClient extends PlatformClient,
+  TId extends string,
 >(
-  id: string,
-  options: PlatformOptions<TActions>,
-): Platform<TActions> => {
+  id: TId,
+  options: PlatformOptions<TActions, TClient>,
+): Platform<TActions, TClient, string> => {
   const authConfigs = isArray(options.auth)
     ? options.auth
     : [
@@ -89,10 +84,9 @@ export const platform = <
 
   return {
     id,
+    client: options.client,
     auth: authConfigs,
     display: options.display,
-    request: options.request,
-    isRetryableAuthResponse: options.isRetryableAuthResponse,
     rawActions: Object.values(options.actions),
     actions: mapValues(
       options.actions as Record<string, Action<string, {}, {}>>,

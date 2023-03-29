@@ -1,4 +1,4 @@
-import { ZodType } from 'zod';
+import { z } from 'zod';
 
 export type Fetch = typeof fetch;
 
@@ -15,9 +15,7 @@ export type StandardToken = {
 
 type BaseAuth = {
   getTokenString: () => Promise<string>;
-  retry: <T extends (...args: any) => Promise<Response>>(
-    func: T,
-  ) => ReturnType<T>;
+  retry: (func: () => Promise<Response>) => Promise<Response>;
 };
 
 export type OAuth2Auth = BaseAuth & {
@@ -41,6 +39,12 @@ export type AuthQuestion = {
   id: string;
   label: string;
 };
+
+export type RetryableCheckFunction = ({
+  response,
+}: {
+  response: Response;
+}) => boolean;
 
 export type StandardAuthConfig = {
   type: 'standard';
@@ -80,6 +84,7 @@ export type OAuth2AuthConfig = {
     redirectUrl: string;
     state: string;
   }) => HttpsUrl;
+  isRetryable: RetryableCheckFunction;
 };
 
 export type Json =
@@ -91,16 +96,17 @@ export type Json =
   | null;
 
 export type HTTPOptions = {
-  path: string;
-  method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'OPTIONS' | 'HEAD' | 'DELETE';
-  headers: Record<string, string>;
-  query: Record<string, string>;
-  params: Record<string, string>;
-  body: string | Json;
+  // url: string;
+  // path: string;
+  // method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'OPTIONS' | 'HEAD' | 'DELETE';
+  // headers: Record<string, string>;
+  // query: Record<string, string>;
+  // params: Record<string, string>;
+  // body: string | Json;
 };
 
 export interface PlatformClient {
-  request: (options: HTTPOptions, auth: Auth) => Promise<any>;
+  passthrough: (auth: Auth, params: any) => Promise<any>;
 }
 
 export type PlatformDisplayConfig = {
@@ -110,10 +116,13 @@ export type PlatformDisplayConfig = {
 
 export type Platform<
   TActions extends Record<string, Action<string, any, any>>,
+  TClient extends PlatformClient,
+  TId extends string,
 > = {
-  id: string;
+  id: TId;
   auth: (StandardAuthConfig | OAuth2AuthConfig)[];
   rawActions: Action<string, any, any>[];
+  client: TClient;
   actions: {
     [Key in keyof TActions]: TActions[Key] extends Action<
       string,
@@ -123,29 +132,21 @@ export type Platform<
       ? DirectlyInvokedAction<TInput, TOutput>
       : never;
   };
-  request?: RequestFunction;
-  isRetryableAuthResponse?: ({
-    response,
-    auth,
-  }: {
-    response: Response;
-    auth: Auth;
-  }) => boolean;
   display: PlatformDisplayConfig;
 };
 
 export type ActionFunction<
   TInput extends {},
-  TOutput extends {} | null,
+  TOutput extends {} | null | void,
 > = (props: { input: TInput; auth: Auth }) => Promise<TOutput>;
 
 export type Action<
   TName extends string,
   TInput extends {},
-  TOutput extends {} | null,
+  TOutput extends {} | null | void,
 > = {
   name: TName;
-  schema: ZodType<TInput>;
+  schema: z.ZodType<TInput>;
   resource?: string;
   scopes?: string[];
   mutation?: boolean;
@@ -154,7 +155,7 @@ export type Action<
 
 export type DirectlyInvokedAction<
   TInput extends {},
-  TOutput extends {} | null,
+  TOutput extends {} | null | void,
 > = (input: TInput, auth: Auth) => Promise<TOutput>;
 
 export type UnifiedAction<
