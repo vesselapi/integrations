@@ -1,6 +1,6 @@
 {
   "name": "@vesselapi/integrations",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Vessel integrations",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
@@ -44,7 +44,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "radash": "^10.7.0",
+    "radash": "^10.8.1",
     "zod": "^3.20.6"
   }
 }

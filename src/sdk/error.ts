@@ -5,7 +5,7 @@ export type ActionErrorMeta = {
 export type HttpErrorMeta = {
   type: 'http';
   status: number;
-  bodyText: string;
+  body: string | object | object[];
 };
 
 export class IntegrationError extends Error {

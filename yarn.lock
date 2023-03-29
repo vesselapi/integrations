@@ -2062,10 +2062,10 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-radash@^10.7.0:
-  version "10.7.0"
-  resolved "https://registry.yarnpkg.com/radash/-/radash-10.7.0.tgz#aaa164f9697a440d848b88323d51d1bc4f39608a"
-  integrity sha512-dz5NUcGnvn080kKJnyPtqVnP4MWoiwp5qQhEQFK/qMJxCjffQd8tMR4cybxy6y5hupYa5UkSlJRSRY2F7GPBxQ==
+radash@^10.8.1:
+  version "10.8.1"
+  resolved "https://registry.yarnpkg.com/radash/-/radash-10.8.1.tgz#7a49fa1ec07381dba9174ddadf83401e1db293f9"
+  integrity sha512-NzYo3XgM9Tzjf5iFPIMG2l5+LSOCi2H7Axe3Ry/1PrhlvuqxUoiLsmcTBtw4CfKtzy5Fzo79STiEj9JZWMfDQg==
 
 react-is@^18.0.0:
   version "18.2.0"
