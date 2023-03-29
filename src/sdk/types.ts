@@ -54,7 +54,6 @@ export type StandardAuthConfig = {
    * E.g. Asking for Api token
    */
   questions: AuthQuestion[];
-  isRetryable: RetryableCheckFunction;
 };
 
 /**

@@ -51,6 +51,5 @@ export const auth = {
       },
       ...(options.questions ?? []),
     ],
-    isRetryable: ({ response }) => response.status === 401,
   }),
 };
