@@ -1,5 +1,6 @@
 import { IntegrationError } from '@/sdk/error';
 import { Auth } from '@/sdk/types';
+import { guard } from 'radash';
 import { z } from 'zod';
 
 export const makeRequestFactory = <TBaseUrl extends string>(
@@ -77,20 +78,13 @@ export const makeRequestFactory = <TBaseUrl extends string>(
       if (!response.ok) {
         const text = await response.text();
 
-        let body = null;
-        try {
-          body = JSON.parse(text);
-        } catch (err) {
-          if (err instanceof SyntaxError) {
-            // Ignore this error.
-          } else {
-            throw err;
-          }
-        }
-
         throw new IntegrationError('HTTP error in client', {
           type: 'http',
-          body: body ?? text,
+          body:
+            guard(
+              () => JSON.parse(text),
+              (err) => err instanceof SyntaxError,
+            ) ?? text,
           status: response.status,
         });
       }
