@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { action } from '../../../../sdk';
-import {client} from '../../client';
-import { AircallContact } from '../../types';
+import { client } from '../../client';
 
 export default action(
   'contacts-create',
@@ -9,10 +8,10 @@ export default action(
     resource: 'contact',
     mutation: true,
     schema: z.object({
-      first_name: z.string().nullish(),
-      last_name: z.string().nullish(),
-      company_name: z.string().nullish(),
-      information: z.string().nullish(),
+      first_name: z.string().optional(),
+      last_name: z.string().optional(),
+      company_name: z.string().optional(),
+      information: z.string().optional(),
       emails: z
         .array(
           z.object({
@@ -30,7 +29,7 @@ export default action(
     }),
     scopes: [],
   },
-  async ({ input, auth }): Promise<{ contact: AircallContact }> => {
+  async ({ input, auth }) => {
     return await client.contacts.create(auth, {
       first_name: input.first_name,
       last_name: input.last_name,
@@ -38,6 +37,6 @@ export default action(
       information: input.information,
       emails: input.emails,
       phone_numbers: input.phone_numbers,
-    })
+    });
   },
 );

@@ -1,12 +1,6 @@
 {
   "name": "@vesselapi/integrations",
-<<<<<<< HEAD
-  "version": "0.0.13-rc-8",
-||||||| 88b3f80
-  "version": "0.0.12",
-=======
   "version": "0.0.13-rc.2",
->>>>>>> zach/epd-3182-contacts
   "description": "Vessel integrations",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",

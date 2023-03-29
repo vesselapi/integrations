@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { action } from '../../../../sdk';
-import {client} from '../../client';
-import { AircallCall } from '../../types';
+import { client } from '../../client';
 
 export default action(
   'calls-find',
@@ -13,7 +12,7 @@ export default action(
     }),
     scopes: [],
   },
-  async ({ input, auth }): Promise<{ contact: AircallCall }> => {
-    return await client.calls.find(auth, { id: input.id })
+  async ({ input, auth }) => {
+    return await client.calls.find(auth, { id: input.id });
   },
 );

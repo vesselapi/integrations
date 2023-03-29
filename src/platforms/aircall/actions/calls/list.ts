@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { action } from '../../../../sdk';
-import {client} from '../../client';
-import { AircallCall, AircallPagination } from '../../types';
+import { client } from '../../client';
 
 export default action(
   'calls-list',
@@ -9,18 +8,17 @@ export default action(
     resource: 'calls',
     mutation: false,
     schema: z.object({
-      from: z.string(),
-      to: z.string(),
-      order: z.enum(['asc', 'desc']),
-      page: z.number(),
-      per_page: z.number(),
+      from: z.string().optional(),
+      page: z.number().optional(),
+      per_page: z.number().optional(),
     }),
     scopes: [],
   },
-  async ({
-    input,
-    auth,
-  }): Promise<{ meta: AircallPagination; users: AircallCall[] }> => {
-    return await client.calls.list(auth, {});
+  async ({ input, auth }) => {
+    return await client.calls.list(auth, {
+      from: input.from,
+      page: input.page,
+      per_page: input.per_page,
+    });
   },
 );

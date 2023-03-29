@@ -1,11 +1,18 @@
-
 import { makeRequestFactory } from '@/sdk/client';
-import { mapKeys, shake } from 'radash';
+import { shake } from 'radash';
 import { z } from 'zod';
+import {
+  aircallCall,
+  aircallContact,
+  AircallContactCreate,
+  AircallContactUpdate,
+  aircallPagination,
+  AircallStartUserCall,
+  aircallUser,
+} from './schema';
 
 const BASE_URL = 'https://api.aircall.io/v1';
 const DEFAULT_PAGE_SIZE = 100;
-
 
 const request = makeRequestFactory(
   BASE_URL,
@@ -27,57 +34,122 @@ export const client = {
     find: request({
       url: ({ id }: { id: string }) => `/users/${id}`,
       method: 'get',
-      schema: z.any(),
+      schema: z
+        .object({
+          user: aircallUser,
+        })
+        .passthrough(),
     }),
     list: request({
       url: () => `/users`,
       method: 'get',
-      schema: z.any()
+      query: ({
+        from,
+        page = 0,
+        per_page = DEFAULT_PAGE_SIZE,
+      }: {
+        from?: string;
+        page?: number;
+        per_page?: number;
+      }) => shake({ from, page: `${page}`, per_page: `${per_page}` }),
+      schema: z.intersection(
+        z
+          .object({
+            users: z.array(aircallUser),
+          })
+          .passthrough(),
+        aircallPagination,
+      ),
     }),
     startCall: request({
       url: ({ id }: { id: string }) => `/users/${id}/calls`,
       method: 'post',
-      json: ({ number_id, to }: { number_id: number; to: string }) => ({
-        number_id,
-        to,
-      }),
-      schema: z.any()
+      json: (call: AircallStartUserCall) => call,
+      schema: z.any(),
     }),
   },
   calls: {
     find: request({
       url: ({ id }: { id: string }) => `/calls/${id}`,
       method: 'get',
-      schema: z.any(),
+      schema: z
+        .object({
+          call: aircallCall,
+        })
+        .passthrough(),
     }),
     list: request({
       url: () => `/calls`,
       method: 'get',
-      schema: z.any()
+      query: ({
+        from,
+        page = 0,
+        per_page = DEFAULT_PAGE_SIZE,
+      }: {
+        from?: string;
+        page?: number;
+        per_page?: number;
+      }) => shake({ from, page: `${page}`, per_page: `${per_page}` }),
+      schema: z.intersection(
+        z
+          .object({
+            calls: z.array(aircallCall),
+          })
+          .passthrough(),
+        aircallPagination,
+      ),
     }),
   },
   contacts: {
     find: request({
-      url: ({ id }: { id: string }) => `/users/${id}`,
+      url: ({ id }: { id: string }) => `/contacts/${id}`,
       method: 'get',
-      schema: z.any(),
+      schema: z
+        .object({
+          contact: aircallContact,
+        })
+        .passthrough(),
     }),
     list: request({
-      url: () => `/users`,
+      url: () => `/contacts`,
       method: 'get',
-      schema: z.any()
+      query: ({
+        from,
+        page = 0,
+        per_page = DEFAULT_PAGE_SIZE,
+      }: {
+        from?: string;
+        page?: number;
+        per_page?: number;
+      }) => shake({ from, page: `${page}`, per_page: `${per_page}` }),
+      schema: z.intersection(
+        z
+          .object({
+            calls: z.array(aircallContact),
+          })
+          .passthrough(),
+        aircallPagination,
+      ),
     }),
     create: request({
-      url: () => `/users`,
+      url: () => `/contacts`,
       method: 'post',
-      json: (contact: { first_name: string; last_name: string; phone_number: string; company: string; tags: string[] }) => contact,
-      schema: z.any()
+      json: (contact: AircallContactCreate) => contact,
+      schema: z
+        .object({
+          contact: aircallContact,
+        })
+        .passthrough(),
     }),
     update: request({
-      url: ({ id}: { id: string}) => `/users/${id}`,
+      url: ({ id }: { id: string }) => `/contacts/${id}`,
       method: 'post',
-      json: (contact: { first_name: string; last_name: string; company_name: string; information: string }) => contact,
-      schema: z.any()
+      json: (contact: AircallContactUpdate) => contact,
+      schema: z
+        .object({
+          contact: aircallContact,
+        })
+        .passthrough(),
     }),
   },
   passthrough: request({
