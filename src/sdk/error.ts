@@ -1,8 +1,8 @@
-type ActionErrorMeta = {
+export type ActionErrorMeta = {
   type: 'action';
 };
 
-type HttpErrorMeta = {
+export type HttpErrorMeta = {
   type: 'http';
   status: number;
   bodyText: string;
