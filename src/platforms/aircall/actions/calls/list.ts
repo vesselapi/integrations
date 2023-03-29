@@ -1,12 +1,12 @@
 import { z } from 'zod';
 import { action } from '../../../../sdk';
 import client from '../../client';
-import { AircallPagination, AircallUser } from '../../types';
+import { AircallCall, AircallPagination } from '../../types';
 
 export default action(
-  'users-list',
+  'calls-list',
   {
-    resource: 'user',
+    resource: 'calls',
     mutation: false,
     schema: z.object({
       from: z.string(),
@@ -20,10 +20,10 @@ export default action(
   async ({
     input,
     auth,
-  }): Promise<{ meta: AircallPagination; users: AircallUser[] }> => {
+  }): Promise<{ meta: AircallPagination; users: AircallCall[] }> => {
     return await client.request(
       {
-        path: `users`,
+        path: `calls`,
         method: 'GET',
         query: {
           from: input.from,

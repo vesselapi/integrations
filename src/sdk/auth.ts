@@ -37,10 +37,12 @@ export const auth = {
     isRetryable:
       options.isRetryable ?? (({ response }) => response.status === 401),
   }),
-  apiToken: (options: {
-    questions?: AuthQuestion[];
-    default?: boolean;
-  }): StandardAuthConfig => ({
+  apiToken: (
+    options: {
+      questions?: AuthQuestion[];
+      default?: boolean;
+    } = {},
+  ): StandardAuthConfig => ({
     type: 'standard',
     default: options.default ?? false,
     questions: [
