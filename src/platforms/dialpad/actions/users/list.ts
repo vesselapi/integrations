@@ -1,11 +1,11 @@
+import { action } from '@/sdk';
 import { z } from 'zod';
-import { action } from '../../../../sdk';
 import client from '../../client';
 
 export default action(
   'users-list',
   {
-    resource: 'user',
+    resource: 'users',
     mutation: false,
     schema: z.object({
       page: z.number().optional(),

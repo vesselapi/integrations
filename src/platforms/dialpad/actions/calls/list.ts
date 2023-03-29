@@ -1,11 +1,11 @@
+import { action } from '@/sdk';
 import { z } from 'zod';
-import { action } from '../../../../sdk';
 import client from '../../client';
 
 export default action(
   'calls-list',
   {
-    resource: 'call',
+    resource: 'calls',
     mutation: false,
     schema: z.object({
       page: z.number().optional(),
