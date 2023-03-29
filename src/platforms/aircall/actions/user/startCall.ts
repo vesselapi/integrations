@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { action } from '../../../../sdk';
-import client from '../../client';
+import {client} from '../../client';
 
 export default action(
   'users-call-start',
@@ -15,16 +15,6 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }): Promise<{}> => {
-    return await client.request(
-      {
-        path: `users/${input.id}/calls`,
-        method: 'POST',
-        body: {
-          number_id: input.number_id,
-          to: input.to,
-        },
-      },
-      auth,
-    );
+    return await client.users.startCall(auth, { id: input.id, number_id: input.number_id, to: input.to })
   },
 );

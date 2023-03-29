@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { action } from '../../../../sdk';
-import client from '../../client';
+import {client} from '../../client';
 import { AircallUser } from '../../types';
 
 export default action(
@@ -14,12 +14,6 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }): Promise<{ user: AircallUser }> => {
-    return await client.request(
-      {
-        path: `users/${input.id}`,
-        method: 'GET',
-      },
-      auth,
-    );
-  },
+    return await client.users.find(auth, { id: input.id })
+  }
 );

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { action } from '../../../../sdk';
-import client from '../../client';
+import {client} from '../../client';
 import { AircallCall, AircallPagination } from '../../types';
 
 export default action(
@@ -21,19 +21,6 @@ export default action(
     input,
     auth,
   }): Promise<{ meta: AircallPagination; users: AircallCall[] }> => {
-    return await client.request(
-      {
-        path: `calls`,
-        method: 'GET',
-        query: {
-          from: input.from,
-          to: input.to,
-          order: input.order,
-          page: `${input.page}`,
-          per_page: `${input.per_page}`,
-        },
-      },
-      auth,
-    );
+    return await client.calls.list(auth, {});
   },
 );

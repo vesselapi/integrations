@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { action } from '../../../../sdk';
-import client from '../../client';
+import {client} from '../../client';
 import { AircallContact } from '../../types';
 
 export default action(
@@ -14,12 +14,6 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }): Promise<{ contact: AircallContact }> => {
-    return await client.request(
-      {
-        path: `contacts/${input.id}`,
-        method: 'GET',
-      },
-      auth,
-    );
+    return await client.contacts.find(auth, { id: input.id })
   },
 );
