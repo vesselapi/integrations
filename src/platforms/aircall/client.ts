@@ -11,7 +11,7 @@ import {
   aircallUser,
 } from './schema';
 
-const BASE_URL = 'https://api.aircall.io/v1';
+export const BASE_URL = 'https://api.aircall.io/v1';
 const DEFAULT_PAGE_SIZE = 100;
 
 const request = makeRequestFactory(
