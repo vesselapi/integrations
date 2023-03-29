@@ -1,14 +1,14 @@
-import { outreachUrl } from '@/platforms/outreach/actions/validators';
-import { client } from '@/platforms/outreach/client';
+import { client } from '@/platforms/aircall/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
+import { aircallUrl } from './validators';
 
 export default action(
   'passthrough',
   {
     mutation: true,
     schema: z.object({
-      url: outreachUrl().or(
+      url: aircallUrl().or(
         z
           .string()
           .refine((s) => s.startsWith('/'))
