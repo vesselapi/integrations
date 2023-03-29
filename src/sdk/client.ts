@@ -1,5 +1,6 @@
 import { IntegrationError } from '@/sdk/error';
 import { Auth } from '@/sdk/types';
+import { tryit } from 'radash';
 import { z } from 'zod';
 
 export const makeRequestFactory = <TBaseUrl extends string>(
@@ -75,9 +76,11 @@ export const makeRequestFactory = <TBaseUrl extends string>(
       );
 
       if (!response.ok) {
+        const [err, body] = await tryit(response.json)();
+
         throw new IntegrationError('HTTP error in client', {
           type: 'http',
-          bodyText: await response.text(),
+          body: !err ? body : await response.text(),
           status: response.status,
         });
       }
