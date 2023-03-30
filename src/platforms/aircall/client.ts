@@ -120,7 +120,7 @@ export const client = {
       }) => shake({ from, page: `${page}`, per_page: `${per_page}` }),
       schema: z
         .object({
-          calls: z.array(aircallContact),
+          contacts: z.array(aircallContact),
           meta: aircallPagination,
         })
         .passthrough(),
