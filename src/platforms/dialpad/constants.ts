@@ -1,2 +1,2 @@
-export const DEFAULT_PAGE_SIZE = 100;
-export const CURSOR_DELIMITER = ':';
+export const API_DOMAIN = 'https://dialpad.com/api';
+export const API_VERSION = 'v2';
