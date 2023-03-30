@@ -20,7 +20,7 @@ const request = makeRequestFactory(
       await fetch(fullUrl, {
         method,
         headers: {
-          Authorization: `Bearer ${auth.getToken()}`,
+          Authorization: `Bearer ${auth.getTokenString()}`,
           'Content-Type': 'application/json',
           ...headers,
         },
