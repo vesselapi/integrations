@@ -25,6 +25,7 @@ export default platform('aircall', {
     name: 'Aircall',
     iconURI: icon,
   },
+  constants: {},
   client: {
     passthrough: async () => ({} as any),
   },

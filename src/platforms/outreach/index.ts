@@ -15,18 +15,32 @@ import listSequences from '@/platforms/outreach/actions/sequences/list-sequences
 import getUser from '@/platforms/outreach/actions/users/get-user';
 import listUsers from '@/platforms/outreach/actions/users/list-users';
 import { client } from '@/platforms/outreach/client';
+import * as constants from '@/platforms/outreach/constants';
 import { icon } from '@/platforms/outreach/icon';
 
 export default platform('outreach', {
   auth: auth.oauth2({
     authUrl: 'https://api.outreach.io/oauth/authorize',
     tokenUrl: 'https://api.outreach.io/oauth/token',
+    url: ({ scopes, clientId, redirectUrl, state }) => {
+      const query = [
+        ['client_id', encodeURIComponent(clientId)],
+        ['redirect_uri', encodeURIComponent(redirectUrl)],
+        ['scope', scopes.join('+')],
+        ['state', encodeURIComponent(state)],
+        ['response_type', 'code'],
+      ]
+        .map((x) => x.join('='))
+        .join('&');
+      return `https://api.outreach.io/oauth/authorize?${query}`;
+    },
   }),
   display: {
     name: 'Outreach',
     iconURI: icon,
   },
   client,
+  constants,
   actions: {
     getAccount,
     listAccounts,

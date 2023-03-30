@@ -15,6 +15,7 @@ export default platform('hubspot', {
   client: {
     passthrough: async () => ({} as any),
   },
+  constants: {},
   actions: {
     createLead,
     findLead,

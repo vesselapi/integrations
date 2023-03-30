@@ -5,6 +5,7 @@ import {
   OAuth2AuthConfig,
   Platform,
   PlatformClient,
+  PlatformConstants,
   PlatformDisplayConfig,
   StandardAuthConfig,
 } from './types';
@@ -25,6 +26,7 @@ export type PlatformOptions<
     | StandardAuthConfig
     | OAuth2AuthConfig
     | (StandardAuthConfig | OAuth2AuthConfig)[];
+  constants: PlatformConstants;
   actions: TActions;
   display: PlatformDisplayConfig;
   client: TClient;
@@ -88,6 +90,7 @@ export const platform = <
     auth: authConfigs,
     display: options.display,
     rawActions: Object.values(options.actions),
+    constants: options.constants,
     actions: mapValues(
       options.actions as Record<string, Action<string, {}, {}>>,
       wrapAction,
