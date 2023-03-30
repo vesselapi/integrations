@@ -17,6 +17,7 @@ export const auth = {
     oauthBodyFormat?: OAuth2AuthConfig['oauthBodyFormat'];
     url?: OAuth2AuthConfig['url'];
     isRetryable?: RetryableCheckFunction;
+    display?: OAuth2AuthConfig['display'];
   }): OAuth2AuthConfig => ({
     type: 'oauth2',
     authUrl: options.authUrl,
@@ -26,6 +27,12 @@ export const auth = {
     scopeSeparator: options.scopeSeparator ?? ' ',
     questions: options.questions ?? [],
     oauthBodyFormat: options.oauthBodyFormat ?? 'form',
+    display: options.display ?? {
+      markdown: (
+        platform,
+      ) => `- You're about to be directed to an external page where you will sign into your ${platform.display.name} account.
+- Once signed in, you'll be redirected back and your credentials will be securely stored by Vessel.`,
+    },
     url:
       options.url ??
       (({ scopes, clientId, redirectUrl, state }) => {
@@ -46,6 +53,7 @@ export const auth = {
     options: {
       questions?: AuthQuestion[];
       default?: boolean;
+      display?: OAuth2AuthConfig['display'];
     } = {},
   ): StandardAuthConfig => ({
     type: 'standard',
@@ -59,5 +67,11 @@ export const auth = {
       ...(options.questions ?? []),
     ],
     toTokenString: (answers) => answers['api-key'],
+    display: options.display ?? {
+      markdown: (
+        platform,
+      ) => `- You will find an API Key under Settings in your ${platform.display.name} account.
+- Copy and paste the API Key above.`,
+    },
   }),
 };
