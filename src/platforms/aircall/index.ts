@@ -5,7 +5,7 @@ import { icon } from './icon';
 
 import findUser from './actions/user/find';
 import listUser from './actions/user/list';
-import startCallUser from './actions/user/startCall';
+import startCallUser from './actions/user/start-call';
 
 import createContact from './actions/contacts/create';
 import findContact from './actions/contacts/find';

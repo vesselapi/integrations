@@ -3,7 +3,7 @@ import { action } from '../../../../sdk';
 import { client } from '../../client';
 
 export default action(
-  'start-users-call',
+  'start-user-call',
   {
     operation: 'startCall',
     resource: 'users',

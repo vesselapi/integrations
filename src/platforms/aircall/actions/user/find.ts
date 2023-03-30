@@ -3,7 +3,7 @@ import { action } from '../../../../sdk';
 import { client } from '../../client';
 
 export default action(
-  'find-users',
+  'find-user',
   {
     operation: 'find',
     resource: 'users',

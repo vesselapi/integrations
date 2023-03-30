@@ -3,7 +3,7 @@ import { z } from 'zod';
 import client from '../../client';
 
 export default action(
-  'find-users',
+  'find-user',
   {
     operation: 'find',
     resource: 'users',

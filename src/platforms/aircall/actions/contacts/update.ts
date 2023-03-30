@@ -3,7 +3,7 @@ import { action } from '../../../../sdk';
 import { client } from '../../client';
 
 export default action(
-  'update-contacts',
+  'update-contact',
   {
     operation: 'update',
     resource: 'contacts',
