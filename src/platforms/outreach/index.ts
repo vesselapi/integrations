@@ -18,6 +18,7 @@ import { client } from '@/platforms/outreach/client';
 import * as constants from '@/platforms/outreach/constants';
 import { icon } from '@/platforms/outreach/icon';
 
+export * as types from './schemas';
 export default platform('outreach', {
   auth: auth.oauth2({
     authUrl: 'https://api.outreach.io/oauth/authorize',
