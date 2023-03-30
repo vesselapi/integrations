@@ -18,7 +18,7 @@ export default platform('dialpad', {
       tokenUrl: `https://dialpad.com/oauth2/token`,
       default: true,
     }),
-    auth.apiToken({}),
+    auth.apiToken(),
   ],
   display: {
     name: 'Dialpad',

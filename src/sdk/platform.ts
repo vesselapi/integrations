@@ -49,7 +49,9 @@ export const platform = <
   options: PlatformOptions<TActions, TClient>,
 ): Platform<TActions, TClient, string> => {
   const authConfigs = isArray(options.auth)
-    ? options.auth
+    ? options.auth.length === 1
+      ? options.auth.map((x) => ({ ...x, default: true }))
+      : options.auth
     : [
         {
           ...options.auth,
@@ -66,7 +68,9 @@ export const platform = <
   const defaultAuthConfigs = authConfigs.filter((a) => a.default === true);
   if (defaultAuthConfigs.length !== 1) {
     throw new Error(
-      'One and only one auth must be the default when using multiple auth types',
+      `One and only one auth must be the default when using multiple auth types but ${id} has ${
+        defaultAuthConfigs.length
+      } auths (${defaultAuthConfigs.map((x) => x.type).join(', ')})`,
     );
   }
   const wrapAction =
