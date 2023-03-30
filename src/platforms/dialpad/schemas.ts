@@ -78,6 +78,16 @@ export const routingBreadcrumbSchema = z
   })
   .passthrough();
 
+const targetSchema = z
+  .object({
+    email: z.string(),
+    id: z.string(),
+    name: z.string(),
+    phone: z.string(),
+    type: z.string(),
+  })
+  .passthrough();
+
 export const dialpadCallSchema = z
   .object({
     admin_call_recording_share_links: z.array(z.string()),
@@ -96,7 +106,7 @@ export const dialpadCallSchema = z
     direction: z.enum(['inbound', 'outbound']),
     duration: z.number(),
     entry_point_call_id: z.number(),
-    entry_point_target: dialpadContactSchema,
+    entry_point_target: targetSchema,
     external_number: z.string(),
     group_id: z.string(),
     internal_number: z.string(),
@@ -105,12 +115,12 @@ export const dialpadCallSchema = z
     master_call_id: z.number(),
     mos_score: z.number(),
     operator_call_id: z.number(),
-    proxy_target: dialpadContactSchema,
+    proxy_target: targetSchema,
     recording_url: z.array(z.string()),
     routing_breadcrumbs: z.array(routingBreadcrumbSchema),
     screen_recording_urls: z.array(z.string()),
     state: z.string(),
-    target: dialpadContactSchema,
+    target: targetSchema,
     total_duration: z.number(),
     transcription_text: z.string(),
     voicemail_link: z.string(),
