@@ -16,7 +16,6 @@ import findCall from './actions/calls/find';
 import listCall from './actions/calls/list';
 
 export * as types from './schemas';
-
 export default platform('aircall', {
   auth: [
     auth.oauth2({

@@ -9,6 +9,8 @@ export const integrations = {
   dialpad,
   apollo,
 };
+export { types as aircallTypes } from '@/platforms/aircall';
 export { types as dialpadTypes } from '@/platforms/dialpad';
+export { types as outreachTypes } from '@/platforms/outreach';
 
 export const integrationsList = Object.values(integrations);

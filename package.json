@@ -1,6 +1,6 @@
 {
   "name": "@vesselapi/integrations",
-  "version": "0.0.24",
+  "version": "0.0.25",
   "description": "Vessel integrations",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
