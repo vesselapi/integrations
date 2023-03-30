@@ -155,7 +155,7 @@ export const client = {
       method: 'get' | 'post' | 'put' | 'delete' | 'patch';
     }) => method,
     query: ({ query }: { query?: Record<string, string> }) => query ?? {},
-    json: ({ body }: { body?: Record<string, unknown> }) => body ?? {},
+    json: ({ body }: { body?: Record<string, unknown> }) => body,
     schema: z.any(),
   }),
 };
