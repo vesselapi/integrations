@@ -70,7 +70,7 @@ export const makeRequestFactory = <TBaseUrl extends string>(
           url: url(args),
           method: typeof method === 'string' ? method : method(args),
           headers: headers?.(args) ?? {},
-          json: json?.(args) ?? {},
+          json: json?.(args) ?? undefined,
           query: query?.(args) ?? {},
         }),
       );

@@ -31,7 +31,7 @@ export default platform('outreach', {
       ]
         .map((x) => x.join('='))
         .join('&');
-      return `https://api.outreach.io/oauth/authorize?${query}`;
+      return `https://api.outreach.io/oauth/authorize?${encodeURI(query)}`;
     },
   }),
   display: {
