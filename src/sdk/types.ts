@@ -52,6 +52,9 @@ export type StandardAuthConfig = {
    * E.g. Asking for Api token
    */
   questions: AuthQuestion[];
+  display: {
+    markdown: string | ((platform: Platform<{}, any, string>) => string);
+  };
   toTokenString: (answers: Record<string, string>) => string;
 };
 
@@ -85,6 +88,9 @@ export type OAuth2AuthConfig = {
     state: string;
   }) => HttpsUrl;
   isRetryable: RetryableCheckFunction;
+  display: {
+    markdown: string | ((platform: Platform<{}, any, string>) => string);
+  };
 };
 
 export type Json =
