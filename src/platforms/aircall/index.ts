@@ -5,7 +5,7 @@ import { icon } from './icon';
 
 import findUser from './actions/user/find';
 import listUser from './actions/user/list';
-import startCallUser from './actions/user/startCall';
+import startCallUser from './actions/user/start-call';
 
 import createContact from './actions/contacts/create';
 import findContact from './actions/contacts/find';
@@ -14,8 +14,6 @@ import updateContact from './actions/contacts/update';
 
 import findCall from './actions/calls/find';
 import listCall from './actions/calls/list';
-
-import passthrough from './actions/passthrough';
 
 export * as types from './schemas';
 
@@ -47,7 +45,5 @@ export default platform('aircall', {
 
     findCall,
     listCall,
-
-    passthrough,
   },
 });

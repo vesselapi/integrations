@@ -3,9 +3,10 @@ import { action } from '../../../../sdk';
 import { client } from '../../client';
 
 export default action(
-  'contacts-update',
+  'update-contact',
   {
-    resource: 'contact',
+    operation: 'update',
+    resource: 'contacts',
     mutation: true,
     schema: z.object({
       id: z.number().or(z.string()),

@@ -3,8 +3,9 @@ import { z } from 'zod';
 import client from '../../client';
 
 export default action(
-  'calls-list',
+  'list-calls',
   {
+    operation: 'list',
     resource: 'calls',
     mutation: false,
     schema: z.object({

@@ -7,6 +7,8 @@ describe('action function', () => {
     const result = action(
       'testing',
       {
+        operation: 'find',
+        resource: 'testing',
         schema: z.object({}),
       },
       async () => {

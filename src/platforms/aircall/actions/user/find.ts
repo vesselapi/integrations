@@ -3,9 +3,10 @@ import { action } from '../../../../sdk';
 import { client } from '../../client';
 
 export default action(
-  'users-find',
+  'find-user',
   {
-    resource: 'user',
+    operation: 'find',
+    resource: 'users',
     mutation: false,
     schema: z.object({
       id: z.number(),

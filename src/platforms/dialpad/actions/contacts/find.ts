@@ -3,8 +3,9 @@ import { z } from 'zod';
 import client from '../../client';
 
 export default action(
-  'contacts-find',
+  'find-contact',
   {
+    operation: 'find',
     resource: 'contacts',
     mutation: false,
     schema: z.object({

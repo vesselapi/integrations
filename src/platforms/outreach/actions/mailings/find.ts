@@ -3,9 +3,10 @@ import { action } from '@/sdk';
 import { z } from 'zod';
 
 export default action(
-  'get-prospect',
+  'find-mailing',
   {
-    resource: 'prospects',
+    operation: 'find',
+    resource: 'mailings',
     mutation: false,
     schema: z.object({
       id: z.number(),
@@ -13,6 +14,6 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.prospects.get(auth, { id: input.id });
+    return await client.mailings.get(auth, { id: input.id });
   },
 );

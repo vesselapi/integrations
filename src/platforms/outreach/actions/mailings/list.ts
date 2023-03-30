@@ -4,24 +4,19 @@ import { action } from '@/sdk';
 import { z } from 'zod';
 
 export default action(
-  'list-prospects',
+  'list-mailings',
   {
-    resource: 'prospects',
+    operation: 'list',
+    resource: 'mailings',
     mutation: false,
     schema: z.object({
-      filters: z
-        .object({
-          emails: z.string(),
-        })
-        .optional(),
       cursor: outreachUrl().optional(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.prospects.list(auth, {
+    return await client.mailings.list(auth, {
       cursor: input.cursor,
-      filters: input.filters,
     });
   },
 );

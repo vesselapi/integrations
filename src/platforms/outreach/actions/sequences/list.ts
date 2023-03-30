@@ -6,6 +6,7 @@ import { z } from 'zod';
 export default action(
   'list-sequences',
   {
+    operation: 'list',
     resource: 'sequences',
     mutation: false,
     schema: z.object({

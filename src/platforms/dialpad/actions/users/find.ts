@@ -3,8 +3,9 @@ import { z } from 'zod';
 import client from '../../client';
 
 export default action(
-  'users-find',
+  'find-user',
   {
+    operation: 'find',
     resource: 'users',
     mutation: false,
     schema: z.object({

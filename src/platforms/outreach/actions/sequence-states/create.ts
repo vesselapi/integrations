@@ -5,6 +5,7 @@ import { z } from 'zod';
 export default action(
   'create-sequence-state',
   {
+    operation: 'create',
     resource: 'sequence-states',
     mutation: true,
     schema: z.object({

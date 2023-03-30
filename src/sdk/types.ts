@@ -145,7 +145,8 @@ export type Action<
 > = {
   name: TName;
   schema: z.ZodType<TInput>;
-  resource?: string;
+  operation: string;
+  resource: string;
   scopes?: string[];
   mutation?: boolean;
   func: ActionFunction<TInput, TOutput>;
