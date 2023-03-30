@@ -1,4 +1,5 @@
 import { auth, platform } from '../../sdk';
+import { client } from './client';
 import * as constants from './constants';
 import { icon } from './icon';
 
@@ -31,9 +32,7 @@ export default platform('aircall', {
     iconURI: icon,
   },
   constants,
-  client: {
-    passthrough: async () => ({} as any),
-  },
+  client,
   actions: {
     listUser,
     findUser,

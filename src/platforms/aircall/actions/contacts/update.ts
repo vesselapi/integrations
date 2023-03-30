@@ -8,7 +8,7 @@ export default action(
     resource: 'contact',
     mutation: true,
     schema: z.object({
-      id: z.string(),
+      id: z.number().or(z.string()),
       first_name: z.string().optional(),
       last_name: z.string().optional(),
       company_name: z.string().optional(),

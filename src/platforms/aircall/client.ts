@@ -136,7 +136,7 @@ export const client = {
         .passthrough(),
     }),
     update: request({
-      url: ({ id }: { id: string }) => `/contacts/${id}`,
+      url: ({ id }: { id: string | number }) => `/contacts/${id}`,
       method: 'post',
       json: (contact: AircallContactUpdate) => contact,
       schema: z
