@@ -3,8 +3,9 @@ import { action } from '../../../../sdk';
 import { client } from '../../client';
 
 export default action(
-  'calls-find',
+  'find-calls',
   {
+    operation: 'find',
     resource: 'calls',
     mutation: false,
     schema: z.object({

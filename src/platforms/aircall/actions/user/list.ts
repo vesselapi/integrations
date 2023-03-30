@@ -3,9 +3,10 @@ import { action } from '../../../../sdk';
 import { client } from '../../client';
 
 export default action(
-  'users-list',
+  'list-users',
   {
-    resource: 'user',
+    operation: 'list',
+    resource: 'users',
     mutation: false,
     schema: z.object({
       from: z.string().optional(),

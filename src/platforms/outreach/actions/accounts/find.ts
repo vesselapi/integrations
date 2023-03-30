@@ -1,21 +1,19 @@
-import { outreachUrl } from '@/platforms/outreach/actions/validators';
 import { client } from '@/platforms/outreach/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
 
 export default action(
-  'list-mailboxes',
+  'find-account',
   {
-    resource: 'mailboxes',
+    operation: 'find',
+    resource: 'accounts',
     mutation: false,
     schema: z.object({
-      cursor: outreachUrl().optional(),
+      id: z.number(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.mailboxes.list(auth, {
-      cursor: input.cursor,
-    });
+    return await client.accounts.get(auth, { id: input.id });
   },
 );

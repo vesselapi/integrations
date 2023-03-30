@@ -3,8 +3,9 @@ import { action } from '../../../../sdk';
 import { client } from '../../client';
 
 export default action(
-  'users-call-start',
+  'start-users-call',
   {
+    operation: 'startCall',
     resource: 'users',
     mutation: false,
     schema: z.object({

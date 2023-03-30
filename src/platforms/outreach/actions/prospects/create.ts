@@ -5,6 +5,7 @@ import { z } from 'zod';
 export default action(
   'create-prospect',
   {
+    operation: 'create',
     resource: 'prospects',
     mutation: true,
     schema: z.object({
