@@ -8,8 +8,7 @@ export default action(
     resource: 'users',
     mutation: false,
     schema: z.object({
-      page: z.number().optional(),
-      per_page: z.number().optional(),
+      cursor: z.string().optional(),
     }),
     scopes: [],
   },
