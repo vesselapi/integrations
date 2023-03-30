@@ -20,8 +20,6 @@ import passthrough from './actions/passthrough';
 export * as types from './schemas';
 
 export default platform('aircall', {
-  // NOTE: Aircall Supports both API key and OAuth2, but we'll default to
-  // API Token until we get access to an Aircall OAuth app.
   auth: [
     auth.oauth2({
       authUrl: 'https://dashboard.aircall.io/oauth/authorize',

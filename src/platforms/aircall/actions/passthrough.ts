@@ -21,6 +21,6 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.passthrough(auth, { ...input });
+    return await client.passthrough(auth, input);
   },
 );
