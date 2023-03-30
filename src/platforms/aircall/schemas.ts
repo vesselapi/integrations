@@ -3,16 +3,12 @@ import { z } from 'zod';
 
 export const aircallPagination = z
   .object({
-    meta: z
-      .object({
-        count: z.number().nullable(),
-        total: z.number().nullable(),
-        current_page: z.number().nullable(),
-        per_page: z.number().nullable(),
-        next_page_link: z.string().nullable(),
-        previous_page_link: z.string().nullable(),
-      })
-      .passthrough(),
+    count: z.number().nullable(),
+    total: z.number().nullable(),
+    current_page: z.number().nullable(),
+    per_page: z.number().nullable(),
+    next_page_link: z.string().nullable(),
+    previous_page_link: z.string().nullable(),
   })
   .passthrough();
 

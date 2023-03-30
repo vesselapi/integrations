@@ -32,7 +32,7 @@ const request = makeRequestFactory(
 export const client = {
   users: {
     find: request({
-      url: ({ id }: { id: string }) => `/users/${id}`,
+      url: ({ id }: { id: number }) => `/users/${id}`,
       method: 'get',
       schema: z
         .object({
@@ -52,14 +52,12 @@ export const client = {
         page?: number;
         per_page?: number;
       }) => shake({ from, page: `${page}`, per_page: `${per_page}` }),
-      schema: z.intersection(
-        z
-          .object({
-            users: z.array(aircallUser),
-          })
-          .passthrough(),
-        aircallPagination,
-      ),
+      schema: z
+        .object({
+          users: z.array(aircallUser),
+          meta: aircallPagination,
+        })
+        .passthrough(),
     }),
     startCall: request({
       url: ({ id }: { id: string }) => `/users/${id}/calls`,
@@ -70,7 +68,7 @@ export const client = {
   },
   calls: {
     find: request({
-      url: ({ id }: { id: string }) => `/calls/${id}`,
+      url: ({ id }: { id: number }) => `/calls/${id}`,
       method: 'get',
       schema: z
         .object({
@@ -90,19 +88,17 @@ export const client = {
         page?: number;
         per_page?: number;
       }) => shake({ from, page: `${page}`, per_page: `${per_page}` }),
-      schema: z.intersection(
-        z
-          .object({
-            calls: z.array(aircallCall),
-          })
-          .passthrough(),
-        aircallPagination,
-      ),
+      schema: z
+        .object({
+          calls: z.array(aircallCall),
+          meta: aircallPagination,
+        })
+        .passthrough(),
     }),
   },
   contacts: {
     find: request({
-      url: ({ id }: { id: string }) => `/contacts/${id}`,
+      url: ({ id }: { id: number }) => `/contacts/${id}`,
       method: 'get',
       schema: z
         .object({
@@ -122,14 +118,12 @@ export const client = {
         page?: number;
         per_page?: number;
       }) => shake({ from, page: `${page}`, per_page: `${per_page}` }),
-      schema: z.intersection(
-        z
-          .object({
-            calls: z.array(aircallContact),
-          })
-          .passthrough(),
-        aircallPagination,
-      ),
+      schema: z
+        .object({
+          calls: z.array(aircallContact),
+          meta: aircallPagination,
+        })
+        .passthrough(),
     }),
     create: request({
       url: () => `/contacts`,
