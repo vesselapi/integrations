@@ -15,6 +15,7 @@ import listSequences from '@/platforms/outreach/actions/sequences/list-sequences
 import getUser from '@/platforms/outreach/actions/users/get-user';
 import listUsers from '@/platforms/outreach/actions/users/list-users';
 import { client } from '@/platforms/outreach/client';
+import * as constants from '@/platforms/outreach/constants';
 import { icon } from '@/platforms/outreach/icon';
 
 export default platform('outreach', {
@@ -27,6 +28,7 @@ export default platform('outreach', {
     iconURI: icon,
   },
   client,
+  constants,
   actions: {
     getAccount,
     listAccounts,

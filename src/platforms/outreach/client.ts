@@ -12,9 +12,9 @@ import {
 import { makeRequestFactory } from '@/sdk/client';
 import { mapKeys, shake } from 'radash';
 import { z } from 'zod';
+import { DEFAULT_PAGE_SIZE } from './constants';
 
 export const BASE_URL = 'https://api.outreach.io/api/v2';
-const DEFAULT_PAGE_SIZE = 100;
 
 const request = makeRequestFactory(
   BASE_URL,
