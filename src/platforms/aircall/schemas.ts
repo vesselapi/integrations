@@ -99,6 +99,7 @@ const aircallNumber = z
     id: z.number(),
     direct_link: z.string().nullable(),
     name: z.string().nullable(),
+    digits: z.string().nullable(),
     number: z.string().nullable(),
     country: z.string().nullable(),
     country_code: z.string().nullable(),
@@ -129,8 +130,6 @@ export const aircallCall = z
     contact: z.string().nullable(),
     archived: z.boolean().nullable(),
     assigned_to: z.string().nullable(),
-    transferred_by: z.string().nullable(),
-    transferred_to: z.string().nullable(),
     number: aircallNumber,
     participants: z.array(
       z.object({
