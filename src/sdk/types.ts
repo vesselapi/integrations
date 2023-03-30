@@ -10,7 +10,7 @@ export type OAuth2Token = {
 
 export type StandardToken = {
   type: 'standard';
-  apiToken: string;
+  answers: Record<string, string>
 };
 
 type BaseAuth = {
