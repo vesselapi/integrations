@@ -1,3 +1,4 @@
+import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 import { Auth, PlatformClient } from '../../sdk/types';
 
@@ -14,8 +15,8 @@ export const dialpadUserSchema = z
     admin_office_ids: z.array(z.string()),
     company_id: z.string(),
     country: z.string(),
-    date_active: z.string(),
-    date_added: z.string(),
+    date_active: custom.date(),
+    date_added: custom.date(),
     do_not_disturb: z.boolean(),
     emails: z.array(z.string()),
     first_name: z.string(),
@@ -57,7 +58,7 @@ export const dialpadContactSchema = z.object({
 export const routingBreadcrumbSchema = z
   .object({
     breadcrumb_type: z.string(),
-    date: z.number(),
+    date: custom.timestamp(),
     request: z
       .object({
         body: z.string(),
@@ -100,10 +101,10 @@ export const dialpadCallSchema = z
     csat_score: z.string(),
     csat_transcriptions: z.string(),
     custom_data: z.string(),
-    date_connected: z.number(),
-    date_ended: z.number(),
-    date_rang: z.number(),
-    date_started: z.number(),
+    date_connected: custom.date(),
+    date_ended: custom.date(),
+    date_rang: custom.date(),
+    date_started: custom.date(),
     direction: z.enum(['inbound', 'outbound']),
     duration: z.number(),
     entry_point_call_id: z.number(),
