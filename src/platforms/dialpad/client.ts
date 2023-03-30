@@ -4,7 +4,11 @@ import { API_DOMAIN, API_VERSION } from './constants';
 import {
   dialpadCallSchema,
   DialpadClient,
+  DialpadContactCreate,
+  dialpadContactCreateSchema,
   dialpadContactSchema,
+  DialpadContactUpdate,
+  dialpadContactUpdateSchema,
   DialpadModules,
   dialpadUserSchema,
   listResponseSchema,
@@ -45,6 +49,28 @@ const makeClient = (): DialpadClient => {
       schema,
     });
 
+  const createObject = <T extends Record<string, unknown>>(
+    module: DialpadModules,
+    schema: z.ZodSchema,
+  ) =>
+    request({
+      url: () => `/${module}/`,
+      method: 'post',
+      schema,
+      json: (body: T) => body,
+    });
+
+  const updateObject = <T extends Record<string, unknown>>(
+    module: DialpadModules,
+    schema: z.ZodSchema,
+  ) =>
+    request({
+      url: () => `/${module}/`,
+      method: 'put',
+      schema,
+      json: (body: T) => body,
+    });
+
   return {
     users: {
       find: findObject('users', dialpadUserSchema),
@@ -53,6 +79,14 @@ const makeClient = (): DialpadClient => {
     contacts: {
       find: findObject('contacts', dialpadContactSchema),
       list: listObject('contacts', listResponseSchema(dialpadContactSchema)),
+      create: createObject<DialpadContactCreate>(
+        'contacts',
+        dialpadContactCreateSchema,
+      ),
+      update: updateObject<DialpadContactUpdate>(
+        'contacts',
+        dialpadContactUpdateSchema,
+      ),
     },
     calls: {
       find: findObject('calls', dialpadCallSchema),
