@@ -54,5 +54,6 @@ export const auth = {
       },
       ...(options.questions ?? []),
     ],
+    toTokenString: (answers) => answers['api-key'],
   }),
 };

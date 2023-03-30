@@ -86,6 +86,7 @@ export const makeRequestFactory = <TBaseUrl extends string>(
               (err) => err instanceof SyntaxError,
             ) ?? text,
           status: response.status,
+          cause: response,
         });
       }
 

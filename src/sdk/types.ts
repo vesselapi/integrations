@@ -52,6 +52,7 @@ export type StandardAuthConfig = {
    * E.g. Asking for Api token
    */
   questions: AuthQuestion[];
+  toTokenString: (answers: Record<string, string>) => string;
 };
 
 /**
