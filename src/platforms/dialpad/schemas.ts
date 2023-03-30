@@ -5,7 +5,7 @@ export const listResponseSchema = (itemSchema: z.ZodSchema<any>) =>
   z
     .object({
       cursor: z.string().optional(),
-      items: z.array(itemSchema),
+      items: z.array(itemSchema).optional(),
     })
     .passthrough();
 
@@ -140,7 +140,8 @@ export type AnyDialpadObject = DialpadUser | DialpadContact | DialpadCall;
 export type FindObjectInput = { id: string };
 export type ListObjectInput = { cursor?: string };
 export type ListOutput<T> = {
-  items: T[];
+  cursor?: string;
+  items?: T[];
 };
 type ClientAction<InputType, OutputType> = (
   auth: Auth,
