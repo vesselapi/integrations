@@ -30,7 +30,7 @@ export const auth = {
         const query = [
           ['client_id', clientId],
           ['redirect_uri', redirectUrl],
-          ['scope', scopes.join('+')],
+          ['scope', scopes.join(options.scopeSeparator ?? '+')],
           ['state', state],
         ]
           .map((x) => x.join('='))

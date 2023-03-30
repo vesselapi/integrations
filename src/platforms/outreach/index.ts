@@ -24,14 +24,15 @@ export default platform('outreach', {
     tokenUrl: 'https://api.outreach.io/oauth/token',
     url: ({ scopes, clientId, redirectUrl, state }) => {
       const query = [
-        ['client_id', clientId],
-        ['redirect_uri', redirectUrl],
-        ['scope', scopes.join(' ')],
-        ['state', state],
+        ['client_id', encodeURIComponent(clientId)],
+        ['redirect_uri', encodeURIComponent(redirectUrl)],
+        ['scope', scopes.join('+')],
+        ['state', encodeURIComponent(state)],
+        ['response_type', 'code'],
       ]
         .map((x) => x.join('='))
         .join('&');
-      return `https://api.outreach.io/oauth/authorize?${encodeURI(query)}`;
+      return `https://api.outreach.io/oauth/authorize?${query}`;
     },
   }),
   display: {
