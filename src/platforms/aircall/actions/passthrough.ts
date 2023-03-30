@@ -14,7 +14,7 @@ export default action(
           .refine((s) => s.startsWith('/'))
           .transform((s) => s as `/${string}`),
       ),
-      method: z.enum(['get', 'post', 'delete', 'patch']),
+      method: z.enum(['get', 'post', 'put', 'delete', 'patch']),
       query: z.record(z.string()).optional(),
       body: z.record(z.unknown()).optional(),
     }),
