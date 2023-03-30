@@ -1,5 +1,6 @@
 import * as custom from '@/sdk/validators';
 import { z } from 'zod';
+import { aircallUrl } from './actions/validators';
 
 export const aircallPagination = z
   .object({
@@ -7,8 +8,8 @@ export const aircallPagination = z
     total: z.number().nullable(),
     current_page: z.number().nullable(),
     per_page: z.number().nullable(),
-    next_page_link: z.string().nullable(),
-    previous_page_link: z.string().nullable(),
+    next_page_link: aircallUrl().nullable(),
+    previous_page_link: aircallUrl().nullable(),
   })
   .passthrough();
 
@@ -18,7 +19,7 @@ export const aircallUser = z
   .object({
     id: z.number(),
     direct_link: z.string().nullable(),
-    name: z.string().nullable(),
+    name: z.string(),
     email: z.string().nullable(),
     available: z.boolean().nullable(),
     availability_status: z.string().nullable(),
@@ -31,7 +32,7 @@ export const aircallUser = z
 
 export type AircallUser = z.infer<typeof aircallUser>;
 
-export type AircallStartUserCall = { number_id: number; to: string };
+export type AircallStartUserCall = { number_id: number | string; to: string };
 
 export const aircallContact = z
   .object({
@@ -50,7 +51,7 @@ export const aircallContact = z
           .object({
             id: z.number(),
             label: z.string().nullable(),
-            value: z.string().nullable(),
+            value: z.string(),
           })
           .passthrough(),
       )
@@ -61,7 +62,7 @@ export const aircallContact = z
           .object({
             id: z.number(),
             label: z.string().nullable(),
-            value: z.string().nullable(),
+            value: z.string(),
           })
           .passthrough(),
       )
@@ -114,7 +115,7 @@ export const aircallCall = z
   .object({
     id: z.number(),
     direct_link: z.string().nullable(),
-    direction: z.string().nullable(),
+    direction: z.enum(['inbound', 'outbound']).nullable(),
     status: z.string().nullable(),
     missed_call_reason: z.string().nullable(),
     started_at: custom.timestamp(true).nullable(),
@@ -123,7 +124,7 @@ export const aircallCall = z
     duration: z.number().nullable(),
     voicemail: z.string().nullable(),
     recording: z.string().nullable(),
-    raw_digits: z.string().nullable(),
+    raw_digits: z.string(),
     user: aircallUser,
     contact: z.string().nullable(),
     archived: z.boolean().nullable(),
@@ -131,6 +132,14 @@ export const aircallCall = z
     transferred_by: z.string().nullable(),
     transferred_to: z.string().nullable(),
     number: aircallNumber,
+    participants: z.array(
+      z.object({
+        id: z.string(),
+        type: z.enum(['user', 'contact', 'external']),
+        name: z.string().nullable(),
+        phone_number: z.string().nullable(),
+      }),
+    ),
   })
   .passthrough();
 

@@ -9,7 +9,7 @@ export default action(
     resource: 'calls',
     mutation: false,
     schema: z.object({
-      id: z.number(),
+      id: z.number().or(z.string()),
     }),
     scopes: [],
   },
