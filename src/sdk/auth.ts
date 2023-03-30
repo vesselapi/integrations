@@ -14,6 +14,7 @@ export const auth = {
     scopeSeparator?: OAuth2AuthConfig['scopeSeparator'];
     tokenAuth?: OAuth2AuthConfig['tokenAuth'];
     questions?: AuthQuestion[];
+    oauthBodyFormat?: OAuth2AuthConfig['oauthBodyFormat'];
     url?: OAuth2AuthConfig['url'];
     isRetryable?: RetryableCheckFunction;
   }): OAuth2AuthConfig => ({
@@ -24,6 +25,7 @@ export const auth = {
     default: options.default ?? false,
     scopeSeparator: options.scopeSeparator ?? ' ',
     questions: options.questions ?? [],
+    oauthBodyFormat: options.oauthBodyFormat ?? 'form',
     url:
       options.url ??
       (({ scopes, clientId, redirectUrl, state }) => {

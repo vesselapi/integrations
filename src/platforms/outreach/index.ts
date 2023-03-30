@@ -22,6 +22,7 @@ export default platform('outreach', {
   auth: auth.oauth2({
     authUrl: 'https://api.outreach.io/oauth/authorize',
     tokenUrl: 'https://api.outreach.io/oauth/token',
+    oauthBodyFormat: 'form',
     url: ({ scopes, clientId, redirectUrl, state }) => {
       const query = [
         ['client_id', encodeURIComponent(clientId)],

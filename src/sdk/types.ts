@@ -76,6 +76,7 @@ export type OAuth2AuthConfig = {
    */
   scopeSeparator: ',' | ' ';
   questions: AuthQuestion[];
+  oauthBodyFormat: 'json' | 'form';
   url: (arg: {
     answers: Record<string, string>;
     scopes: string[];
