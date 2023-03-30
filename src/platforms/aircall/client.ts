@@ -22,7 +22,10 @@ const request = makeRequestFactory(
         method,
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Basic ${base64(await auth.getTokenString())}`,
+          Authorization:
+            auth.type === 'oauth2'
+              ? `Bearer ${await auth.getTokenString()}`
+              : `Basic ${base64(await auth.getTokenString())}`,
           ...headers,
         },
         body: json ? JSON.stringify(json) : undefined,
