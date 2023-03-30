@@ -1,5 +1,6 @@
 import { makeRequestFactory } from '@/sdk/client';
 import * as z from 'zod';
+import { API_DOMAIN, API_VERSION } from './constants';
 import {
   dialpadCallSchema,
   DialpadClient,
@@ -9,8 +10,6 @@ import {
   listResponseSchema,
 } from './schemas';
 
-const API_DOMAIN = 'https://dialpad.com/api';
-const API_VERSION = 'v2';
 const BASE_URL = `${API_DOMAIN}/${API_VERSION}`;
 
 const request = makeRequestFactory(
@@ -20,11 +19,12 @@ const request = makeRequestFactory(
       await fetch(fullUrl, {
         method,
         headers: {
-          Authorization: `Bearer ${auth.getToken()}`,
           'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Authorization: `Bearer ${await auth.getTokenString()}`,
           ...headers,
         },
-        ...(json ? { body: JSON.stringify(json) } : {}),
+        body: json ? JSON.stringify(json) : undefined,
       }),
 );
 
@@ -40,10 +40,8 @@ const makeClient = (): DialpadClient => {
     request({
       url: () => `/${module}`,
       method: 'get',
-      query: ({ page, per_page }: { page?: number; per_page?: number }) => ({
-        page: `${page ?? 1}`,
-        per_page: `${per_page ?? 100}`,
-      }),
+      query: ({ cursor }: { cursor?: string }): Record<string, string> =>
+        cursor ? { cursor } : {},
       schema,
     });
 

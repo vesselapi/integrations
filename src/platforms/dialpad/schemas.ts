@@ -4,7 +4,8 @@ import { Auth, PlatformClient } from '../../sdk/types';
 export const listResponseSchema = (itemSchema: z.ZodSchema<any>) =>
   z
     .object({
-      items: z.array(itemSchema),
+      cursor: z.string().optional(),
+      items: z.array(itemSchema).optional(),
     })
     .passthrough();
 
@@ -137,9 +138,10 @@ export type DialpadCall = z.infer<typeof dialpadCallSchema>;
 export type AnyDialpadObject = DialpadUser | DialpadContact | DialpadCall;
 
 export type FindObjectInput = { id: string };
-export type ListObjectInput = { page?: number; per_page?: number };
+export type ListObjectInput = { cursor?: string };
 export type ListOutput<T> = {
-  items: T[];
+  cursor?: string;
+  items?: T[];
 };
 type ClientAction<InputType, OutputType> = (
   auth: Auth,
