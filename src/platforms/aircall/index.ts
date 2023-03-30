@@ -15,8 +15,6 @@ import updateContact from './actions/contacts/update';
 import findCall from './actions/calls/find';
 import listCall from './actions/calls/list';
 
-import passthrough from './actions/passthrough';
-
 export * as types from './schemas';
 
 export default platform('aircall', {
@@ -47,7 +45,5 @@ export default platform('aircall', {
 
     findCall,
     listCall,
-
-    passthrough,
   },
 });

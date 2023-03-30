@@ -3,8 +3,8 @@ import { Action, ActionFunction } from './types';
 
 export type ActionOptions<TZodSchema extends z.ZodType<any, any, any>> = {
   schema: TZodSchema;
-  operation?: string;
-  resource?: string;
+  operation: string;
+  resource: string;
   scopes?: string[];
   mutation?: boolean;
 };
