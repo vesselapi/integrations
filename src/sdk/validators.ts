@@ -5,10 +5,9 @@ export const date = () =>
     .string()
     .datetime()
     .transform((value) => new Date(value));
-export const unixTimestamp = () =>
-  z.number().transform((value) => new Date(value * 1000));
 
-export const timestamp = () => z.number().transform((value) => new Date(value));
+export const timestamp = (isSeconds = false) =>
+  z.number().transform((value) => new Date(value * (isSeconds ? 1000 : 1)));
 
 export const json = () => z.object({}).catchall(z.any()).optional();
 
