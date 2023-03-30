@@ -1,4 +1,5 @@
 import { auth, platform } from '../../sdk';
+import * as constants from './constants';
 import { icon } from './icon';
 
 import findUser from './actions/user/find';
@@ -13,6 +14,8 @@ import updateContact from './actions/contacts/update';
 import findCall from './actions/calls/find';
 import listCall from './actions/calls/list';
 
+export * as types from './schemas';
+
 export default platform('aircall', {
   auth: [
     auth.oauth2({
@@ -25,7 +28,7 @@ export default platform('aircall', {
     name: 'Aircall',
     iconURI: icon,
   },
-  constants: {},
+  constants,
   client: {
     passthrough: async () => ({} as any),
   },

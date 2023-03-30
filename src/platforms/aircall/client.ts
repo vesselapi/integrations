@@ -1,6 +1,7 @@
 import { makeRequestFactory } from '@/sdk/client';
 import { shake } from 'radash';
 import { z } from 'zod';
+import { BASE_URL, DEFAULT_PAGE_SIZE } from './constants';
 import {
   aircallCall,
   aircallContact,
@@ -9,10 +10,7 @@ import {
   aircallPagination,
   AircallStartUserCall,
   aircallUser,
-} from './schema';
-
-export const BASE_URL = 'https://api.aircall.io/v1';
-const DEFAULT_PAGE_SIZE = 100;
+} from './schemas';
 
 const request = makeRequestFactory(
   BASE_URL,
