@@ -1,5 +1,5 @@
-import { BASE_URL } from '@/platforms/aircall/client';
 import { z } from 'zod';
+import { BASE_URL } from '../constants';
 
 export const aircallUrl = () =>
   z
