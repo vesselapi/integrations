@@ -45,7 +45,7 @@ export const makeRequestFactory = <TBaseUrl extends string>(
         | 'patch'
         | ((args: TMethod) => 'get' | 'post' | 'put' | 'delete' | 'patch');
       headers?: (args: THeaders) => Record<string, string>;
-      json?: (args: TBody) => Record<string, unknown>;
+      json?: (args: TBody) => Record<string, unknown> | undefined;
       query?: (args: TQuery) => Record<string, string>;
       schema: TResponseSchema;
     }) =>
