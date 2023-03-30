@@ -22,7 +22,9 @@ export default platform('aircall', {
       authUrl: 'https://dashboard.aircall.io/oauth/authorize',
       tokenUrl: 'https://api.aircall.io/v1/oauth/token',
     }),
-    auth.apiToken(),
+    auth.apiToken({
+      default: true,
+    }),
   ],
   display: {
     name: 'Aircall',
