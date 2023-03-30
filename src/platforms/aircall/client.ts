@@ -12,6 +12,8 @@ import {
   aircallUser,
 } from './schemas';
 
+const base64 = (str: string) => Buffer.from(str).toString('base64');
+
 const request = makeRequestFactory(
   BASE_URL,
   ({ auth, fullUrl, method, headers, json }) =>
@@ -20,7 +22,7 @@ const request = makeRequestFactory(
         method,
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${await auth.getTokenString()}`,
+          Authorization: `Basic ${base64(await auth.getTokenString())}`,
           ...headers,
         },
         body: json ? JSON.stringify(json) : undefined,
