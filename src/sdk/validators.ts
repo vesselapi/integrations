@@ -6,6 +6,8 @@ export const date = () =>
     .datetime()
     .transform((value) => new Date(value));
 
+export const timestamp = () => z.number().transform((value) => new Date(value));
+
 export const json = () => z.object({}).catchall(z.any()).optional();
 
 // Create a shorthand for zod object passthrough since we need to use it everywhere.
