@@ -118,7 +118,6 @@ export const aircallCall = z
     direct_link: z.string().nullable(),
     direction: z.enum(['inbound', 'outbound']).nullable(),
     status: z.string().nullable(),
-    missed_call_reason: z.string().nullable(),
     started_at: custom.timestamp(true).nullable(),
     answered_at: custom.timestamp(true).nullable(),
     ended_at: custom.timestamp(true).nullable(),
@@ -127,9 +126,7 @@ export const aircallCall = z
     recording: z.string().nullable(),
     raw_digits: z.string(),
     user: aircallUser,
-    contact: z.string().nullable(),
-    archived: z.boolean().nullable(),
-    assigned_to: z.string().nullable(),
+    contact: aircallContact,
     number: aircallNumber,
     participants: z.array(
       z.object({
