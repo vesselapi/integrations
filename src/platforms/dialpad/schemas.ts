@@ -64,6 +64,7 @@ export const dialpadContactCreateSchema = dialpadContactSchema
   .omit({
     id: true,
     owner_id: true,
+    display_name: true,
     // The first email and phone number are used as the primary email and phone
     primary_email: true,
     primary_phone: true,
@@ -78,6 +79,7 @@ export const dialpadContactUpdateSchema = dialpadContactSchema
   .omit({
     id: true,
     owner_id: true,
+    display_name: true,
     // The first email and phone number are used as the primary email and phone
     primary_email: true,
     primary_phone: true,
