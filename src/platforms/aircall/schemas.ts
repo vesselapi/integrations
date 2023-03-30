@@ -42,8 +42,8 @@ export const aircallContact = z
     company_name: z.string().nullable(),
     information: z.string().nullable(),
     is_shared: z.boolean().nullable(),
-    created_at: custom.date(),
-    updated_at: custom.date(),
+    created_at: custom.unixTimestamp(),
+    updated_at: custom.unixTimestamp(),
     emails: z
       .array(
         z
@@ -106,7 +106,7 @@ const aircallNumber = z
     availability_status: z.literal('custom'),
     is_ivr: z.boolean(),
     live_recording_activated: z.boolean(),
-    created_at: custom.date(),
+    created_at: custom.unixTimestamp(),
   })
   .passthrough();
 
@@ -117,9 +117,9 @@ export const aircallCall = z
     direction: z.string().nullable(),
     status: z.string().nullable(),
     missed_call_reason: z.string().nullable(),
-    started_at: custom.date().nullable(),
-    answered_at: custom.date().nullable(),
-    ended_at: custom.date().nullable(),
+    started_at: custom.unixTimestamp().nullable(),
+    answered_at: custom.unixTimestamp().nullable(),
+    ended_at: custom.unixTimestamp().nullable(),
     duration: z.number().nullable(),
     voicemail: z.string().nullable(),
     recording: z.string().nullable(),

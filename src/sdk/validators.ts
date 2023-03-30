@@ -5,7 +5,8 @@ export const date = () =>
     .string()
     .datetime()
     .transform((value) => new Date(value));
-// export const timestamp = () => z.number().transform((value) => new Date(value));
+export const unixTimestamp = () =>
+  z.number().transform((value) => new Date(value * 1000));
 
 export const json = () => z.object({}).catchall(z.any()).optional();
 
