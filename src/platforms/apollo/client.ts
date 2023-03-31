@@ -30,7 +30,9 @@ const request = makeRequestFactory(
       if (method === 'get') {
         const wKey = new URL(fullUrl);
         wKey.searchParams.append('api_key', await auth.getToken());
+        console.log(fullUrl);
         fullUrl = wKey.toString() as `${typeof BASE_URL}/${string}`;
+        console.log(wKey);
         console.log(fullUrl);
       }
       return await fetch(fullUrl, {
