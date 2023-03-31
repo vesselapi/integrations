@@ -51,7 +51,7 @@ export const platform = <
 >(
   id: TId,
   options: PlatformOptions<TActions, TClient, TAnswers, TOAuth2Answers>,
-): Platform<TActions, TClient, string> => {
+): Platform<TActions, TClient, string, TAnswers, TOAuth2Answers> => {
   const authConfigs = isArray(options.auth)
     ? options.auth.length === 1
       ? options.auth.map((x) => ({ ...x, default: true }))

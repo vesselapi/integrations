@@ -134,9 +134,11 @@ export type Platform<
   TActions extends Record<string, Action<string, any, any>>,
   TClient extends PlatformClient,
   TId extends string,
+  TAnswers extends Record<string, string>,
+  TOAuth2Answers extends Record<string, string>,
 > = {
   id: TId;
-  auth: (StandardAuthConfig | OAuth2AuthConfig)[];
+  auth: (StandardAuthConfig<TAnswers> | OAuth2AuthConfig<TOAuth2Answers>)[];
   rawActions: Action<string, any, any>[];
   client: TClient;
   constants: PlatformConstants;
