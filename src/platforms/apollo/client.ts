@@ -28,9 +28,10 @@ const request = makeRequestFactory(
   ({ auth, fullUrl, method, json }) =>
     async () => {
       if (method === 'get') {
-        fullUrl += `&api_key=${await auth.getTokenString()}`;
+        const wKey = new URL(fullUrl);
+        wKey.searchParams.append('api_key', await auth.getTokenString());
+        fullUrl = wKey.toString() as `${typeof BASE_URL}/${string}`;
       }
-      console.log(fullUrl);
       return await fetch(fullUrl, {
         method,
         headers: {
