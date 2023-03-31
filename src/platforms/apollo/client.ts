@@ -30,6 +30,7 @@ const request = makeRequestFactory(
       if (method === 'get') {
         fullUrl += `&api_key=${await auth.getTokenString()}`;
       }
+      console.log(fullUrl);
       return await fetch(fullUrl, {
         method,
         headers: {
