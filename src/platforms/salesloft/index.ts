@@ -1,25 +1,28 @@
 import { auth, platform } from '@/sdk';
 
-import getAccount from '@/platforms/salesloft/actions/accounts/find';
-import listAccounts from '@/platforms/salesloft/actions/accounts/list';
-import listMailboxes from '@/platforms/salesloft/actions/mailboxes/list';
-import getMailing from '@/platforms/salesloft/actions/mailings/find';
-import listMailings from '@/platforms/salesloft/actions/mailings/list';
-import createProspect from '@/platforms/salesloft/actions/prospects/create';
-import getProspect from '@/platforms/salesloft/actions/prospects/find';
-import listProspects from '@/platforms/salesloft/actions/prospects/list';
-import updateProspect from '@/platforms/salesloft/actions/prospects/update';
-import createSequenceState from '@/platforms/salesloft/actions/sequence-states/create';
-import createSequenceTemplate from '@/platforms/salesloft/actions/sequence-templates/create';
-import createSequence from '@/platforms/salesloft/actions/sequences/create';
-import getSequence from '@/platforms/salesloft/actions/sequences/find';
-import listSequences from '@/platforms/salesloft/actions/sequences/list';
-import createTemplate from '@/platforms/salesloft/actions/templates/create';
-import getUser from '@/platforms/salesloft/actions/users/find';
-import listUsers from '@/platforms/salesloft/actions/users/list';
 import { client } from '@/platforms/salesloft/client';
 import * as constants from '@/platforms/salesloft/constants';
 import { icon } from '@/platforms/salesloft/icon';
+
+import createCadenceMembership from './actions/cadence-memberships/create';
+
+import importCadence from './actions/cadences/import';
+import listCadences from './actions/cadences/list';
+
+import createCustomField from './actions/custom-fields/create';
+import listCustomFields from './actions/custom-fields/list';
+
+import findEmailBodies from './actions/email-bodies/find';
+import findEmail from './actions/emails/find';
+import listEmails from './actions/emails/list';
+
+import createPeople from './actions/people/create';
+import findPerson from './actions/people/find';
+import listPeople from './actions/people/list';
+import updatePerson from './actions/people/update';
+
+import findUsers from './actions/users/find';
+import listUsers from './actions/users/list';
 
 export * as types from './schemas';
 export default platform('salesloft', {
@@ -37,22 +40,24 @@ export default platform('salesloft', {
   client,
   constants,
   actions: {
-    getAccount,
-    listAccounts,
-    listMailboxes,
-    getMailing,
-    listMailings,
-    createProspect,
-    getProspect,
-    listProspects,
-    updateProspect,
-    createSequenceState,
-    getSequence,
-    listSequences,
-    getUser,
+    createCadenceMembership,
+
+    importCadence,
+    listCadences,
+
+    createCustomField,
+    listCustomFields,
+
+    findEmailBodies,
+    listEmails,
+    findEmail,
+
+    createPeople,
+    listPeople,
+    findPerson,
+    updatePerson,
+
+    findUsers,
     listUsers,
-    createSequence,
-    createTemplate,
-    createSequenceTemplate,
   },
 });
