@@ -14,8 +14,6 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.contacts.search(auth, {
-      page: input.page,
-    });
+    return await client.contacts.search(auth, input);
   },
 );

@@ -14,8 +14,6 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.customFields.search(auth, {
-      page: input.page,
-    });
+    return await client.customFields.search(auth, input);
   },
 );

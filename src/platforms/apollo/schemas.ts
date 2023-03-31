@@ -77,6 +77,7 @@ export const apolloContactCreate = z
 
 export const apolloContactUpdate = z
   .object({
+    id: z.string(),
     first_name: z.string().nullish(),
     last_name: z.string().nullish(),
     organization_name: z.string().nullish(),
@@ -270,7 +271,8 @@ export const apolloCreateTemplate = z.object({
 
 export type ApolloCreateTemplate = z.infer<typeof apolloCreateTemplate>;
 
-export const apolloCreateSequenceTemplate = z.object({
+export const apolloUpdateSequenceTemplate = z.object({
+  id: z.string(),
   emailer_template: apolloCreateTemplate.passthrough(),
   emailer_step_id: z.string(),
   emailer_template_id: z.string().optional(),
@@ -280,7 +282,7 @@ export const apolloCreateSequenceTemplate = z.object({
 });
 
 export type ApolloUpdateSequenceTemplate = z.infer<
-  typeof apolloCreateSequenceTemplate
+  typeof apolloUpdateSequenceTemplate
 >;
 
 export const apolloCreateSequenceTemplateResponse = z

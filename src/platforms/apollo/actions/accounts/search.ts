@@ -15,9 +15,6 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.accounts.search(auth, {
-      page: input.page,
-      q_organization_name: input.q_organization_name,
-    });
+    return await client.accounts.search(auth, input);
   },
 );

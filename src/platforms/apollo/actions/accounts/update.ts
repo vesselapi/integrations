@@ -12,11 +12,6 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.accounts.update(auth, {
-      id: input.id,
-      name: input.name,
-      domain: input.domain,
-      phone: input.phone,
-    });
+    return await client.accounts.update(auth, input);
   },
 );

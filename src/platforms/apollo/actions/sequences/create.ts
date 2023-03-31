@@ -12,12 +12,6 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.sequences.create(auth, {
-      creation_type: input.creation_type,
-      name: input.name,
-      permissions: input.permissions,
-      active: input.active,
-      type: input.type,
-    });
+    return await client.sequences.create(auth, input);
   },
 );

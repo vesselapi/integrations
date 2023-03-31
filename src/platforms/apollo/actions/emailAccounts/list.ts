@@ -14,8 +14,6 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.emailAccounts.list(auth, {
-      page: input.page,
-    });
+    return await client.emailAccounts.list(auth, input);
   },
 );

@@ -15,9 +15,6 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.sequences.search(auth, {
-      page: input.page,
-      q_keywords: input.q_keywords,
-    });
+    return await client.sequences.search(auth, input);
   },
 );

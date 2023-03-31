@@ -12,10 +12,6 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.accounts.create(auth, {
-      name: input.name,
-      domain: input.domain,
-      phone: input.phone,
-    });
+    return await client.accounts.create(auth, input);
   },
 );

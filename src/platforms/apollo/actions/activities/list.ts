@@ -15,9 +15,6 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.activities.list(auth, {
-      contact_id: input.contact_id,
-      types: input.types,
-    });
+    return await client.activities.list(auth, input);
   },
 );

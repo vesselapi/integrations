@@ -16,10 +16,6 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.sequences.addContacts(auth, {
-      emailer_campaign_id: input.emailer_campaign_id,
-      contact_ids: input.contact_ids,
-      send_email_from_email_account_id: input.send_email_from_email_account_id,
-    });
+    return await client.sequences.addContacts(auth, input);
   },
 );

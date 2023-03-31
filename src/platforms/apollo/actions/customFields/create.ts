@@ -16,10 +16,6 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.customFields.create(auth, {
-      modality: input.modality,
-      name: input.name,
-      type: input.type,
-    });
+    return await client.customFields.create(auth, input);
   },
 );

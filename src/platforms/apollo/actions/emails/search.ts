@@ -15,9 +15,6 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.emails.search(auth, {
-      page: input.page,
-      emailer_campaign_id: input.emailer_campaign_id,
-    });
+    return await client.emails.search(auth, input);
   },
 );
