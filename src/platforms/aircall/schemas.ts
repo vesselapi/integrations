@@ -109,15 +109,15 @@ export const aircallCall = z
     direct_link: z.string().nullable(),
     direction: z.enum(['inbound', 'outbound']).nullable(),
     status: z.string().nullable(),
-    started_at: custom.timestamp(true).nullable(),
-    answered_at: custom.timestamp(true).nullable(),
-    ended_at: custom.timestamp(true).nullable(),
+    started_at: custom.timestamp(true),
+    answered_at: custom.timestamp(true),
+    ended_at: custom.timestamp(true),
     duration: z.number().nullable(),
     voicemail: z.string().nullable(),
     recording: z.string().nullable(),
     raw_digits: z.string(),
     user: aircallUser,
-    contact: aircallContact,
+    contact: aircallContact.nullable(),
     number: aircallNumber,
     participants: z
       .array(
@@ -128,8 +128,7 @@ export const aircallCall = z
             name: z.string().nullable(),
             phone_number: z.string().nullable(),
           })
-          .passthrough()
-          .nullable(),
+          .passthrough(),
       )
       .nullable(),
   })
