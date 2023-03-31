@@ -10,10 +10,10 @@ import updateAccount from './actions/accounts/update';
 
 import listActivities from './actions/activities/list';
 
-import createContact from './actions/accounts/create';
-import listContacts from './actions/accounts/list';
-import searchContact from './actions/accounts/search';
-import updateContact from './actions/accounts/update';
+import createContact from './actions/contacts/create';
+import listContacts from './actions/contacts/list';
+import searchContact from './actions/contacts/search';
+import updateContact from './actions/contacts/update';
 
 import createCustomField from './actions/customFields/create';
 import listCustomFields from './actions/customFields/list';
