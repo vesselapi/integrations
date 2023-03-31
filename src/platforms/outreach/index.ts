@@ -10,6 +10,7 @@ import getProspect from '@/platforms/outreach/actions/prospects/find';
 import listProspects from '@/platforms/outreach/actions/prospects/list';
 import updateProspect from '@/platforms/outreach/actions/prospects/update';
 import createSequenceState from '@/platforms/outreach/actions/sequence-states/create';
+import createSequence from '@/platforms/outreach/actions/sequences/create';
 import getSequence from '@/platforms/outreach/actions/sequences/find';
 import listSequences from '@/platforms/outreach/actions/sequences/list';
 import getUser from '@/platforms/outreach/actions/users/find';
@@ -58,5 +59,6 @@ export default platform('outreach', {
     listSequences,
     getUser,
     listUsers,
+    createSequence,
   },
 });

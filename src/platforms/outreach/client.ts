@@ -7,9 +7,11 @@ import {
   outreachProspect,
   outreachSequence,
   outreachSequenceState,
+  outreachSequenceStep,
   outreachUser,
 } from '@/platforms/outreach/schemas';
 import { makeRequestFactory } from '@/sdk/client';
+import * as custom from '@/sdk/validators';
 import { mapKeys, shake } from 'radash';
 import { z } from 'zod';
 import { BASE_URL, DEFAULT_PAGE_SIZE } from './constants';
@@ -298,6 +300,35 @@ export const client = {
           data: outreachSequenceState,
         })
         .passthrough(),
+    }),
+  },
+  sequenceSteps: {
+    create: request({
+      url: () => `/sequenceSteps`,
+      method: 'post',
+      json: (sequenceStep: {
+        attributes: {
+          order?: number;
+          stepType: 'auto_email' | 'manual_email' | 'call' | 'task';
+          interval?: number;
+        };
+        relationships: {
+          sequence: {
+            data: {
+              type: 'sequence';
+              id: number;
+            };
+          };
+        };
+      }) => ({
+        data: {
+          type: 'sequenceStep',
+          ...sequenceStep,
+        },
+      }),
+      schema: custom.object({
+        data: outreachSequenceStep,
+      }),
     }),
   },
   mailboxes: {
