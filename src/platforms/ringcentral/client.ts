@@ -1,5 +1,6 @@
+import { HttpsUrl } from '@/sdk';
 import { makeRequestFactory } from '@/sdk/client';
-import { omit } from 'radash';
+import { omit, shake } from 'radash';
 import * as z from 'zod';
 import { API_DOMAIN, API_VERSION } from './constants';
 import {
@@ -14,63 +15,56 @@ import {
   ringcentralRingOutStatusSchema,
 } from './schemas';
 
-const BASE_URL = `${API_DOMAIN}/${API_VERSION}`;
+const BASE_URL = `${API_DOMAIN}/${API_VERSION}` as HttpsUrl;
 
-const request = makeRequestFactory(
-  BASE_URL,
-  ({ auth, fullUrl, method, headers, json }) =>
-    async () =>
-      await fetch(fullUrl, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-          Authorization: `Bearer ${await auth.getToken()}`,
-          ...headers,
-        },
-        body: json ? JSON.stringify(json) : undefined,
-      }),
-);
+const request = makeRequestFactory(async (auth, options) => ({
+  ...options,
+  url: `${BASE_URL}/${options.url}`,
+  headers: {
+    ...options.headers,
+    Authorization: `Bearer ${await auth.getToken()}`,
+  },
+}));
 
 const findObject = (endpoint: string, schema: z.ZodSchema) =>
-  request({
-    url: ({ id }: { id: string }) => `/${endpoint}/${id}`,
+  request(({ id }: { id: string }) => ({
+    url: `/${endpoint}/${id}`,
     method: 'get',
     schema,
-  });
+  }));
 
 const listObject = (endpoint: string, schema: z.ZodSchema) =>
-  request({
-    url: () => `/${endpoint}`,
+  request(({ page, perPage }: ListObjectInput) => ({
+    url: `/${endpoint}`,
     method: 'get',
-    query: ({ page, perPage }: ListObjectInput): Record<string, string> => ({
-      ...(page ? { page: `${page}` } : {}),
-      ...(perPage ? { perPage: `${perPage}` } : {}),
+    query: shake({
+      page: page ? `${page}` : undefined,
+      perPage: perPage ? `${perPage}` : undefined,
     }),
-    schema,
-  });
+    schema: schema,
+  }));
 
 const createObject = <T extends Record<string, unknown>>(
   endpoint: string,
   schema: z.ZodSchema,
 ) =>
-  request({
-    url: () => `/${endpoint}`,
+  request((body: T) => ({
+    url: `/${endpoint}`,
     method: 'post',
     schema,
-    json: (body: T) => body,
-  });
+    json: body,
+  }));
 
 const updateObject = <T extends Record<string, unknown>>(
   endpoint: string,
   schema: z.ZodSchema,
 ) =>
-  request({
-    url: ({ id }: { id: string }) => `/${endpoint}/${id}`,
+  request((obj: T) => ({
+    url: `/${endpoint}/${obj.id}`,
     method: 'put',
     schema,
-    json: (body: T) => omit(body, ['id']),
-  });
+    json: omit(obj, ['id']),
+  }));
 
 const makeClient = () => {
   return {
@@ -80,13 +74,12 @@ const makeClient = () => {
         'account/~/extension',
         listResponseSchema(ringcentralExtensionSchema),
       ),
-      ringout: request({
-        url: ({ extensionId }: { extensionId: string }) =>
-          `account/~/extension/${extensionId}/ring-out`,
+      ringout: request((body: RingcentralRingOutStart) => ({
+        url: `/account/~/extension/${body.extensionId}/ring-out`,
         method: 'post',
-        json: (body: RingcentralRingOutStart) => omit(body, ['extensionId']),
+        json: omit(body, ['extensionId']),
         schema: ringcentralRingOutStatusSchema,
-      }),
+      })),
     },
     callLogs: {
       find: findObject('account/~/call-log', ringcentralCallLogSchema),
@@ -113,18 +106,7 @@ const makeClient = () => {
         ringcentralContactSchema,
       ),
     },
-    passthrough: request({
-      url: ({ url }: { url: `${typeof BASE_URL}/${string}` | `/${string}` }) =>
-        url,
-      method: ({
-        method,
-      }: {
-        method: 'get' | 'post' | 'put' | 'delete' | 'patch';
-      }) => method,
-      query: ({ query }: { query?: Record<string, string> }) => query ?? {},
-      json: ({ body }: { body?: Record<string, unknown> }) => body ?? {},
-      schema: z.any(),
-    }),
+    passthrough: request.passthrough(),
   };
 };
 
