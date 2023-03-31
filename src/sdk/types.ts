@@ -2,30 +2,30 @@ import { z } from 'zod';
 
 export type Fetch = typeof fetch;
 
-export type OAuth2Token = {
+export type OAuth2Metadata = {
   type: 'oauth2';
   accessToken: string;
   refreshToken: string;
 };
 
-export type StandardToken = {
+export type StandardMetadata = {
   type: 'standard';
   answers: Record<string, string>;
 };
 
 type BaseAuth = {
-  getTokenString: () => Promise<string>;
+  getToken: () => Promise<string>;
   retry: (func: () => Promise<Response>) => Promise<Response>;
 };
 
 export type OAuth2Auth = BaseAuth & {
   type: 'oauth2';
-  getToken: () => Promise<OAuth2Token>;
+  getMetadata: () => Promise<OAuth2Metadata>;
 };
 
 export type StandardAuth = BaseAuth & {
   type: 'standard';
-  getToken: () => Promise<StandardToken>;
+  getMetadata: () => Promise<StandardMetadata>;
 };
 
 export type Auth = OAuth2Auth | StandardAuth;

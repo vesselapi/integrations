@@ -24,7 +24,7 @@ const request = makeRequestFactory(
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
-          Authorization: `Bearer ${await auth.getTokenString()}`,
+          Authorization: `Bearer ${await auth.getToken()}`,
           ...headers,
         },
         body: json ? JSON.stringify(json) : undefined,
