@@ -1,4 +1,5 @@
 import { auth, platform } from '../../sdk';
+import { icon } from './icon';
 
 export default platform('apollo', {
   auth: [
@@ -11,7 +12,7 @@ export default platform('apollo', {
   ],
   display: {
     name: 'Apollo',
-    iconURI: 'TBD',
+    iconURI: icon,
   },
   constants: {},
   client: {} as any,
