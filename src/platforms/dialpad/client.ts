@@ -3,6 +3,7 @@ import * as z from 'zod';
 import { API_DOMAIN, API_VERSION } from './constants';
 import {
   dialpadCallSchema,
+  DialpadCallStart,
   DialpadClient,
   DialpadContactCreate,
   dialpadContactSchema,
@@ -89,6 +90,14 @@ const makeClient = (): DialpadClient => {
     calls: {
       find: findObject('calls', dialpadCallSchema),
       list: listObject('calls', listResponseSchema(dialpadCallSchema)),
+      start: request({
+        url: () => `/call`,
+        method: 'post',
+        schema: z.object({
+          id: z.string(),
+        }),
+        json: (body: DialpadCallStart) => body,
+      }),
     },
     passthrough: request({
       url: ({ url }: { url: `${typeof BASE_URL}/${string}` | `/${string}` }) =>

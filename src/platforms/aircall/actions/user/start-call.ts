@@ -1,3 +1,4 @@
+import { parsePhoneNumber } from 'libphonenumber-js';
 import { z } from 'zod';
 import { action } from '../../../../sdk';
 import { client } from '../../client';
@@ -11,7 +12,14 @@ export default action(
     schema: z.object({
       id: z.number().or(z.string()),
       number_id: z.number().or(z.string()),
-      to: z.string(),
+      to: z
+        .string()
+        .refine((value) => {
+          return parsePhoneNumber(value)?.isValid();
+        })
+        .transform((value) => {
+          return parsePhoneNumber(value)?.format('E.164');
+        }),
     }),
     scopes: [],
   },
