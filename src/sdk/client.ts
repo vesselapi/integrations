@@ -1,79 +1,63 @@
 import { IntegrationError } from '@/sdk/error';
-import { Auth } from '@/sdk/types';
-import { guard } from 'radash';
+import { Auth, HttpsUrl } from '@/sdk/types';
+import { guard, isFunction, trim } from 'radash';
 import { z } from 'zod';
 
-export const makeRequestFactory = <TBaseUrl extends string>(
-  baseUrl: TBaseUrl,
-  makeFetch: ({
-    url,
-    method,
-    headers,
-    json,
-    query,
-  }: {
-    auth: Auth;
-    url: `${TBaseUrl}/${string}` | `/${string}`;
-    fullUrl: `${TBaseUrl}/${string}` | `${TBaseUrl}/${string}?${string}`;
-    method: 'get' | 'post' | 'put' | 'delete' | 'patch';
-    headers: Record<string, string>;
-    json?: Record<string, unknown>;
-    query: Record<string, string>;
-  }) => () => Promise<Response>,
+export type HttpMethod = 'get' | 'post' | 'put' | 'delete' | 'patch';
+export type HttpOptions = {
+  url: `${HttpsUrl}/${string}` | `/${string}`;
+  method: 'get' | 'post' | 'put' | 'delete' | 'patch';
+  headers?: Record<string, string>;
+  json?: Record<string, unknown>;
+  query?: Record<string, string>;
+};
+
+export type FetchOptions = HttpOptions & {
+  schema: z.ZodType;
+};
+
+export type RequestFetchOptions<TResponseSchema extends z.ZodType> =
+  HttpOptions & {
+    url: `${HttpsUrl}/${string}` | `/${string}`;
+    schema: TResponseSchema;
+  };
+
+export const makeRequestFactory = (
+  formatFetchOptions: (
+    auth: Auth,
+    options: RequestFetchOptions<z.ZodType>,
+  ) => Promise<FetchOptions>,
 ) => {
-  return <
-      TPath,
-      THeaders,
-      TBody,
-      TQuery,
-      TMethod,
-      TResponseSchema extends z.ZodType,
-    >({
-      url,
-      method,
-      schema,
-      headers,
-      json,
-      query,
-    }: {
-      url: (args: TPath) => `${TBaseUrl}/${string}` | `/${string}`;
-      method:
-        | 'get'
-        | 'post'
-        | 'put'
-        | 'delete'
-        | 'patch'
-        | ((args: TMethod) => 'get' | 'post' | 'put' | 'delete' | 'patch');
-      headers?: (args: THeaders) => Record<string, string>;
-      json?: (args: TBody) => Record<string, unknown> | undefined;
-      query?: (args: TQuery) => Record<string, string>;
-      schema: TResponseSchema;
-    }) =>
-    async (
+  function createRequest<TArgs extends {}, TResponseSchema extends z.ZodType>(
+    formatRequestOptions:
+      | RequestFetchOptions<TResponseSchema>
+      | ((args: TArgs) => RequestFetchOptions<TResponseSchema>),
+  ) {
+    return async function makeRequest(
       auth: Auth,
-      args: TPath & THeaders & TBody & TQuery & TMethod,
-    ): Promise<z.infer<TResponseSchema>> => {
-      const queryString = query
-        ? new URLSearchParams(query(args)).toString()
-        : '';
-
-      const givenUrl = url(args);
-
-      const fullUrl = `${
-        givenUrl.startsWith(baseUrl) ? givenUrl : baseUrl + givenUrl
-      }${queryString ? '?' + queryString : ''}` as `${TBaseUrl}/${string}`;
-
-      const response = await auth.retry(
-        makeFetch({
-          auth,
-          fullUrl,
-          url: url(args),
-          method: typeof method === 'string' ? method : method(args),
-          headers: headers?.(args) ?? {},
-          json: json?.(args),
-          query: query?.(args) ?? {},
-        }),
+      args: TArgs,
+    ): Promise<z.infer<TResponseSchema>> {
+      const options = await formatFetchOptions(
+        auth,
+        isFunction(formatRequestOptions)
+          ? formatRequestOptions(args)
+          : formatRequestOptions,
       );
+      const response = await auth.retry(async () => {
+        const url = options.query
+          ? `${trim(options.url, '/')}/${toQueryString(options.query)}`
+          : options.url;
+        return fetch(url, {
+          body: options.json ? JSON.stringify(options.json) : undefined,
+          method: options.method,
+          headers: options.json
+            ? {
+                ...options.headers,
+                'Content-Type': 'application/json',
+              }
+            : options.headers,
+        });
+      });
 
       if (!response.ok) {
         const text = await response.text();
@@ -92,7 +76,7 @@ export const makeRequestFactory = <TBaseUrl extends string>(
 
       const body = await response.json();
 
-      const zodResult = await schema.safeParseAsync(body);
+      const zodResult = await options.schema.safeParseAsync(body);
       if (!zodResult.success) {
         // For now, we log an error when validation fails on responses.
         // In the future, we may stop doing this once our schemas are robust
@@ -107,4 +91,21 @@ export const makeRequestFactory = <TBaseUrl extends string>(
 
       return zodResult.data;
     };
+  }
+
+  createRequest.passthrough = () =>
+    createRequest((args: HttpOptions) => ({
+      ...args,
+      schema: z.any(),
+    }));
+
+  return createRequest;
+};
+
+const toQueryString = (query: Record<string, string>): string => {
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(query)) {
+    params.set(key, value);
+  }
+  return params.toString();
 };
