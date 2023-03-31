@@ -356,7 +356,7 @@ export const client = {
         attributes: {
           bodyHtml: string;
           name: string;
-          subject: string;
+          subject?: string | null;
           trackOpens?: boolean;
         };
       }) => ({
