@@ -1,6 +1,6 @@
+import { isFunction } from 'radash';
 import {
   AuthQuestion,
-  HttpsUrl,
   OAuth2AuthConfig,
   RetryableCheckFunction,
   StandardAuthConfig,
@@ -8,8 +8,8 @@ import {
 
 export const auth = {
   oauth2: (options: {
-    authUrl: HttpsUrl;
-    tokenUrl: HttpsUrl;
+    authUrl: OAuth2AuthConfig['authUrl'];
+    tokenUrl: OAuth2AuthConfig['tokenUrl'];
     default?: boolean;
     scopeSeparator?: OAuth2AuthConfig['scopeSeparator'];
     tokenAuth?: OAuth2AuthConfig['tokenAuth'];
@@ -35,16 +35,21 @@ export const auth = {
     },
     url:
       options.url ??
-      (({ scopes, clientId, redirectUrl, state }) => {
+      (({ scopes, clientId, redirectUrl, state, answers }) => {
         const query = [
-          ['client_id', clientId],
-          ['redirect_uri', redirectUrl],
+          ['client_id', encodeURIComponent(clientId)],
+          ['redirect_uri', encodeURIComponent(redirectUrl)],
           ['scope', scopes.join(options.scopeSeparator ?? '+')],
-          ['state', state],
+          ['state', encodeURIComponent(state)],
+          ['response_type', 'code'],
         ]
           .map((x) => x.join('='))
           .join('&');
-        return `${options.authUrl}?${query}`;
+        return `${
+          isFunction(options.authUrl)
+            ? options.authUrl({ answers })
+            : options.authUrl
+        }?${query}`;
       }),
     isRetryable:
       options.isRetryable ?? (({ response }) => response.status === 401),

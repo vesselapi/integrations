@@ -65,8 +65,12 @@ export type StandardAuthConfig = {
 export type OAuth2AuthConfig = {
   type: 'oauth2';
   default: boolean;
-  authUrl: HttpsUrl;
-  tokenUrl: HttpsUrl;
+  authUrl:
+    | HttpsUrl
+    | ((options: { answers: Record<string, string> }) => HttpsUrl);
+  tokenUrl:
+    | HttpsUrl
+    | ((options: { answers: Record<string, string> }) => HttpsUrl);
   /**
    * Depending on the end platform wrote their OAuth, the clientId and
    * clientSecret could be requested in the Auth header using Basic Auth
@@ -77,7 +81,7 @@ export type OAuth2AuthConfig = {
    * Defaults to ' '. The scope separator may differ between platforms.
    * Used by the FE to render form fields before OAuth login
    */
-  scopeSeparator: ',' | ' ';
+  scopeSeparator: ',' | ' ' | '+';
   questions: AuthQuestion[];
   oauthBodyFormat: 'json' | 'form';
   url: (arg: {
