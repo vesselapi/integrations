@@ -9,18 +9,29 @@ export default action(
     resource: 'prospects',
     mutation: true,
     schema: z.object({
-      attributes: z.object({
-        firstName: z.string().nullish(),
-        lastName: z.string().nullish(),
-        occupation: z.string().nullish(),
-        addressCity: z.string().nullish(),
-        addressCountry: z.string().nullish(),
-        addressState: z.string().nullish(),
-        addressStreet: z.string().nullish(),
-        addressStreet2: z.string().nullish(),
-        addressZip: z.string().nullish(),
-        emails: z.array(z.string()).optional(),
-      }),
+      attributes: z
+        .object({
+          firstName: z.string().nullish(),
+          lastName: z.string().nullish(),
+          occupation: z.string().nullish(),
+          addressCity: z.string().nullish(),
+          addressCountry: z.string().nullish(),
+          addressState: z.string().nullish(),
+          addressStreet: z.string().nullish(),
+          addressStreet2: z.string().nullish(),
+          addressZip: z.string().nullish(),
+          emails: z.array(z.string()).optional(),
+        })
+        .catchall(
+          z
+            .string()
+            .regex(
+              /^custom[0-9]+$/,
+              'Custom fields must be of the form custom[0-9]+',
+            )
+            .transform((key) => key as `custom${number}`)
+            .nullable(),
+        ),
       relationships: z.object({
         ownerId: z.number().optional(),
         accountId: z.number().optional(),

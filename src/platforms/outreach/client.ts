@@ -12,9 +12,7 @@ import {
 import { makeRequestFactory } from '@/sdk/client';
 import { mapKeys, shake } from 'radash';
 import { z } from 'zod';
-import { DEFAULT_PAGE_SIZE } from './constants';
-
-export const BASE_URL = 'https://api.outreach.io/api/v2';
+import { BASE_URL, DEFAULT_PAGE_SIZE } from './constants';
 
 const request = makeRequestFactory(
   BASE_URL,
@@ -101,6 +99,7 @@ export const client = {
           addressStreet2?: string | null;
           addressZip?: string | null;
           emails?: string[];
+          [key: `custom${number}`]: string | null;
         };
         relationships: {
           owner?: {
@@ -140,6 +139,7 @@ export const client = {
           addressStreet?: string | null;
           addressStreet2?: string | null;
           addressZip?: string | null;
+          [key: `custom${number}`]: string | null;
         };
       }) => ({ data: { type: 'prospect', ...prospect } }),
       method: 'patch',
@@ -325,3 +325,4 @@ export const client = {
     schema: z.any(),
   }),
 };
+export { BASE_URL };
