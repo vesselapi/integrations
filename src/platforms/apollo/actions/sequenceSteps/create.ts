@@ -3,9 +3,9 @@ import { client } from '../../client';
 import { apolloCreateSequenceStep } from '../../schemas';
 
 export default action(
-  'list-sequence-steps',
+  'create-sequence-steps',
   {
-    operation: 'list',
+    operation: 'create',
     resource: 'sequence-steps',
     mutation: true,
     schema: apolloCreateSequenceStep,

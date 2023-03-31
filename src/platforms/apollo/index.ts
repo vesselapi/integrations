@@ -28,7 +28,7 @@ import startSequence from './actions/sequences/start';
 
 import createSequenceSteps from './actions/sequenceSteps/create';
 
-import createSequenceTemplates from './actions/sequenceTemplates/create';
+import updateSequenceTemplates from './actions/sequenceTemplates/update';
 
 import listUsers from './actions/users/list';
 
@@ -74,7 +74,7 @@ export default platform('apollo', {
 
     createSequenceSteps,
 
-    createSequenceTemplates,
+    updateSequenceTemplates,
 
     listUsers,
   },

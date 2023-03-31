@@ -271,7 +271,7 @@ export type ApolloCreateTemplate = z.infer<typeof apolloCreateTemplate>;
 export const apolloCreateSequenceTemplate = z.object({
   emailer_template: apolloCreateTemplate.passthrough(),
   emailer_step_id: z.string(),
-  emailer_template_id: z.string(),
+  emailer_template_id: z.string().optional(),
   status: z.string().optional(),
   type: z.string().optional(),
   include_signature: z.boolean().optional(),

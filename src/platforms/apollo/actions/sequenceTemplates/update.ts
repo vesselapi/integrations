@@ -4,9 +4,9 @@ import { client } from '../../client';
 import { apolloCreateSequenceTemplate } from '../../schemas';
 
 export default action(
-  'list-sequence-templates',
+  'update-sequence-templates',
   {
-    operation: 'list',
+    operation: 'update',
     resource: 'sequence-templates',
     mutation: true,
     schema: apolloCreateSequenceTemplate.extend({ id: z.string() }),
