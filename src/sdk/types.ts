@@ -1,9 +1,11 @@
 import { z } from 'zod';
+import { HttpOptions } from './client';
 
 export type Fetch = typeof fetch;
 
 export type OAuth2Metadata = {
   type: 'oauth2';
+  answers: Record<string, string>;
   accessToken: string;
   refreshToken: string;
 };
@@ -117,7 +119,7 @@ export type Json =
   | null;
 
 export interface PlatformClient {
-  passthrough: (auth: Auth, params: any) => Promise<any>;
+  passthrough: (auth: Auth, options: HttpOptions) => Promise<any>;
 }
 
 export type PlatformDisplayConfig = {
