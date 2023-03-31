@@ -1,5 +1,38 @@
 import { auth, platform } from '../../sdk';
+import { client } from './client';
+import * as constants from './constants';
+import { icon } from './icon';
 
+import createAccount from './actions/accounts/create';
+import listAccounts from './actions/accounts/list';
+import searchAccount from './actions/accounts/search';
+import updateAccount from './actions/accounts/update';
+
+import listActivities from './actions/activities/list';
+
+import createContact from './actions/contacts/create';
+import listContacts from './actions/contacts/list';
+import searchContact from './actions/contacts/search';
+import updateContact from './actions/contacts/update';
+
+import createCustomField from './actions/customFields/create';
+import listCustomFields from './actions/customFields/list';
+
+import searchEmails from './actions/emails/search';
+
+import listEmailAccounts from './actions/emailAccounts/list';
+
+import createSequences from './actions/sequences/create';
+import listSequences from './actions/sequences/list';
+import startSequence from './actions/sequences/start';
+
+import createSequenceSteps from './actions/sequenceSteps/create';
+
+import updateSequenceTemplates from './actions/sequenceTemplates/update';
+
+import listUsers from './actions/users/list';
+
+export * as types from './schemas';
 export default platform('apollo', {
   auth: [
     auth.apiToken({
@@ -11,9 +44,38 @@ export default platform('apollo', {
   ],
   display: {
     name: 'Apollo',
-    iconURI: 'TBD',
+    iconURI: icon,
   },
-  constants: {},
-  client: {} as any,
-  actions: {},
+  constants,
+  client,
+  actions: {
+    createAccount,
+    listAccounts,
+    updateAccount,
+    searchAccount,
+
+    listActivities,
+
+    createContact,
+    listContacts,
+    updateContact,
+    searchContact,
+
+    createCustomField,
+    listCustomFields,
+
+    searchEmails,
+
+    listEmailAccounts,
+
+    createSequences,
+    listSequences,
+    startSequence,
+
+    createSequenceSteps,
+
+    updateSequenceTemplates,
+
+    listUsers,
+  },
 });

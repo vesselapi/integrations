@@ -10,6 +10,7 @@ export const integrations = {
   apollo,
 };
 export { types as aircallTypes } from '@/platforms/aircall';
+export { types as apolloTypes } from '@/platforms/apollo';
 export { types as dialpadTypes } from '@/platforms/dialpad';
 export { types as outreachTypes } from '@/platforms/outreach';
 
