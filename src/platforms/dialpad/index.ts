@@ -1,6 +1,7 @@
 import { auth, platform } from '../../sdk';
 import callsFind from './actions/calls/find';
 import callsList from './actions/calls/list';
+import callsStart from './actions/calls/start';
 import contactsCreate from './actions/contacts/create';
 import contactsFind from './actions/contacts/find';
 import contactsList from './actions/contacts/list';
@@ -39,5 +40,6 @@ export default platform('dialpad', {
 
     callsFind,
     callsList,
+    callsStart,
   },
 });

@@ -1,4 +1,5 @@
 import * as custom from '@/sdk/validators';
+import parsePhoneNumber from 'libphonenumber-js';
 import { z } from 'zod';
 import { Auth, PlatformClient } from '../../sdk/types';
 
@@ -167,12 +168,30 @@ export const dialpadCallSchema = z
   })
   .passthrough();
 
+export const dialpadCallStartSchema = z.object({
+  custom_data: z.string().optional(),
+  device_id: z.string().optional(),
+  group_id: z.number().optional(),
+  group_type: z.string().optional(),
+  outbound_caller_id: z.string().optional(),
+  phone_number: z
+    .string()
+    .refine((value) => {
+      return parsePhoneNumber(value)?.isValid();
+    })
+    .transform((value) => {
+      return parsePhoneNumber(value)?.format('E.164');
+    }),
+  user_id: z.string(),
+});
+
 export type DialpadModules = 'users' | 'calls' | 'contacts';
 export type DialpadUser = z.infer<typeof dialpadUserSchema>;
 export type DialpadContact = z.infer<typeof dialpadContactSchema>;
 export type DialpadContactCreate = z.infer<typeof dialpadContactCreateSchema>;
 export type DialpadContactUpdate = z.infer<typeof dialpadContactUpdateSchema>;
 export type DialpadCall = z.infer<typeof dialpadCallSchema>;
+export type DialpadCallStart = z.infer<typeof dialpadCallStartSchema>;
 export type AnyDialpadObject = DialpadUser | DialpadContact | DialpadCall;
 
 export type FindObjectInput = { id: string };
@@ -200,5 +219,6 @@ export interface DialpadClient extends PlatformClient {
   calls: {
     find: ClientAction<FindObjectInput, DialpadCall>;
     list: ClientAction<ListObjectInput, ListOutput<DialpadCall>>;
+    start: ClientAction<DialpadCallStart, Pick<DialpadCall, 'id'>>;
   };
 }
