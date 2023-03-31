@@ -65,13 +65,13 @@ export const auth = {
     isRetryable:
       options.isRetryable ?? (({ response }) => response.status === 401),
   }),
-  apiToken: (
+  apiToken: <T extends Record<string, string> = Record<string, string>>(
     options: {
       questions?: AuthQuestion[];
       default?: boolean;
       display?: OAuth2AuthConfig['display'];
     } = {},
-  ): StandardAuthConfig => ({
+  ): StandardAuthConfig<T> => ({
     type: 'standard',
     default: options.default ?? false,
     questions: [

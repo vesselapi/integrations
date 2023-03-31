@@ -47,9 +47,10 @@ export const platform = <
   TClient extends PlatformClient,
   TId extends string,
   TAnswers extends Record<string, string>,
+  TOAuth2Answers extends Record<string, string>,
 >(
   id: TId,
-  options: PlatformOptions<TActions, TClient, TAnswers>,
+  options: PlatformOptions<TActions, TClient, TAnswers, TOAuth2Answers>,
 ): Platform<TActions, TClient, string> => {
   const authConfigs = isArray(options.auth)
     ? options.auth.length === 1

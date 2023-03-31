@@ -59,7 +59,9 @@ export type RetryableCheckFunction = ({
   response: Response;
 }) => boolean;
 
-export type StandardAuthConfig<TAnswers extends Record<string, string>> = {
+export type StandardAuthConfig<
+  TAnswers extends Record<string, string> = Record<string, string>,
+> = {
   type: 'standard';
   default: boolean;
   /**
@@ -98,7 +100,7 @@ export type OAuth2AuthConfig<
   questions: AuthQuestion[];
   oauthBodyFormat: 'json' | 'form';
   url: (arg: {
-    answers: Record<string, string>;
+    answers: T;
     scopes: string[];
     clientId: string;
     redirectUrl: string;
