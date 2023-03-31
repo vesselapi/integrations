@@ -43,7 +43,7 @@ export const client = {
         from,
         per_page = DEFAULT_PAGE_SIZE,
       }: {
-        next_page_link: `${typeof BASE_URL}/${string}`;
+        next_page_link?: `${typeof BASE_URL}/${string}`;
         from?: string;
         per_page?: number;
       }) => ({

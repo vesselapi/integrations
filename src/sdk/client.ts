@@ -53,9 +53,13 @@ export const makeRequestFactory = (
           headers: options.json
             ? {
                 ...options.headers,
+                Accept: 'application/json',
                 'Content-Type': 'application/json',
               }
-            : options.headers,
+            : {
+                ...options.headers,
+                Accept: 'application/json',
+              },
         });
       });
 
