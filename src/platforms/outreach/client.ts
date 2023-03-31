@@ -79,7 +79,7 @@ export const client = {
       schema: z.intersection(
         z
           .object({
-            data: z.array(outreachUser),
+            data: z.array(outreachProspect),
           })
           .passthrough(),
         outreachPaginatedResponse,
