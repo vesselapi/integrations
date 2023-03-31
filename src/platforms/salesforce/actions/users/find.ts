@@ -1,4 +1,4 @@
-import { client } from '@/platforms/outreach/client';
+import { client } from '@/platforms/salesforce/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
 

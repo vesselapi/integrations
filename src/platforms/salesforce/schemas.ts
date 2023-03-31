@@ -1,3 +1,4 @@
+import { HttpsUrl } from '@/sdk';
 import * as validators from '@/sdk/validators';
 import { z } from 'zod';
 import { SalesforceSupportedObjectType } from './constants';
@@ -43,6 +44,18 @@ export const SalesforceSchemaByObjectType: Record<
   User: salesforceUser,
   Contact: salesforceContact,
   List: salesforceList,
+};
+
+export type SalesforceAccountType = 'Production' | 'Sandbox';
+export interface SalesforceAuthAnswers extends Record<string, string> {
+  accountType: SalesforceAccountType;
+}
+export const salesforceOAuthUrlsByAccountType: Record<
+  SalesforceAccountType,
+  HttpsUrl
+> = {
+  Production: `https://login.salesforce.com/services/oauth2`,
+  Sandbox: `https://test.salesforce.com/services/oauth2`,
 };
 
 export type SalesforceSupportedObjectType = 'User' | 'Contact' | 'List';

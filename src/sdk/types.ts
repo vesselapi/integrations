@@ -59,7 +59,7 @@ export type RetryableCheckFunction = ({
   response: Response;
 }) => boolean;
 
-export type StandardAuthConfig = {
+export type StandardAuthConfig<TAnswers extends Record<string, string>> = {
   type: 'standard';
   default: boolean;
   /**
@@ -70,18 +70,20 @@ export type StandardAuthConfig = {
   display: {
     markdown: string | ((platform: Platform<{}, any, string>) => string);
   };
-  toTokenString: (answers: Record<string, string>) => string;
+  toTokenString: (answers: TAnswers) => string;
 };
 
 /**
  * OAUTH2: Many of the options defined here follow the simple auth package
  * https://github.com/lelylan/simple-oauth2/blob/fbb295b1ae0ea998bcdf4ad22a6ef2fcf6930d12/API.md#new-authorizationcodeoptions
  */
-export type OAuth2AuthConfig = {
+export type OAuth2AuthConfig<
+  T extends Record<string, string> = Record<string, string>,
+> = {
   type: 'oauth2';
   default: boolean;
-  authUrl: (options: { answers: Record<string, string> }) => HttpsUrl;
-  tokenUrl: (options: { answers: Record<string, string> }) => HttpsUrl;
+  authUrl: (options: { answers: T }) => HttpsUrl;
+  tokenUrl: (options: { answers: T }) => HttpsUrl;
   /**
    * Depending on the end platform wrote their OAuth, the clientId and
    * clientSecret could be requested in the Auth header using Basic Auth
