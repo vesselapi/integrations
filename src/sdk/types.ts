@@ -32,11 +32,26 @@ export type Auth = OAuth2Auth | StandardAuth;
 
 export type HttpsUrl = `https://${string}`;
 export type AuthQuestionType = 'string' | 'select';
-export type AuthQuestion = {
-  type: AuthQuestionType;
-  id: string;
+export type AuthQuestionOption = {
+  value: string;
   label: string;
 };
+
+export interface BaseAuthQuestion {
+  id: string;
+  label: string;
+}
+
+export type SelectAuthQuestion = BaseAuthQuestion & {
+  type: 'select';
+  options: AuthQuestionOption[];
+};
+
+export type StringAuthQuestion = BaseAuthQuestion & {
+  type: 'string';
+};
+
+export type AuthQuestion = SelectAuthQuestion | StringAuthQuestion;
 
 export type RetryableCheckFunction = ({
   response,
