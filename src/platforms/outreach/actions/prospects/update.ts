@@ -10,17 +10,28 @@ export default action(
     mutation: true,
     schema: z.object({
       id: z.number(),
-      attributes: z.object({
-        firstName: z.string().nullish(),
-        lastName: z.string().nullish(),
-        occupation: z.string().nullish(),
-        addressCity: z.string().nullish(),
-        addressCountry: z.string().nullish(),
-        addressState: z.string().nullish(),
-        addressStreet: z.string().nullish(),
-        addressStreet2: z.string().nullish(),
-        addressZip: z.string().nullish(),
-      }),
+      attributes: z
+        .object({
+          firstName: z.string().nullish(),
+          lastName: z.string().nullish(),
+          occupation: z.string().nullish(),
+          addressCity: z.string().nullish(),
+          addressCountry: z.string().nullish(),
+          addressState: z.string().nullish(),
+          addressStreet: z.string().nullish(),
+          addressStreet2: z.string().nullish(),
+          addressZip: z.string().nullish(),
+        })
+        .catchall(
+          z
+            .string()
+            .regex(
+              /^custom[0-9]+$/,
+              'Custom fields must be of the form custom[0-9]+',
+            )
+            .transform((key) => key as `custom${number}`)
+            .nullable(),
+        ),
     }),
     scopes: [],
   },

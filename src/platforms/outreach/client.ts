@@ -101,6 +101,7 @@ export const client = {
           addressStreet2?: string | null;
           addressZip?: string | null;
           emails?: string[];
+          [key: `custom${number}`]: string | null;
         };
         relationships: {
           owner?: {
@@ -140,6 +141,7 @@ export const client = {
           addressStreet?: string | null;
           addressStreet2?: string | null;
           addressZip?: string | null;
+          [key: `custom${number}`]: string | null;
         };
       }) => ({ data: { type: 'prospect', ...prospect } }),
       method: 'patch',
