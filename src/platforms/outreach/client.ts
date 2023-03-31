@@ -8,6 +8,8 @@ import {
   outreachSequence,
   outreachSequenceState,
   outreachSequenceStep,
+  outreachSequenceTemplate,
+  outreachTemplate,
   outreachUser,
 } from '@/platforms/outreach/schemas';
 import { makeRequestFactory } from '@/sdk/client';
@@ -344,6 +346,61 @@ export const client = {
           .passthrough(),
         outreachPaginatedResponse,
       ),
+    }),
+  },
+  templates: {
+    create: request({
+      url: () => `/templates`,
+      method: 'post',
+      json: (template: {
+        attributes: {
+          bodyHtml: string;
+          name: string;
+          subject: string;
+          trackOpens?: boolean;
+        };
+      }) => ({
+        data: {
+          type: 'template',
+          ...template,
+        },
+      }),
+      schema: custom.object({
+        data: outreachTemplate,
+      }),
+    }),
+  },
+  sequenceTemplates: {
+    create: request({
+      url: () => `/sequenceTemplates`,
+      method: 'post',
+      json: (sequenceTemplate: {
+        attributes: {
+          isReply: boolean;
+        };
+        relationships: {
+          sequenceStep: {
+            data: {
+              type: 'sequenceStep';
+              id: number;
+            };
+          };
+          template: {
+            data: {
+              type: 'template';
+              id: number;
+            };
+          };
+        };
+      }) => ({
+        data: {
+          type: 'sequenceTemplate',
+          ...sequenceTemplate,
+        },
+      }),
+      schema: custom.object({
+        data: outreachSequenceTemplate,
+      }),
     }),
   },
   emailAddresses: {
