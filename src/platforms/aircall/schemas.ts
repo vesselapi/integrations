@@ -130,7 +130,7 @@ export const aircallCall = z
           })
           .passthrough(),
       )
-      .nullable(),
+      .optional(),
   })
   .passthrough();
 
