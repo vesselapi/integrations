@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { action } from '../../../../sdk';
 import { client } from '../../client';
+import { aircallUrl } from '../validators';
 
 export default action(
   'list-users',
@@ -10,16 +11,16 @@ export default action(
     mutation: false,
     schema: z.object({
       from: z.string().optional(),
-      page: z.number().optional(),
       per_page: z.number().optional(),
+      next_page_link: aircallUrl().optional(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
     return await client.users.list(auth, {
       from: input.from,
-      page: input.page,
       per_page: input.per_page,
+      next_page_link: input.next_page_link,
     });
   },
 );

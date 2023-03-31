@@ -35,7 +35,7 @@ const request = makeRequestFactory(
 export const client = {
   users: {
     find: request({
-      url: ({ id }: { id: number }) => `/users/${id}`,
+      url: ({ id }: { id: number | string }) => `/users/${id}`,
       method: 'get',
       schema: z
         .object({
@@ -44,17 +44,19 @@ export const client = {
         .passthrough(),
     }),
     list: request({
-      url: () => `/users`,
+      url: ({
+        next_page_link,
+      }: {
+        next_page_link?: `${typeof BASE_URL}/${string}`;
+      }) => next_page_link ?? `/users`,
       method: 'get',
       query: ({
         from,
-        page = 0,
         per_page = DEFAULT_PAGE_SIZE,
       }: {
         from?: string;
-        page?: number;
         per_page?: number;
-      }) => shake({ from, page: `${page}`, per_page: `${per_page}` }),
+      }) => shake({ from, per_page: `${per_page}` }),
       schema: z
         .object({
           users: z.array(aircallUser),
@@ -63,7 +65,7 @@ export const client = {
         .passthrough(),
     }),
     startCall: request({
-      url: ({ id }: { id: string }) => `/users/${id}/calls`,
+      url: ({ id }: { id: string | number }) => `/users/${id}/calls`,
       method: 'post',
       json: (call: AircallStartUserCall) => call,
       schema: z.any(),
@@ -71,7 +73,7 @@ export const client = {
   },
   calls: {
     find: request({
-      url: ({ id }: { id: number }) => `/calls/${id}`,
+      url: ({ id }: { id: number | string }) => `/calls/${id}`,
       method: 'get',
       schema: z
         .object({
@@ -80,17 +82,19 @@ export const client = {
         .passthrough(),
     }),
     list: request({
-      url: () => `/calls`,
+      url: ({
+        next_page_link,
+      }: {
+        next_page_link?: `${typeof BASE_URL}/${string}`;
+      }) => next_page_link ?? `/calls`,
       method: 'get',
       query: ({
         from,
-        page = 0,
         per_page = DEFAULT_PAGE_SIZE,
       }: {
         from?: string;
-        page?: number;
         per_page?: number;
-      }) => shake({ from, page: `${page}`, per_page: `${per_page}` }),
+      }) => shake({ from, per_page: `${per_page}` }),
       schema: z
         .object({
           calls: z.array(aircallCall),
@@ -101,7 +105,7 @@ export const client = {
   },
   contacts: {
     find: request({
-      url: ({ id }: { id: number }) => `/contacts/${id}`,
+      url: ({ id }: { id: number | string }) => `/contacts/${id}`,
       method: 'get',
       schema: z
         .object({
@@ -110,17 +114,19 @@ export const client = {
         .passthrough(),
     }),
     list: request({
-      url: () => `/contacts`,
+      url: ({
+        next_page_link,
+      }: {
+        next_page_link?: `${typeof BASE_URL}/${string}`;
+      }) => next_page_link ?? `/contacts`,
       method: 'get',
       query: ({
         from,
-        page = 0,
         per_page = DEFAULT_PAGE_SIZE,
       }: {
         from?: string;
-        page?: number;
         per_page?: number;
-      }) => shake({ from, page: `${page}`, per_page: `${per_page}` }),
+      }) => shake({ from, per_page: `${per_page}` }),
       schema: z
         .object({
           contacts: z.array(aircallContact),

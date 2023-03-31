@@ -9,8 +9,8 @@ export default action(
     resource: 'users',
     mutation: false,
     schema: z.object({
-      id: z.string(),
-      number_id: z.number(),
+      id: z.number().or(z.string()),
+      number_id: z.number().or(z.string()),
       to: z.string(),
     }),
     scopes: [],
