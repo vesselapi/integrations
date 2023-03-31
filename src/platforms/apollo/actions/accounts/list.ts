@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { action } from '../../../../sdk';
-import { client } from '../../client';
+import { action } from '@/sdk';
+import { client } from '@/platforms/apollo/client';
 
 export default action(
   'list-account',

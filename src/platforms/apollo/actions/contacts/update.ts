@@ -1,7 +1,7 @@
+import { client } from '@/platforms/apollo/client';
+import { apolloContactUpdate } from '@/platforms/apollo/schemas';
+import { action } from '@/sdk';
 import { z } from 'zod';
-import { action } from '../../../../sdk';
-import { client } from '../../client';
-import { apolloContactUpdate } from '../../schemas';
 
 export default action(
   'update-contact',

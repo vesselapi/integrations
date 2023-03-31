@@ -1,6 +1,6 @@
-import { action } from '../../../../sdk';
-import { client } from '../../client';
-import { apolloAccountUpdate } from '../../schemas';
+import { client } from '@/platforms/apollo/client';
+import { apolloAccountUpdate } from '@/platforms/apollo/schemas';
+import { action } from '@/sdk';
 
 export default action(
   'update-account',
