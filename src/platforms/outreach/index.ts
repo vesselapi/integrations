@@ -28,7 +28,7 @@ export default platform('outreach', {
       const query = [
         ['client_id', encodeURIComponent(clientId)],
         ['redirect_uri', encodeURIComponent(redirectUrl)],
-        ['scope', scopes.join('+')],
+        ['scope', scopes.join(' ')],
         ['state', encodeURIComponent(state)],
         ['response_type', 'code'],
       ]
