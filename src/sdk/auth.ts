@@ -1,27 +1,40 @@
-import { isFunction } from 'radash';
+import { isFunction, isString } from 'radash';
 import {
   AuthQuestion,
+  HttpsUrl,
   OAuth2AuthConfig,
   RetryableCheckFunction,
   StandardAuthConfig,
 } from './types';
 
+const toQueryString = (query: Record<string, string>): string => {
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(query)) {
+    params.set(key, value);
+  }
+  return params.toString();
+};
+
 export const auth = {
   oauth2: (options: {
-    authUrl: OAuth2AuthConfig['authUrl'];
-    tokenUrl: OAuth2AuthConfig['tokenUrl'];
+    authUrl: HttpsUrl | OAuth2AuthConfig['authUrl'];
+    tokenUrl: HttpsUrl | OAuth2AuthConfig['tokenUrl'];
+    questions?: AuthQuestion[];
     default?: boolean;
     scopeSeparator?: OAuth2AuthConfig['scopeSeparator'];
     tokenAuth?: OAuth2AuthConfig['tokenAuth'];
-    questions?: AuthQuestion[];
     oauthBodyFormat?: OAuth2AuthConfig['oauthBodyFormat'];
     url?: OAuth2AuthConfig['url'];
     isRetryable?: RetryableCheckFunction;
     display?: OAuth2AuthConfig['display'];
   }): OAuth2AuthConfig => ({
     type: 'oauth2',
-    authUrl: options.authUrl,
-    tokenUrl: options.tokenUrl,
+    authUrl: isString(options.authUrl)
+      ? () => options.authUrl as HttpsUrl
+      : options.authUrl,
+    tokenUrl: isString(options.tokenUrl)
+      ? () => options.tokenUrl as HttpsUrl
+      : options.tokenUrl,
     tokenAuth: options.tokenAuth ?? 'body',
     default: options.default ?? false,
     scopeSeparator: options.scopeSeparator ?? ' ',
@@ -36,20 +49,18 @@ export const auth = {
     url:
       options.url ??
       (({ scopes, clientId, redirectUrl, state, answers }) => {
-        const query = [
-          ['client_id', encodeURIComponent(clientId)],
-          ['redirect_uri', encodeURIComponent(redirectUrl)],
-          ['scope', scopes.join(options.scopeSeparator ?? '+')],
-          ['state', encodeURIComponent(state)],
-          ['response_type', 'code'],
-        ]
-          .map((x) => x.join('='))
-          .join('&');
+        const query: Record<string, string> = {
+          client_id: clientId,
+          redirect_uri: redirectUrl,
+          scope: scopes.join(options.scopeSeparator ?? '+'),
+          state,
+          response_type: 'code',
+        };
         return `${
           isFunction(options.authUrl)
             ? options.authUrl({ answers })
             : options.authUrl
-        }?${query}`;
+        }?${toQueryString(query)}`;
       }),
     isRetryable:
       options.isRetryable ?? (({ response }) => response.status === 401),

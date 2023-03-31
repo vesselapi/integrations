@@ -65,12 +65,8 @@ export type StandardAuthConfig = {
 export type OAuth2AuthConfig = {
   type: 'oauth2';
   default: boolean;
-  authUrl:
-    | HttpsUrl
-    | ((options: { answers: Record<string, string> }) => HttpsUrl);
-  tokenUrl:
-    | HttpsUrl
-    | ((options: { answers: Record<string, string> }) => HttpsUrl);
+  authUrl: (options: { answers: Record<string, string> }) => HttpsUrl;
+  tokenUrl: (options: { answers: Record<string, string> }) => HttpsUrl;
   /**
    * Depending on the end platform wrote their OAuth, the clientId and
    * clientSecret could be requested in the Auth header using Basic Auth
