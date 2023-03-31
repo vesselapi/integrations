@@ -1,4 +1,4 @@
-import { BASE_URL } from '@/platforms/outreach/client';
+import { BASE_URL } from '@/platforms/outreach/constants';
 import { z } from 'zod';
 
 export const outreachUrl = () =>
