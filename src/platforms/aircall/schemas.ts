@@ -130,7 +130,7 @@ export const aircallCall = z
     number: aircallNumber,
     participants: z.array(
       z.object({
-        id: z.string(),
+        id: z.number(),
         type: z.enum(['user', 'contact', 'external']),
         name: z.string().nullable(),
         phone_number: z.string().nullable(),
