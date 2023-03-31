@@ -197,7 +197,18 @@ export const client = {
       url: ({ cursor }: { cursor?: `${typeof BASE_URL}/${string}` }) =>
         cursor ?? `/mailings`,
       method: 'get',
-      query: () => ({ count: 'false', 'page[size]': `${DEFAULT_PAGE_SIZE}` }),
+      query: ({
+        filters,
+      }: {
+        filters?: {
+          prospectId?: number;
+          sequenceId?: number;
+        };
+      }) => ({
+        count: 'false',
+        'page[size]': `${DEFAULT_PAGE_SIZE}`,
+        ...(filters ? mapKeys(shake(filters), (key) => `filter[${key}]`) : {}),
+      }),
       schema: z.intersection(
         z
           .object({
