@@ -10,6 +10,8 @@ export const apolloPaginatedResponse = z
   })
   .passthrough();
 
+export type ApolloPaginatedResponse = z.infer<typeof apolloPaginatedResponse>;
+
 export const apolloUser = z
   .object({
     id: z.string(),

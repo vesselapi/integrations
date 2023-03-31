@@ -29,7 +29,7 @@ const request = makeRequestFactory(
     async () => {
       if (method === 'get') {
         const wKey = new URL(fullUrl);
-        wKey.searchParams.append('api_key', await auth.getTokenString());
+        wKey.searchParams.append('api_key', await auth.getToken());
         fullUrl = wKey.toString() as `${typeof BASE_URL}/${string}`;
       }
       return await fetch(fullUrl, {
@@ -38,7 +38,7 @@ const request = makeRequestFactory(
           'Content-Type': 'application/json',
         },
         body: json
-          ? JSON.stringify({ ...json, api_key: await auth.getTokenString() })
+          ? JSON.stringify({ ...json, api_key: await auth.getToken() })
           : undefined,
       });
     },
