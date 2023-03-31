@@ -194,6 +194,10 @@ export const outreachMailing = z
   })
   .passthrough();
 
+export const outreachSequenceStep = custom.object({
+  id: z.number(),
+});
+
 export type OutreachProspect = z.infer<typeof outreachProspect>;
 export type OutreachAccount = z.infer<typeof outreachAccount>;
 export type OutreachEmailAddress = z.infer<typeof outreachEmailAddress>;
