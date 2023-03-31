@@ -99,7 +99,7 @@ const aircallNumber = z
     id: z.number(),
     name: z.string().nullable(),
     digits: z.string().nullable(),
-    created_at: custom.timestamp(true),
+    created_at: custom.date(),
   })
   .passthrough();
 
@@ -128,7 +128,8 @@ export const aircallCall = z
             name: z.string().nullable(),
             phone_number: z.string().nullable(),
           })
-          .passthrough(),
+          .passthrough()
+          .nullable(),
       )
       .nullable(),
   })
