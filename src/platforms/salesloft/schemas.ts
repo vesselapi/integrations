@@ -218,8 +218,8 @@ export type SalesloftCadenceImport = {
     target_daily_people: number;
     remove_replied: boolean;
     remove_bounced: boolean;
-    external_identifier: string | null;
-    cadence_function: 'outbound';
+    external_identifier?: string;
+    cadence_function: string;
   };
   sharing_settings?: {
     team_cadence: boolean;
@@ -231,11 +231,11 @@ export type SalesloftCadenceImport = {
       day: number;
       due_immediately: boolean;
       automated: boolean;
-      reference_id: number | null;
+      reference_id?: number;
       steps: {
         enabled: boolean;
         name: string;
-        type: 'Email';
+        type: string;
         type_settings: {
           previous_email_step_group_reference_id?: number;
           email_template: {
@@ -329,5 +329,5 @@ export type SalesloftCustomField = z.infer<typeof salesloftCustomField>;
 
 export type SalesloftCustomFieldCreate = {
   name: string;
-  field_type: 'person' | 'company';
+  field_type: string;
 };

@@ -208,7 +208,7 @@ export const client = {
         .passthrough(),
     }),
   },
-  emailBody: {
+  emailBodies: {
     find: request({
       url: ({ id }: { id: string }) => `/mime_email_payloads/${id}.json`,
       method: 'get',
