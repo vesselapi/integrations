@@ -212,7 +212,7 @@ export const apolloEmailActivity = z
 export type ApolloEmailActivity = z.infer<typeof apolloEmailActivity>;
 
 export const apolloCreateSequence = z.object({
-  creation_type: z.string(),
+  creation_type: z.string().optional(),
   name: z.string().optional(),
   permissions: z.string(),
   type: z.string().optional(),
