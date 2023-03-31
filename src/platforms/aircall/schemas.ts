@@ -97,17 +97,8 @@ export type AircallContactUpdate = {
 const aircallNumber = z
   .object({
     id: z.number(),
-    direct_link: z.string().nullable(),
     name: z.string().nullable(),
     digits: z.string().nullable(),
-    number: z.string().nullable(),
-    country: z.string().nullable(),
-    country_code: z.string().nullable(),
-    time_zone: z.string().nullable(),
-    open: z.boolean(),
-    availability_status: z.literal('custom'),
-    is_ivr: z.boolean(),
-    live_recording_activated: z.boolean(),
     created_at: custom.timestamp(true),
   })
   .passthrough();
@@ -128,14 +119,18 @@ export const aircallCall = z
     user: aircallUser,
     contact: aircallContact,
     number: aircallNumber,
-    participants: z.array(
-      z.object({
-        id: z.number(),
-        type: z.enum(['user', 'contact', 'external']),
-        name: z.string().nullable(),
-        phone_number: z.string().nullable(),
-      }),
-    ),
+    participants: z
+      .array(
+        z
+          .object({
+            id: z.number(),
+            type: z.enum(['user', 'contact', 'external']),
+            name: z.string().nullable(),
+            phone_number: z.string().nullable(),
+          })
+          .passthrough(),
+      )
+      .nullable(),
   })
   .passthrough();
 
