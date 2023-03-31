@@ -243,6 +243,24 @@ export const client = {
         outreachPaginatedResponse,
       ),
     }),
+    create: request({
+      url: () => `/sequences`,
+      method: 'post',
+      json: (sequence: {
+        attributes: {
+          name: string;
+          sequenceType: 'date' | 'interval';
+          shareType: 'private' | 'read_only' | 'shared';
+        };
+      }) => ({
+        data: { type: 'sequence', ...sequence },
+      }),
+      schema: z
+        .object({
+          data: outreachSequence,
+        })
+        .passthrough(),
+    }),
   },
   sequenceStates: {
     create: request({
