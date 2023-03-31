@@ -12,7 +12,7 @@ export default action(
       attributes: z.object({
         bodyHtml: z.string(),
         name: z.string(),
-        subject: z.string(),
+        subject: z.string().nullish(),
         trackOpens: z.boolean().optional(),
       }),
     }),
