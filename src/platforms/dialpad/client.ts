@@ -1,3 +1,4 @@
+import { HttpsUrl } from '@/sdk';
 import { makeRequestFactory } from '@/sdk/client';
 import * as z from 'zod';
 import { API_DOMAIN, API_VERSION } from './constants';
@@ -13,62 +14,55 @@ import {
   listResponseSchema,
 } from './schemas';
 
-const BASE_URL = `${API_DOMAIN}/${API_VERSION}`;
+const BASE_URL = `${API_DOMAIN}/${API_VERSION}` as HttpsUrl;
 
-const request = makeRequestFactory(
-  BASE_URL,
-  ({ auth, fullUrl, method, headers, json }) =>
-    async () =>
-      await fetch(fullUrl, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-          Authorization: `Bearer ${await auth.getToken()}`,
-          ...headers,
-        },
-        body: json ? JSON.stringify(json) : undefined,
-      }),
-);
+const request = makeRequestFactory(async (auth, options) => ({
+  ...options,
+  url: `${BASE_URL}/${options.url}`,
+  headers: {
+    ...options.headers,
+    Accept: 'application/json',
+    Authorization: `Bearer ${await auth.getToken()}`,
+  },
+}));
 
 const makeClient = (): DialpadClient => {
   const findObject = (module: DialpadModules, schema: z.ZodSchema) =>
-    request({
-      url: ({ id }: { id: string }) => `/${module}/${id}`,
+    request(({ id }: { id: string }) => ({
+      url: `/${module}/${id}`,
       method: 'get',
       schema,
-    });
+    }));
 
   const listObject = (module: DialpadModules, schema: z.ZodSchema) =>
-    request({
-      url: () => `/${module}`,
+    request(({ cursor }: { cursor?: string }) => ({
+      url: `/${module}`,
       method: 'get',
-      query: ({ cursor }: { cursor?: string }): Record<string, string> =>
-        cursor ? { cursor } : {},
+      query: cursor ? { cursor } : undefined,
       schema,
-    });
+    }));
 
   const createObject = <T extends Record<string, unknown>>(
     module: DialpadModules,
     schema: z.ZodSchema,
   ) =>
-    request({
-      url: () => `/${module}/`,
+    request((body: T) => ({
+      url: `/${module}/`,
       method: 'post',
       schema,
-      json: (body: T) => body,
-    });
+      json: body,
+    }));
 
   const updateObject = <T extends Record<string, unknown>>(
     module: DialpadModules,
     schema: z.ZodSchema,
   ) =>
-    request({
-      url: () => `/${module}/`,
+    request((body: T) => ({
+      url: `/${module}/`,
       method: 'put',
       schema,
-      json: (body: T) => body,
-    });
+      json: body,
+    }));
 
   return {
     users: {
@@ -90,27 +84,16 @@ const makeClient = (): DialpadClient => {
     calls: {
       find: findObject('calls', dialpadCallSchema),
       list: listObject('calls', listResponseSchema(dialpadCallSchema)),
-      start: request({
-        url: () => `/call`,
+      start: request((body: DialpadCallStart) => ({
+        url: `/call`,
         method: 'post',
         schema: z.object({
           id: z.string(),
         }),
-        json: (body: DialpadCallStart) => body,
-      }),
+        json: body,
+      })),
     },
-    passthrough: request({
-      url: ({ url }: { url: `${typeof BASE_URL}/${string}` | `/${string}` }) =>
-        url,
-      method: ({
-        method,
-      }: {
-        method: 'get' | 'post' | 'put' | 'delete' | 'patch';
-      }) => method,
-      query: ({ query }: { query?: Record<string, string> }) => query ?? {},
-      json: ({ body }: { body?: Record<string, unknown> }) => body ?? {},
-      schema: z.any(),
-    }),
+    passthrough: request.passthrough(),
   };
 };
 

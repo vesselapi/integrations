@@ -18,80 +18,78 @@ import { mapKeys, shake } from 'radash';
 import { z } from 'zod';
 import { BASE_URL, DEFAULT_PAGE_SIZE } from './constants';
 
-const request = makeRequestFactory(
-  BASE_URL,
-  ({ auth, fullUrl, method, headers, json }) =>
-    async () =>
-      await fetch(fullUrl, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${await auth.getToken()}`,
-          ...headers,
-        },
-        body: json ? JSON.stringify(json) : undefined,
-      }),
-);
+const request = makeRequestFactory(async (auth, options) => ({
+  ...options,
+  headers: {
+    ...options.headers,
+    Authorization: `Bearer ${await auth.getToken()}`,
+  },
+}));
 
 export const client = {
   users: {
-    get: request({
-      url: ({ id }: { id: number }) => `/users/${id}`,
+    get: request(({ id }: { id: number }) => ({
+      url: `/users/${id}`,
       method: 'get',
       schema: z
         .object({
           data: outreachUser,
         })
         .passthrough(),
-    }),
-    list: request({
-      url: ({ cursor }: { cursor?: `${typeof BASE_URL}/${string}` }) =>
-        cursor ?? `/users`,
-      method: 'get',
-      query: () => ({ count: 'false', 'page[size]': `${DEFAULT_PAGE_SIZE}` }),
-      schema: z.intersection(
-        z
-          .object({
-            data: z.array(outreachUser),
-          })
-          .passthrough(),
-        outreachPaginatedResponse,
-      ),
-    }),
+    })),
+    list: request(
+      ({ cursor }: { cursor?: `${typeof BASE_URL}/${string}` }) => ({
+        url: cursor ?? `/users`,
+        method: 'get',
+        query: { count: 'false', 'page[size]': `${DEFAULT_PAGE_SIZE}` },
+        schema: z.intersection(
+          z
+            .object({
+              data: z.array(outreachUser),
+            })
+            .passthrough(),
+          outreachPaginatedResponse,
+        ),
+      }),
+    ),
   },
   prospects: {
-    get: request({
-      url: ({ id }: { id: number }) => `/prospects/${id}`,
+    get: request(({ id }: { id: number }) => ({
+      url: `/prospects/${id}`,
       method: 'get',
       schema: z
         .object({
           data: outreachProspect,
         })
         .passthrough(),
-    }),
-    list: request({
-      url: ({ cursor }: { cursor?: `${typeof BASE_URL}/${string}` }) =>
-        cursor ?? `/prospects`,
-      query: ({ filters }: { filters?: { emails: string } }) => {
-        return {
+    })),
+    list: request(
+      ({
+        cursor,
+        filters,
+      }: {
+        cursor?: `${typeof BASE_URL}/${string}`;
+        filters?: { emails: string };
+      }) => ({
+        url: cursor ?? `/prospects`,
+        query: {
           count: 'false',
           'page[size]': `${DEFAULT_PAGE_SIZE}`,
           ...(filters ? mapKeys(filters, (key) => `filter[${key}]`) : {}),
-        };
-      },
-      method: 'get',
-      schema: z.intersection(
-        z
-          .object({
-            data: z.array(outreachProspect),
-          })
-          .passthrough(),
-        outreachPaginatedResponse,
-      ),
-    }),
-    create: request({
-      url: () => `/prospects`,
-      json: (prospect: {
+        },
+        method: 'get',
+        schema: z.intersection(
+          z
+            .object({
+              data: z.array(outreachProspect),
+            })
+            .passthrough(),
+          outreachPaginatedResponse,
+        ),
+      }),
+    ),
+    create: request(
+      (prospect: {
         attributes: {
           firstName?: string | null;
           lastName?: string | null;
@@ -120,18 +118,20 @@ export const client = {
           };
         };
       }) => ({
-        data: { type: 'prospect', ...prospect },
+        url: `/prospects`,
+        json: {
+          data: { type: 'prospect', ...prospect },
+        },
+        method: 'post',
+        schema: z
+          .object({
+            data: outreachProspect,
+          })
+          .passthrough(),
       }),
-      method: 'post',
-      schema: z
-        .object({
-          data: outreachProspect,
-        })
-        .passthrough(),
-    }),
-    update: request({
-      url: ({ id }: { id: number }) => `/prospects/${id}`,
-      json: (prospect: {
+    ),
+    update: request(
+      (prospect: {
         id: number;
         attributes: {
           firstName?: string | null;
@@ -145,131 +145,146 @@ export const client = {
           addressZip?: string | null;
           [key: `custom${number}`]: string | null;
         };
-      }) => ({ data: { type: 'prospect', ...prospect } }),
-      method: 'patch',
-      schema: z
-        .object({
-          data: outreachProspect,
-        })
-        .passthrough(),
-    }),
+      }) => ({
+        url: `/prospects/${prospect.id}`,
+        json: { data: { type: 'prospect', ...prospect } },
+        method: 'patch',
+        schema: z
+          .object({
+            data: outreachProspect,
+          })
+          .passthrough(),
+      }),
+    ),
   },
   accounts: {
-    get: request({
-      url: ({ id }: { id: number }) => `/accounts/${id}`,
+    get: request(({ id }: { id: number }) => ({
+      url: `/accounts/${id}`,
       method: 'get',
       schema: z
         .object({
           data: outreachAccount,
         })
         .passthrough(),
-    }),
-    list: request({
-      url: ({ cursor }: { cursor?: `${typeof BASE_URL}/${string}` }) =>
-        cursor ?? `${BASE_URL}/accounts`,
-      query: ({
+    })),
+    list: request(
+      ({
+        cursor,
         filters,
       }: {
+        cursor?: `${typeof BASE_URL}/${string}`;
         filters?: { name?: string; domain?: string };
       }) => ({
-        count: 'false',
-        'page[size]': `${DEFAULT_PAGE_SIZE}`,
-        ...(filters ? mapKeys(shake(filters), (key) => `filter[${key}]`) : {}),
+        url: cursor ?? `${BASE_URL}/accounts`,
+        query: {
+          count: 'false',
+          'page[size]': `${DEFAULT_PAGE_SIZE}`,
+          ...(filters
+            ? mapKeys(shake(filters), (key) => `filter[${key}]`)
+            : {}),
+        },
+        method: 'get',
+        schema: z.intersection(
+          z
+            .object({
+              data: z.array(outreachAccount),
+            })
+            .passthrough(),
+          outreachPaginatedResponse,
+        ),
       }),
-      method: 'get',
-      schema: z.intersection(
-        z
-          .object({
-            data: z.array(outreachAccount),
-          })
-          .passthrough(),
-        outreachPaginatedResponse,
-      ),
-    }),
+    ),
   },
   mailings: {
-    get: request({
-      url: ({ id }: { id: number }) => `/mailings/${id}`,
+    get: request(({ id }: { id: number }) => ({
+      url: `/mailings/${id}`,
       method: 'get',
       schema: z
         .object({
           data: outreachMailing,
         })
         .passthrough(),
-    }),
-    list: request({
-      url: ({ cursor }: { cursor?: `${typeof BASE_URL}/${string}` }) =>
-        cursor ?? `/mailings`,
-      method: 'get',
-      query: ({
+    })),
+    list: request(
+      ({
+        cursor,
         filters,
       }: {
+        cursor?: `${typeof BASE_URL}/${string}`;
         filters?: {
           prospectId?: number;
           sequenceId?: number;
         };
       }) => ({
-        count: 'false',
-        'page[size]': `${DEFAULT_PAGE_SIZE}`,
-        ...(filters ? mapKeys(shake(filters), (key) => `filter[${key}]`) : {}),
+        url: cursor ?? `/mailings`,
+        method: 'get',
+        query: {
+          count: 'false',
+          'page[size]': `${DEFAULT_PAGE_SIZE}`,
+          ...(filters
+            ? mapKeys(shake(filters), (key) => `filter[${key}]`)
+            : {}),
+        },
+        schema: z.intersection(
+          z
+            .object({
+              data: z.array(outreachMailing),
+            })
+            .passthrough(),
+          outreachPaginatedResponse,
+        ),
       }),
-      schema: z.intersection(
-        z
-          .object({
-            data: z.array(outreachMailing),
-          })
-          .passthrough(),
-        outreachPaginatedResponse,
-      ),
-    }),
+    ),
   },
   sequences: {
-    get: request({
-      url: ({ id }: { id: number }) => `/sequences/${id}`,
+    get: request(({ id }: { id: number }) => ({
+      url: `/sequences/${id}`,
       method: 'get',
       schema: z
         .object({
           data: outreachSequence,
         })
         .passthrough(),
-    }),
-    list: request({
-      url: ({ cursor }: { cursor?: `${typeof BASE_URL}/${string}` }) =>
-        cursor ?? `/sequences`,
-      method: 'get',
-      query: () => ({ count: 'false', 'page[size]': `${DEFAULT_PAGE_SIZE}` }),
-      schema: z.intersection(
-        z
-          .object({
-            data: z.array(outreachSequence),
-          })
-          .passthrough(),
-        outreachPaginatedResponse,
-      ),
-    }),
-    create: request({
-      url: () => `/sequences`,
-      method: 'post',
-      json: (sequence: {
+    })),
+    list: request(
+      ({ cursor }: { cursor?: `${typeof BASE_URL}/${string}` }) => ({
+        url: cursor ?? `/sequences`,
+        method: 'get',
+        query: { count: 'false', 'page[size]': `${DEFAULT_PAGE_SIZE}` },
+        schema: z.intersection(
+          z
+            .object({
+              data: z.array(outreachSequence),
+            })
+            .passthrough(),
+          outreachPaginatedResponse,
+        ),
+      }),
+    ),
+    create: request(
+      (sequence: {
         attributes: {
           name: string;
           sequenceType: 'date' | 'interval';
           shareType: 'private' | 'read_only' | 'shared';
         };
       }) => ({
-        data: { type: 'sequence', ...sequence },
+        url: `/sequences`,
+        method: 'post',
+        json: {
+          data: { type: 'sequence', ...sequence },
+        },
+        schema: z
+          .object({
+            data: outreachSequence,
+          })
+          .passthrough(),
       }),
-      schema: z
-        .object({
-          data: outreachSequence,
-        })
-        .passthrough(),
-    }),
+    ),
   },
   sequenceStates: {
-    create: request({
-      url: () => `/sequenceStates`,
-      json: (sequenceState: {
+    create: request(
+      (sequenceState: {
         relationships: {
           prospect: {
             data: {
@@ -291,24 +306,25 @@ export const client = {
           };
         };
       }) => ({
-        data: {
-          type: 'sequenceState',
-          ...sequenceState,
+        url: `/sequenceStates`,
+        json: {
+          data: {
+            type: 'sequenceState',
+            ...sequenceState,
+          },
         },
+        method: 'post',
+        schema: z
+          .object({
+            data: outreachSequenceState,
+          })
+          .passthrough(),
       }),
-      method: 'post',
-      schema: z
-        .object({
-          data: outreachSequenceState,
-        })
-        .passthrough(),
-    }),
+    ),
   },
   sequenceSteps: {
-    create: request({
-      url: () => `/sequenceSteps`,
-      method: 'post',
-      json: (sequenceStep: {
+    create: request(
+      (sequenceStep: {
         attributes: {
           order?: number;
           stepType: 'auto_email' | 'manual_email' | 'call' | 'task';
@@ -323,36 +339,39 @@ export const client = {
           };
         };
       }) => ({
-        data: {
-          type: 'sequenceStep',
-          ...sequenceStep,
+        url: `/sequenceSteps`,
+        method: 'post',
+        json: {
+          data: {
+            type: 'sequenceStep',
+            ...sequenceStep,
+          },
         },
+        schema: custom.object({
+          data: outreachSequenceStep,
+        }),
       }),
-      schema: custom.object({
-        data: outreachSequenceStep,
-      }),
-    }),
+    ),
   },
   mailboxes: {
-    list: request({
-      url: ({ cursor }: { cursor?: `${typeof BASE_URL}/${string}` }) =>
-        cursor ?? `/mailboxes`,
-      method: 'get',
-      schema: z.intersection(
-        z
-          .object({
-            data: z.array(outreachMailbox),
-          })
-          .passthrough(),
-        outreachPaginatedResponse,
-      ),
-    }),
+    list: request(
+      ({ cursor }: { cursor?: `${typeof BASE_URL}/${string}` }) => ({
+        url: cursor ?? `/mailboxes`,
+        method: 'get',
+        schema: z.intersection(
+          z
+            .object({
+              data: z.array(outreachMailbox),
+            })
+            .passthrough(),
+          outreachPaginatedResponse,
+        ),
+      }),
+    ),
   },
   templates: {
-    create: request({
-      url: () => `/templates`,
-      method: 'post',
-      json: (template: {
+    create: request(
+      (template: {
         attributes: {
           bodyHtml: string;
           name: string;
@@ -360,21 +379,23 @@ export const client = {
           trackOpens?: boolean;
         };
       }) => ({
-        data: {
-          type: 'template',
-          ...template,
+        url: `/templates`,
+        method: 'post',
+        json: {
+          data: {
+            type: 'template',
+            ...template,
+          },
         },
+        schema: custom.object({
+          data: outreachTemplate,
+        }),
       }),
-      schema: custom.object({
-        data: outreachTemplate,
-      }),
-    }),
+    ),
   },
   sequenceTemplates: {
-    create: request({
-      url: () => `/sequenceTemplates`,
-      method: 'post',
-      json: (sequenceTemplate: {
+    create: request(
+      (sequenceTemplate: {
         attributes: {
           isReply: boolean;
         };
@@ -393,20 +414,23 @@ export const client = {
           };
         };
       }) => ({
-        data: {
-          type: 'sequenceTemplate',
-          ...sequenceTemplate,
+        url: `/sequenceTemplates`,
+        method: 'post',
+        json: {
+          data: {
+            type: 'sequenceTemplate',
+            ...sequenceTemplate,
+          },
         },
+        schema: custom.object({
+          data: outreachSequenceTemplate,
+        }),
       }),
-      schema: custom.object({
-        data: outreachSequenceTemplate,
-      }),
-    }),
+    ),
   },
   emailAddresses: {
-    create: request({
-      url: () => `/emailAddresses`,
-      json: (emailAddress: {
+    create: request(
+      (emailAddress: {
         attributes: {
           email: string;
           emailType?: 'work' | 'personal';
@@ -420,26 +444,18 @@ export const client = {
             };
           };
         };
-      }) => ({ data: { type: 'emailAddress', ...emailAddress } }),
-      method: 'post',
-      schema: z
-        .object({
-          data: outreachEmailAddress,
-        })
-        .passthrough(),
-    }),
+      }) => ({
+        url: `/emailAddresses`,
+        json: { data: { type: 'emailAddress', ...emailAddress } },
+        method: 'post',
+        schema: z
+          .object({
+            data: outreachEmailAddress,
+          })
+          .passthrough(),
+      }),
+    ),
   },
-  passthrough: request({
-    url: ({ url }: { url: `${typeof BASE_URL}/${string}` | `/${string}` }) =>
-      url,
-    method: ({
-      method,
-    }: {
-      method: 'get' | 'post' | 'put' | 'delete' | 'patch';
-    }) => method,
-    query: ({ query }: { query?: Record<string, string> }) => query ?? {},
-    json: ({ body }: { body?: Record<string, unknown> }) => body ?? {},
-    schema: z.any(),
-  }),
+  passthrough: request.passthrough(),
 };
 export { BASE_URL };
