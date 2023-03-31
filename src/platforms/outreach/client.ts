@@ -7,9 +7,13 @@ import {
   outreachProspect,
   outreachSequence,
   outreachSequenceState,
+  outreachSequenceStep,
+  outreachSequenceTemplate,
+  outreachTemplate,
   outreachUser,
 } from '@/platforms/outreach/schemas';
 import { makeRequestFactory } from '@/sdk/client';
+import * as custom from '@/sdk/validators';
 import { mapKeys, shake } from 'radash';
 import { z } from 'zod';
 import { BASE_URL, DEFAULT_PAGE_SIZE } from './constants';
@@ -243,6 +247,24 @@ export const client = {
         outreachPaginatedResponse,
       ),
     }),
+    create: request({
+      url: () => `/sequences`,
+      method: 'post',
+      json: (sequence: {
+        attributes: {
+          name: string;
+          sequenceType: 'date' | 'interval';
+          shareType: 'private' | 'read_only' | 'shared';
+        };
+      }) => ({
+        data: { type: 'sequence', ...sequence },
+      }),
+      schema: z
+        .object({
+          data: outreachSequence,
+        })
+        .passthrough(),
+    }),
   },
   sequenceStates: {
     create: request({
@@ -282,6 +304,35 @@ export const client = {
         .passthrough(),
     }),
   },
+  sequenceSteps: {
+    create: request({
+      url: () => `/sequenceSteps`,
+      method: 'post',
+      json: (sequenceStep: {
+        attributes: {
+          order?: number;
+          stepType: 'auto_email' | 'manual_email' | 'call' | 'task';
+          interval?: number;
+        };
+        relationships: {
+          sequence: {
+            data: {
+              type: 'sequence';
+              id: number;
+            };
+          };
+        };
+      }) => ({
+        data: {
+          type: 'sequenceStep',
+          ...sequenceStep,
+        },
+      }),
+      schema: custom.object({
+        data: outreachSequenceStep,
+      }),
+    }),
+  },
   mailboxes: {
     list: request({
       url: ({ cursor }: { cursor?: `${typeof BASE_URL}/${string}` }) =>
@@ -295,6 +346,61 @@ export const client = {
           .passthrough(),
         outreachPaginatedResponse,
       ),
+    }),
+  },
+  templates: {
+    create: request({
+      url: () => `/templates`,
+      method: 'post',
+      json: (template: {
+        attributes: {
+          bodyHtml: string;
+          name: string;
+          subject?: string | null;
+          trackOpens?: boolean;
+        };
+      }) => ({
+        data: {
+          type: 'template',
+          ...template,
+        },
+      }),
+      schema: custom.object({
+        data: outreachTemplate,
+      }),
+    }),
+  },
+  sequenceTemplates: {
+    create: request({
+      url: () => `/sequenceTemplates`,
+      method: 'post',
+      json: (sequenceTemplate: {
+        attributes: {
+          isReply: boolean;
+        };
+        relationships: {
+          sequenceStep: {
+            data: {
+              type: 'sequenceStep';
+              id: number;
+            };
+          };
+          template: {
+            data: {
+              type: 'template';
+              id: number;
+            };
+          };
+        };
+      }) => ({
+        data: {
+          type: 'sequenceTemplate',
+          ...sequenceTemplate,
+        },
+      }),
+      schema: custom.object({
+        data: outreachSequenceTemplate,
+      }),
     }),
   },
   emailAddresses: {
