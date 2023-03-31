@@ -1,7 +1,6 @@
 import { HttpsUrl } from '@/sdk';
 import * as validators from '@/sdk/validators';
 import { z } from 'zod';
-import { SalesforceSupportedObjectType } from './constants';
 
 export const salesforceUser = z
   .object({
@@ -25,15 +24,41 @@ export const salesforceContact = z
     MobilePhone: z.string(),
     CreatedDate: validators.date(),
     LastModifiedDate: validators.date(),
+    AccountId: z.number(),
+    OwnerId: z.number(),
   })
   .passthrough();
 
-export const salesforceList = z
+export const salesforceContactCreate = z.object({
+  Email: z.string().email(),
+  FirstName: z.string().optional(),
+  LastName: z.string().optional(),
+  Title: z.string().optional(),
+  Phone: z.string().optional(),
+  MobilePhone: z.string().optional(),
+  AccountId: z.number().optional(),
+  OwnerId: z.number().optional(),
+});
+
+export const salesforceContactUpdate = z.object({
+  Id: z.number(),
+  Email: z.string().email().optional(),
+  FirstName: z.string().optional(),
+  LastName: z.string().optional(),
+  Title: z.string().optional(),
+  Phone: z.string().optional(),
+  MobilePhone: z.string().optional(),
+  AccountId: z.number().optional(),
+  OwnerId: z.number().optional(),
+});
+
+export const salesforceListView = z
   .object({
     Id: z.string(),
     Name: z.string(),
     CreatedDate: validators.date(),
     LastModifiedDate: validators.date(),
+    CreatedById: z.number(),
   })
   .passthrough();
 
@@ -43,7 +68,7 @@ export const SalesforceSchemaByObjectType: Record<
 > = {
   User: salesforceUser,
   Contact: salesforceContact,
-  List: salesforceList,
+  ListView: salesforceListView,
 };
 
 export type SalesforceAccountType = 'Production' | 'Sandbox';
@@ -58,7 +83,9 @@ export const salesforceOAuthUrlsByAccountType: Record<
   Sandbox: `https://test.salesforce.com/services/oauth2`,
 };
 
-export type SalesforceSupportedObjectType = 'User' | 'Contact' | 'List';
+export type SalesforceSupportedObjectType = 'User' | 'Contact' | 'ListView';
 export type SalesforceUser = z.infer<typeof salesforceUser>;
 export type SalesforceContact = z.infer<typeof salesforceContact>;
-export type SalesforceList = z.infer<typeof salesforceList>;
+export type SalesforceContactCreate = z.infer<typeof salesforceContactCreate>;
+export type SalesforceContactUpdate = z.infer<typeof salesforceContactUpdate>;
+export type SalesforceListView = z.infer<typeof salesforceListView>;

@@ -3,7 +3,9 @@ import { z } from 'zod';
 import { MAX_QUERY_PAGE_SIZE } from './constants';
 import {
   salesforceContact,
-  salesforceList,
+  SalesforceContactCreate,
+  SalesforceContactUpdate,
+  salesforceListView,
   SalesforceSupportedObjectType,
   salesforceUser,
 } from './schemas';
@@ -77,35 +79,47 @@ const query = {
 export const client = {
   users: {
     get: request({
-      url: ({ id }: { id: number }) => `/sobjects/User/${id}/`,
+      url: ({ Id }: { Id: number }) => `/sobjects/User/${Id}/`,
       method: 'get',
-      schema: salesforceUser,
+      schema: salesforceUser.passthrough(),
     }),
     list: query.list({
       objectType: 'User',
-      schema: salesforceUser,
+      schema: salesforceUser.passthrough(),
     }),
   },
   contacts: {
     get: request({
-      url: ({ id }: { id: number }) => `/sobjects/Contact/${id}/`,
+      url: ({ Id }: { Id: number }) => `/sobjects/Contact/${Id}/`,
       method: 'get',
-      schema: salesforceContact,
+      schema: salesforceContact.passthrough(),
     }),
     list: query.list({
       objectType: 'Contact',
-      schema: salesforceContact,
+      schema: salesforceContact.passthrough(),
+    }),
+    create: request({
+      url: () => `/sobjects/Contact`,
+      method: 'post',
+      json: (contact: SalesforceContactCreate) => contact,
+      schema: salesforceContact.passthrough(),
+    }),
+    update: request({
+      url: ({ Id }: { Id: number }) => `/sobjects/Contact/${Id}/`,
+      method: 'patch',
+      json: (contact: SalesforceContactUpdate) => contact,
+      schema: salesforceContact.passthrough(),
     }),
   },
   lists: {
     get: request({
-      url: ({ id }: { id: number }) => `/sobjects/List/${id}/`,
+      url: ({ Id }: { Id: number }) => `/sobjects/List/${Id}/`,
       method: 'get',
-      schema: salesforceList,
+      schema: salesforceListView.passthrough(),
     }),
     list: query.list({
-      objectType: 'List',
-      schema: salesforceList,
+      objectType: 'ListView',
+      schema: salesforceListView.passthrough(),
     }),
   },
   passthrough: request({
