@@ -51,6 +51,7 @@ export const apolloContact = z
     account_id: z.string().nullish(),
     created_at: custom.date(),
     updated_at: custom.date(),
+    typed_custom_fields: z.object({}).passthrough(),
   })
   .passthrough();
 
@@ -212,35 +213,57 @@ export type ApolloEmailActivity = z.infer<typeof apolloEmailActivity>;
 
 export const apolloCreateSequence = z.object({
   creation_type: z.string(),
-  name: z.string().nullable(),
+  name: z.string().optional(),
   permissions: z.string(),
-  type: z.string().nullable(),
-  active: z.boolean().nullable(),
+  type: z.string().optional(),
+  active: z.boolean().optional(),
 });
 
 export type ApolloCreateSequence = z.infer<typeof apolloCreateSequence>;
 
+export const apolloSequenceStep = z
+  .object({
+    emailer_step: z
+      .object({
+        id: z.string(),
+      })
+      .passthrough(),
+    emailer_touch: z
+      .object({
+        id: z.string(),
+      })
+      .passthrough(),
+    emailer_template: z
+      .object({
+        id: z.string(),
+      })
+      .passthrough(),
+  })
+  .passthrough();
+
+export type ApolloSequenceStep = z.infer<typeof apolloSequenceStep>;
+
 export const apolloCreateSequenceStep = z.object({
   emailer_campaign_id: z.string(),
-  priority: z.string().nullable(),
-  position: z.number().nullable(),
-  type: z.string().nullable(),
-  wait_mode: z.string().nullable(),
-  wait_time: z.number().nullable(),
-  exact_datetime: z.string().nullable(),
+  priority: z.string().optional(),
+  position: z.number().optional(),
+  type: z.string().optional(),
+  wait_mode: z.string().optional(),
+  wait_time: z.number().optional(),
+  exact_datetime: z.string().optional(),
 });
 
 export type ApolloCreateSequenceStep = z.infer<typeof apolloCreateSequenceStep>;
 
 export const apolloCreateTemplate = z.object({
-  name: z.string().nullable(),
-  user_id: z.string().nullable(),
-  subject: z.string().nullable(),
-  global: z.boolean().nullable(),
-  body_html: z.string().nullable(),
-  body_text: z.string().nullable(),
-  creation_type: z.string().nullable(),
-  label_ids: z.array(z.string()).nullable(),
+  name: z.string().optional(),
+  user_id: z.string().optional(),
+  subject: z.string().optional(),
+  global: z.boolean().optional(),
+  body_html: z.string().optional(),
+  body_text: z.string().optional(),
+  creation_type: z.string().optional(),
+  label_ids: z.array(z.string()).optional(),
 });
 
 export type ApolloCreateTemplate = z.infer<typeof apolloCreateTemplate>;
@@ -249,9 +272,9 @@ export const apolloCreateSequenceTemplate = z.object({
   emailer_template: apolloCreateTemplate.passthrough(),
   emailer_step_id: z.string(),
   emailer_template_id: z.string(),
-  status: z.string().nullable(),
-  type: z.string().nullable(),
-  include_signature: z.boolean().nullable(),
+  status: z.string().optional(),
+  type: z.string().optional(),
+  include_signature: z.boolean().optional(),
 });
 
 export type ApolloUpdateSequenceTemplate = z.infer<

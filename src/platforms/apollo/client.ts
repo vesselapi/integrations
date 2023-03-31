@@ -18,6 +18,7 @@ import {
   apolloEmailMessage,
   apolloPaginatedResponse,
   apolloSequence,
+  apolloSequenceStep,
   ApolloUpdateSequenceTemplate,
   apolloUser,
 } from './schemas';
@@ -263,25 +264,7 @@ export const client = {
       url: () => `/emailer_steps`,
       method: 'post',
       json: (step: ApolloCreateSequenceStep) => shake(step),
-      schema: z
-        .object({
-          emailer_step: z
-            .object({
-              id: z.string(),
-            })
-            .passthrough(),
-          emailer_touch: z
-            .object({
-              id: z.string(),
-            })
-            .passthrough(),
-          emailer_template: z
-            .object({
-              id: z.string(),
-            })
-            .passthrough(),
-        })
-        .passthrough(),
+      schema: apolloSequenceStep,
     }),
   },
   sequenceTemplate: {
