@@ -11,12 +11,16 @@ export default action(
     mutation: false,
     schema: z.object({
       cursor: outreachUrl().optional(),
+      filters: z
+        .object({
+          prospectId: z.number().optional(),
+          sequenceId: z.number().optional(),
+        })
+        .optional(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.mailings.list(auth, {
-      cursor: input.cursor,
-    });
+    return await client.mailings.list(auth, input);
   },
 );
