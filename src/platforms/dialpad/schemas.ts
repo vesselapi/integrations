@@ -1,5 +1,4 @@
 import * as custom from '@/sdk/validators';
-import parsePhoneNumber from 'libphonenumber-js';
 import { z } from 'zod';
 import { Auth, PlatformClient } from '../../sdk/types';
 
@@ -174,14 +173,7 @@ export const dialpadCallStartSchema = z.object({
   group_id: z.number().optional(),
   group_type: z.string().optional(),
   outbound_caller_id: z.string().optional(),
-  phone_number: z
-    .string()
-    .refine((value) => {
-      return parsePhoneNumber(value)?.isValid();
-    })
-    .transform((value) => {
-      return parsePhoneNumber(value)?.format('E.164');
-    }),
+  phone_number: custom.formattedPhoneNumber(),
   user_id: z.string(),
 });
 

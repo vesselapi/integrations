@@ -1,3 +1,4 @@
+import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 import { action } from '../../../../sdk';
 import { client } from '../../client';
@@ -24,7 +25,7 @@ export default action(
       phone_numbers: z.array(
         z.object({
           label: z.string().optional(),
-          value: z.string(),
+          value: custom.formattedPhoneNumber(),
         }),
       ),
     }),
