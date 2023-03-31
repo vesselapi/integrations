@@ -16,14 +16,14 @@ export default action(
       emails: z
         .array(
           z.object({
-            label: z.string(),
+            label: z.string().optional(),
             value: z.string(),
           }),
         )
         .optional(),
       phone_numbers: z.array(
         z.object({
-          label: z.string(),
+          label: z.string().optional(),
           value: z.string(),
         }),
       ),

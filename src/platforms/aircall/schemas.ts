@@ -78,11 +78,11 @@ export type AircallContactCreate = {
   company_name?: string;
   information?: string;
   emails?: {
-    label: string;
+    label?: string;
     value: string;
   }[];
   phone_numbers: {
-    label: string;
+    label?: string;
     value: string;
   }[];
 };
