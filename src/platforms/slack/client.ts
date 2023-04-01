@@ -97,4 +97,5 @@ export const client = {
       }),
     ),
   },
+  passthrough: request.passthrough(),
 };
