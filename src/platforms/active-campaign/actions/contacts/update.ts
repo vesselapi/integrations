@@ -3,9 +3,9 @@ import { action } from '@/sdk';
 import { z } from 'zod';
 
 export default action(
-  'find-contact',
+  'update-contact',
   {
-    operation: 'find',
+    operation: 'update',
     resource: 'contacts',
     mutation: true,
     schema: z.object({
