@@ -4,6 +4,7 @@ import dialpad from '@/platforms/dialpad';
 import outreach from '@/platforms/outreach';
 import ringcentral from '@/platforms/ringcentral';
 import salesloft from '@/platforms/salesloft';
+import { Platform } from '@/sdk';
 
 export { default as aircall, types as aircallTypes } from '@/platforms/aircall';
 export { default as apollo, types as apolloTypes } from '@/platforms/apollo';
@@ -21,7 +22,7 @@ export {
   types as salesloftTypes,
 } from '@/platforms/salesloft';
 
-export const integrationsList = Object.values([
+export const integrationsList: Platform<any, any, any>[] = Object.values([
   aircall,
   apollo,
   dialpad,
