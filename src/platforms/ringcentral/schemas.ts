@@ -44,6 +44,16 @@ export const ringcentralExtensionSchema = z
       .optional(),
     status: z.string(),
     type: z.string(),
+    permissions: z
+      .object({
+        admin: z.object({
+          enabled: z.boolean(),
+        }),
+        internationalCalling: z.object({
+          enabled: z.boolean(),
+        }),
+      })
+      .passthrough(),
   })
   .passthrough();
 
@@ -59,10 +69,12 @@ export const ringcentralCallLogSchema = z
     result: z.string(),
     from: z.object({
       phoneNumber: custom.formattedPhoneNumber(),
+      extensionId: z.string().optional(),
       name: z.string().optional(),
     }),
     to: z.object({
       phoneNumber: custom.formattedPhoneNumber(),
+      extensionId: z.string().optional(),
       name: z.string().optional(),
     }),
   })
@@ -157,3 +169,5 @@ export type AnyRingcentralObject =
 
 export type FindObjectInput = { id: string };
 export type ListObjectInput = { page?: number; perPage?: number };
+const anyListResponseSchema = listResponseSchema(z.any());
+export type RingcentralListResponse = z.infer<typeof anyListResponseSchema>;
