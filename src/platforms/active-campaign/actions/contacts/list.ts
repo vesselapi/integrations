@@ -8,7 +8,7 @@ export default action(
     operation: 'list',
     resource: 'contacts',
     mutation: false,
-    schema: z.object({}).nullable(),
+    schema: z.object({}),
     scopes: [],
   },
   async ({ auth }) => {

@@ -38,7 +38,7 @@ export const client = {
       url: `/api/3/lists`,
       method: 'get',
       query: shake({
-        limit
+        limit,
       }),
       schema: z
         .object({
