@@ -1,8 +1,30 @@
 import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
-export const outreachSequenceTemplate = custom.object({
-  id: z.number(),
+export const activeCampaignUser = custom.object({
+  id: z.string(),
+  username: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string(),
+  phone: z.string(),
 });
+export type ActiveCampaignUser = z.infer<typeof activeCampaignUser>;
 
-export type OutreachSequenceTemplate = z.infer<typeof outreachSequenceTemplate>;
+export const activeCampaignContact = custom.object({
+  id: z.string(),
+  email: z.string(),
+  phone: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
+  udate: custom.date(),
+  cdate: custom.date(),
+});
+export type ActiveCampaignContact = z.infer<typeof activeCampaignContact>;
+
+export const activeCampaignList = custom.object({
+  id: z.string(),
+  name: z.string(),
+  cdate: custom.date(),
+});
+export type ActiveCampaignList = z.infer<typeof activeCampaignList>;
