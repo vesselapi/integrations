@@ -10,10 +10,18 @@ export type HttpErrorMeta = {
   cause?: unknown;
 };
 
-export class IntegrationError extends Error {
-  meta: ActionErrorMeta | HttpErrorMeta;
+export type ClientErrorMeta = {
+  type: 'client';
+  cause?: unknown;
+};
 
-  constructor(message: string, meta: ActionErrorMeta | HttpErrorMeta) {
+export class IntegrationError extends Error {
+  meta: ActionErrorMeta | HttpErrorMeta | ClientErrorMeta;
+
+  constructor(
+    message: string,
+    meta: ActionErrorMeta | HttpErrorMeta | ClientErrorMeta,
+  ) {
     super(message);
     this.name = 'IntegrationError';
     this.meta = meta;

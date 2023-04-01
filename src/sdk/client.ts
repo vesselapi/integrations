@@ -45,9 +45,9 @@ export const makeRequestFactory = (
       );
       const response = await auth.retry(async () => {
         const url = options.query
-          ? `${trim(options.url, '/')}/${toQueryString(options.query)}`
+          ? `${trim(options.url, '/')}?${toQueryString(options.query)}`
           : options.url;
-        return fetch(url, {
+        return await fetch(url, {
           body: options.json ? JSON.stringify(options.json) : undefined,
           method: options.method,
           headers: options.json
