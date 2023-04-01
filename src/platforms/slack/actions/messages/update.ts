@@ -1,21 +1,21 @@
-// import { outreachUrl } from '@/platforms/outreach/actions/validators';
 import { client } from '@/platforms/slack/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
 
 export default action(
-  'update-chat',
+  'update-message',
   {
     operation: 'update',
-    resource: 'chats',
+    resource: 'messages',
     mutation: false,
     schema: z.object({
+      ts: z.string(),
       text: z.string(),
       channel: z.string(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.chat.postMessage(auth, input);
+    return await client.chat.update(auth, input);
   },
 );

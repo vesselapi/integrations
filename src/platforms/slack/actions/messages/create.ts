@@ -1,4 +1,3 @@
-// import { outreachUrl } from '@/platforms/outreach/actions/validators';
 import { client } from '@/platforms/slack/client';
 import { action } from '@/sdk';
 import { z } from 'zod';

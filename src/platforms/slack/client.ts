@@ -4,27 +4,21 @@ import {
   slackPaginated,
   slackUser,
 } from '@/platforms/slack/schemas';
-import { IntegrationError } from '@/sdk';
 import { makeRequestFactory } from '@/sdk/client';
 import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
 const request = makeRequestFactory(async (auth, options) => {
-  if (auth.type === 'oauth2') {
-    const meta = await auth.getMetadata();
-
-    return {
-      ...options,
-      url: !options.url.startsWith(BASE_URL)
-        ? `${BASE_URL}${options.url}`
-        : options.url,
-      headers: {
-        ...options.headers,
-        Authorization: `Bearer ${await auth.getToken()}`,
-      },
-    };
-  }
-  throw new IntegrationError('Unsupported auth type', { type: 'client' });
+  return {
+    ...options,
+    url: !options.url.startsWith(BASE_URL)
+      ? `${BASE_URL}${options.url}`
+      : options.url,
+    headers: {
+      ...options.headers,
+      Authorization: `Bearer ${await auth.getToken()}`,
+    },
+  };
 });
 
 export const client = {

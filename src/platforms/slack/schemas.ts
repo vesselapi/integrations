@@ -19,5 +19,10 @@ export const slackConversation = custom.object({
   created: custom.timestamp(true),
 });
 
+export const slackMessage = custom.object({
+  ts: z.string(),
+});
+
 export type SlackUser = z.infer<typeof slackUser>;
 export type SlackConversation = z.infer<typeof slackConversation>;
+export type SlackMessage = z.infer<typeof slackMessage>;
