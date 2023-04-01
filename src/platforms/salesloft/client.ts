@@ -202,7 +202,7 @@ export const client = {
       method: 'get',
       schema: z
         .object({
-          data: salesloftEmailBody,
+          data: salesloftEmail,
         })
         .passthrough(),
     })),
@@ -213,7 +213,7 @@ export const client = {
       method: 'get',
       schema: z
         .object({
-          data: z.string(),
+          data: salesloftEmailBody,
         })
         .passthrough(),
     })),

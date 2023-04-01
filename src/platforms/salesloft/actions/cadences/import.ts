@@ -41,7 +41,7 @@ export default action(
                   z
                     .object({
                       enabled: z.boolean(),
-                      name: z.string(),
+                      name: z.string().optional(),
                       type: z.string(),
                       type_settings: z
                         .object({
@@ -51,7 +51,7 @@ export default action(
                           email_template: z
                             .object({
                               title: z.string(),
-                              subject: z.string(),
+                              subject: z.string().optional(),
                               body: z.string(),
                               open_tracking: z.boolean().optional(),
                               click_tracking: z.boolean().optional(),

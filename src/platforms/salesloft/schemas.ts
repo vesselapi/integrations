@@ -234,13 +234,13 @@ export type SalesloftCadenceImport = {
       reference_id?: number;
       steps: {
         enabled: boolean;
-        name: string;
+        name?: string;
         type: string;
         type_settings: {
           previous_email_step_group_reference_id?: number;
           email_template: {
             title: string;
-            subject: string;
+            subject?: string;
             body: string;
             open_tracking?: boolean;
             click_tracking?: boolean;
