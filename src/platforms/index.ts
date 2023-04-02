@@ -3,6 +3,7 @@ import apollo from '@/platforms/apollo';
 import dialpad from '@/platforms/dialpad';
 import outreach from '@/platforms/outreach';
 import ringcentral from '@/platforms/ringcentral';
+import salesforce from '@/platforms/salesforce';
 
 export { default as aircall, types as aircallTypes } from '@/platforms/aircall';
 export { default as apollo, types as apolloTypes } from '@/platforms/apollo';
@@ -15,6 +16,10 @@ export {
   default as ringcentral,
   types as ringcentralTypes,
 } from '@/platforms/ringcentral';
+export {
+  default as salesforce,
+  types as salesforceTypes,
+} from '@/platforms/salesforce';
 
 export const integrationsList = Object.values([
   aircall,
@@ -22,4 +27,5 @@ export const integrationsList = Object.values([
   dialpad,
   outreach,
   ringcentral,
+  salesforce,
 ]);
