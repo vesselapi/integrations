@@ -127,23 +127,5 @@ export const client = {
       schema: salesforceListView.passthrough(),
     }),
   },
-  passthrough: request(
-    ({
-      url,
-      method,
-      query,
-      body,
-    }: {
-      url: `/${string}`;
-      method: 'get' | 'post' | 'put' | 'delete' | 'patch';
-      query?: Record<string, string>;
-      body?: Record<string, unknown>;
-    }) => ({
-      url,
-      method,
-      query: query ?? {},
-      json: body ?? {},
-      schema: z.any(),
-    }),
-  ),
+  passthrough: request.passthrough(),
 };

@@ -1,12 +1,22 @@
-import { auth, platform } from '@/sdk';
-
 import { client } from '@/platforms/salesforce/client';
 import * as constants from '@/platforms/salesforce/constants';
 import { icon } from '@/platforms/salesforce/icon';
+import { auth, platform } from '@/sdk';
 import {
   SalesforceAuthAnswers,
   salesforceOAuthUrlsByAccountType,
 } from './schemas';
+
+import createContact from '@/platforms/salesforce/actions/contacts/create';
+import findContact from '@/platforms/salesforce/actions/contacts/find';
+import listContacts from '@/platforms/salesforce/actions/contacts/list';
+import updateContact from '@/platforms/salesforce/actions/contacts/update';
+
+import findList from '@/platforms/salesforce/actions/lists/find';
+import listLists from '@/platforms/salesforce/actions/lists/list';
+
+import findUser from '@/platforms/salesforce/actions/users/find';
+import listUsers from '@/platforms/salesforce/actions/users/list';
 
 export * as types from './schemas';
 export default platform('salesforce', {
@@ -33,5 +43,14 @@ export default platform('salesforce', {
   },
   client,
   constants,
-  actions: {},
+  actions: {
+    createContact,
+    findContact,
+    listContacts,
+    updateContact,
+    findList,
+    listLists,
+    listUsers,
+    findUser,
+  },
 });
