@@ -8,6 +8,7 @@ export type OAuth2Metadata = {
   answers: Record<string, string>;
   accessToken: string;
   refreshToken: string;
+  oauthResponse: Record<string, unknown>;
 };
 
 export type StandardMetadata = {

@@ -1,3 +1,4 @@
+import { HttpsUrl } from '@/sdk';
 import { makeRequestFactory } from '@/sdk/client';
 import { z } from 'zod';
 import { MAX_QUERY_PAGE_SIZE } from './constants';
@@ -10,20 +11,22 @@ import {
   salesforceUser,
 } from './schemas';
 
-const request = makeRequestFactory(
-  BASE_URL,
-  ({ auth, fullUrl, method, headers, json }) =>
-    async () =>
-      await fetch(fullUrl, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${await auth.getToken()}`,
-          ...headers,
-        },
-        body: json ? JSON.stringify(json) : undefined,
-      }),
-);
+const request = makeRequestFactory(async (auth, options) => {
+  if (auth.type === 'oauth2') {
+    const { oauthResponse } = await auth.getMetadata();
+    const instanceUrl = oauthResponse.instance_url as HttpsUrl;
+    return {
+      ...options,
+      url: `${instanceUrl}/${options.url}`,
+      headers: {
+        ...options.headers,
+        Authorization: `Bearer ${await auth.getToken()}`,
+      },
+    };
+  } else {
+    throw new Error('Salesforce only supports OAuth2 authentication');
+  }
+});
 
 const queryBuilder = {
   list: ({
@@ -59,78 +62,88 @@ const query = {
     objectType: SalesforceSupportedObjectType;
     relationalSelect?: string;
   }) =>
-    request({
-      url: () => `/query`,
+    request(({ cursor }: { cursor: number }) => ({
+      url: `/query`,
       method: 'get',
-      schema: z.object({
-        records: z.array(schema),
-        totalSize: z.number(),
-      }),
-      query: ({ cursor }: { cursor: number }) => ({
+      schema: z
+        .object({
+          records: z.array(schema),
+          totalSize: z.number(),
+        })
+        .passthrough(),
+      query: {
         query: queryBuilder.list({
           objectType,
           cursor,
           relationalSelect,
         }),
-      }),
-    }),
+      },
+    })),
 };
 
 export const client = {
   users: {
-    get: request({
-      url: ({ Id }: { Id: number }) => `/sobjects/User/${Id}/`,
+    get: request(({ Id }: { Id: number }) => ({
+      url: `/sobjects/User/${Id}/`,
       method: 'get',
       schema: salesforceUser.passthrough(),
-    }),
+    })),
     list: query.list({
       objectType: 'User',
       schema: salesforceUser.passthrough(),
     }),
   },
   contacts: {
-    get: request({
-      url: ({ Id }: { Id: number }) => `/sobjects/Contact/${Id}/`,
+    get: request(({ Id }: { Id: number }) => ({
+      url: `/sobjects/Contact/${Id}/`,
       method: 'get',
       schema: salesforceContact.passthrough(),
-    }),
+    })),
     list: query.list({
       objectType: 'Contact',
       schema: salesforceContact.passthrough(),
     }),
-    create: request({
-      url: () => `/sobjects/Contact`,
+    create: request((contact: SalesforceContactCreate) => ({
+      url: `/sobjects/Contact`,
       method: 'post',
-      json: (contact: SalesforceContactCreate) => contact,
+      json: contact,
       schema: salesforceContact.passthrough(),
-    }),
-    update: request({
-      url: ({ Id }: { Id: number }) => `/sobjects/Contact/${Id}/`,
+    })),
+    update: request((contact: SalesforceContactUpdate) => ({
+      url: `/sobjects/Contact/${contact.Id}/`,
       method: 'patch',
-      json: (contact: SalesforceContactUpdate) => contact,
+      json: contact,
       schema: salesforceContact.passthrough(),
-    }),
+    })),
   },
   lists: {
-    get: request({
-      url: ({ Id }: { Id: number }) => `/sobjects/List/${Id}/`,
+    get: request(({ Id }: { Id: number }) => ({
+      url: `/sobjects/List/${Id}/`,
       method: 'get',
       schema: salesforceListView.passthrough(),
-    }),
+    })),
     list: query.list({
       objectType: 'ListView',
       schema: salesforceListView.passthrough(),
     }),
   },
-  passthrough: request({
-    url: ({ url }: { url: `/${string}` }) => url,
-    method: ({
+  passthrough: request(
+    ({
+      url,
       method,
+      query,
+      body,
     }: {
+      url: `/${string}`;
       method: 'get' | 'post' | 'put' | 'delete' | 'patch';
-    }) => method,
-    query: ({ query }: { query?: Record<string, string> }) => query ?? {},
-    json: ({ body }: { body?: Record<string, unknown> }) => body ?? {},
-    schema: z.any(),
-  }),
+      query?: Record<string, string>;
+      body?: Record<string, unknown>;
+    }) => ({
+      url,
+      method,
+      query: query ?? {},
+      json: body ?? {},
+      schema: z.any(),
+    }),
+  ),
 };
