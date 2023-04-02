@@ -7,6 +7,7 @@ import {
   SalesforceContactCreate,
   SalesforceContactUpdate,
   salesforceListView,
+  salesforceListViewResult,
   SalesforceSupportedObjectType,
   salesforceUser,
 } from './schemas';
@@ -50,6 +51,26 @@ const queryBuilder = {
     LIMIT ${limit}
   `;
   },
+  listListView: ({
+    objectType,
+    cursor,
+    limit = MAX_QUERY_PAGE_SIZE,
+  }: {
+    objectType?: string;
+    cursor?: number;
+    limit?: number;
+  }) => {
+    const where =
+      `WHERE Id < ${cursor}` +
+      (objectType ? `AND SobjectType = '${objectType.toUpperCase()}'` : '');
+    return `
+    SELECT FIELDS(ALL)
+    FROM ListView
+    ${where}
+    ORDER BY Id DESC
+    LIMIT ${limit}
+  `;
+  },
 };
 
 const query = {
@@ -62,7 +83,7 @@ const query = {
     objectType: SalesforceSupportedObjectType;
     relationalSelect?: string;
   }) =>
-    request(({ cursor }: { cursor: number }) => ({
+    request(({ cursor, limit }: { cursor: number; limit: number }) => ({
       url: `/query`,
       method: 'get',
       schema: z
@@ -76,6 +97,7 @@ const query = {
           objectType,
           cursor,
           relationalSelect,
+          limit,
         }),
       },
     })),
@@ -116,16 +138,46 @@ export const client = {
       schema: salesforceContact.passthrough(),
     })),
   },
-  lists: {
+  listViews: {
     get: request(({ Id }: { Id: number }) => ({
-      url: `/sobjects/List/${Id}/`,
+      url: `/sobjects/ListView/${Id}/`,
       method: 'get',
       schema: salesforceListView.passthrough(),
     })),
-    list: query.list({
-      objectType: 'ListView',
-      schema: salesforceListView.passthrough(),
-    }),
+    list: request(
+      ({
+        objectType,
+        cursor,
+        limit,
+      }: {
+        objectType?: string;
+        cursor: number;
+        limit: number;
+      }) => ({
+        url: `/query`,
+        method: 'get',
+        schema: z
+          .object({
+            records: z.array(salesforceListView),
+            totalSize: z.number(),
+          })
+          .passthrough(),
+        query: {
+          query: queryBuilder.listListView({
+            objectType,
+            cursor,
+            limit,
+          }),
+        },
+      }),
+    ),
+  },
+  listViewResults: {
+    get: request(({ Id, objectType }: { Id: number; objectType: string }) => ({
+      url: `/sobjects/${objectType}/listviews/${Id}/results`,
+      method: 'get',
+      schema: salesforceListViewResult.passthrough(),
+    })),
   },
   passthrough: request.passthrough(),
 };

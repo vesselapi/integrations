@@ -3,17 +3,17 @@ import { action } from '@/sdk';
 import { z } from 'zod';
 
 export default action(
-  'list-contacts',
+  'find-list-view',
   {
-    operation: 'list',
-    resource: 'contacts',
+    operation: 'find',
+    resource: 'list-views',
     mutation: false,
     schema: z.object({
-      cursor: z.number(),
+      id: z.number(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.lists.list(auth, { cursor: input.cursor });
+    return await client.listViews.get(auth, { Id: input.id });
   },
 );

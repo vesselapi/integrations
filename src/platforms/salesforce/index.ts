@@ -12,8 +12,10 @@ import findContact from '@/platforms/salesforce/actions/contacts/find';
 import listContacts from '@/platforms/salesforce/actions/contacts/list';
 import updateContact from '@/platforms/salesforce/actions/contacts/update';
 
-import findList from '@/platforms/salesforce/actions/lists/find';
-import listLists from '@/platforms/salesforce/actions/lists/list';
+import findListView from '@/platforms/salesforce/actions/listViews/find';
+import listListViews from '@/platforms/salesforce/actions/listViews/list';
+
+import findListViewResult from './actions/listViewResults/find';
 
 import findUser from '@/platforms/salesforce/actions/users/find';
 import listUsers from '@/platforms/salesforce/actions/users/list';
@@ -48,8 +50,9 @@ export default platform('salesforce', {
     findContact,
     listContacts,
     updateContact,
-    findList,
-    listLists,
+    findListView,
+    listListViews,
+    findListViewResult,
     listUsers,
     findUser,
   },

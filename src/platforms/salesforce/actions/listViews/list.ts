@@ -5,19 +5,21 @@ import { MAX_QUERY_PAGE_SIZE } from '../../constants';
 import { getNextCursor } from '../utils';
 
 export default action(
-  'list-contacts',
+  'list-list-views',
   {
     operation: 'list',
-    resource: 'contacts',
+    resource: 'list-views',
     mutation: false,
     schema: z.object({
       cursor: z.number(),
+      objectType: z.string().optional(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    const resp = await client.contacts.list(auth, {
+    const resp = await client.listViews.list(auth, {
       cursor: input.cursor,
+      objectType: input.objectType,
       limit: MAX_QUERY_PAGE_SIZE,
     });
     return {

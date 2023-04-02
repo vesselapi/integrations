@@ -2,32 +2,28 @@ import { HttpsUrl } from '@/sdk';
 import * as validators from '@/sdk/validators';
 import { z } from 'zod';
 
-export const salesforceUser = z
-  .object({
-    Id: z.number(),
-    FirstName: z.string(),
-    LastName: z.string(),
-    Email: z.string().email(),
-    CreatedDate: validators.date(),
-    LastModifiedDate: validators.date(),
-  })
-  .passthrough();
+export const salesforceUser = z.object({
+  Id: z.number(),
+  FirstName: z.string(),
+  LastName: z.string(),
+  Email: z.string().email(),
+  CreatedDate: validators.date(),
+  LastModifiedDate: validators.date(),
+});
 
-export const salesforceContact = z
-  .object({
-    Id: z.number(),
-    FirstName: z.string(),
-    LastName: z.string(),
-    Title: z.string(),
-    Email: z.string().email(),
-    Phone: z.string(),
-    MobilePhone: z.string(),
-    CreatedDate: validators.date(),
-    LastModifiedDate: validators.date(),
-    AccountId: z.number(),
-    OwnerId: z.number(),
-  })
-  .passthrough();
+export const salesforceContact = z.object({
+  Id: z.number(),
+  FirstName: z.string(),
+  LastName: z.string(),
+  Title: z.string(),
+  Email: z.string().email(),
+  Phone: z.string(),
+  MobilePhone: z.string(),
+  CreatedDate: validators.date(),
+  LastModifiedDate: validators.date(),
+  AccountId: z.number(),
+  OwnerId: z.number(),
+});
 
 export const salesforceContactCreate = z.object({
   Email: z.string().email(),
@@ -52,15 +48,31 @@ export const salesforceContactUpdate = z.object({
   OwnerId: z.number().optional(),
 });
 
-export const salesforceListView = z
-  .object({
-    Id: z.string(),
-    Name: z.string(),
-    CreatedDate: validators.date(),
-    LastModifiedDate: validators.date(),
-    CreatedById: z.number(),
-  })
-  .passthrough();
+export const salesforceListView = z.object({
+  Id: z.number(),
+  Name: z.string(),
+  CreatedDate: validators.date(),
+  LastModifiedDate: validators.date(),
+  CreatedById: z.number(),
+});
+
+export const salesforceListViewResult = z.object({
+  developerName: z.string(),
+  done: z.boolean(),
+  id: z.number(),
+  label: z.string(),
+  records: z.array(
+    z.object({
+      columns: z.array(
+        z.object({
+          fieldNameOrPath: z.string(),
+          value: z.string(),
+        }),
+      ),
+    }),
+  ),
+  size: z.number(),
+});
 
 export const SalesforceSchemaByObjectType: Record<
   SalesforceSupportedObjectType,
