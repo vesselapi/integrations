@@ -20,6 +20,9 @@ import { BASE_URL, DEFAULT_PAGE_SIZE } from './constants';
 
 const request = makeRequestFactory(async (auth, options) => ({
   ...options,
+  url: !options.url.startsWith(BASE_URL)
+    ? `${BASE_URL}${options.url}`
+    : options.url,
   headers: {
     ...options.headers,
     Authorization: `Bearer ${await auth.getToken()}`,
