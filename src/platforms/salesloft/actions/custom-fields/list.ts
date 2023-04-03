@@ -1,19 +1,21 @@
-import { client } from '@/platforms/apollo/client';
+import { client } from '@/platforms/salesloft/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
 
 export default action(
-  'list-accounts',
+  'list-custom-fields',
   {
     operation: 'list',
-    resource: 'accounts',
+    resource: 'custom-fields',
     mutation: true,
     schema: z.object({
+      per_page: z.number().optional(),
       page: z.number().optional(),
+      field_type: z.string().optional(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.accounts.search(auth, input);
+    return await client.customFields.list(auth, input);
   },
 );
