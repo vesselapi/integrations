@@ -16,6 +16,6 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.chat.update(auth, input);
+    return await client.messages.update(auth, input);
   },
 );

@@ -19,7 +19,7 @@ const BASE_URL = `${API_DOMAIN}/${API_VERSION}` as HttpsUrl;
 
 const request = makeRequestFactory(async (auth, options) => ({
   ...options,
-  url: `${BASE_URL}/${options.url}`,
+  url: `${BASE_URL}${options.url}`,
   headers: {
     ...options.headers,
     Authorization: `Bearer ${await auth.getToken()}`,

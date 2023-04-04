@@ -4,35 +4,29 @@ import * as constants from './constants';
 import { icon } from './icon';
 
 import createAccount from './actions/accounts/create';
-import {
-  default as searchAccount,
-  default as searchAccounts,
-} from './actions/accounts/search';
+import searchAccounts from './actions/accounts/search';
 import updateAccount from './actions/accounts/update';
 
 import listActivities from './actions/activities/list';
 
 import createContact from './actions/contacts/create';
-import {
-  default as searchContact,
-  default as searchContacts,
-} from './actions/contacts/search';
+import searchContacts from './actions/contacts/search';
 import updateContact from './actions/contacts/update';
 
 import createCustomField from './actions/custom-fields/create';
-import listCustomFields from './actions/custom-fields/search';
+import listCustomFields from './actions/custom-fields/list';
 
 import searchEmails from './actions/emails/search';
 
 import listEmailAccounts from './actions/email-accounts/list';
 
-import createSequences from './actions/sequences/create';
+import createSequence from './actions/sequences/create';
 import searchSequences from './actions/sequences/search';
 import startSequence from './actions/sequences/start';
 
-import createSequenceSteps from './actions/sequence-steps/create';
+import createSequenceStep from './actions/sequence-steps/create';
 
-import updateSequenceTemplates from './actions/sequence-templates/update';
+import updateSequenceTemplate from './actions/sequence-templates/update';
 
 import searchUsers from './actions/users/search';
 
@@ -57,14 +51,12 @@ export default platform('apollo', {
     createAccount,
     searchAccounts,
     updateAccount,
-    searchAccount,
 
     listActivities,
 
     createContact,
     searchContacts,
     updateContact,
-    searchContact,
 
     createCustomField,
     listCustomFields,
@@ -73,13 +65,13 @@ export default platform('apollo', {
 
     listEmailAccounts,
 
-    createSequences,
+    createSequence,
     searchSequences,
     startSequence,
 
-    createSequenceSteps,
+    createSequenceStep,
 
-    updateSequenceTemplates,
+    updateSequenceTemplate,
 
     searchUsers,
   },

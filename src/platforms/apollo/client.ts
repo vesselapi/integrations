@@ -35,10 +35,12 @@ const request = makeRequestFactory(async (auth, options) => {
             api_key,
           }
         : options.query,
-    json: {
-      ...options.json,
-      api_key,
-    },
+    json: options.json
+      ? {
+          ...options.json,
+          api_key,
+        }
+      : undefined,
   };
 });
 
@@ -67,7 +69,7 @@ export const client = {
       }) => ({
         url: `/accounts/search`,
         method: 'post',
-        query: shake({ page, q_organization_name }),
+        json: shake({ page, q_organization_name }),
         schema: z
           .object({
             accounts: z.array(apolloAccount),
@@ -102,7 +104,7 @@ export const client = {
       ({ q_keywords, page }: { q_keywords?: string; page?: number }) => ({
         url: `/contacts/search`,
         method: 'post',
-        query: shake({ page, q_keywords }),
+        json: shake({ page, q_keywords }),
         schema: z
           .object({
             contacts: z.array(apolloContact),
@@ -143,7 +145,7 @@ export const client = {
       }) => ({
         url: `/emailer_messages/search`,
         method: 'post',
-        query: shake({ page, emailer_campaign_id }),
+        json: shake({ page, emailer_campaign_id }),
         schema: z
           .object({
             emailer_messages: z.array(apolloEmailMessage),
@@ -180,7 +182,7 @@ export const client = {
       ({ q_keywords, page }: { q_keywords?: string; page?: number }) => ({
         url: `/emailer_campaigns/search`,
         method: 'post',
-        query: shake({ page, q_keywords }),
+        json: shake({ page, q_keywords }),
         schema: z
           .object({
             emailer_campaigns: z.array(apolloSequence),
@@ -226,7 +228,7 @@ export const client = {
     ),
   },
   customFields: {
-    search: request(({ page }: { page?: number }) => ({
+    list: request(({ page }: { page?: number }) => ({
       url: `/typed_custom_fields`,
       method: 'get',
       query: shake({ page }),
@@ -248,10 +250,9 @@ export const client = {
     })),
   },
   emailAccounts: {
-    list: request(({ page }: { page?: number }) => ({
+    list: request(() => ({
       url: `/email_accounts`,
       method: 'get',
-      query: shake({ page }),
       schema: z
         .object({
           email_accounts: z.array(apolloEmailAccount),
@@ -267,7 +268,7 @@ export const client = {
       schema: apolloSequenceStep,
     })),
   },
-  sequenceTemplate: {
+  sequenceTemplates: {
     update: request(
       (template: { id: string } & ApolloUpdateSequenceTemplate) => ({
         url: `/emailer_touches/${template.id}`,

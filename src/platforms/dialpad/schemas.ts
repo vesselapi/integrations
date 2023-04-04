@@ -33,7 +33,7 @@ export const dialpadUserSchema = z
     license: z.string(),
     muted: z.boolean(),
     office_id: z.string(),
-    phone_numbers: z.array(z.string()),
+    phone_numbers: z.array(custom.formattedPhoneNumber()),
     state: z.string(),
     timezone: z.string(),
   })
@@ -49,9 +49,9 @@ export const dialpadContactSchema = z.object({
   extension: z.string(),
   job_title: z.string(),
   owner_id: z.string(),
-  phones: z.array(z.string()),
+  phones: z.array(custom.formattedPhoneNumber()),
   primary_email: z.string(),
-  primary_phone: z.string(),
+  primary_phone: custom.formattedPhoneNumber(),
   type: z.enum(['shared', 'local']),
   urls: z.array(z.string()),
 });
@@ -119,7 +119,7 @@ const targetSchema = z
     email: z.string(),
     id: z.string(),
     name: z.string(),
-    phone: z.string(),
+    phone: custom.formattedPhoneNumber(),
     type: z.string(),
   })
   .passthrough();
