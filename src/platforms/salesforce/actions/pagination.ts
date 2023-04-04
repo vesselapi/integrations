@@ -4,7 +4,7 @@ export const getNextCursor = ({
   records,
   limit,
 }: {
-  records: { Id: number }[];
+  records: { Id: string }[];
   limit: number;
 }) => {
   if (records.length < limit) {

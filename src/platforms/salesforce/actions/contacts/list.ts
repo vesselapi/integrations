@@ -11,7 +11,7 @@ export default action(
     resource: 'contacts',
     mutation: false,
     schema: z.object({
-      cursor: z.number().optional(),
+      cursor: z.string().optional(),
     }),
     scopes: [],
   },

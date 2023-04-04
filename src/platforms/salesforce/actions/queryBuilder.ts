@@ -36,7 +36,7 @@ export const salesforceQueryBuilder: Record<
       if (!cursor) {
         return '';
       }
-      return `WHERE Id < ${cursor}`;
+      return `WHERE Id < '${cursor}'`;
     };
     const where = getWhere();
     return formatQuery(`
@@ -61,7 +61,7 @@ export const salesforceQueryBuilder: Record<
         return '';
       }
       return (
-        `WHERE Id < ${cursor}` +
+        `WHERE Id < '${cursor}'` +
         (objectType ? `AND SobjectType = '${objectType.toUpperCase()}'` : '')
       );
     };

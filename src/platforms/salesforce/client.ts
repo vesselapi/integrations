@@ -40,7 +40,7 @@ const query = {
     objectType: SalesforceSupportedObjectType;
     relationalSelect?: string;
   }) =>
-    request(({ cursor, limit }: { cursor?: number; limit: number }) => ({
+    request(({ cursor, limit }: { cursor?: string; limit: number }) => ({
       url: `/query/?q=${salesforceQueryBuilder.list({
         objectType,
         cursor,
@@ -59,7 +59,7 @@ const query = {
 
 export const client = {
   users: {
-    find: request(({ Id }: { Id: number }) => ({
+    find: request(({ Id }: { Id: string }) => ({
       url: `/sobjects/User/${Id}/`,
       method: 'get',
       schema: salesforceUser.passthrough(),
@@ -70,7 +70,7 @@ export const client = {
     }),
   },
   contacts: {
-    find: request(({ Id }: { Id: number }) => ({
+    find: request(({ Id }: { Id: string }) => ({
       url: `/sobjects/Contact/${Id}/`,
       method: 'get',
       schema: salesforceContact.passthrough(),
@@ -93,7 +93,7 @@ export const client = {
     })),
   },
   listViews: {
-    find: request(({ Id }: { Id: number }) => ({
+    find: request(({ Id }: { Id: string }) => ({
       url: `/sobjects/ListView/${Id}/`,
       method: 'get',
       schema: salesforceListView.passthrough(),
@@ -105,7 +105,7 @@ export const client = {
         limit,
       }: {
         objectType?: string;
-        cursor?: number;
+        cursor?: string;
         limit: number;
       }) => ({
         url: `/query/?q=${salesforceQueryBuilder.listListView({
@@ -124,7 +124,7 @@ export const client = {
     ),
   },
   listViewResults: {
-    find: request(({ Id, objectType }: { Id: number; objectType: string }) => ({
+    find: request(({ Id, objectType }: { Id: string; objectType: string }) => ({
       url: `/sobjects/${objectType}/listviews/${Id}/results`,
       method: 'get',
       schema: salesforceListViewResult.passthrough(),

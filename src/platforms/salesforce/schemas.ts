@@ -3,7 +3,7 @@ import * as validators from '@/sdk/validators';
 import { z } from 'zod';
 
 export const salesforceUser = z.object({
-  Id: z.number(),
+  Id: z.string(),
   FirstName: z.string(),
   LastName: z.string(),
   Email: z.string().email(),
@@ -12,7 +12,7 @@ export const salesforceUser = z.object({
 });
 
 export const salesforceContact = z.object({
-  Id: z.number(),
+  Id: z.string(),
   FirstName: z.string(),
   LastName: z.string(),
   Title: z.string(),
@@ -21,8 +21,8 @@ export const salesforceContact = z.object({
   MobilePhone: z.string(),
   CreatedDate: validators.date(),
   LastModifiedDate: validators.date(),
-  AccountId: z.number(),
-  OwnerId: z.number(),
+  AccountId: z.string(),
+  OwnerId: z.string(),
 });
 
 export const salesforceContactCreate = z.object({
@@ -32,34 +32,34 @@ export const salesforceContactCreate = z.object({
   Title: z.string().optional(),
   Phone: z.string().optional(),
   MobilePhone: z.string().optional(),
-  AccountId: z.number().optional(),
-  OwnerId: z.number().optional(),
+  AccountId: z.string().optional(),
+  OwnerId: z.string().optional(),
 });
 
 export const salesforceContactUpdate = z.object({
-  Id: z.number(),
+  Id: z.string(),
   Email: z.string().email().optional(),
   FirstName: z.string().optional(),
   LastName: z.string().optional(),
   Title: z.string().optional(),
   Phone: z.string().optional(),
   MobilePhone: z.string().optional(),
-  AccountId: z.number().optional(),
-  OwnerId: z.number().optional(),
+  AccountId: z.string().optional(),
+  OwnerId: z.string().optional(),
 });
 
 export const salesforceListView = z.object({
-  Id: z.number(),
+  Id: z.string(),
   Name: z.string(),
   CreatedDate: validators.date(),
   LastModifiedDate: validators.date(),
-  CreatedById: z.number(),
+  CreatedById: z.string(),
 });
 
 export const salesforceListViewResult = z.object({
   developerName: z.string(),
   done: z.boolean(),
-  id: z.number(),
+  id: z.string(),
   label: z.string(),
   records: z.array(
     z.object({
