@@ -58,12 +58,14 @@ export const client = {
           .passthrough(),
       }),
     ),
-    start: request((call: { id: string | number } & AircallStartUserCall) => ({
-      url: `/users/${call.id}/calls`,
-      method: 'post',
-      json: call,
-      schema: z.any(),
-    })),
+    startCall: request(
+      (call: { id: string | number } & AircallStartUserCall) => ({
+        url: `/users/${call.id}/calls`,
+        method: 'post',
+        json: call,
+        schema: z.any(),
+      }),
+    ),
   },
   calls: {
     find: request(({ id }: { id: number | string }) => ({
