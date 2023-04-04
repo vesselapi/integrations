@@ -1,5 +1,6 @@
 import { client } from '@/platforms/outreach/client';
 import { action } from '@/sdk';
+import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
 export default action(
@@ -8,8 +9,8 @@ export default action(
     operation: 'create',
     resource: 'sequences',
     mutation: true,
-    schema: z.object({
-      attributes: z.object({
+    schema: custom.object({
+      attributes: custom.object({
         name: z.string(),
         sequenceType: z.enum(['date', 'interval']),
         shareType: z.enum(['private', 'read_only', 'shared']),

@@ -1,9 +1,9 @@
 import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
-const outreachRelationship = z
+const outreachRelationship = custom
   .object({
-    data: z
+    data: custom
       .object({
         id: z.string(),
       })
@@ -11,9 +11,9 @@ const outreachRelationship = z
   })
   .passthrough();
 
-export const outreachPaginatedResponse = z
+export const outreachPaginatedResponse = custom
   .object({
-    links: z
+    links: custom
       .object({
         next: z.string().nullish(),
       })
@@ -22,10 +22,10 @@ export const outreachPaginatedResponse = z
   })
   .passthrough();
 
-export const outreachProspect = z
+export const outreachProspect = custom
   .object({
     id: z.number(),
-    attributes: z
+    attributes: custom
       .object({
         firstName: z.string().nullable(),
         lastName: z.string().nullable(),
@@ -48,7 +48,7 @@ export const outreachProspect = z
         updatedAt: custom.date(),
       })
       .passthrough(),
-    relationships: z
+    relationships: custom
       .object({
         owner: outreachRelationship.nullish(),
         account: outreachRelationship.nullish(),
@@ -57,10 +57,10 @@ export const outreachProspect = z
   })
   .passthrough();
 
-export const outreachAccount = z
+export const outreachAccount = custom
   .object({
     id: z.number(),
-    attributes: z
+    attributes: custom
       .object({
         companyType: z.string().nullable(),
         name: z.string().nullable(),
@@ -74,7 +74,7 @@ export const outreachAccount = z
         updatedAt: custom.date(),
       })
       .passthrough(),
-    relationships: z
+    relationships: custom
       .object({
         owner: outreachRelationship,
       })
@@ -82,18 +82,18 @@ export const outreachAccount = z
   })
   .passthrough();
 
-export const outreachEmailAddress = z
+export const outreachEmailAddress = custom
   .object({
     id: z.number(),
-    attributes: z.object({}).passthrough(),
-    relationships: z.object({}).passthrough(),
+    attributes: custom.object({}).passthrough(),
+    relationships: custom.object({}).passthrough(),
   })
   .passthrough();
 
-export const outreachUser = z
+export const outreachUser = custom
   .object({
     id: z.number(),
-    attributes: z
+    attributes: custom
       .object({
         firstName: z.string(),
         lastName: z.string(),
@@ -102,21 +102,21 @@ export const outreachUser = z
         updatedAt: custom.date(),
       })
       .passthrough(),
-    relationships: z.object({}).passthrough(),
+    relationships: custom.object({}).passthrough(),
   })
   .passthrough();
 
 export const outreachListUsersResponse = z.intersection(
-  z.object({
+  custom.object({
     data: z.array(outreachUser),
   }),
   outreachPaginatedResponse,
 );
 
-export const outreachMailbox = z
+export const outreachMailbox = custom
   .object({
     id: z.number(),
-    attributes: z
+    attributes: custom
       .object({
         email: z.string(),
         userId: z.number(),
@@ -127,10 +127,10 @@ export const outreachMailbox = z
   })
   .passthrough();
 
-export const outreachSequence = z
+export const outreachSequence = custom
   .object({
     id: z.number(),
-    attributes: z
+    attributes: custom
       .object({
         name: z.string(),
         bounceCount: z.number(),
@@ -148,15 +148,15 @@ export const outreachSequence = z
         updatedAt: custom.date(),
       })
       .passthrough(),
-    relationships: z.object({}).passthrough(),
+    relationships: custom.object({}).passthrough(),
   })
   .passthrough();
 
-export const outreachSequenceState = z
+export const outreachSequenceState = custom
   .object({
     id: z.number(),
-    attributes: z.object({}).passthrough(),
-    relationships: z
+    attributes: custom.object({}).passthrough(),
+    relationships: custom
       .object({
         prospect: outreachRelationship,
         sequence: outreachRelationship,
@@ -166,10 +166,10 @@ export const outreachSequenceState = z
   })
   .passthrough();
 
-export const outreachMailing = z
+export const outreachMailing = custom
   .object({
     id: z.number(),
-    attributes: z
+    attributes: custom
       .object({
         bodyHtml: z.string().nullable(),
         bodyText: z.string().nullable(),
@@ -185,7 +185,7 @@ export const outreachMailing = z
         updatedAt: custom.date(),
       })
       .passthrough(),
-    relationships: z
+    relationships: custom
       .object({
         user: outreachRelationship.nullable(),
         sequence: outreachRelationship.nullable(),
@@ -194,15 +194,15 @@ export const outreachMailing = z
   })
   .passthrough();
 
-export const outreachSequenceStep = custom.object({
+export const outreachSequenceStep = custom.passthrough({
   id: z.number(),
 });
 
-export const outreachTemplate = custom.object({
+export const outreachTemplate = custom.passthrough({
   id: z.number(),
 });
 
-export const outreachSequenceTemplate = custom.object({
+export const outreachSequenceTemplate = custom.passthrough({
   id: z.number(),
 });
 

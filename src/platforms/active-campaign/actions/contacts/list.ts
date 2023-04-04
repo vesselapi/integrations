@@ -1,6 +1,6 @@
 import { client } from '@/platforms/active-campaign/client';
 import { action } from '@/sdk';
-import { z } from 'zod';
+import * as custom from '@/sdk/validators';
 
 export default action(
   'list-contacts',
@@ -8,7 +8,7 @@ export default action(
     operation: 'list',
     resource: 'contacts',
     mutation: false,
-    schema: z.object({}),
+    schema: custom.object({}),
     scopes: [],
   },
   async ({ auth }) => {

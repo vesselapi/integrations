@@ -1,5 +1,6 @@
 import { client } from '@/platforms/apollo/client';
 import { action } from '@/sdk';
+import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
 export default action(
@@ -8,7 +9,7 @@ export default action(
     operation: 'create',
     resource: 'custom-fields',
     mutation: true,
-    schema: z.object({
+    schema: custom.object({
       modality: z.enum(['contact', 'account']),
       name: z.string(),
       type: z.string(),

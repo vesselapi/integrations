@@ -9,21 +9,21 @@ export default action(
     operation: 'create',
     resource: 'contacts',
     mutation: true,
-    schema: z.object({
+    schema: custom.object({
       first_name: z.string().optional(),
       last_name: z.string().optional(),
       company_name: z.string().optional(),
       information: z.string().optional(),
       emails: z
         .array(
-          z.object({
+          custom.object({
             label: z.string().optional(),
             value: z.string(),
           }),
         )
         .optional(),
       phone_numbers: z.array(
-        z.object({
+        custom.object({
           label: z.string().optional(),
           value: custom.formattedPhoneNumber(),
         }),

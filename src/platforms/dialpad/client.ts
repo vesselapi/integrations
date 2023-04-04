@@ -1,6 +1,7 @@
 import { HttpsUrl } from '@/sdk';
 import { makeRequestFactory } from '@/sdk/client';
-import * as z from 'zod';
+import { z } from 'zod';
+import * as custom from '@/sdk/validators';
 import { API_DOMAIN, API_VERSION } from './constants';
 import {
   dialpadCallSchema,
@@ -91,7 +92,7 @@ const makeClient = (): DialpadClient => {
       start: request((body: DialpadCallStart) => ({
         url: `/call`,
         method: 'post',
-        schema: z.object({
+        schema: custom.object({
           id: z.string(),
         }),
         json: body,

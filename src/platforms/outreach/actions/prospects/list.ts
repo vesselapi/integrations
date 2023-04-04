@@ -1,6 +1,7 @@
 import { outreachUrl } from '@/platforms/outreach/actions/validators';
 import { client } from '@/platforms/outreach/client';
 import { action } from '@/sdk';
+import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
 export default action(
@@ -9,8 +10,8 @@ export default action(
     operation: 'list',
     resource: 'prospects',
     mutation: false,
-    schema: z.object({
-      filters: z
+    schema: custom.object({
+      filters: custom
         .object({
           emails: z.string(),
         })

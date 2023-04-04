@@ -1,7 +1,7 @@
 import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
-export const apolloPaginatedResponse = z
+export const apolloPaginatedResponse = custom
   .object({
     page: z.number().nullable(),
     per_page: z.number(),
@@ -12,7 +12,7 @@ export const apolloPaginatedResponse = z
 
 export type ApolloPaginatedResponse = z.infer<typeof apolloPaginatedResponse>;
 
-export const apolloUser = z
+export const apolloUser = custom
   .object({
     id: z.string(),
     first_name: z.string().nullish(),
@@ -25,7 +25,7 @@ export const apolloUser = z
 
 export type ApolloUser = z.infer<typeof apolloUser>;
 
-export const apolloContact = z
+export const apolloContact = custom
   .object({
     id: z.string(),
     first_name: z.string().nullish(),
@@ -35,7 +35,7 @@ export const apolloContact = z
     owner_id: z.string().nullish(),
     present_raw_address: z.string().nullish(),
     phone_numbers: z.array(
-      z
+      custom
         .object({
           raw_number: z.string(),
           sanitized_number: z.string().nullish(),
@@ -53,13 +53,13 @@ export const apolloContact = z
     account_id: z.string().nullish(),
     created_at: custom.date(),
     updated_at: custom.date(),
-    typed_custom_fields: z.object({}).passthrough(),
+    typed_custom_fields: custom.object({}).passthrough(),
   })
   .passthrough();
 
 export type ApolloContact = z.infer<typeof apolloContact>;
 
-export const apolloContactCreate = z
+export const apolloContactCreate = custom
   .object({
     first_name: z.string().nullish(),
     last_name: z.string().nullish(),
@@ -75,7 +75,7 @@ export const apolloContactCreate = z
   })
   .passthrough();
 
-export const apolloContactUpdate = z
+export const apolloContactUpdate = custom
   .object({
     id: z.string(),
     first_name: z.string().nullish(),
@@ -95,7 +95,7 @@ export type ApolloContactCreate = z.infer<typeof apolloContactCreate>;
 
 export type ApolloContactUpdate = z.infer<typeof apolloContactUpdate>;
 
-export const apolloSequence = z
+export const apolloSequence = custom
   .object({
     id: z.string(),
     name: z.string().nullish(),
@@ -126,7 +126,7 @@ export const apolloSequence = z
 
 export type ApolloSequence = z.infer<typeof apolloSequence>;
 
-export const apolloEmailAccount = z
+export const apolloEmailAccount = custom
   .object({
     id: z.string(),
     email: z.string().nullish(),
@@ -137,7 +137,7 @@ export const apolloEmailAccount = z
 
 export type ApolloEmailAccount = z.infer<typeof apolloEmailAccount>;
 
-export const apolloAccount = z
+export const apolloAccount = custom
   .object({
     id: z.string(),
     name: z.string().nullish(),
@@ -160,7 +160,7 @@ export const apolloAccount = z
 
 export type ApolloAccount = z.infer<typeof apolloAccount>;
 
-export const apolloAccountUpdate = z
+export const apolloAccountUpdate = custom
   .object({
     id: z.string(),
     name: z.string().nullish(),
@@ -169,7 +169,7 @@ export const apolloAccountUpdate = z
   })
   .passthrough();
 
-export const apolloAccountCreate = z
+export const apolloAccountCreate = custom
   .object({
     name: z.string().nullish(),
     domain: z.string().nullish(),
@@ -180,7 +180,7 @@ export type ApolloAccountCreate = z.infer<typeof apolloAccountCreate>;
 
 export type ApolloAccountUpdate = z.infer<typeof apolloAccountUpdate>;
 
-export const apolloEmailMessage = z
+export const apolloEmailMessage = custom
   .object({
     id: z.string(),
     body_text: z.string().nullish(),
@@ -203,7 +203,7 @@ export const apolloEmailMessage = z
 
 export type ApolloEmailMessage = z.infer<typeof apolloEmailMessage>;
 
-export const apolloEmailActivity = z
+export const apolloEmailActivity = custom
   .object({
     id: z.string(),
     type: z.string(),
@@ -214,7 +214,7 @@ export const apolloEmailActivity = z
 
 export type ApolloEmailActivity = z.infer<typeof apolloEmailActivity>;
 
-export const apolloCreateSequence = z.object({
+export const apolloCreateSequence = custom.object({
   creation_type: z.string().optional(),
   name: z.string().optional(),
   permissions: z.string(),
@@ -224,19 +224,19 @@ export const apolloCreateSequence = z.object({
 
 export type ApolloCreateSequence = z.infer<typeof apolloCreateSequence>;
 
-export const apolloSequenceStep = z
+export const apolloSequenceStep = custom
   .object({
-    emailer_step: z
+    emailer_step: custom
       .object({
         id: z.string(),
       })
       .passthrough(),
-    emailer_touch: z
+    emailer_touch: custom
       .object({
         id: z.string(),
       })
       .passthrough(),
-    emailer_template: z
+    emailer_template: custom
       .object({
         id: z.string(),
       })
@@ -246,7 +246,7 @@ export const apolloSequenceStep = z
 
 export type ApolloSequenceStep = z.infer<typeof apolloSequenceStep>;
 
-export const apolloCreateSequenceStep = z.object({
+export const apolloCreateSequenceStep = custom.object({
   emailer_campaign_id: z.string(),
   priority: z.string().optional(),
   position: z.number().optional(),
@@ -258,7 +258,7 @@ export const apolloCreateSequenceStep = z.object({
 
 export type ApolloCreateSequenceStep = z.infer<typeof apolloCreateSequenceStep>;
 
-export const apolloCreateTemplate = z.object({
+export const apolloCreateTemplate = custom.object({
   name: z.string().optional(),
   user_id: z.string().optional(),
   subject: z.string().optional(),
@@ -271,7 +271,7 @@ export const apolloCreateTemplate = z.object({
 
 export type ApolloCreateTemplate = z.infer<typeof apolloCreateTemplate>;
 
-export const apolloUpdateSequenceTemplate = z.object({
+export const apolloUpdateSequenceTemplate = custom.object({
   id: z.string(),
   emailer_template: apolloCreateTemplate.passthrough(),
   emailer_step_id: z.string(),
@@ -285,9 +285,9 @@ export type ApolloUpdateSequenceTemplate = z.infer<
   typeof apolloUpdateSequenceTemplate
 >;
 
-export const apolloCreateSequenceTemplateResponse = z
+export const apolloCreateSequenceTemplateResponse = custom
   .object({
-    emailer_touch: z
+    emailer_touch: custom
       .object({
         id: z.string(),
       })
@@ -295,7 +295,7 @@ export const apolloCreateSequenceTemplateResponse = z
   })
   .passthrough();
 
-export const apolloCustomField = z
+export const apolloCustomField = custom
   .object({
     id: z.string(),
     modality: z.string(),

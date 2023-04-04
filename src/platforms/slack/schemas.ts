@@ -1,25 +1,25 @@
 import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
-export const slackPaginated = custom.object({
-  response_metadata: custom.object({
+export const slackPaginated = custom.passthrough({
+  response_metadata: custom.passthrough({
     next_cursor: z.string(),
   }),
 });
 
-export const slackUser = custom.object({
+export const slackUser = custom.passthrough({
   id: z.string(),
   name: z.string(),
   deleted: z.boolean(),
 });
 
-export const slackConversation = custom.object({
+export const slackConversation = custom.passthrough({
   id: z.string(),
   name: z.string(),
   created: custom.timestamp(true),
 });
 
-export const slackMessage = custom.object({
+export const slackMessage = custom.passthrough({
   ts: z.string(),
 });
 

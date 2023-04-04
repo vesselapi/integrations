@@ -34,7 +34,7 @@ export const client = {
     find: request(({ id }: { id: number }) => ({
       url: `/users/${id}`,
       method: 'get',
-      schema: z
+      schema: custom
         .object({
           data: outreachUser,
         })
@@ -46,7 +46,7 @@ export const client = {
         method: 'get',
         query: { count: 'false', 'page[size]': `${DEFAULT_PAGE_SIZE}` },
         schema: z.intersection(
-          z
+          custom
             .object({
               data: z.array(outreachUser),
             })
@@ -60,7 +60,7 @@ export const client = {
     find: request(({ id }: { id: number }) => ({
       url: `/prospects/${id}`,
       method: 'get',
-      schema: z
+      schema: custom
         .object({
           data: outreachProspect,
         })
@@ -82,7 +82,7 @@ export const client = {
         },
         method: 'get',
         schema: z.intersection(
-          z
+          custom
             .object({
               data: z.array(outreachProspect),
             })
@@ -126,7 +126,7 @@ export const client = {
           data: { type: 'prospect', ...prospect },
         },
         method: 'post',
-        schema: z
+        schema: custom
           .object({
             data: outreachProspect,
           })
@@ -152,7 +152,7 @@ export const client = {
         url: `/prospects/${prospect.id}`,
         json: { data: { type: 'prospect', ...prospect } },
         method: 'patch',
-        schema: z
+        schema: custom
           .object({
             data: outreachProspect,
           })
@@ -164,7 +164,7 @@ export const client = {
     find: request(({ id }: { id: number }) => ({
       url: `/accounts/${id}`,
       method: 'get',
-      schema: z
+      schema: custom
         .object({
           data: outreachAccount,
         })
@@ -188,7 +188,7 @@ export const client = {
         },
         method: 'get',
         schema: z.intersection(
-          z
+          custom
             .object({
               data: z.array(outreachAccount),
             })
@@ -202,7 +202,7 @@ export const client = {
     find: request(({ id }: { id: number }) => ({
       url: `/mailings/${id}`,
       method: 'get',
-      schema: z
+      schema: custom
         .object({
           data: outreachMailing,
         })
@@ -229,7 +229,7 @@ export const client = {
             : {}),
         },
         schema: z.intersection(
-          z
+          custom
             .object({
               data: z.array(outreachMailing),
             })
@@ -243,7 +243,7 @@ export const client = {
     find: request(({ id }: { id: number }) => ({
       url: `/sequences/${id}`,
       method: 'get',
-      schema: z
+      schema: custom
         .object({
           data: outreachSequence,
         })
@@ -255,7 +255,7 @@ export const client = {
         method: 'get',
         query: { count: 'false', 'page[size]': `${DEFAULT_PAGE_SIZE}` },
         schema: z.intersection(
-          z
+          custom
             .object({
               data: z.array(outreachSequence),
             })
@@ -277,7 +277,7 @@ export const client = {
         json: {
           data: { type: 'sequence', ...sequence },
         },
-        schema: z
+        schema: custom
           .object({
             data: outreachSequence,
           })
@@ -317,7 +317,7 @@ export const client = {
           },
         },
         method: 'post',
-        schema: z
+        schema: custom
           .object({
             data: outreachSequenceState,
           })
@@ -350,7 +350,7 @@ export const client = {
             ...sequenceStep,
           },
         },
-        schema: custom.object({
+        schema: custom.passthrough({
           data: outreachSequenceStep,
         }),
       }),
@@ -362,7 +362,7 @@ export const client = {
         url: cursor ?? `/mailboxes`,
         method: 'get',
         schema: z.intersection(
-          z
+          custom
             .object({
               data: z.array(outreachMailbox),
             })
@@ -390,7 +390,7 @@ export const client = {
             ...template,
           },
         },
-        schema: custom.object({
+        schema: custom.passthrough({
           data: outreachTemplate,
         }),
       }),
@@ -425,7 +425,7 @@ export const client = {
             ...sequenceTemplate,
           },
         },
-        schema: custom.object({
+        schema: custom.passthrough({
           data: outreachSequenceTemplate,
         }),
       }),
@@ -451,7 +451,7 @@ export const client = {
         url: `/emailAddresses`,
         json: { data: { type: 'emailAddress', ...emailAddress } },
         method: 'post',
-        schema: z
+        schema: custom
           .object({
             data: outreachEmailAddress,
           })

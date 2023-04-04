@@ -1,4 +1,5 @@
 import { makeRequestFactory } from '@/sdk/client';
+import * as custom from '@/sdk/validators';
 import { shake } from 'radash';
 import { z } from 'zod';
 import { DEFAULT_PAGE_SIZE } from './constants';
@@ -45,7 +46,7 @@ export const client = {
           per_page,
           page,
         }),
-        schema: z
+        schema: custom
           .object({
             data: z.array(salesloftPerson),
             metadata: salesloftResponseMetadata,
@@ -56,7 +57,7 @@ export const client = {
     find: request(({ id }: { id: string }) => ({
       url: `/people/${id}.json`,
       method: 'get',
-      schema: z
+      schema: custom
         .object({
           data: salesloftPerson,
         })
@@ -66,7 +67,7 @@ export const client = {
       url: `/people.json`,
       method: 'post',
       json: person,
-      schema: z
+      schema: custom
         .object({
           data: salesloftPerson,
         })
@@ -76,7 +77,7 @@ export const client = {
       url: `/people/${person.id}.json`,
       method: 'put',
       json: person,
-      schema: z
+      schema: custom
         .object({
           data: salesloftPerson,
         })
@@ -98,7 +99,7 @@ export const client = {
           per_page,
           page,
         }),
-        schema: z
+        schema: custom
           .object({
             data: z.array(salesloftCadence),
             metadata: salesloftResponseMetadata,
@@ -127,7 +128,7 @@ export const client = {
         url: `/cadence_memberships.json`,
         method: 'post',
         json: shake({ cadence_id, person_id, user_id }),
-        schema: z
+        schema: custom
           .object({
             data: salesloftCadenceMembership,
           })
@@ -139,7 +140,7 @@ export const client = {
     find: request(({ id }: { id: string }) => ({
       url: `/users/${id}.json`,
       method: 'get',
-      schema: z
+      schema: custom
         .object({
           data: salesloftUser,
         })
@@ -159,7 +160,7 @@ export const client = {
           per_page,
           page,
         }),
-        schema: z
+        schema: custom
           .object({
             data: z.array(salesloftUser),
             metadata: salesloftResponseMetadata,
@@ -189,7 +190,7 @@ export const client = {
           person_id,
           cadence_id,
         }),
-        schema: z
+        schema: custom
           .object({
             data: z.array(salesloftEmail),
             metadata: salesloftResponseMetadata,
@@ -200,7 +201,7 @@ export const client = {
     find: request(({ id }: { id: string }) => ({
       url: `/activities/emails/${id}.json`,
       method: 'get',
-      schema: z
+      schema: custom
         .object({
           data: salesloftEmail,
         })
@@ -211,7 +212,7 @@ export const client = {
     find: request(({ id }: { id: string }) => ({
       url: `/mime_email_payloads/${id}.json`,
       method: 'get',
-      schema: z
+      schema: custom
         .object({
           data: salesloftEmailBody,
         })
@@ -236,7 +237,7 @@ export const client = {
           page,
           field_type,
         }),
-        schema: z
+        schema: custom
           .object({
             data: z.array(salesloftCustomField),
             metadata: salesloftResponseMetadata,
@@ -248,7 +249,7 @@ export const client = {
       url: `/custom_fields.json`,
       method: 'post',
       json: customField,
-      schema: z
+      schema: custom
         .object({
           data: salesloftCustomField,
         })

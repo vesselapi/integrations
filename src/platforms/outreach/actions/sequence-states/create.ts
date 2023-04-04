@@ -1,5 +1,6 @@
 import { client } from '@/platforms/outreach/client';
 import { action } from '@/sdk';
+import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
 export default action(
@@ -8,8 +9,8 @@ export default action(
     operation: 'create',
     resource: 'sequence-states',
     mutation: true,
-    schema: z.object({
-      relationships: z.object({
+    schema: custom.object({
+      relationships: custom.object({
         prospectId: z.number(),
         sequenceId: z.number(),
         mailboxId: z.number(),

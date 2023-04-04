@@ -1,4 +1,5 @@
 import { makeRequestFactory } from '@/sdk/client';
+import * as custom from '@/sdk/validators';
 import { shake } from 'radash';
 import { z } from 'zod';
 import { BASE_URL, DEFAULT_PAGE_SIZE } from './constants';
@@ -31,7 +32,7 @@ export const client = {
     find: request(({ id }: { id: number | string }) => ({
       url: `/users/${id}`,
       method: 'get',
-      schema: z
+      schema: custom
         .object({
           user: aircallUser,
         })
@@ -50,7 +51,7 @@ export const client = {
         url: next_page_link ?? `/users`,
         method: 'get',
         query: shake({ from, per_page: `${per_page}` }),
-        schema: z
+        schema: custom
           .object({
             users: z.array(aircallUser),
             meta: aircallPagination,
@@ -71,7 +72,7 @@ export const client = {
     find: request(({ id }: { id: number | string }) => ({
       url: `/calls/${id}`,
       method: 'get',
-      schema: z
+      schema: custom
         .object({
           call: aircallCall,
         })
@@ -90,7 +91,7 @@ export const client = {
         url: next_page_link ?? `/calls`,
         method: 'get',
         query: shake({ from, per_page: `${per_page}` }),
-        schema: z
+        schema: custom
           .object({
             calls: z.array(aircallCall),
             meta: aircallPagination,
@@ -103,7 +104,7 @@ export const client = {
     find: request(({ id }: { id: number | string }) => ({
       url: `/contacts/${id}`,
       method: 'get',
-      schema: z
+      schema: custom
         .object({
           contact: aircallContact,
         })
@@ -122,7 +123,7 @@ export const client = {
         url: next_page_link ?? `/contacts`,
         method: 'get',
         query: shake({ from, per_page: `${per_page}` }),
-        schema: z
+        schema: custom
           .object({
             contacts: z.array(aircallContact),
             meta: aircallPagination,
@@ -134,7 +135,7 @@ export const client = {
       url: `/contacts`,
       method: 'post',
       json: contact,
-      schema: z
+      schema: custom
         .object({
           contact: aircallContact,
         })
@@ -145,7 +146,7 @@ export const client = {
         url: `/contacts/${contact.id}`,
         method: 'post',
         json: contact,
-        schema: z
+        schema: custom
           .object({
             contact: aircallContact,
           })

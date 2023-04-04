@@ -1,16 +1,16 @@
 import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
-export const salesloftOAuthResponse = z.object({
+export const salesloftOAuthResponse = custom.object({
   access_token: z.string(),
   refresh_token: z.string(),
 });
 
 export type SalesloftOAuthResponse = z.infer<typeof salesloftOAuthResponse>;
 
-export const salesloftResponseMetadata = z
+export const salesloftResponseMetadata = custom
   .object({
-    paging: z
+    paging: custom
       .object({
         per_page: z.number(),
         current_page: z.number(),
@@ -22,7 +22,7 @@ export const salesloftResponseMetadata = z
   .passthrough();
 export type SalesloftMetadata = z.infer<typeof salesloftResponseMetadata>;
 
-export const salesloftPerson = z
+export const salesloftPerson = custom
   .object({
     id: z.number(),
     first_name: z.string().nullish(),
@@ -31,13 +31,13 @@ export const salesloftPerson = z
     state: z.string().nullish(),
     country: z.string().nullish(),
     title: z.string().nullish(),
-    owner: z
+    owner: custom
       .object({
         id: z.number(),
       })
       .passthrough()
       .nullish(),
-    account: z
+    account: custom
       .object({
         id: z.number(),
       })
@@ -51,7 +51,7 @@ export const salesloftPerson = z
     personal_email_address: z.string().nullish(),
     created_at: custom.date(),
     updated_at: custom.date(),
-    counts: z.object({
+    counts: custom.object({
       emails_sent: z.number().nullish(),
       emails_viewed: z.number().nullish(),
       emails_clicked: z.number().nullish(),
@@ -59,7 +59,7 @@ export const salesloftPerson = z
       emails_bounced: z.number().nullish(),
       calls: z.number().nullish(),
     }),
-    custom_fields: z.object({}).passthrough(),
+    custom_fields: custom.object({}).passthrough(),
   })
   .passthrough();
 
@@ -95,7 +95,7 @@ export type SalesloftPersonUpdate = {
   custom_fields?: Record<string, any>;
 };
 
-export const salesloftUser = z
+export const salesloftUser = custom
   .object({
     id: z.number(),
     guid: z.string(),
@@ -129,7 +129,7 @@ export const salesloftUser = z
 
 export type SalesloftUser = z.infer<typeof salesloftUser>;
 
-export const salesloftCadence = z
+export const salesloftCadence = custom
   .object({
     id: z.number(),
     created_at: custom.date(),
@@ -146,7 +146,7 @@ export const salesloftCadence = z
     cadence_function: z.string().nullish(),
     external_identifier: z.string().nullish(),
     tags: z.array(z.string()),
-    counts: z
+    counts: custom
       .object({
         cadence_people: z.number().nullish(),
         people_acted_on_count: z.number().nullish(),
@@ -161,7 +161,7 @@ export const salesloftCadence = z
 
 export type SalesloftCadence = z.infer<typeof salesloftCadence>;
 
-export const salesloftCadenceMembership = z
+export const salesloftCadenceMembership = custom
   .object({
     id: z.number(),
     added_at: z.string(),
@@ -170,30 +170,30 @@ export const salesloftCadenceMembership = z
     person_deleted: z.boolean().nullish(),
     currently_on_cadence: z.boolean().nullish(),
     current_state: z.string().nullish(),
-    cadence: z
+    cadence: custom
       .object({
         id: z.number(),
       })
       .passthrough(),
-    person: z
+    person: custom
       .object({
         id: z.number(),
       })
       .passthrough()
       .nullish(),
-    user: z
+    user: custom
       .object({
         id: z.number(),
       })
       .passthrough()
       .nullish(),
-    latest_action: z
+    latest_action: custom
       .object({
         id: z.number(),
       })
       .passthrough()
       .nullish(),
-    counts: z
+    counts: custom
       .object({
         views: z.number().nullish(),
         clicks: z.number().nullish(),
@@ -251,10 +251,10 @@ export type SalesloftCadenceImport = {
   };
 };
 
-export const salesloftCadenceImportResponse = z.object({
-  data: z
+export const salesloftCadenceImportResponse = custom.object({
+  data: custom
     .object({
-      cadence: z
+      cadence: custom
         .object({
           id: z.number(),
         })
@@ -263,7 +263,7 @@ export const salesloftCadenceImportResponse = z.object({
     .passthrough(),
 });
 
-export const salesloftEmail = z
+export const salesloftEmail = custom
   .object({
     id: z.number(),
     created_at: custom.date(),
@@ -277,7 +277,7 @@ export const salesloftEmail = z
     click_tracking: z.boolean(),
     subject: z.string().nullish(),
     error_message: z.string().nullish(),
-    counts: z
+    counts: custom
       .object({
         clicks: z.number().nullish(),
         views: z.number().nullish(),
@@ -288,13 +288,13 @@ export const salesloftEmail = z
       })
       .passthrough()
       .nullish(),
-    user: z
+    user: custom
       .object({
         id: z.number(),
       })
       .passthrough()
       .nullish(),
-    cadence: z
+    cadence: custom
       .object({
         id: z.number(),
       })
@@ -305,7 +305,7 @@ export const salesloftEmail = z
 
 export type SalesloftEmail = z.infer<typeof salesloftEmail>;
 
-export const salesloftEmailBody = z.object({
+export const salesloftEmailBody = custom.object({
   id: z.number(),
   mailbox: z.string().nullish(),
   message_id: z.string().nullish(),
@@ -314,7 +314,7 @@ export const salesloftEmailBody = z.object({
 
 export type SalesloftEmailBody = z.infer<typeof salesloftEmailBody>;
 
-export const salesloftCustomField = z
+export const salesloftCustomField = custom
   .object({
     id: z.number(),
     name: z.string(),

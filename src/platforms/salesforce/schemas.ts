@@ -1,8 +1,9 @@
 import { HttpsUrl } from '@/sdk';
+import * as custom from '@/sdk/validators';
 import * as validators from '@/sdk/validators';
 import { z } from 'zod';
 
-export const salesforceUser = z.object({
+export const salesforceUser = custom.object({
   Id: z.number(),
   FirstName: z.string(),
   LastName: z.string(),
@@ -11,7 +12,7 @@ export const salesforceUser = z.object({
   LastModifiedDate: validators.date(),
 });
 
-export const salesforceContact = z.object({
+export const salesforceContact = custom.object({
   Id: z.number(),
   FirstName: z.string(),
   LastName: z.string(),
@@ -25,7 +26,7 @@ export const salesforceContact = z.object({
   OwnerId: z.number(),
 });
 
-export const salesforceContactCreate = z.object({
+export const salesforceContactCreate = custom.object({
   Email: z.string().email(),
   FirstName: z.string().optional(),
   LastName: z.string().optional(),
@@ -36,7 +37,7 @@ export const salesforceContactCreate = z.object({
   OwnerId: z.number().optional(),
 });
 
-export const salesforceContactUpdate = z.object({
+export const salesforceContactUpdate = custom.object({
   Id: z.number(),
   Email: z.string().email().optional(),
   FirstName: z.string().optional(),
@@ -48,7 +49,7 @@ export const salesforceContactUpdate = z.object({
   OwnerId: z.number().optional(),
 });
 
-export const salesforceListView = z.object({
+export const salesforceListView = custom.object({
   Id: z.number(),
   Name: z.string(),
   CreatedDate: validators.date(),
@@ -56,15 +57,15 @@ export const salesforceListView = z.object({
   CreatedById: z.number(),
 });
 
-export const salesforceListViewResult = z.object({
+export const salesforceListViewResult = custom.object({
   developerName: z.string(),
   done: z.boolean(),
   id: z.number(),
   label: z.string(),
   records: z.array(
-    z.object({
+    custom.object({
       columns: z.array(
-        z.object({
+        custom.object({
           fieldNameOrPath: z.string(),
           value: z.string(),
         }),

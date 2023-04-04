@@ -1,5 +1,6 @@
 import { client } from '@/platforms/salesloft/client';
 import { action } from '@/sdk';
+import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
 export default action(
@@ -8,8 +9,8 @@ export default action(
     operation: 'import',
     resource: 'cadences',
     mutation: true,
-    schema: z.object({
-      settings: z
+    schema: custom.object({
+      settings: custom
         .object({
           name: z.string(),
           target_daily_people: z.number(),
@@ -20,35 +21,35 @@ export default action(
         })
         .passthrough()
         .optional(),
-      sharing_settings: z
+      sharing_settings: custom
         .object({
           team_cadence: z.boolean(),
           shared: z.boolean(),
         })
         .passthrough()
         .optional(),
-      cadence_content: z
+      cadence_content: custom
         .object({
           cadence_id: z.string(),
           step_groups: z.array(
-            z
+            custom
               .object({
                 day: z.number(),
                 due_immediately: z.boolean(),
                 automated: z.boolean(),
                 reference_id: z.number().optional(),
                 steps: z.array(
-                  z
+                  custom
                     .object({
                       enabled: z.boolean(),
                       name: z.string().optional(),
                       type: z.string(),
-                      type_settings: z
+                      type_settings: custom
                         .object({
                           previous_email_step_group_reference_id: z
                             .number()
                             .optional(),
-                          email_template: z
+                          email_template: custom
                             .object({
                               title: z.string(),
                               subject: z.string().optional(),

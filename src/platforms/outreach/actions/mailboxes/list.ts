@@ -1,7 +1,7 @@
 import { outreachUrl } from '@/platforms/outreach/actions/validators';
 import { client } from '@/platforms/outreach/client';
 import { action } from '@/sdk';
-import { z } from 'zod';
+import * as custom from '@/sdk/validators';
 
 export default action(
   'list-mailboxes',
@@ -9,7 +9,7 @@ export default action(
     operation: 'list',
     resource: 'mailboxes',
     mutation: false,
-    schema: z.object({
+    schema: custom.object({
       cursor: outreachUrl().optional(),
     }),
     scopes: [],

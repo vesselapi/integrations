@@ -1,4 +1,5 @@
 import { makeRequestFactory } from '@/sdk/client';
+import * as custom from '@/sdk/validators';
 import { objectify, shake } from 'radash';
 import { z } from 'zod';
 import { BASE_URL } from './constants';
@@ -50,7 +51,7 @@ export const client = {
       url: `/users/search`,
       method: 'get',
       query: shake({ page }),
-      schema: z
+      schema: custom
         .object({
           users: z.array(apolloUser),
           pagination: apolloPaginatedResponse,
@@ -70,7 +71,7 @@ export const client = {
         url: `/accounts/search`,
         method: 'post',
         json: shake({ page, q_organization_name }),
-        schema: z
+        schema: custom
           .object({
             accounts: z.array(apolloAccount),
             pagination: apolloPaginatedResponse,
@@ -82,7 +83,7 @@ export const client = {
       url: `/accounts`,
       method: 'post',
       json: shake(account),
-      schema: z
+      schema: custom
         .object({
           account: apolloAccount,
         })
@@ -92,7 +93,7 @@ export const client = {
       url: `/accounts/${account.id}`,
       method: 'put',
       json: shake(account),
-      schema: z
+      schema: custom
         .object({
           account: apolloAccount,
         })
@@ -105,7 +106,7 @@ export const client = {
         url: `/contacts/search`,
         method: 'post',
         json: shake({ page, q_keywords }),
-        schema: z
+        schema: custom
           .object({
             contacts: z.array(apolloContact),
             pagination: apolloPaginatedResponse,
@@ -117,7 +118,7 @@ export const client = {
       url: `/contacts`,
       method: 'post',
       json: shake(contact),
-      schema: z
+      schema: custom
         .object({
           contact: apolloContact,
         })
@@ -127,7 +128,7 @@ export const client = {
       url: `/contacts/${contact.id}`,
       method: 'put',
       json: shake(contact),
-      schema: z
+      schema: custom
         .object({
           contact: apolloContact,
         })
@@ -146,7 +147,7 @@ export const client = {
         url: `/emailer_messages/search`,
         method: 'post',
         json: shake({ page, emailer_campaign_id }),
-        schema: z
+        schema: custom
           .object({
             emailer_messages: z.array(apolloEmailMessage),
           })
@@ -169,7 +170,7 @@ export const client = {
               )
             : {}),
         }),
-        schema: z
+        schema: custom
           .object({
             activities: z.array(apolloEmailActivity),
           })
@@ -183,7 +184,7 @@ export const client = {
         url: `/emailer_campaigns/search`,
         method: 'post',
         json: shake({ page, q_keywords }),
-        schema: z
+        schema: custom
           .object({
             emailer_campaigns: z.array(apolloSequence),
             pagination: apolloPaginatedResponse,
@@ -195,7 +196,7 @@ export const client = {
       url: `/emailer_campaigns`,
       method: 'post',
       json: shake(sequence),
-      schema: z
+      schema: custom
         .object({
           emailer_campaign: apolloSequence,
         })
@@ -218,7 +219,7 @@ export const client = {
           emailer_campaign_id,
           send_email_from_email_account_id,
         }),
-        schema: z
+        schema: custom
           .object({
             contacts: z.array(apolloContact),
             emailer_campaign: apolloSequence,
@@ -232,7 +233,7 @@ export const client = {
       url: `/typed_custom_fields`,
       method: 'get',
       query: shake({ page }),
-      schema: z
+      schema: custom
         .object({
           typed_custom_fields: z.array(apolloCustomField),
         })
@@ -242,7 +243,7 @@ export const client = {
       url: `/typed_custom_fields`,
       method: 'post',
       json: shake(customFieldCreate),
-      schema: z
+      schema: custom
         .object({
           typed_custom_field: apolloCustomField,
         })
@@ -253,7 +254,7 @@ export const client = {
     list: request(() => ({
       url: `/email_accounts`,
       method: 'get',
-      schema: z
+      schema: custom
         .object({
           email_accounts: z.array(apolloEmailAccount),
         })
@@ -274,9 +275,9 @@ export const client = {
         url: `/emailer_touches/${template.id}`,
         method: 'put',
         json: shake(template),
-        schema: z
+        schema: custom
           .object({
-            emailer_touch: z
+            emailer_touch: custom
               .object({
                 id: z.string(),
               })

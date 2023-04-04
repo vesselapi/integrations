@@ -1,7 +1,7 @@
 import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
-export const activeCampaignUser = custom.object({
+export const activeCampaignUser = custom.passthrough({
   id: z.string(),
   username: z.string(),
   firstName: z.string(),
@@ -11,7 +11,7 @@ export const activeCampaignUser = custom.object({
 });
 export type ActiveCampaignUser = z.infer<typeof activeCampaignUser>;
 
-export const activeCampaignContact = custom.object({
+export const activeCampaignContact = custom.passthrough({
   id: z.string(),
   email: z.string(),
   phone: z.string(),
@@ -22,7 +22,7 @@ export const activeCampaignContact = custom.object({
 });
 export type ActiveCampaignContact = z.infer<typeof activeCampaignContact>;
 
-export const activeCampaignList = custom.object({
+export const activeCampaignList = custom.passthrough({
   id: z.string(),
   name: z.string(),
   cdate: custom.date(),

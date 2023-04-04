@@ -1,3 +1,4 @@
+import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 import { action } from '../../../../sdk';
 import { client } from '../../client';
@@ -9,7 +10,7 @@ export default action(
     operation: 'list',
     resource: 'users',
     mutation: false,
-    schema: z.object({
+    schema: custom.object({
       from: z.string().optional(),
       per_page: z.number().optional(),
       next_page_link: aircallUrl().optional(),

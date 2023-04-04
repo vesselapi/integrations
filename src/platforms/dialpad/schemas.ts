@@ -3,14 +3,14 @@ import { z } from 'zod';
 import { Auth, PlatformClient } from '../../sdk/types';
 
 export const listResponseSchema = (itemSchema: z.ZodSchema<any>) =>
-  z
+  custom
     .object({
       cursor: z.string().optional(),
       items: z.array(itemSchema).optional(),
     })
     .passthrough();
 
-export const dialpadUserSchema = z
+export const dialpadUserSchema = custom
   .object({
     admin_office_ids: z.array(z.string()),
     company_id: z.string(),
@@ -39,7 +39,7 @@ export const dialpadUserSchema = z
   })
   .passthrough();
 
-export const dialpadContactSchema = z.object({
+export const dialpadContactSchema = custom.object({
   id: z.string(),
   first_name: z.string(),
   last_name: z.string(),
@@ -89,11 +89,11 @@ export const dialpadContactUpdateSchema = dialpadContactSchema
     uid: z.string(),
   });
 
-export const routingBreadcrumbSchema = z
+export const routingBreadcrumbSchema = custom
   .object({
     breadcrumb_type: z.string(),
     date: custom.timestamp(),
-    request: z
+    request: custom
       .object({
         body: z.string(),
         headers: z.string(),
@@ -101,7 +101,7 @@ export const routingBreadcrumbSchema = z
         url: z.string(),
       })
       .passthrough(),
-    response: z
+    response: custom
       .object({
         body: z.string(),
         headers: z.string(),
@@ -114,7 +114,7 @@ export const routingBreadcrumbSchema = z
   })
   .passthrough();
 
-const targetSchema = z
+const targetSchema = custom
   .object({
     email: z.string(),
     id: z.string(),
@@ -124,7 +124,7 @@ const targetSchema = z
   })
   .passthrough();
 
-export const dialpadCallSchema = z
+export const dialpadCallSchema = custom
   .object({
     admin_call_recording_share_links: z.array(z.string()),
     call_id: z.number(),
@@ -167,7 +167,7 @@ export const dialpadCallSchema = z
   })
   .passthrough();
 
-export const dialpadCallStartSchema = z.object({
+export const dialpadCallStartSchema = custom.object({
   custom_data: z.string().optional(),
   device_id: z.string().optional(),
   group_id: z.number().optional(),

@@ -1,5 +1,6 @@
 import { client } from '@/platforms/salesloft/client';
 import { action } from '@/sdk';
+import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
 export default action(
@@ -8,7 +9,7 @@ export default action(
     operation: 'update',
     resource: 'people',
     mutation: true,
-    schema: z.object({
+    schema: custom.object({
       id: z.string(),
       first_name: z.string().optional(),
       last_name: z.string().optional(),
@@ -16,12 +17,12 @@ export default action(
       state: z.string().optional(),
       country: z.string().optional(),
       title: z.string().optional(),
-      owner: z
+      owner: custom
         .object({
           id: z.string(),
         })
         .optional(),
-      account: z
+      account: custom
         .object({
           id: z.string(),
         })
@@ -29,7 +30,7 @@ export default action(
       email_address: z.string().optional(),
       secondary_email_address: z.string().optional(),
       personal_email_address: z.string().optional(),
-      custom_fields: z.object({}).passthrough(),
+      custom_fields: custom.object({}).passthrough(),
     }),
     scopes: [],
   },

@@ -1,5 +1,6 @@
 import { client } from '@/platforms/active-campaign/client';
 import { action } from '@/sdk';
+import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
 export default action(
@@ -8,7 +9,7 @@ export default action(
     operation: 'update',
     resource: 'contacts',
     mutation: true,
-    schema: z.object({
+    schema: custom.object({
       id: z.string(),
       email: z.string().optional(),
       firstName: z.string().optional(),

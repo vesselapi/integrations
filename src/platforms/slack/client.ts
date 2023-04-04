@@ -31,7 +31,7 @@ export const client = {
         limit: `${DEFAULT_PAGE_SIZE}`,
       },
       schema: z.intersection(
-        custom.object({
+        custom.passthrough({
           members: z.array(slackUser),
         }),
         slackPaginated,
@@ -47,7 +47,7 @@ export const client = {
         limit: `${DEFAULT_PAGE_SIZE}`,
       },
       schema: z.intersection(
-        custom.object({
+        custom.passthrough({
           channels: z.array(slackConversation),
         }),
         slackPaginated,
@@ -62,7 +62,7 @@ export const client = {
         channel,
         text,
       },
-      schema: custom.object({
+      schema: custom.passthrough({
         ts: z.string(),
       }),
     })),
@@ -83,7 +83,7 @@ export const client = {
           ts,
           text,
         },
-        schema: custom.object({
+        schema: custom.passthrough({
           ts: z.string(),
         }),
       }),

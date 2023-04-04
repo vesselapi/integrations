@@ -1,5 +1,6 @@
 import { client } from '@/platforms/apollo/client';
 import { action } from '@/sdk';
+import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
 export default action(
@@ -8,7 +9,7 @@ export default action(
     operation: 'search',
     resource: 'contacts',
     mutation: true,
-    schema: z.object({
+    schema: custom.object({
       page: z.number().optional(),
       q_keywords: z.string().optional(),
     }),

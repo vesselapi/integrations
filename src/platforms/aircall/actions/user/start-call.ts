@@ -9,7 +9,7 @@ export default action(
     operation: 'start-call',
     resource: 'users',
     mutation: false,
-    schema: z.object({
+    schema: custom.object({
       id: z.number().or(z.string()),
       number_id: z.number().or(z.string()),
       to: custom.formattedPhoneNumber(),

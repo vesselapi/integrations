@@ -2,7 +2,7 @@ import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 import { aircallUrl } from './actions/validators';
 
-export const aircallPagination = z
+export const aircallPagination = custom
   .object({
     count: z.number().nullable(),
     total: z.number().nullable(),
@@ -15,7 +15,7 @@ export const aircallPagination = z
 
 export type AircallPagination = z.infer<typeof aircallPagination>;
 
-export const aircallUser = z
+export const aircallUser = custom
   .object({
     id: z.number(),
     direct_link: z.string().nullable(),
@@ -34,7 +34,7 @@ export type AircallUser = z.infer<typeof aircallUser>;
 
 export type AircallStartUserCall = { number_id: number | string; to: string };
 
-export const aircallContact = z
+export const aircallContact = custom
   .object({
     id: z.number(),
     direct_link: z.string().nullable(),
@@ -47,7 +47,7 @@ export const aircallContact = z
     updated_at: custom.timestamp(true),
     emails: z
       .array(
-        z
+        custom
           .object({
             id: z.number(),
             label: z.string().nullable(),
@@ -58,7 +58,7 @@ export const aircallContact = z
       .nullable(),
     phone_numbers: z
       .array(
-        z
+        custom
           .object({
             id: z.number(),
             label: z.string().nullable(),
@@ -94,7 +94,7 @@ export type AircallContactUpdate = {
   information?: string;
 };
 
-const aircallNumber = z
+const aircallNumber = custom
   .object({
     id: z.number(),
     name: z.string().nullable(),
@@ -103,7 +103,7 @@ const aircallNumber = z
   })
   .passthrough();
 
-export const aircallCall = z
+export const aircallCall = custom
   .object({
     id: z.number(),
     direct_link: z.string().nullable(),
@@ -121,7 +121,7 @@ export const aircallCall = z
     number: aircallNumber,
     participants: z
       .array(
-        z
+        custom
           .object({
             id: z.number(),
             type: z.enum(['user', 'contact', 'external']),

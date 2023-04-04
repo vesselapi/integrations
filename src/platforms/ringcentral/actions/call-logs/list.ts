@@ -1,4 +1,5 @@
 import { action } from '@/sdk';
+import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 import client from '../../client';
 
@@ -8,7 +9,7 @@ export default action(
     operation: 'list',
     resource: 'call-logs',
     mutation: false,
-    schema: z.object({
+    schema: custom.object({
       page: z.number().optional(),
       perPage: z.number().optional(),
     }),

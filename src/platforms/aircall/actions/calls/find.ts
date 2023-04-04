@@ -1,3 +1,4 @@
+import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 import { action } from '../../../../sdk';
 import { client } from '../../client';
@@ -8,7 +9,7 @@ export default action(
     operation: 'find',
     resource: 'calls',
     mutation: false,
-    schema: z.object({
+    schema: custom.object({
       id: z.number().or(z.string()),
     }),
     scopes: [],

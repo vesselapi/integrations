@@ -5,6 +5,7 @@ import {
 } from '@/platforms/active-campaign/schemas';
 import { HttpsUrl } from '@/sdk';
 import { makeRequestFactory } from '@/sdk/client';
+import * as custom from '@/sdk/validators';
 import { shake } from 'radash';
 import { z } from 'zod';
 
@@ -26,7 +27,7 @@ export const client = {
     list: request(() => ({
       url: `/api/3/users`,
       method: 'get',
-      schema: z
+      schema: custom
         .object({
           users: z.array(activeCampaignUser),
         })
@@ -40,7 +41,7 @@ export const client = {
       query: shake({
         limit,
       }),
-      schema: z
+      schema: custom
         .object({
           lists: z.array(activeCampaignList),
         })
@@ -49,7 +50,7 @@ export const client = {
     find: request(({ id }: { id: string }) => ({
       url: `/api/3/lists/${id}`,
       method: 'get',
-      schema: z
+      schema: custom
         .object({
           list: activeCampaignList,
         })
@@ -60,7 +61,7 @@ export const client = {
     list: request(() => ({
       url: `/api/3/contacts`,
       method: 'get',
-      schema: z
+      schema: custom
         .object({
           contacts: z.array(activeCampaignContact),
         })
@@ -69,7 +70,7 @@ export const client = {
     find: request(({ id }: { id: string }) => ({
       url: `/api/3/contacts/${id}`,
       method: 'get',
-      schema: z
+      schema: custom
         .object({
           contact: activeCampaignContact,
         })
@@ -90,7 +91,7 @@ export const client = {
       }) => ({
         url: `/api/3/contacts/${id}`,
         method: 'put',
-        schema: z
+        schema: custom
           .object({
             contact: activeCampaignContact,
           })
@@ -114,7 +115,7 @@ export const client = {
       }) => ({
         url: `/api/3/contacts`,
         method: 'post',
-        schema: z
+        schema: custom
           .object({
             contact: activeCampaignContact,
           })

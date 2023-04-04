@@ -1,5 +1,6 @@
 import { client } from '@/platforms/salesloft/client';
 import { action } from '@/sdk';
+import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
 export default action(
@@ -8,7 +9,7 @@ export default action(
     operation: 'list',
     resource: 'cadences',
     mutation: true,
-    schema: z.object({
+    schema: custom.object({
       per_page: z.number().optional(),
       page: z.number().optional(),
     }),

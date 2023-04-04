@@ -1,5 +1,6 @@
 import { client } from '@/platforms/salesforce/client';
 import { action } from '@/sdk';
+import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 import { MAX_QUERY_PAGE_SIZE } from '../../constants';
 import { getNextCursor } from '../pagination';
@@ -10,7 +11,7 @@ export default action(
     operation: 'list',
     resource: 'contacts',
     mutation: false,
-    schema: z.object({
+    schema: custom.object({
       cursor: z.number(),
     }),
     scopes: [],

@@ -1,5 +1,6 @@
 import { client } from '@/platforms/outreach/client';
 import { action } from '@/sdk';
+import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
 export default action(
@@ -8,8 +9,8 @@ export default action(
     operation: 'create',
     resource: 'prospects',
     mutation: true,
-    schema: z.object({
-      attributes: z
+    schema: custom.object({
+      attributes: custom
         .object({
           firstName: z.string().nullish(),
           lastName: z.string().nullish(),
@@ -32,7 +33,7 @@ export default action(
             .transform((key) => key as `custom${number}`)
             .nullable(),
         ),
-      relationships: z.object({
+      relationships: custom.object({
         ownerId: z.number().optional(),
         accountId: z.number().optional(),
       }),

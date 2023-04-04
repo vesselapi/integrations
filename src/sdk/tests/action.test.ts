@@ -1,5 +1,5 @@
+import * as custom from '@/sdk/validators';
 import { describe, it } from '@jest/globals';
-import { z } from 'zod';
 import { action } from '../action';
 
 describe('action function', () => {
@@ -9,7 +9,7 @@ describe('action function', () => {
       {
         operation: 'find',
         resource: 'testing',
-        schema: z.object({}),
+        schema: custom.object({}),
       },
       async () => {
         return {};

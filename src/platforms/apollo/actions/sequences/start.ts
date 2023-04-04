@@ -1,5 +1,6 @@
 import { client } from '@/platforms/apollo/client';
 import { action } from '@/sdk';
+import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
 export default action(
@@ -8,7 +9,7 @@ export default action(
     operation: 'start',
     resource: 'sequences',
     mutation: true,
-    schema: z.object({
+    schema: custom.object({
       emailer_campaign_id: z.string(),
       contact_ids: z.array(z.string()),
       send_email_from_email_account_id: z.string().optional(),

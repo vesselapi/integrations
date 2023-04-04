@@ -1,5 +1,6 @@
 import { HttpsUrl } from '@/sdk';
 import { makeRequestFactory } from '@/sdk/client';
+import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 import { MAX_QUERY_PAGE_SIZE } from './constants';
 import {
@@ -93,7 +94,7 @@ const query = {
     request(({ cursor, limit }: { cursor?: number; limit: number }) => ({
       url: `/query`,
       method: 'get',
-      schema: z
+      schema: custom
         .object({
           records: z.array(schema),
           totalSize: z.number(),
@@ -163,7 +164,7 @@ export const client = {
       }) => ({
         url: `/query`,
         method: 'get',
-        schema: z
+        schema: custom
           .object({
             records: z.array(salesforceListView),
             totalSize: z.number(),

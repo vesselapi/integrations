@@ -2,20 +2,20 @@ import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
 export const listResponseSchema = (itemSchema: z.ZodSchema<any>) =>
-  z
+  custom
     .object({
       records: z.array(itemSchema).optional(),
-      navigation: z
+      navigation: custom
         .object({
-          firstPage: z.object({
+          firstPage: custom.object({
             uri: z.string(),
           }),
-          lastPage: z.object({
+          lastPage: custom.object({
             uri: z.string(),
           }),
         })
         .optional(),
-      paging: z
+      paging: custom
         .object({
           page: z.number(),
           totalPages: z.number(),
@@ -28,11 +28,11 @@ export const listResponseSchema = (itemSchema: z.ZodSchema<any>) =>
     })
     .passthrough();
 
-export const ringcentralExtensionSchema = z
+export const ringcentralExtensionSchema = custom
   .object({
     id: z.string(),
     extensionNumber: z.string(),
-    contact: z
+    contact: custom
       .object({
         firstName: z.string(),
         lastName: z.string(),
@@ -44,12 +44,12 @@ export const ringcentralExtensionSchema = z
       .optional(),
     status: z.string(),
     type: z.string(),
-    permissions: z
+    permissions: custom
       .object({
-        admin: z.object({
+        admin: custom.object({
           enabled: z.boolean(),
         }),
-        internationalCalling: z.object({
+        internationalCalling: custom.object({
           enabled: z.boolean(),
         }),
       })
@@ -57,7 +57,7 @@ export const ringcentralExtensionSchema = z
   })
   .passthrough();
 
-export const ringcentralCallLogSchema = z
+export const ringcentralCallLogSchema = custom
   .object({
     id: z.string(),
     sessionId: z.string(),
@@ -67,12 +67,12 @@ export const ringcentralCallLogSchema = z
     direction: z.enum(['Inbound', 'Outbound']),
     action: z.string(),
     result: z.string(),
-    from: z.object({
+    from: custom.object({
       phoneNumber: custom.formattedPhoneNumber(),
       extensionId: z.string().optional(),
       name: z.string().optional(),
     }),
-    to: z.object({
+    to: custom.object({
       phoneNumber: custom.formattedPhoneNumber(),
       extensionId: z.string().optional(),
       name: z.string().optional(),
@@ -80,7 +80,7 @@ export const ringcentralCallLogSchema = z
   })
   .passthrough();
 
-export const ringcentralContactSchema = z
+export const ringcentralContactSchema = custom
   .object({
     id: z.string(),
     firstName: z.string(),
@@ -106,17 +106,17 @@ export const ringcentralContactUpdateSchema = ringcentralContactSchema
     id: true,
   });
 
-export const ringcentralRingOutStartSchema = z
+export const ringcentralRingOutStartSchema = custom
   .object({
     extensionId: z.string().default('~'),
-    from: z.object({
+    from: custom.object({
       phoneNumber: custom.formattedPhoneNumber(),
     }),
-    to: z.object({
+    to: custom.object({
       phoneNumber: custom.formattedPhoneNumber(),
     }),
     playPrompt: z.boolean().optional(),
-    callerId: z
+    callerId: custom
       .object({
         phoneNumber: custom.formattedPhoneNumber(),
       })
@@ -124,7 +124,7 @@ export const ringcentralRingOutStartSchema = z
     callId: z.string().optional(),
     sipInfo: z
       .array(
-        z.object({
+        custom.object({
           transport: z.string(),
           uri: z.string(),
           username: z.string(),
@@ -135,11 +135,11 @@ export const ringcentralRingOutStartSchema = z
   })
   .passthrough();
 
-export const ringcentralRingOutStatusSchema = z
+export const ringcentralRingOutStatusSchema = custom
   .object({
     uri: z.string(),
     id: z.string(),
-    status: z.object({
+    status: custom.object({
       callStatus: z.string(),
       callerStatus: z.string(),
       calleeStatus: z.string(),

@@ -1,6 +1,7 @@
 // import { outreachUrl } from '@/platforms/outreach/actions/validators';
 import { client } from '@/platforms/slack/client';
 import { action } from '@/sdk';
+import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
 export default action(
@@ -9,7 +10,7 @@ export default action(
     operation: 'list',
     resource: 'conversations',
     mutation: true,
-    schema: z.object({
+    schema: custom.object({
       cursor: z.string().optional(),
     }),
     scopes: [],

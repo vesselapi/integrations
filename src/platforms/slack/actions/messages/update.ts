@@ -1,5 +1,6 @@
 import { client } from '@/platforms/slack/client';
 import { action } from '@/sdk';
+import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
 export default action(
@@ -8,7 +9,7 @@ export default action(
     operation: 'update',
     resource: 'messages',
     mutation: false,
-    schema: z.object({
+    schema: custom.object({
       ts: z.string(),
       text: z.string(),
       channel: z.string(),
