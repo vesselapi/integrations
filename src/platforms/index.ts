@@ -1,3 +1,4 @@
+import activeCampaign from '@/platforms/active-campaign';
 import aircall from '@/platforms/aircall';
 import apollo from '@/platforms/apollo';
 import dialpad from '@/platforms/dialpad';
@@ -8,6 +9,10 @@ import salesloft from '@/platforms/salesloft';
 import slack from '@/platforms/slack';
 import { Platform } from '@/sdk';
 
+export {
+  default as activeCampaign,
+  types as activeCampaignType,
+} from '@/platforms/active-campaign';
 export { default as aircall, types as aircallTypes } from '@/platforms/aircall';
 export { default as apollo, types as apolloTypes } from '@/platforms/apollo';
 export { default as dialpad, types as dialpadTypes } from '@/platforms/dialpad';
@@ -31,6 +36,7 @@ export { default as slack, types as slackTypes } from '@/platforms/slack';
 
 export const integrationsList: Platform<any, any, any, any, any>[] = [
   aircall,
+  activeCampaign,
   apollo,
   dialpad,
   outreach,
