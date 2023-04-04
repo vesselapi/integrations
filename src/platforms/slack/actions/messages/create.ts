@@ -3,10 +3,10 @@ import { action } from '@/sdk';
 import { z } from 'zod';
 
 export default action(
-  'create-chat',
+  'create-messages',
   {
     operation: 'create',
-    resource: 'chats',
+    resource: 'messages',
     mutation: false,
     schema: z.object({
       text: z.string(),
@@ -15,6 +15,6 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.chat.create(auth, input);
+    return await client.messages.create(auth, input);
   },
 );
