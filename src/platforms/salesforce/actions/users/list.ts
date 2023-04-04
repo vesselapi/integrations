@@ -22,7 +22,7 @@ export default action(
     });
     return {
       ...resp,
-      nextCursor: getNextCursor({
+      cursor: getNextCursor({
         records: resp.records,
         limit: MAX_QUERY_PAGE_SIZE,
       }),

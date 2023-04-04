@@ -9,11 +9,11 @@ export default action(
     resource: 'users',
     mutation: false,
     schema: z.object({
-      id: z.number(),
+      Id: z.number(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.users.find(auth, { Id: input.id });
+    return await client.users.find(auth, { Id: input.Id });
   },
 );
