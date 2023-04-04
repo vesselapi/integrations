@@ -6,7 +6,7 @@ import { client } from '../../client';
 export default action(
   'start-user-call',
   {
-    operation: 'startCall',
+    operation: 'start-call',
     resource: 'users',
     mutation: false,
     schema: z.object({

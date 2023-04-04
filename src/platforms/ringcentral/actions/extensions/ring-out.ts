@@ -11,5 +11,5 @@ export default action(
     schema: ringcentralRingOutStartSchema,
     scopes: ['RingOut'],
   },
-  ({ auth, input }) => client.extensions.ringout(auth, input),
+  ({ auth, input }) => client.extensions.ringOut(auth, input),
 );

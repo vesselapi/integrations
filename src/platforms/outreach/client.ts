@@ -31,7 +31,7 @@ const request = makeRequestFactory(async (auth, options) => ({
 
 export const client = {
   users: {
-    get: request(({ id }: { id: number }) => ({
+    find: request(({ id }: { id: number }) => ({
       url: `/users/${id}`,
       method: 'get',
       schema: z
@@ -57,7 +57,7 @@ export const client = {
     ),
   },
   prospects: {
-    get: request(({ id }: { id: number }) => ({
+    find: request(({ id }: { id: number }) => ({
       url: `/prospects/${id}`,
       method: 'get',
       schema: z
@@ -161,7 +161,7 @@ export const client = {
     ),
   },
   accounts: {
-    get: request(({ id }: { id: number }) => ({
+    find: request(({ id }: { id: number }) => ({
       url: `/accounts/${id}`,
       method: 'get',
       schema: z
@@ -199,7 +199,7 @@ export const client = {
     ),
   },
   mailings: {
-    get: request(({ id }: { id: number }) => ({
+    find: request(({ id }: { id: number }) => ({
       url: `/mailings/${id}`,
       method: 'get',
       schema: z
@@ -240,7 +240,7 @@ export const client = {
     ),
   },
   sequences: {
-    get: request(({ id }: { id: number }) => ({
+    find: request(({ id }: { id: number }) => ({
       url: `/sequences/${id}`,
       method: 'get',
       schema: z
