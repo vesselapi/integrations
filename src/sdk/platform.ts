@@ -21,11 +21,13 @@ export type PlatformOptions<
       : never;
   },
   TClient extends PlatformClient,
+  TAnswers extends Record<string, string>,
+  TOAuth2Answers extends Record<string, string>,
 > = {
   auth:
-    | StandardAuthConfig
-    | OAuth2AuthConfig
-    | (StandardAuthConfig | OAuth2AuthConfig)[];
+    | StandardAuthConfig<TAnswers>
+    | OAuth2AuthConfig<TOAuth2Answers>
+    | (StandardAuthConfig<TAnswers> | OAuth2AuthConfig<TOAuth2Answers>)[];
   constants: PlatformConstants;
   actions: TActions;
   display: PlatformDisplayConfig;
@@ -44,10 +46,12 @@ export const platform = <
   },
   TClient extends PlatformClient,
   TId extends string,
+  TAnswers extends Record<string, string>,
+  TOAuth2Answers extends Record<string, string>,
 >(
   id: TId,
-  options: PlatformOptions<TActions, TClient>,
-): Platform<TActions, TClient, string> => {
+  options: PlatformOptions<TActions, TClient, TAnswers, TOAuth2Answers>,
+): Platform<TActions, TClient, string, TAnswers, TOAuth2Answers> => {
   const authConfigs = isArray(options.auth)
     ? options.auth.length === 1
       ? options.auth.map((x) => ({ ...x, default: true }))

@@ -16,18 +16,18 @@ const toQueryString = (query: Record<string, string>): string => {
 };
 
 export const auth = {
-  oauth2: (options: {
-    authUrl: HttpsUrl | OAuth2AuthConfig['authUrl'];
-    tokenUrl: HttpsUrl | OAuth2AuthConfig['tokenUrl'];
+  oauth2: <T extends Record<string, string> = Record<string, string>>(options: {
+    authUrl: HttpsUrl | OAuth2AuthConfig<T>['authUrl'];
+    tokenUrl: HttpsUrl | OAuth2AuthConfig<T>['tokenUrl'];
     questions?: AuthQuestion[];
     default?: boolean;
-    scopeSeparator?: OAuth2AuthConfig['scopeSeparator'];
-    tokenAuth?: OAuth2AuthConfig['tokenAuth'];
-    oauthBodyFormat?: OAuth2AuthConfig['oauthBodyFormat'];
-    url?: OAuth2AuthConfig['url'];
+    scopeSeparator?: OAuth2AuthConfig<T>['scopeSeparator'];
+    tokenAuth?: OAuth2AuthConfig<T>['tokenAuth'];
+    oauthBodyFormat?: OAuth2AuthConfig<T>['oauthBodyFormat'];
+    url?: OAuth2AuthConfig<T>['url'];
     isRetryable?: RetryableCheckFunction;
-    display?: OAuth2AuthConfig['display'];
-  }): OAuth2AuthConfig => ({
+    display?: OAuth2AuthConfig<T>['display'];
+  }): OAuth2AuthConfig<T> => ({
     type: 'oauth2',
     authUrl: isString(options.authUrl)
       ? () => options.authUrl as HttpsUrl
@@ -65,13 +65,13 @@ export const auth = {
     isRetryable:
       options.isRetryable ?? (({ response }) => response.status === 401),
   }),
-  apiToken: (
+  apiToken: <T extends Record<string, string> = Record<string, string>>(
     options: {
       questions?: AuthQuestion[];
       default?: boolean;
       display?: OAuth2AuthConfig['display'];
     } = {},
-  ): StandardAuthConfig => ({
+  ): StandardAuthConfig<T> => ({
     type: 'standard',
     default: options.default ?? false,
     questions: [

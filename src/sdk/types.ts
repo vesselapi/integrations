@@ -8,6 +8,7 @@ export type OAuth2Metadata = {
   answers: Record<string, string>;
   accessToken: string;
   refreshToken: string;
+  oauthResponse: Record<string, unknown>;
 };
 
 export type StandardMetadata = {
@@ -37,6 +38,7 @@ export type AuthQuestionType = 'string' | 'select';
 export type AuthQuestionOption = {
   value: string;
   label: string;
+  default?: boolean;
 };
 
 export interface BaseAuthQuestion {
@@ -61,7 +63,9 @@ export type RetryableCheckFunction = ({
   response: Response;
 }) => boolean;
 
-export type StandardAuthConfig = {
+export type StandardAuthConfig<
+  TAnswers extends Record<string, string> = Record<string, string>,
+> = {
   type: 'standard';
   default: boolean;
   /**
@@ -72,18 +76,20 @@ export type StandardAuthConfig = {
   display: {
     markdown: string | ((platform: Platform<{}, any, string>) => string);
   };
-  toTokenString: (answers: Record<string, string>) => string;
+  toTokenString: (answers: TAnswers) => string;
 };
 
 /**
  * OAUTH2: Many of the options defined here follow the simple auth package
  * https://github.com/lelylan/simple-oauth2/blob/fbb295b1ae0ea998bcdf4ad22a6ef2fcf6930d12/API.md#new-authorizationcodeoptions
  */
-export type OAuth2AuthConfig = {
+export type OAuth2AuthConfig<
+  T extends Record<string, string> = Record<string, string>,
+> = {
   type: 'oauth2';
   default: boolean;
-  authUrl: (options: { answers: Record<string, string> }) => HttpsUrl;
-  tokenUrl: (options: { answers: Record<string, string> }) => HttpsUrl;
+  authUrl: (options: { answers: T }) => HttpsUrl;
+  tokenUrl: (options: { answers: T }) => HttpsUrl;
   /**
    * Depending on the end platform wrote their OAuth, the clientId and
    * clientSecret could be requested in the Auth header using Basic Auth
@@ -98,7 +104,7 @@ export type OAuth2AuthConfig = {
   questions: AuthQuestion[];
   oauthBodyFormat: 'json' | 'form';
   url: (arg: {
-    answers: Record<string, string>;
+    answers: T;
     scopes: string[];
     clientId: string;
     redirectUrl: string;
@@ -140,9 +146,11 @@ export type Platform<
   TActions extends Record<string, Action<string, any, any>>,
   TClient extends PlatformClient,
   TId extends string,
+  TAnswers extends Record<string, string> = Record<string, string>,
+  TOAuth2Answers extends Record<string, string> = Record<string, string>,
 > = {
   id: TId;
-  auth: (StandardAuthConfig | OAuth2AuthConfig)[];
+  auth: (StandardAuthConfig<TAnswers> | OAuth2AuthConfig<TOAuth2Answers>)[];
   rawActions: Action<string, any, any>[];
   client: TClient;
   constants: PlatformConstants;
