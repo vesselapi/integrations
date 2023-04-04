@@ -44,6 +44,7 @@ export default platform('salesforce', {
   display: {
     name: 'Salesforce',
     iconURI: icon,
+    categories: ['crm', 'marketing-automation'],
   },
   client,
   constants,
