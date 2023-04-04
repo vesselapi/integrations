@@ -60,9 +60,16 @@ const queryBuilder = {
     cursor?: number;
     limit?: number;
   }) => {
-    const where =
-      `WHERE Id < ${cursor}` +
-      (objectType ? `AND SobjectType = '${objectType.toUpperCase()}'` : '');
+    const getWhere = () => {
+      if (!cursor) {
+        return '';
+      }
+      return (
+        `WHERE Id < ${cursor}` +
+        (objectType ? `AND SobjectType = '${objectType.toUpperCase()}'` : '')
+      );
+    };
+    const where = getWhere();
     return `
     SELECT FIELDS(ALL)
     FROM ListView
@@ -83,7 +90,7 @@ const query = {
     objectType: SalesforceSupportedObjectType;
     relationalSelect?: string;
   }) =>
-    request(({ cursor, limit }: { cursor: number; limit: number }) => ({
+    request(({ cursor, limit }: { cursor?: number; limit: number }) => ({
       url: `/query`,
       method: 'get',
       schema: z
@@ -151,7 +158,7 @@ export const client = {
         limit,
       }: {
         objectType?: string;
-        cursor: number;
+        cursor?: number;
         limit: number;
       }) => ({
         url: `/query`,
