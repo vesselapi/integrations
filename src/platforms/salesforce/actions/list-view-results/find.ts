@@ -9,7 +9,7 @@ export default action(
     resource: 'list-view-results',
     mutation: false,
     schema: z.object({
-      Id: z.number(),
+      Id: z.string(),
       objectType: z.string(),
     }),
     scopes: [],

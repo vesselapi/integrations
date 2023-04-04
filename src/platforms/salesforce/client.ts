@@ -1,7 +1,8 @@
 import { HttpsUrl } from '@/sdk';
 import { makeRequestFactory } from '@/sdk/client';
 import { z } from 'zod';
-import { MAX_QUERY_PAGE_SIZE } from './constants';
+import { salesforceQueryBuilder } from './actions/query-builder';
+import { SALESFORCE_API_VERSION } from './constants';
 import {
   salesforceContact,
   SalesforceContactCreate,
@@ -18,7 +19,7 @@ const request = makeRequestFactory(async (auth, options) => {
     const instanceUrl = oauthResponse.instance_url as HttpsUrl;
     return {
       ...options,
-      url: `${instanceUrl}${options.url}`,
+      url: `${instanceUrl}/services/data/${SALESFORCE_API_VERSION}${options.url}`,
       headers: {
         ...options.headers,
         Authorization: `Bearer ${await auth.getToken()}`,
@@ -28,57 +29,6 @@ const request = makeRequestFactory(async (auth, options) => {
     throw new Error('Salesforce only supports OAuth2 authentication');
   }
 });
-
-const queryBuilder = {
-  list: ({
-    objectType,
-    cursor,
-    relationalSelect,
-    limit = MAX_QUERY_PAGE_SIZE,
-  }: {
-    objectType: SalesforceSupportedObjectType;
-    cursor?: number;
-    relationalSelect?: string;
-    limit?: number;
-  }) => {
-    const select =
-      'SELECT FIELDS(ALL)' + (relationalSelect ? `, ${relationalSelect}` : '');
-    return `
-    ${select}
-    FROM ${objectType}
-    WHERE Id < ${cursor}
-    ORDER BY Id DESC
-    LIMIT ${limit}
-  `;
-  },
-  listListView: ({
-    objectType,
-    cursor,
-    limit = MAX_QUERY_PAGE_SIZE,
-  }: {
-    objectType?: string;
-    cursor?: number;
-    limit?: number;
-  }) => {
-    const getWhere = () => {
-      if (!cursor) {
-        return '';
-      }
-      return (
-        `WHERE Id < ${cursor}` +
-        (objectType ? `AND SobjectType = '${objectType.toUpperCase()}'` : '')
-      );
-    };
-    const where = getWhere();
-    return `
-    SELECT FIELDS(ALL)
-    FROM ListView
-    ${where}
-    ORDER BY Id DESC
-    LIMIT ${limit}
-  `;
-  },
-};
 
 const query = {
   list: <T extends z.ZodType>({
@@ -90,8 +40,13 @@ const query = {
     objectType: SalesforceSupportedObjectType;
     relationalSelect?: string;
   }) =>
-    request(({ cursor, limit }: { cursor?: number; limit: number }) => ({
-      url: `/query`,
+    request(({ cursor, limit }: { cursor?: string; limit: number }) => ({
+      url: `/query/?q=${salesforceQueryBuilder.list({
+        objectType,
+        cursor,
+        relationalSelect,
+        limit,
+      })}`,
       method: 'get',
       schema: z
         .object({
@@ -99,20 +54,12 @@ const query = {
           totalSize: z.number(),
         })
         .passthrough(),
-      query: {
-        query: queryBuilder.list({
-          objectType,
-          cursor,
-          relationalSelect,
-          limit,
-        }),
-      },
     })),
 };
 
 export const client = {
   users: {
-    find: request(({ Id }: { Id: number }) => ({
+    find: request(({ Id }: { Id: string }) => ({
       url: `/sobjects/User/${Id}/`,
       method: 'get',
       schema: salesforceUser.passthrough(),
@@ -123,7 +70,7 @@ export const client = {
     }),
   },
   contacts: {
-    find: request(({ Id }: { Id: number }) => ({
+    find: request(({ Id }: { Id: string }) => ({
       url: `/sobjects/Contact/${Id}/`,
       method: 'get',
       schema: salesforceContact.passthrough(),
@@ -146,7 +93,7 @@ export const client = {
     })),
   },
   listViews: {
-    find: request(({ Id }: { Id: number }) => ({
+    find: request(({ Id }: { Id: string }) => ({
       url: `/sobjects/ListView/${Id}/`,
       method: 'get',
       schema: salesforceListView.passthrough(),
@@ -158,10 +105,14 @@ export const client = {
         limit,
       }: {
         objectType?: string;
-        cursor?: number;
+        cursor?: string;
         limit: number;
       }) => ({
-        url: `/query`,
+        url: `/query/?q=${salesforceQueryBuilder.listListView({
+          objectType,
+          cursor,
+          limit,
+        })}`,
         method: 'get',
         schema: z
           .object({
@@ -169,18 +120,11 @@ export const client = {
             totalSize: z.number(),
           })
           .passthrough(),
-        query: {
-          query: queryBuilder.listListView({
-            objectType,
-            cursor,
-            limit,
-          }),
-        },
       }),
     ),
   },
   listViewResults: {
-    find: request(({ Id, objectType }: { Id: number; objectType: string }) => ({
+    find: request(({ Id, objectType }: { Id: string; objectType: string }) => ({
       url: `/sobjects/${objectType}/listviews/${Id}/results`,
       method: 'get',
       schema: salesforceListViewResult.passthrough(),

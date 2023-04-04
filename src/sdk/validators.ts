@@ -4,7 +4,7 @@ import { z } from 'zod';
 export const date = () =>
   z
     .string()
-    .datetime()
+    .datetime({ offset: true })
     .transform((value) => new Date(value));
 
 export const timestamp = (isSeconds = false) =>
