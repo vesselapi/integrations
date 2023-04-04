@@ -1,7 +1,7 @@
 import { HttpsUrl } from '@/sdk';
 import { makeRequestFactory } from '@/sdk/client';
 import { z } from 'zod';
-import { salesforceQueryBuilder } from './actions/queryBuilder';
+import { salesforceQueryBuilder } from './actions/query-builder';
 import { SALESFORCE_API_VERSION } from './constants';
 import {
   salesforceContact,
