@@ -15,7 +15,8 @@ export const json = () => z.object({}).catchall(z.any()).optional();
 export const formattedPhoneNumber = (format?: NumberFormat) =>
   z
     .string()
-    .refine((value) => {
+    .refine((value?) => {
+      if (!value) return false;
       return parsePhoneNumber(value)?.isValid();
     })
     .transform((value) => {

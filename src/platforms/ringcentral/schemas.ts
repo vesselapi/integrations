@@ -87,7 +87,7 @@ export const ringcentralContactSchema = z
     lastName: z.string(),
     company: z.string().optional(),
     email: z.string().optional(),
-    businessPhone: z.string(),
+    businessPhone: custom.formattedPhoneNumber(),
   })
   .passthrough();
 
