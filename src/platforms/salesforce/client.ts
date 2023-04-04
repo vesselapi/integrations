@@ -18,7 +18,7 @@ const request = makeRequestFactory(async (auth, options) => {
     const instanceUrl = oauthResponse.instance_url as HttpsUrl;
     return {
       ...options,
-      url: `${instanceUrl}/${options.url}`,
+      url: `${instanceUrl}${options.url}`,
       headers: {
         ...options.headers,
         Authorization: `Bearer ${await auth.getToken()}`,
