@@ -61,7 +61,7 @@ export type RetryableCheckFunction = ({
   response,
 }: {
   response: Response;
-}) => boolean;
+}) => Promise<boolean>;
 
 export type StandardAuthConfig<
   TAnswers extends Record<string, string> = Record<string, string>,

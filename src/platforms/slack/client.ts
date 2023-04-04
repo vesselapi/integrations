@@ -30,12 +30,11 @@ export const client = {
         ...(cursor ? { cursor } : {}),
         limit: `${DEFAULT_PAGE_SIZE}`,
       },
-      schema: z.intersection(
-        custom.object({
+      schema: custom
+        .object({
           members: z.array(slackUser),
-        }),
-        slackPaginated,
-      ),
+        })
+        .extend(slackPaginated.shape),
     })),
   },
   conversations: {
@@ -46,12 +45,11 @@ export const client = {
         ...(cursor ? { cursor } : {}),
         limit: `${DEFAULT_PAGE_SIZE}`,
       },
-      schema: z.intersection(
-        custom.object({
+      schema: custom
+        .object({
           channels: z.array(slackConversation),
-        }),
-        slackPaginated,
-      ),
+        })
+        .extend(slackPaginated.shape),
     })),
   },
   messages: {
