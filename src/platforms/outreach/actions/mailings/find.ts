@@ -14,6 +14,6 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.mailings.get(auth, { id: input.id });
+    return await client.mailings.find(auth, { id: input.id });
   },
 );
