@@ -20,8 +20,8 @@ export default platform('slack', {
   display: {
     name: 'Slack',
     iconURI: icon,
+    categories: ['chat'],
   },
-  verticals: ['chat'],
   client,
   constants,
   actions: {

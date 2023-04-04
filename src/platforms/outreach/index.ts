@@ -32,8 +32,8 @@ export default platform('outreach', {
   display: {
     name: 'Outreach',
     iconURI: icon,
+    categories: ['engagement'],
   },
-  verticals: ['engagement'],
   client,
   constants,
   actions: {

@@ -45,8 +45,8 @@ export default platform('apollo', {
   display: {
     name: 'Apollo',
     iconURI: icon,
+    categories: ['engagement'],
   },
-  verticals: ['engagement'],
   constants,
   client,
   actions: {

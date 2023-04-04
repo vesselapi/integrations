@@ -8,7 +8,6 @@ import {
   PlatformConstants,
   PlatformDisplayConfig,
   StandardAuthConfig,
-  UnificationVertical,
 } from './types';
 
 export type PlatformOptions<
@@ -27,7 +26,6 @@ export type PlatformOptions<
     | StandardAuthConfig
     | OAuth2AuthConfig
     | (StandardAuthConfig | OAuth2AuthConfig)[];
-  verticals: UnificationVertical[];
   constants: PlatformConstants;
   actions: TActions;
   display: PlatformDisplayConfig;
@@ -94,7 +92,6 @@ export const platform = <
     id,
     client: options.client,
     auth: authConfigs,
-    verticals: options.verticals,
     display: options.display,
     rawActions: Object.values(options.actions),
     constants: options.constants,
