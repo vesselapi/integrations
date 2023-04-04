@@ -36,6 +36,7 @@ export default platform('salesloft', {
   display: {
     name: 'Salesloft',
     iconURI: icon,
+    categories: ['engagement'],
   },
   client,
   constants,

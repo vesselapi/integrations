@@ -29,6 +29,7 @@ export default platform('aircall', {
   display: {
     name: 'Aircall',
     iconURI: icon,
+    categories: ['dialer'],
   },
   constants,
   client,

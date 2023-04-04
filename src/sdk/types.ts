@@ -122,9 +122,17 @@ export interface PlatformClient {
   passthrough: (auth: Auth, options: HttpOptions) => Promise<any>;
 }
 
+export type Category =
+  | 'dialer'
+  | 'crm'
+  | 'marketing-automation'
+  | 'chat'
+  | 'engagement';
+
 export type PlatformDisplayConfig = {
   name: string;
   iconURI: string;
+  categories: Category[];
 };
 
 export type PlatformConstants = Record<string, any>;
