@@ -3,9 +3,9 @@ import { action } from '@/sdk';
 import { z } from 'zod';
 
 export default action(
-  'list-users',
+  'search-users',
   {
-    operation: 'list',
+    operation: 'search',
     resource: 'users',
     mutation: true,
     schema: z.object({

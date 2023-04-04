@@ -1,20 +1,20 @@
-import { client } from '@/platforms/apollo/client';
+import { client } from '@/platforms/salesloft/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
 
 export default action(
-  'list-sequences',
+  'list-cadences',
   {
     operation: 'list',
-    resource: 'sequences',
+    resource: 'cadences',
     mutation: true,
     schema: z.object({
-      q_keywords: z.string().optional(),
+      per_page: z.number().optional(),
       page: z.number().optional(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.sequences.search(auth, input);
+    return await client.cadences.list(auth, input);
   },
 );

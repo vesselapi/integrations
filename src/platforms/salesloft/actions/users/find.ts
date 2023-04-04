@@ -1,4 +1,4 @@
-import { client } from '@/platforms/outreach/client';
+import { client } from '@/platforms/salesloft/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
 
@@ -7,13 +7,13 @@ export default action(
   {
     operation: 'find',
     resource: 'users',
-    mutation: false,
+    mutation: true,
     schema: z.object({
-      id: z.number(),
+      id: z.string(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.users.find(auth, { id: input.id });
+    return await client.users.find(auth, input);
   },
 );

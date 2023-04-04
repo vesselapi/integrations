@@ -74,7 +74,7 @@ const makeClient = () => {
         'account/~/extension',
         listResponseSchema(ringcentralExtensionSchema),
       ),
-      ringout: request((body: RingcentralRingOutStart) => ({
+      ringOut: request((body: RingcentralRingOutStart) => ({
         url: `/account/~/extension/${body.extensionId}/ring-out`,
         method: 'post',
         json: omit(body, ['extensionId']),

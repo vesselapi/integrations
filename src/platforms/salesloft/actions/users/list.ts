@@ -1,20 +1,20 @@
-import { client } from '@/platforms/apollo/client';
+import { client } from '@/platforms/salesloft/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
 
 export default action(
-  'search-account',
+  'list-users',
   {
-    operation: 'search',
-    resource: 'accounts',
+    operation: 'list',
+    resource: 'users',
     mutation: true,
     schema: z.object({
-      q_organization_name: z.string().optional(),
+      per_page: z.number().optional(),
       page: z.number().optional(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.accounts.search(auth, input);
+    return await client.users.list(auth, input);
   },
 );

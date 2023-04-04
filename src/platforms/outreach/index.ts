@@ -1,21 +1,21 @@
 import { auth, platform } from '@/sdk';
 
-import getAccount from '@/platforms/outreach/actions/accounts/find';
+import findAccount from '@/platforms/outreach/actions/accounts/find';
 import listAccounts from '@/platforms/outreach/actions/accounts/list';
 import listMailboxes from '@/platforms/outreach/actions/mailboxes/list';
-import getMailing from '@/platforms/outreach/actions/mailings/find';
+import findMailing from '@/platforms/outreach/actions/mailings/find';
 import listMailings from '@/platforms/outreach/actions/mailings/list';
 import createProspect from '@/platforms/outreach/actions/prospects/create';
-import getProspect from '@/platforms/outreach/actions/prospects/find';
+import findProspect from '@/platforms/outreach/actions/prospects/find';
 import listProspects from '@/platforms/outreach/actions/prospects/list';
 import updateProspect from '@/platforms/outreach/actions/prospects/update';
 import createSequenceState from '@/platforms/outreach/actions/sequence-states/create';
 import createSequenceTemplate from '@/platforms/outreach/actions/sequence-templates/create';
 import createSequence from '@/platforms/outreach/actions/sequences/create';
-import getSequence from '@/platforms/outreach/actions/sequences/find';
+import findSequence from '@/platforms/outreach/actions/sequences/find';
 import listSequences from '@/platforms/outreach/actions/sequences/list';
 import createTemplate from '@/platforms/outreach/actions/templates/create';
-import getUser from '@/platforms/outreach/actions/users/find';
+import findUser from '@/platforms/outreach/actions/users/find';
 import listUsers from '@/platforms/outreach/actions/users/list';
 import { client } from '@/platforms/outreach/client';
 import * as constants from '@/platforms/outreach/constants';
@@ -32,23 +32,24 @@ export default platform('outreach', {
   display: {
     name: 'Outreach',
     iconURI: icon,
+    categories: ['engagement'],
   },
   client,
   constants,
   actions: {
-    getAccount,
+    findAccount,
     listAccounts,
     listMailboxes,
-    getMailing,
+    findMailing,
     listMailings,
     createProspect,
-    getProspect,
+    findProspect,
     listProspects,
     updateProspect,
     createSequenceState,
-    getSequence,
+    findSequence,
     listSequences,
-    getUser,
+    findUser,
     listUsers,
     createSequence,
     createTemplate,

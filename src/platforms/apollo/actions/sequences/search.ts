@@ -3,18 +3,18 @@ import { action } from '@/sdk';
 import { z } from 'zod';
 
 export default action(
-  'search-account',
+  'search-sequences',
   {
     operation: 'search',
-    resource: 'accounts',
+    resource: 'sequences',
     mutation: true,
     schema: z.object({
-      q_organization_name: z.string().optional(),
+      q_keywords: z.string().optional(),
       page: z.number().optional(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.accounts.search(auth, input);
+    return await client.sequences.search(auth, input);
   },
 );

@@ -3,10 +3,10 @@ import { action } from '@/sdk';
 import { z } from 'zod';
 
 export default action(
-  'list-contacts',
+  'search-custom-fields',
   {
-    operation: 'list',
-    resource: 'contacts',
+    operation: 'search',
+    resource: 'custom-fields',
     mutation: true,
     schema: z.object({
       page: z.number().optional(),
@@ -14,6 +14,6 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.contacts.search(auth, input);
+    return await client.customFields.search(auth, input);
   },
 );

@@ -16,6 +16,6 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.sequences.addContacts(auth, input);
+    return await client.sequences.start(auth, input);
   },
 );

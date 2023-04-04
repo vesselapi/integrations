@@ -20,6 +20,9 @@ import { BASE_URL, DEFAULT_PAGE_SIZE } from './constants';
 
 const request = makeRequestFactory(async (auth, options) => ({
   ...options,
+  url: !options.url.startsWith(BASE_URL)
+    ? `${BASE_URL}${options.url}`
+    : options.url,
   headers: {
     ...options.headers,
     Authorization: `Bearer ${await auth.getToken()}`,
@@ -28,7 +31,7 @@ const request = makeRequestFactory(async (auth, options) => ({
 
 export const client = {
   users: {
-    get: request(({ id }: { id: number }) => ({
+    find: request(({ id }: { id: number }) => ({
       url: `/users/${id}`,
       method: 'get',
       schema: z
@@ -54,7 +57,7 @@ export const client = {
     ),
   },
   prospects: {
-    get: request(({ id }: { id: number }) => ({
+    find: request(({ id }: { id: number }) => ({
       url: `/prospects/${id}`,
       method: 'get',
       schema: z
@@ -158,7 +161,7 @@ export const client = {
     ),
   },
   accounts: {
-    get: request(({ id }: { id: number }) => ({
+    find: request(({ id }: { id: number }) => ({
       url: `/accounts/${id}`,
       method: 'get',
       schema: z
@@ -196,7 +199,7 @@ export const client = {
     ),
   },
   mailings: {
-    get: request(({ id }: { id: number }) => ({
+    find: request(({ id }: { id: number }) => ({
       url: `/mailings/${id}`,
       method: 'get',
       schema: z
@@ -237,7 +240,7 @@ export const client = {
     ),
   },
   sequences: {
-    get: request(({ id }: { id: number }) => ({
+    find: request(({ id }: { id: number }) => ({
       url: `/sequences/${id}`,
       method: 'get',
       schema: z

@@ -4,33 +4,37 @@ import * as constants from './constants';
 import { icon } from './icon';
 
 import createAccount from './actions/accounts/create';
-import listAccounts from './actions/accounts/list';
-import searchAccount from './actions/accounts/search';
+import {
+  default as searchAccount,
+  default as searchAccounts,
+} from './actions/accounts/search';
 import updateAccount from './actions/accounts/update';
 
 import listActivities from './actions/activities/list';
 
 import createContact from './actions/contacts/create';
-import listContacts from './actions/contacts/list';
-import searchContact from './actions/contacts/search';
+import {
+  default as searchContact,
+  default as searchContacts,
+} from './actions/contacts/search';
 import updateContact from './actions/contacts/update';
 
-import createCustomField from './actions/customFields/create';
-import listCustomFields from './actions/customFields/list';
+import createCustomField from './actions/custom-fields/create';
+import listCustomFields from './actions/custom-fields/search';
 
 import searchEmails from './actions/emails/search';
 
-import listEmailAccounts from './actions/emailAccounts/list';
+import listEmailAccounts from './actions/email-accounts/list';
 
 import createSequences from './actions/sequences/create';
-import listSequences from './actions/sequences/list';
+import searchSequences from './actions/sequences/search';
 import startSequence from './actions/sequences/start';
 
-import createSequenceSteps from './actions/sequenceSteps/create';
+import createSequenceSteps from './actions/sequence-steps/create';
 
-import updateSequenceTemplates from './actions/sequenceTemplates/update';
+import updateSequenceTemplates from './actions/sequence-templates/update';
 
-import listUsers from './actions/users/list';
+import searchUsers from './actions/users/search';
 
 export * as types from './schemas';
 export default platform('apollo', {
@@ -45,19 +49,20 @@ export default platform('apollo', {
   display: {
     name: 'Apollo',
     iconURI: icon,
+    categories: ['engagement'],
   },
   constants,
   client,
   actions: {
     createAccount,
-    listAccounts,
+    searchAccounts,
     updateAccount,
     searchAccount,
 
     listActivities,
 
     createContact,
-    listContacts,
+    searchContacts,
     updateContact,
     searchContact,
 
@@ -69,13 +74,13 @@ export default platform('apollo', {
     listEmailAccounts,
 
     createSequences,
-    listSequences,
+    searchSequences,
     startSequence,
 
     createSequenceSteps,
 
     updateSequenceTemplates,
 
-    listUsers,
+    searchUsers,
   },
 });

@@ -199,7 +199,7 @@ export const client = {
         })
         .passthrough(),
     })),
-    addContacts: request(
+    start: request(
       ({
         emailer_campaign_id,
         contact_ids,
