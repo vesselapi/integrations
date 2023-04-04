@@ -27,6 +27,7 @@ export default platform('activecampaign', {
     name: 'Active Campaign',
     iconURI: icon,
   },
+  verticals: ['marketing'],
   client,
   constants,
   actions: {

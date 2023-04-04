@@ -35,6 +35,7 @@ export default platform('ringcentral', {
     name: 'Ringcentral',
     iconURI: icon,
   },
+  verticals: ['dialer'],
   constants,
   client,
   actions: {

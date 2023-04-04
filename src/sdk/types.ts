@@ -137,6 +137,7 @@ export type Platform<
   auth: (StandardAuthConfig | OAuth2AuthConfig)[];
   rawActions: Action<string, any, any>[];
   client: TClient;
+  verticals: UnificationVertical[];
   constants: PlatformConstants;
   actions: {
     [Key in keyof TActions]: TActions[Key] extends Action<
@@ -173,6 +174,13 @@ export type DirectlyInvokedAction<
   TInput extends {},
   TOutput extends {} | null | void,
 > = (input: TInput, auth: Auth) => Promise<TOutput>;
+
+export type UnificationVertical =
+  | 'dialer'
+  | 'crm'
+  | 'marketing'
+  | 'chat'
+  | 'engagement';
 
 export type UnifiedAction<
   TName extends string,

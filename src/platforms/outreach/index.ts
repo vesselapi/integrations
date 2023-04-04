@@ -33,6 +33,7 @@ export default platform('outreach', {
     name: 'Outreach',
     iconURI: icon,
   },
+  verticals: ['engagement'],
   client,
   constants,
   actions: {
