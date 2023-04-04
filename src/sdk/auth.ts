@@ -63,7 +63,7 @@ export const auth = {
         }?${toQueryString(query)}`;
       }),
     isRetryable:
-      options.isRetryable ?? (({ response }) => response.status === 401),
+      options.isRetryable ?? (async ({ response }) => response.status === 401),
   }),
   apiToken: <T extends Record<string, string> = Record<string, string>>(
     options: {

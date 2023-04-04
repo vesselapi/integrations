@@ -7,6 +7,11 @@ export const slackPaginated = custom.object({
   }),
 });
 
+export const slackExpiredAuth = custom.object({
+  ok: z.literal(false),
+  error: z.literal('token_expired'),
+});
+
 export const slackUser = custom.object({
   id: z.string(),
   name: z.string(),
