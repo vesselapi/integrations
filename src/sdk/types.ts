@@ -38,6 +38,7 @@ export type AuthQuestionType = 'string' | 'select';
 export type AuthQuestionOption = {
   value: string;
   label: string;
+  default?: boolean;
 };
 
 export interface BaseAuthQuestion {

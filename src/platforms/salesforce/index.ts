@@ -35,7 +35,7 @@ export default platform('salesforce', {
         id: 'accountType',
         label: 'Account Type',
         options: [
-          { label: 'Production', value: 'Production' },
+          { label: 'Production', value: 'Production', default: true },
           { label: 'Sandbox', value: 'Sandbox' },
         ],
       },
