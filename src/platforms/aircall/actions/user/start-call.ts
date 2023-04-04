@@ -6,7 +6,7 @@ import { client } from '../../client';
 export default action(
   'start-user-call',
   {
-    operation: 'startCall',
+    operation: 'start',
     resource: 'users',
     mutation: false,
     schema: z.object({
@@ -17,7 +17,7 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.users.startCall(auth, {
+    return await client.users.start(auth, {
       id: input.id,
       number_id: input.number_id,
       to: input.to,

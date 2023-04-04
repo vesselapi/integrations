@@ -55,19 +55,17 @@ export const client = {
     })),
   },
   chat: {
-    postMessage: request(
-      ({ channel, text }: { channel: string; text: string }) => ({
-        url: '/chat.postMessage',
-        method: 'post',
-        json: {
-          channel,
-          text,
-        },
-        schema: custom.object({
-          ts: z.string(),
-        }),
+    create: request(({ channel, text }: { channel: string; text: string }) => ({
+      url: '/chat.postMessage',
+      method: 'post',
+      json: {
+        channel,
+        text,
+      },
+      schema: custom.object({
+        ts: z.string(),
       }),
-    ),
+    })),
     update: request(
       ({
         channel,
