@@ -74,6 +74,7 @@ export const makeRequestFactory = (
               (err) => err instanceof SyntaxError,
             ) ?? text,
           status: response.status,
+          headers: response.headers,
           cause: response,
         });
       }
