@@ -12,6 +12,6 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.sequenceTemplate.update(auth, input);
+    return await client.sequenceTemplates.update(auth, input);
   },
 );

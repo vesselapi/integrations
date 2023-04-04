@@ -54,7 +54,7 @@ export const client = {
       ),
     })),
   },
-  chat: {
+  messages: {
     create: request(({ channel, text }: { channel: string; text: string }) => ({
       url: '/chat.postMessage',
       method: 'post',
