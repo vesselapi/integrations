@@ -29,14 +29,13 @@ export {
 } from '@/platforms/salesloft';
 export { default as slack, types as slackTypes } from '@/platforms/slack';
 
-export const integrationsList: Platform<any, any, any, any, any>[] =
-  Object.values([
-    aircall,
-    apollo,
-    dialpad,
-    outreach,
-    ringcentral,
-    salesforce,
-    salesloft,
-    slack,
-  ]);
+export const integrationsList: Platform<any, any, any, any, any>[] = [
+  aircall,
+  apollo,
+  dialpad,
+  outreach,
+  ringcentral,
+  salesforce,
+  salesloft,
+  slack,
+];

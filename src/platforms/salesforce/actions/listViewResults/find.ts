@@ -15,7 +15,7 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.listViewResults.get(auth, {
+    return await client.listViewResults.find(auth, {
       Id: input.Id,
       objectType: input.objectType,
     });

@@ -112,7 +112,7 @@ const query = {
 
 export const client = {
   users: {
-    get: request(({ Id }: { Id: number }) => ({
+    find: request(({ Id }: { Id: number }) => ({
       url: `/sobjects/User/${Id}/`,
       method: 'get',
       schema: salesforceUser.passthrough(),
@@ -123,7 +123,7 @@ export const client = {
     }),
   },
   contacts: {
-    get: request(({ Id }: { Id: number }) => ({
+    find: request(({ Id }: { Id: number }) => ({
       url: `/sobjects/Contact/${Id}/`,
       method: 'get',
       schema: salesforceContact.passthrough(),
@@ -146,7 +146,7 @@ export const client = {
     })),
   },
   listViews: {
-    get: request(({ Id }: { Id: number }) => ({
+    find: request(({ Id }: { Id: number }) => ({
       url: `/sobjects/ListView/${Id}/`,
       method: 'get',
       schema: salesforceListView.passthrough(),
@@ -180,7 +180,7 @@ export const client = {
     ),
   },
   listViewResults: {
-    get: request(({ Id, objectType }: { Id: number; objectType: string }) => ({
+    find: request(({ Id, objectType }: { Id: number; objectType: string }) => ({
       url: `/sobjects/${objectType}/listviews/${Id}/results`,
       method: 'get',
       schema: salesforceListViewResult.passthrough(),

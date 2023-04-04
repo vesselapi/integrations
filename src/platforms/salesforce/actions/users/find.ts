@@ -14,6 +14,6 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.users.get(auth, { Id: input.id });
+    return await client.users.find(auth, { Id: input.id });
   },
 );
