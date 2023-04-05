@@ -20,7 +20,7 @@ import findListViewResult from './actions/list-view-results/find';
 import findUser from '@/platforms/salesforce/actions/users/find';
 import listUsers from '@/platforms/salesforce/actions/users/list';
 
-export * as utils from './actions/pagination';
+export * as pagination from './actions/pagination';
 export * as constants from './constants';
 export * as types from './schemas';
 export default platform('salesforce', {
