@@ -80,14 +80,10 @@ export const makeRequestFactory = (
       }
 
       const text = await response.text();
-      const getJsonText = () => {
-        try {
-          return JSON.parse(text);
-        } catch (err) {
-          return { body: text };
-        }
-      };
-      const body = getJsonText();
+      const body = guard(
+        () => JSON.parse(text),
+        (err) => err instanceof SyntaxError,
+      ) ?? { body: text };
 
       const zodResult = await options.schema.safeParseAsync(body);
       if (!zodResult.success) {
