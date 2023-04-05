@@ -79,7 +79,15 @@ export const makeRequestFactory = (
         });
       }
 
-      const body = await response.json();
+      const text = await response.text();
+      const getJsonText = () => {
+        try {
+          return JSON.parse(text);
+        } catch (err) {
+          return { body: text };
+        }
+      };
+      const body = getJsonText();
 
       const zodResult = await options.schema.safeParseAsync(body);
       if (!zodResult.success) {
