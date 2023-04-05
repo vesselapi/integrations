@@ -2,10 +2,11 @@ import { HttpsUrl } from '@/sdk';
 import { makeRequestFactory } from '@/sdk/client';
 import { omit, shake } from 'radash';
 import * as z from 'zod';
-import { API_DOMAIN, API_VERSION } from './constants';
+import { API_VERSION } from './constants';
 import {
   ListObjectInput,
   listResponseSchema,
+  RingcentralAuthAnswers,
   ringcentralCallLogSchema,
   RingcentralContactCreate,
   ringcentralContactSchema,
@@ -13,18 +14,25 @@ import {
   ringcentralExtensionSchema,
   RingcentralRingOutStart,
   ringcentralRingOutStatusSchema,
+  ringcentralUrlsByAccountType,
 } from './schemas';
 
-const BASE_URL = `${API_DOMAIN}/${API_VERSION}` as HttpsUrl;
+const baseUrl = (answers: RingcentralAuthAnswers) =>
+  `${
+    ringcentralUrlsByAccountType[answers.accountType]
+  }/${API_VERSION}` as HttpsUrl;
 
-const request = makeRequestFactory(async (auth, options) => ({
-  ...options,
-  url: `${BASE_URL}${options.url}`,
-  headers: {
-    ...options.headers,
-    Authorization: `Bearer ${await auth.getToken()}`,
-  },
-}));
+const request = makeRequestFactory(async (auth, options) => {
+  const { answers } = await auth.getMetadata();
+  return {
+    ...options,
+    url: `${baseUrl(answers as RingcentralAuthAnswers)}${options.url}`,
+    headers: {
+      ...options.headers,
+      Authorization: `Bearer ${await auth.getToken()}`,
+    },
+  };
+});
 
 const findObject = (endpoint: string, schema: z.ZodSchema) =>
   request(({ id }: { id: string }) => ({
