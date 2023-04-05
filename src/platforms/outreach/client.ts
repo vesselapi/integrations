@@ -33,7 +33,7 @@ export const client = {
   users: {
     find: request(({ id }: { id: number }) => ({
       url: `/users/${id}`,
-      method: 'get',
+      method: 'GET',
       schema: z
         .object({
           data: outreachUser,
@@ -43,7 +43,7 @@ export const client = {
     list: request(
       ({ cursor }: { cursor?: `${typeof BASE_URL}/${string}` }) => ({
         url: cursor ?? `/users`,
-        method: 'get',
+        method: 'GET',
         query: { count: 'false', 'page[size]': `${DEFAULT_PAGE_SIZE}` },
         schema: z.intersection(
           z
@@ -59,7 +59,7 @@ export const client = {
   prospects: {
     find: request(({ id }: { id: number }) => ({
       url: `/prospects/${id}`,
-      method: 'get',
+      method: 'GET',
       schema: z
         .object({
           data: outreachProspect,
@@ -80,7 +80,7 @@ export const client = {
           'page[size]': `${DEFAULT_PAGE_SIZE}`,
           ...(filters ? mapKeys(filters, (key) => `filter[${key}]`) : {}),
         },
-        method: 'get',
+        method: 'GET',
         schema: z.intersection(
           z
             .object({
@@ -125,7 +125,7 @@ export const client = {
         json: {
           data: { type: 'prospect', ...prospect },
         },
-        method: 'post',
+        method: 'POST',
         schema: z
           .object({
             data: outreachProspect,
@@ -151,7 +151,7 @@ export const client = {
       }) => ({
         url: `/prospects/${prospect.id}`,
         json: { data: { type: 'prospect', ...prospect } },
-        method: 'patch',
+        method: 'PATCH',
         schema: z
           .object({
             data: outreachProspect,
@@ -163,7 +163,7 @@ export const client = {
   accounts: {
     find: request(({ id }: { id: number }) => ({
       url: `/accounts/${id}`,
-      method: 'get',
+      method: 'GET',
       schema: z
         .object({
           data: outreachAccount,
@@ -186,7 +186,7 @@ export const client = {
             ? mapKeys(shake(filters), (key) => `filter[${key}]`)
             : {}),
         },
-        method: 'get',
+        method: 'GET',
         schema: z.intersection(
           z
             .object({
@@ -201,7 +201,7 @@ export const client = {
   mailings: {
     find: request(({ id }: { id: number }) => ({
       url: `/mailings/${id}`,
-      method: 'get',
+      method: 'GET',
       schema: z
         .object({
           data: outreachMailing,
@@ -220,7 +220,7 @@ export const client = {
         };
       }) => ({
         url: cursor ?? `/mailings`,
-        method: 'get',
+        method: 'GET',
         query: {
           count: 'false',
           'page[size]': `${DEFAULT_PAGE_SIZE}`,
@@ -242,7 +242,7 @@ export const client = {
   sequences: {
     find: request(({ id }: { id: number }) => ({
       url: `/sequences/${id}`,
-      method: 'get',
+      method: 'GET',
       schema: z
         .object({
           data: outreachSequence,
@@ -252,7 +252,7 @@ export const client = {
     list: request(
       ({ cursor }: { cursor?: `${typeof BASE_URL}/${string}` }) => ({
         url: cursor ?? `/sequences`,
-        method: 'get',
+        method: 'GET',
         query: { count: 'false', 'page[size]': `${DEFAULT_PAGE_SIZE}` },
         schema: z.intersection(
           z
@@ -273,7 +273,7 @@ export const client = {
         };
       }) => ({
         url: `/sequences`,
-        method: 'post',
+        method: 'POST',
         json: {
           data: { type: 'sequence', ...sequence },
         },
@@ -316,7 +316,7 @@ export const client = {
             ...sequenceState,
           },
         },
-        method: 'post',
+        method: 'POST',
         schema: z
           .object({
             data: outreachSequenceState,
@@ -343,7 +343,7 @@ export const client = {
         };
       }) => ({
         url: `/sequenceSteps`,
-        method: 'post',
+        method: 'POST',
         json: {
           data: {
             type: 'sequenceStep',
@@ -360,7 +360,7 @@ export const client = {
     list: request(
       ({ cursor }: { cursor?: `${typeof BASE_URL}/${string}` }) => ({
         url: cursor ?? `/mailboxes`,
-        method: 'get',
+        method: 'GET',
         schema: z.intersection(
           z
             .object({
@@ -383,7 +383,7 @@ export const client = {
         };
       }) => ({
         url: `/templates`,
-        method: 'post',
+        method: 'POST',
         json: {
           data: {
             type: 'template',
@@ -418,7 +418,7 @@ export const client = {
         };
       }) => ({
         url: `/sequenceTemplates`,
-        method: 'post',
+        method: 'POST',
         json: {
           data: {
             type: 'sequenceTemplate',
@@ -450,7 +450,7 @@ export const client = {
       }) => ({
         url: `/emailAddresses`,
         json: { data: { type: 'emailAddress', ...emailAddress } },
-        method: 'post',
+        method: 'POST',
         schema: z
           .object({
             data: outreachEmailAddress,

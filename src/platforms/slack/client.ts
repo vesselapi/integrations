@@ -25,7 +25,7 @@ export const client = {
   users: {
     list: request(({ cursor }: { cursor?: string }) => ({
       url: '/users.list',
-      method: 'get',
+      method: 'GET',
       query: {
         ...(cursor ? { cursor } : {}),
         limit: `${DEFAULT_PAGE_SIZE}`,
@@ -40,7 +40,7 @@ export const client = {
   conversations: {
     list: request(({ cursor }: { cursor?: string }) => ({
       url: '/conversations.list',
-      method: 'get',
+      method: 'GET',
       query: {
         ...(cursor ? { cursor } : {}),
         limit: `${DEFAULT_PAGE_SIZE}`,
@@ -55,7 +55,7 @@ export const client = {
   messages: {
     create: request(({ channel, text }: { channel: string; text: string }) => ({
       url: '/chat.postMessage',
-      method: 'post',
+      method: 'POST',
       json: {
         channel,
         text,
@@ -75,7 +75,7 @@ export const client = {
         text: string;
       }) => ({
         url: '/chat.update',
-        method: 'post',
+        method: 'POST',
         json: {
           channel,
           ts,
