@@ -23,6 +23,13 @@ export default platform('aircall', {
       tokenUrl: 'https://api.aircall.io/v1/oauth/token',
     }),
     auth.apiToken({
+      questions: [
+        {
+          type: 'string',
+          id: 'api-id',
+          label: 'API ID',
+        },
+      ],
       default: true,
     }),
   ],
