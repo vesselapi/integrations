@@ -14,6 +14,7 @@ describe('outreach platform oauth', () => {
         clientId: 'clientid',
         redirectUrl: 'https://localhost:20000',
         state: 'state',
+        appMetadata: {},
       });
       expect(url).toMatch(/scope=alpha%20omega/g);
     });

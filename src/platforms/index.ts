@@ -8,6 +8,7 @@ import ringcentral from '@/platforms/ringcentral';
 import salesforce from '@/platforms/salesforce';
 import salesloft from '@/platforms/salesloft';
 import slack from '@/platforms/slack';
+import teams from '@/platforms/teams';
 import { Platform } from '@/sdk';
 
 export {
@@ -38,6 +39,7 @@ export {
   types as salesloftTypes,
 } from '@/platforms/salesloft';
 export { default as slack, types as slackTypes } from '@/platforms/slack';
+export { default as teams, types as teamsTypes } from '@/platforms/teams';
 
 export const integrationsList: Platform<any, any, any, any, any>[] = [
   aircall,
@@ -50,4 +52,5 @@ export const integrationsList: Platform<any, any, any, any, any>[] = [
   salesloft,
   slack,
   mailchimp,
+  teams,
 ];

@@ -1,4 +1,4 @@
-import { client } from '@/platforms/slack/client';
+import { client } from '@/platforms/microsoft/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
 
@@ -10,11 +10,12 @@ export default action(
     mutation: true,
     schema: z.object({
       text: z.string(),
-      channel: z.string(),
+      channelId: z.string(),
+      teamId: z.string(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.messages.create(auth, input);
+    return await client.teams.messages.create(auth, input);
   },
 );
