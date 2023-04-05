@@ -6,7 +6,7 @@ import * as z from 'zod';
 import { API_DOMAIN, API_VERSION } from './constants';
 import { mailchimpList, mailchimpMember, MailchimpMember } from './schemas';
 
-const BASE_URL = `.${API_DOMAIN}/${API_VERSION}` as HttpsUrl;
+const BASE_URL = `${API_DOMAIN}/${API_VERSION}` as HttpsUrl;
 
 const metaRequest = makeRequestFactory(async (auth, options) => ({
   ...options,
@@ -23,7 +23,7 @@ const request = makeRequestFactory(async (auth, options) => {
   }))(auth, {});
   return {
     ...options,
-    url: `https://${dc}${BASE_URL}${options.url}`,
+    url: `https://${dc}.${BASE_URL}${options.url}`,
     headers: {
       ...options.headers,
       'Content-Type': 'application/json',

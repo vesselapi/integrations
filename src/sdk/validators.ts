@@ -26,6 +26,3 @@ export const formattedPhoneNumber = (format?: NumberFormat) =>
 // Create a shorthand for zod object passthrough since we need to use it everywhere.
 export const object = ((shape: any, params: any) =>
   z.object(shape, params).passthrough()) as unknown as typeof z.object;
-
-export const objectCreate = (schema: z.AnyZodObject, idKey: string = 'id') =>
-  schema.partial().omit({ [idKey]: true });

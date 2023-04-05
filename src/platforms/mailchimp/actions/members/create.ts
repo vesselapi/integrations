@@ -12,10 +12,15 @@ export default action(
     mutation: true,
     schema: custom.object({
       list_id: z.string(),
-      member: custom.objectCreate(mailchimpMember).required({
-        email_address: true,
-        status: true,
-      }),
+      member: mailchimpMember
+        .partial()
+        .required({
+          email_address: true,
+          status: true,
+        })
+        .omit({
+          id: true,
+        }),
     }),
     scopes: [],
   },
