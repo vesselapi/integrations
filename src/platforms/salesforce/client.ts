@@ -86,10 +86,10 @@ export const client = {
       json: contact,
       schema: salesforceContactCreateResponse,
     })),
-    update: request((contact: SalesforceContactUpdate) => ({
-      url: `/sobjects/Contact/${contact.Id}/`,
+    update: request(({ Id, Contact }: SalesforceContactUpdate) => ({
+      url: `/sobjects/Contact/${Id}/`,
       method: 'PATCH',
-      json: contact,
+      json: Contact,
       schema: salesforceContact,
     })),
   },

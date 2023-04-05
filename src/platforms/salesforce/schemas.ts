@@ -42,14 +42,16 @@ export const salesforceContactCreateResponse = validators.object({
 
 export const salesforceContactUpdate = validators.object({
   Id: z.string(),
-  Email: z.string().email().optional(),
-  FirstName: z.string().optional(),
-  LastName: z.string().optional(),
-  Title: z.string().optional(),
-  Phone: z.string().optional(),
-  MobilePhone: z.string().optional(),
-  AccountId: z.string().optional(),
-  OwnerId: z.string().optional(),
+  Contact: z.object({
+    Email: z.string().email().optional(),
+    FirstName: z.string().optional(),
+    LastName: z.string().optional(),
+    Title: z.string().optional(),
+    Phone: z.string().optional(),
+    MobilePhone: z.string().optional(),
+    AccountId: z.string().optional(),
+    OwnerId: z.string().optional(),
+  }),
 });
 
 export const salesforceListView = validators.object({
