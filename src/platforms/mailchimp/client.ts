@@ -18,7 +18,7 @@ const metaRequest = makeRequestFactory(async (auth, options) => ({
 const request = makeRequestFactory(async (auth, options) => {
   const { dc } = await metaRequest(({}) => ({
     url: 'https://login.mailchimp.com/oauth2/metadata',
-    method: 'get',
+    method: 'GET',
     schema: custom.object({ dc: z.string() }),
   }))(auth, {});
   return {
@@ -36,12 +36,12 @@ export const client = {
   lists: {
     find: request(({ id }: { id: string }) => ({
       url: `/lists/${id}`,
-      method: 'get',
+      method: 'GET',
       schema: z.any(),
     })),
     list: request(({ count, offset }: { count?: number; offset?: number }) => ({
       url: `/lists`,
-      method: 'get',
+      method: 'GET',
       schema: custom.object({
         lists: z.array(mailchimpList),
       }),
@@ -65,7 +65,7 @@ export const client = {
         query: string;
       }) => ({
         url: `/search-members`,
-        method: 'get',
+        method: 'GET',
         schema: custom.object({
           exact_matches: custom.object({
             members: z.array(mailchimpMember),
@@ -94,7 +94,7 @@ export const client = {
         member: Partial<MailchimpMember>;
       }) => ({
         url: `/lists/${list_id}/members`,
-        method: 'post',
+        method: 'POST',
         schema: custom.object({
           id: z.string(),
         }),
@@ -112,7 +112,7 @@ export const client = {
         member: Partial<MailchimpMember>;
       }) => ({
         url: `/lists/${list_id}/members/${subscriber_hash}`,
-        method: 'patch',
+        method: 'PATCH',
         schema: custom.object({
           id: z.string(),
         }),

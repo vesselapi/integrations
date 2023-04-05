@@ -33,7 +33,7 @@ export const client = {
   users: {
     find: request(({ id }: { id: number | string }) => ({
       url: `/users/${id}`,
-      method: 'get',
+      method: 'GET',
       schema: z
         .object({
           user: aircallUser,
@@ -51,7 +51,7 @@ export const client = {
         per_page?: number;
       }) => ({
         url: next_page_link ?? `/users`,
-        method: 'get',
+        method: 'GET',
         query: shake({ from, per_page: `${per_page}` }),
         schema: z
           .object({
@@ -64,7 +64,7 @@ export const client = {
     startCall: request(
       (call: { id: string | number } & AircallStartUserCall) => ({
         url: `/users/${call.id}/calls`,
-        method: 'post',
+        method: 'POST',
         json: call,
         schema: z.any(),
       }),
@@ -73,7 +73,7 @@ export const client = {
   calls: {
     find: request(({ id }: { id: number | string }) => ({
       url: `/calls/${id}`,
-      method: 'get',
+      method: 'GET',
       schema: z
         .object({
           call: aircallCall,
@@ -91,7 +91,7 @@ export const client = {
         per_page?: number;
       }) => ({
         url: next_page_link ?? `/calls`,
-        method: 'get',
+        method: 'GET',
         query: shake({ from, per_page: `${per_page}` }),
         schema: z
           .object({
@@ -105,7 +105,7 @@ export const client = {
   contacts: {
     find: request(({ id }: { id: number | string }) => ({
       url: `/contacts/${id}`,
-      method: 'get',
+      method: 'GET',
       schema: z
         .object({
           contact: aircallContact,
@@ -123,7 +123,7 @@ export const client = {
         per_page?: number;
       }) => ({
         url: next_page_link ?? `/contacts`,
-        method: 'get',
+        method: 'GET',
         query: shake({ from, per_page: `${per_page}` }),
         schema: z
           .object({
@@ -135,7 +135,7 @@ export const client = {
     ),
     create: request((contact: AircallContactCreate) => ({
       url: `/contacts`,
-      method: 'post',
+      method: 'POST',
       json: contact,
       schema: z
         .object({
@@ -146,7 +146,7 @@ export const client = {
     update: request(
       (contact: { id: string | number } & AircallContactUpdate) => ({
         url: `/contacts/${contact.id}`,
-        method: 'post',
+        method: 'POST',
         json: contact,
         schema: z
           .object({

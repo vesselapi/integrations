@@ -39,7 +39,7 @@ export const client = {
         page?: number;
       }) => ({
         url: `/people.json`,
-        method: 'get',
+        method: 'GET',
         query: shake({
           email_addresses,
           per_page,
@@ -55,7 +55,7 @@ export const client = {
     ),
     find: request(({ id }: { id: string }) => ({
       url: `/people/${id}.json`,
-      method: 'get',
+      method: 'GET',
       schema: z
         .object({
           data: salesloftPerson,
@@ -64,7 +64,7 @@ export const client = {
     })),
     create: request((person: SalesloftPersonCreate) => ({
       url: `/people.json`,
-      method: 'post',
+      method: 'POST',
       json: person,
       schema: z
         .object({
@@ -74,7 +74,7 @@ export const client = {
     })),
     update: request((person: SalesloftPersonUpdate & { id: string }) => ({
       url: `/people/${person.id}.json`,
-      method: 'put',
+      method: 'PUT',
       json: person,
       schema: z
         .object({
@@ -93,7 +93,7 @@ export const client = {
         page?: number;
       }) => ({
         url: `/cadences.json`,
-        method: 'get',
+        method: 'GET',
         query: shake({
           per_page,
           page,
@@ -108,7 +108,7 @@ export const client = {
     ),
     import: request((cadence: SalesloftCadenceImport) => ({
       url: `/cadence_imports.json`,
-      method: 'post',
+      method: 'POST',
       json: cadence,
       schema: salesloftCadenceImportResponse,
     })),
@@ -125,7 +125,7 @@ export const client = {
         user_id: string;
       }) => ({
         url: `/cadence_memberships.json`,
-        method: 'post',
+        method: 'POST',
         json: shake({ cadence_id, person_id, user_id }),
         schema: z
           .object({
@@ -138,7 +138,7 @@ export const client = {
   users: {
     find: request(({ id }: { id: string }) => ({
       url: `/users/${id}.json`,
-      method: 'get',
+      method: 'GET',
       schema: z
         .object({
           data: salesloftUser,
@@ -154,7 +154,7 @@ export const client = {
         page?: number;
       }) => ({
         url: `/users.json`,
-        method: 'get',
+        method: 'GET',
         query: shake({
           per_page,
           page,
@@ -182,7 +182,7 @@ export const client = {
         cadence_id?: string;
       }) => ({
         url: `/activities/emails.json`,
-        method: 'get',
+        method: 'GET',
         query: shake({
           per_page,
           page,
@@ -199,7 +199,7 @@ export const client = {
     ),
     find: request(({ id }: { id: string }) => ({
       url: `/activities/emails/${id}.json`,
-      method: 'get',
+      method: 'GET',
       schema: z
         .object({
           data: salesloftEmail,
@@ -210,7 +210,7 @@ export const client = {
   emailBodies: {
     find: request(({ id }: { id: string }) => ({
       url: `/mime_email_payloads/${id}.json`,
-      method: 'get',
+      method: 'GET',
       schema: z
         .object({
           data: salesloftEmailBody,
@@ -230,7 +230,7 @@ export const client = {
         field_type?: string;
       }) => ({
         url: `/custom_fields.json`,
-        method: 'get',
+        method: 'GET',
         query: shake({
           per_page,
           page,
@@ -246,7 +246,7 @@ export const client = {
     ),
     create: request((customField: SalesloftCustomFieldCreate) => ({
       url: `/custom_fields.json`,
-      method: 'post',
+      method: 'POST',
       json: customField,
       schema: z
         .object({

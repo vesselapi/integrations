@@ -29,14 +29,14 @@ const request = makeRequestFactory(async (auth, options) => ({
 const findObject = (endpoint: string, schema: z.ZodSchema) =>
   request(({ id }: { id: string }) => ({
     url: `/${endpoint}/${id}`,
-    method: 'get',
+    method: 'GET',
     schema,
   }));
 
 const listObject = (endpoint: string, schema: z.ZodSchema) =>
   request(({ page, perPage }: ListObjectInput) => ({
     url: `/${endpoint}`,
-    method: 'get',
+    method: 'GET',
     query: shake({
       page: page ? `${page}` : undefined,
       perPage: perPage ? `${perPage}` : undefined,
@@ -50,7 +50,7 @@ const createObject = <T extends Record<string, unknown>>(
 ) =>
   request((body: T) => ({
     url: `/${endpoint}`,
-    method: 'post',
+    method: 'POST',
     schema,
     json: body,
   }));
@@ -61,7 +61,7 @@ const updateObject = <T extends Record<string, unknown>>(
 ) =>
   request((obj: T) => ({
     url: `/${endpoint}/${obj.id}`,
-    method: 'put',
+    method: 'PUT',
     schema,
     json: omit(obj, ['id']),
   }));
@@ -76,7 +76,7 @@ const makeClient = () => {
       ),
       ringOut: request((body: RingcentralRingOutStart) => ({
         url: `/account/~/extension/${body.extensionId}/ring-out`,
-        method: 'post',
+        method: 'POST',
         json: omit(body, ['extensionId']),
         schema: ringcentralRingOutStatusSchema,
       })),

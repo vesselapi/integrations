@@ -29,7 +29,7 @@ const request = makeRequestFactory(async (auth, options) => {
     ...options,
     url: `${BASE_URL}/${options.url}`,
     query:
-      options.method === 'get'
+      options.method === 'GET'
         ? {
             ...options.query,
             api_key,
@@ -48,7 +48,7 @@ export const client = {
   users: {
     search: request(({ page }: { page?: number }) => ({
       url: `/users/search`,
-      method: 'get',
+      method: 'GET',
       query: shake({ page }),
       schema: z
         .object({
@@ -68,7 +68,7 @@ export const client = {
         page?: number;
       }) => ({
         url: `/accounts/search`,
-        method: 'post',
+        method: 'POST',
         json: shake({ page, q_organization_name }),
         schema: z
           .object({
@@ -80,7 +80,7 @@ export const client = {
     ),
     create: request((account: ApolloAccountCreate) => ({
       url: `/accounts`,
-      method: 'post',
+      method: 'POST',
       json: shake(account),
       schema: z
         .object({
@@ -90,7 +90,7 @@ export const client = {
     })),
     update: request((account: { id: string } & ApolloAccountUpdate) => ({
       url: `/accounts/${account.id}`,
-      method: 'put',
+      method: 'PUT',
       json: shake(account),
       schema: z
         .object({
@@ -103,7 +103,7 @@ export const client = {
     search: request(
       ({ q_keywords, page }: { q_keywords?: string; page?: number }) => ({
         url: `/contacts/search`,
-        method: 'post',
+        method: 'POST',
         json: shake({ page, q_keywords }),
         schema: z
           .object({
@@ -115,7 +115,7 @@ export const client = {
     ),
     create: request((contact: ApolloContactCreate) => ({
       url: `/contacts`,
-      method: 'post',
+      method: 'POST',
       json: shake(contact),
       schema: z
         .object({
@@ -125,7 +125,7 @@ export const client = {
     })),
     update: request((contact: { id: string } & ApolloContactUpdate) => ({
       url: `/contacts/${contact.id}`,
-      method: 'put',
+      method: 'PUT',
       json: shake(contact),
       schema: z
         .object({
@@ -144,7 +144,7 @@ export const client = {
         page?: number;
       }) => ({
         url: `/emailer_messages/search`,
-        method: 'post',
+        method: 'POST',
         json: shake({ page, emailer_campaign_id }),
         schema: z
           .object({
@@ -158,7 +158,7 @@ export const client = {
     list: request(
       ({ contact_id, types }: { contact_id?: string; types?: string[] }) => ({
         url: `/activities`,
-        method: 'get',
+        method: 'GET',
         query: shake({
           contact_id,
           ...(types
@@ -181,7 +181,7 @@ export const client = {
     search: request(
       ({ q_keywords, page }: { q_keywords?: string; page?: number }) => ({
         url: `/emailer_campaigns/search`,
-        method: 'post',
+        method: 'POST',
         json: shake({ page, q_keywords }),
         schema: z
           .object({
@@ -193,7 +193,7 @@ export const client = {
     ),
     create: request((sequence: ApolloCreateSequence) => ({
       url: `/emailer_campaigns`,
-      method: 'post',
+      method: 'POST',
       json: shake(sequence),
       schema: z
         .object({
@@ -212,7 +212,7 @@ export const client = {
         send_email_from_email_account_id?: string;
       }) => ({
         url: `/emailer_campaigns/${emailer_campaign_id}/add_contact_ids`,
-        method: 'post',
+        method: 'POST',
         json: shake({
           contact_ids,
           emailer_campaign_id,
@@ -230,7 +230,7 @@ export const client = {
   customFields: {
     list: request(({ page }: { page?: number }) => ({
       url: `/typed_custom_fields`,
-      method: 'get',
+      method: 'GET',
       query: shake({ page }),
       schema: z
         .object({
@@ -240,7 +240,7 @@ export const client = {
     })),
     create: request((customFieldCreate: ApolloCreateCustomField) => ({
       url: `/typed_custom_fields`,
-      method: 'post',
+      method: 'POST',
       json: shake(customFieldCreate),
       schema: z
         .object({
@@ -252,7 +252,7 @@ export const client = {
   emailAccounts: {
     list: request(() => ({
       url: `/email_accounts`,
-      method: 'get',
+      method: 'GET',
       schema: z
         .object({
           email_accounts: z.array(apolloEmailAccount),
@@ -263,7 +263,7 @@ export const client = {
   sequenceSteps: {
     create: request((step: ApolloCreateSequenceStep) => ({
       url: `/emailer_steps`,
-      method: 'post',
+      method: 'POST',
       json: shake(step),
       schema: apolloSequenceStep,
     })),
@@ -272,7 +272,7 @@ export const client = {
     update: request(
       (template: { id: string } & ApolloUpdateSequenceTemplate) => ({
         url: `/emailer_touches/${template.id}`,
-        method: 'put',
+        method: 'PUT',
         json: shake(template),
         schema: z
           .object({
