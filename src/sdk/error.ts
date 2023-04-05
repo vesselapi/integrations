@@ -8,6 +8,7 @@ export type HttpErrorMeta = {
   status: number;
   body: string | object | object[];
   cause?: unknown;
+  headers: Headers;
 };
 
 export type ClientErrorMeta = {

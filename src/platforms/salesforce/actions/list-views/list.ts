@@ -11,7 +11,7 @@ export default action(
     resource: 'list-views',
     mutation: false,
     schema: z.object({
-      cursor: z.number(),
+      cursor: z.string().optional(),
       objectType: z.string().optional(),
     }),
     scopes: [],

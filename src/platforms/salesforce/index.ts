@@ -12,10 +12,10 @@ import findContact from '@/platforms/salesforce/actions/contacts/find';
 import listContacts from '@/platforms/salesforce/actions/contacts/list';
 import updateContact from '@/platforms/salesforce/actions/contacts/update';
 
-import findListView from '@/platforms/salesforce/actions/listViews/find';
-import listListViews from '@/platforms/salesforce/actions/listViews/list';
+import findListView from '@/platforms/salesforce/actions/list-views/find';
+import listListViews from '@/platforms/salesforce/actions/list-views/list';
 
-import findListViewResult from './actions/listViewResults/find';
+import findListViewResult from './actions/list-view-results/find';
 
 import findUser from '@/platforms/salesforce/actions/users/find';
 import listUsers from '@/platforms/salesforce/actions/users/list';

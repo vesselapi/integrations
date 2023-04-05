@@ -1,19 +1,19 @@
-import { client } from '@/platforms/salesforce/client';
+import { client } from '@/platforms/mailchimp/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
 
 export default action(
-  'find-contact',
+  'find-list',
   {
     operation: 'find',
-    resource: 'contacts',
+    resource: 'lists',
     mutation: false,
     schema: z.object({
-      Id: z.string(),
+      id: z.string(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.contacts.find(auth, { Id: input.Id });
+    return await client.lists.find(auth, input);
   },
 );

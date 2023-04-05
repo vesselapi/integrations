@@ -14,17 +14,20 @@ import {
 
 const base64 = (str: string) => Buffer.from(str).toString('base64');
 
-const request = makeRequestFactory(async (auth, options) => ({
-  ...options,
-  url: `${BASE_URL}/${options.url}`,
-  headers: {
-    ...options.headers,
-    Authorization:
-      auth.type === 'oauth2'
-        ? `Bearer ${await auth.getToken()}`
-        : `Basic ${base64(await auth.getToken())}`,
-  },
-}));
+const request = makeRequestFactory(async (auth, options) => {
+  const { answers } = await auth.getMetadata();
+  return {
+    ...options,
+    url: `${BASE_URL}${options.url}`,
+    headers: {
+      ...options.headers,
+      Authorization:
+        auth.type === 'oauth2'
+          ? `Bearer ${await auth.getToken()}`
+          : `Basic ${base64(`${answers['api-id']}:${await auth.getToken()}`)}`,
+    },
+  };
+});
 
 export const client = {
   users: {
