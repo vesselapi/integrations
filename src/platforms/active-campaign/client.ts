@@ -25,7 +25,7 @@ export const client = {
   users: {
     list: request(() => ({
       url: `/api/3/users`,
-      method: 'get',
+      method: 'GET',
       schema: z
         .object({
           users: z.array(activeCampaignUser),
@@ -36,7 +36,7 @@ export const client = {
   lists: {
     list: request(({ limit }: { limit?: number }) => ({
       url: `/api/3/lists`,
-      method: 'get',
+      method: 'GET',
       query: shake({
         limit,
       }),
@@ -48,7 +48,7 @@ export const client = {
     })),
     find: request(({ id }: { id: string }) => ({
       url: `/api/3/lists/${id}`,
-      method: 'get',
+      method: 'GET',
       schema: z
         .object({
           list: activeCampaignList,
@@ -59,7 +59,7 @@ export const client = {
   contacts: {
     list: request(() => ({
       url: `/api/3/contacts`,
-      method: 'get',
+      method: 'GET',
       schema: z
         .object({
           contacts: z.array(activeCampaignContact),
@@ -68,7 +68,7 @@ export const client = {
     })),
     find: request(({ id }: { id: string }) => ({
       url: `/api/3/contacts/${id}`,
-      method: 'get',
+      method: 'GET',
       schema: z
         .object({
           contact: activeCampaignContact,
@@ -89,7 +89,7 @@ export const client = {
         };
       }) => ({
         url: `/api/3/contacts/${id}`,
-        method: 'put',
+        method: 'PUT',
         schema: z
           .object({
             contact: activeCampaignContact,
@@ -113,7 +113,7 @@ export const client = {
         phone?: string;
       }) => ({
         url: `/api/3/contacts`,
-        method: 'post',
+        method: 'POST',
         schema: z
           .object({
             contact: activeCampaignContact,

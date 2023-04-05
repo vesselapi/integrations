@@ -38,14 +38,14 @@ const makeClient = (): DialpadClient => {
   const findObject = (module: DialpadModules, schema: z.ZodSchema) =>
     request(({ id }: { id: string }) => ({
       url: `/${module}/${id}`,
-      method: 'get',
+      method: 'GET',
       schema,
     }));
 
   const listObject = (module: DialpadModules, schema: z.ZodSchema) =>
     request(({ cursor }: { cursor?: string }) => ({
       url: `/${module}`,
-      method: 'get',
+      method: 'GET',
       query: cursor ? { cursor } : undefined,
       schema,
     }));
@@ -56,7 +56,7 @@ const makeClient = (): DialpadClient => {
   ) =>
     request((body: T) => ({
       url: `/${module}/`,
-      method: 'post',
+      method: 'POST',
       schema,
       json: body,
     }));
@@ -67,7 +67,7 @@ const makeClient = (): DialpadClient => {
   ) =>
     request((body: T) => ({
       url: `/${module}/`,
-      method: 'put',
+      method: 'PUT',
       schema,
       json: body,
     }));
@@ -98,7 +98,7 @@ const makeClient = (): DialpadClient => {
       list: listObject('calls', listResponseSchema(dialpadCallSchema)),
       start: request((body: DialpadCallStart) => ({
         url: `/call`,
-        method: 'post',
+        method: 'POST',
         schema: z.object({
           id: z.string(),
         }),
