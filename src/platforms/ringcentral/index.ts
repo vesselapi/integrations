@@ -1,4 +1,5 @@
 import { auth, platform } from '../../sdk';
+import callLogsFind from './actions/call-logs/find';
 import callLogsList from './actions/call-logs/list';
 import contactsCreate from './actions/contacts/create';
 import contactsFind from './actions/contacts/find';
@@ -47,6 +48,7 @@ export default platform('ringcentral', {
     extensionsRingOut,
 
     callLogsList,
+    callLogsFind,
 
     contactsList,
     contactsFind,
