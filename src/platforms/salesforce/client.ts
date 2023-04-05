@@ -62,41 +62,41 @@ export const client = {
     find: request(({ Id }: { Id: string }) => ({
       url: `/sobjects/User/${Id}/`,
       method: 'get',
-      schema: salesforceUser.passthrough(),
+      schema: salesforceUser,
     })),
     list: query.list({
       objectType: 'User',
-      schema: salesforceUser.passthrough(),
+      schema: salesforceUser,
     }),
   },
   contacts: {
     find: request(({ Id }: { Id: string }) => ({
       url: `/sobjects/Contact/${Id}/`,
       method: 'get',
-      schema: salesforceContact.passthrough(),
+      schema: salesforceContact,
     })),
     list: query.list({
       objectType: 'Contact',
-      schema: salesforceContact.passthrough(),
+      schema: salesforceContact,
     }),
     create: request((contact: SalesforceContactCreate) => ({
       url: `/sobjects/Contact`,
       method: 'post',
       json: contact,
-      schema: salesforceContact.passthrough(),
+      schema: salesforceContact,
     })),
     update: request((contact: SalesforceContactUpdate) => ({
       url: `/sobjects/Contact/${contact.Id}/`,
       method: 'patch',
       json: contact,
-      schema: salesforceContact.passthrough(),
+      schema: salesforceContact,
     })),
   },
   listViews: {
     find: request(({ Id }: { Id: string }) => ({
       url: `/sobjects/ListView/${Id}/`,
       method: 'get',
-      schema: salesforceListView.passthrough(),
+      schema: salesforceListView,
     })),
     list: request(
       ({
@@ -127,7 +127,7 @@ export const client = {
     find: request(({ Id, objectType }: { Id: string; objectType: string }) => ({
       url: `/sobjects/${objectType}/listviews/${Id}/results`,
       method: 'get',
-      schema: salesforceListViewResult.passthrough(),
+      schema: salesforceListViewResult,
     })),
   },
   passthrough: request.passthrough(),
