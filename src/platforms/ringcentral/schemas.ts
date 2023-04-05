@@ -1,5 +1,18 @@
+import { HttpsUrl } from '@/sdk';
 import * as custom from '@/sdk/validators';
 import { z } from 'zod';
+
+export type RingcentralAccountType = 'production' | 'sandbox';
+export interface RingcentralAuthAnswers extends Record<string, string> {
+  accountType: RingcentralAccountType;
+}
+export const ringcentralUrlsByAccountType: Record<
+  RingcentralAccountType,
+  HttpsUrl
+> = {
+  production: `https://platform.ringcentral.com/restapi`,
+  sandbox: `https://platform.devtest.ringcentral.com/restapi`,
+};
 
 export const listResponseSchema = (itemSchema: z.ZodSchema<any>) =>
   z
