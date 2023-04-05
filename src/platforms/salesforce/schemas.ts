@@ -37,7 +37,6 @@ export const salesforceContactCreate = z.object({
 });
 
 export const salesforceContactUpdate = z.object({
-  Id: z.string(),
   Email: z.string().email().optional(),
   FirstName: z.string().optional(),
   LastName: z.string().optional(),
