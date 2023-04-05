@@ -2,7 +2,7 @@ import { HttpsUrl } from '@/sdk';
 import * as validators from '@/sdk/validators';
 import { z } from 'zod';
 
-export const salesforceUser = z.object({
+export const salesforceUser = validators.object({
   Id: z.string(),
   FirstName: z.string(),
   LastName: z.string(),
@@ -11,7 +11,7 @@ export const salesforceUser = z.object({
   LastModifiedDate: validators.date(),
 });
 
-export const salesforceContact = z.object({
+export const salesforceContact = validators.object({
   Id: z.string(),
   FirstName: z.string(),
   LastName: z.string(),
@@ -25,7 +25,7 @@ export const salesforceContact = z.object({
   OwnerId: z.string(),
 });
 
-export const salesforceContactCreate = z.object({
+export const salesforceContactCreateInput = validators.object({
   Email: z.string().email(),
   FirstName: z.string().optional(),
   LastName: z.string().optional(),
@@ -36,7 +36,11 @@ export const salesforceContactCreate = z.object({
   OwnerId: z.string().optional(),
 });
 
-export const salesforceContactUpdate = z.object({
+export const salesforceContactCreateResponse = validators.object({
+  id: z.string(),
+});
+
+export const salesforceContactUpdate = validators.object({
   Id: z.string(),
   Email: z.string().email().optional(),
   FirstName: z.string().optional(),
@@ -48,7 +52,7 @@ export const salesforceContactUpdate = z.object({
   OwnerId: z.string().optional(),
 });
 
-export const salesforceListView = z.object({
+export const salesforceListView = validators.object({
   Id: z.string(),
   Name: z.string(),
   CreatedDate: validators.date(),
@@ -56,15 +60,15 @@ export const salesforceListView = z.object({
   CreatedById: z.string(),
 });
 
-export const salesforceListViewResult = z.object({
+export const salesforceListViewResult = validators.object({
   developerName: z.string(),
   done: z.boolean(),
   id: z.string(),
   label: z.string(),
   records: z.array(
-    z.object({
+    validators.object({
       columns: z.array(
-        z.object({
+        validators.object({
           fieldNameOrPath: z.string(),
           value: z.string(),
         }),
@@ -98,6 +102,8 @@ export const salesforceOAuthUrlsByAccountType: Record<
 export type SalesforceSupportedObjectType = 'User' | 'Contact' | 'ListView';
 export type SalesforceUser = z.infer<typeof salesforceUser>;
 export type SalesforceContact = z.infer<typeof salesforceContact>;
-export type SalesforceContactCreate = z.infer<typeof salesforceContactCreate>;
+export type SalesforceContactCreateInput = z.infer<
+  typeof salesforceContactCreateInput
+>;
 export type SalesforceContactUpdate = z.infer<typeof salesforceContactUpdate>;
 export type SalesforceListView = z.infer<typeof salesforceListView>;

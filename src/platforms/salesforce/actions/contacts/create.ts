@@ -1,6 +1,6 @@
 import { client } from '@/platforms/salesforce/client';
 import { action } from '@/sdk';
-import { salesforceContactCreate } from '../../schemas';
+import { salesforceContactCreateInput } from '../../schemas';
 
 export default action(
   'create-contact',
@@ -8,7 +8,7 @@ export default action(
     operation: 'create',
     resource: 'contacts',
     mutation: true,
-    schema: salesforceContactCreate,
+    schema: salesforceContactCreateInput,
     scopes: [],
   },
   async ({ input, auth }) => {
