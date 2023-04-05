@@ -3,10 +3,10 @@ import { Auth, HttpsUrl } from '@/sdk/types';
 import { guard, isFunction, trim } from 'radash';
 import { z } from 'zod';
 
-export type HttpMethod = 'get' | 'post' | 'put' | 'delete' | 'patch';
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 export type HttpOptions = {
   url: `${HttpsUrl}/${string}` | `/${string}`;
-  method: 'get' | 'post' | 'put' | 'delete' | 'patch';
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   headers?: Record<string, string>;
   json?: Record<string, unknown>;
   query?: Record<string, string>;
@@ -79,7 +79,11 @@ export const makeRequestFactory = (
         });
       }
 
-      const body = await response.json();
+      const text = await response.text();
+      const body = guard(
+        () => JSON.parse(text),
+        (err) => err instanceof SyntaxError,
+      ) ?? { body: text };
 
       const zodResult = await options.schema.safeParseAsync(body);
       if (!zodResult.success) {

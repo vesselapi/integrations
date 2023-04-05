@@ -5,7 +5,8 @@ import { salesforceQueryBuilder } from './actions/query-builder';
 import { SALESFORCE_API_VERSION } from './constants';
 import {
   salesforceContact,
-  SalesforceContactCreate,
+  SalesforceContactCreateInput,
+  salesforceContactCreateResponse,
   SalesforceContactUpdate,
   salesforceListView,
   salesforceListViewResult,
@@ -47,7 +48,7 @@ const query = {
         relationalSelect,
         limit,
       })}`,
-      method: 'get',
+      method: 'GET',
       schema: z
         .object({
           records: z.array(schema),
@@ -61,42 +62,42 @@ export const client = {
   users: {
     find: request(({ Id }: { Id: string }) => ({
       url: `/sobjects/User/${Id}/`,
-      method: 'get',
-      schema: salesforceUser.passthrough(),
+      method: 'GET',
+      schema: salesforceUser,
     })),
     list: query.list({
       objectType: 'User',
-      schema: salesforceUser.passthrough(),
+      schema: salesforceUser,
     }),
   },
   contacts: {
     find: request(({ Id }: { Id: string }) => ({
       url: `/sobjects/Contact/${Id}/`,
-      method: 'get',
-      schema: salesforceContact.passthrough(),
+      method: 'GET',
+      schema: salesforceContact,
     })),
     list: query.list({
       objectType: 'Contact',
-      schema: salesforceContact.passthrough(),
+      schema: salesforceContact,
     }),
-    create: request((contact: SalesforceContactCreate) => ({
+    create: request((contact: SalesforceContactCreateInput) => ({
       url: `/sobjects/Contact`,
-      method: 'post',
+      method: 'POST',
       json: contact,
-      schema: salesforceContact.passthrough(),
+      schema: salesforceContactCreateResponse,
     })),
-    update: request((contact: SalesforceContactUpdate) => ({
-      url: `/sobjects/Contact/${contact.Id}/`,
-      method: 'patch',
-      json: contact,
-      schema: salesforceContact.passthrough(),
+    update: request(({ Id, Contact }: SalesforceContactUpdate) => ({
+      url: `/sobjects/Contact/${Id}/`,
+      method: 'PATCH',
+      json: Contact,
+      schema: salesforceContact,
     })),
   },
   listViews: {
     find: request(({ Id }: { Id: string }) => ({
       url: `/sobjects/ListView/${Id}/`,
-      method: 'get',
-      schema: salesforceListView.passthrough(),
+      method: 'GET',
+      schema: salesforceListView,
     })),
     list: request(
       ({
@@ -113,7 +114,7 @@ export const client = {
           cursor,
           limit,
         })}`,
-        method: 'get',
+        method: 'GET',
         schema: z
           .object({
             records: z.array(salesforceListView),
@@ -126,8 +127,8 @@ export const client = {
   listViewResults: {
     find: request(({ Id, objectType }: { Id: string; objectType: string }) => ({
       url: `/sobjects/${objectType}/listviews/${Id}/results`,
-      method: 'get',
-      schema: salesforceListViewResult.passthrough(),
+      method: 'GET',
+      schema: salesforceListViewResult,
     })),
   },
   passthrough: request.passthrough(),

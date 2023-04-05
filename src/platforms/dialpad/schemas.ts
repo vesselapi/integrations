@@ -1,6 +1,15 @@
+import { Auth, HttpsUrl, PlatformClient } from '@/sdk/types';
 import * as custom from '@/sdk/validators';
 import { z } from 'zod';
-import { Auth, PlatformClient } from '../../sdk/types';
+
+export type DialpadAccountType = 'production' | 'sandbox';
+export interface DialpadAuthAnswers extends Record<string, string> {
+  accountType: DialpadAccountType;
+}
+export const dialpadUrlsByAccountType: Record<DialpadAccountType, HttpsUrl> = {
+  production: `https://dialpad.com`,
+  sandbox: `https://sandbox.dialpad.com`,
+};
 
 export const listResponseSchema = (itemSchema: z.ZodSchema<any>) =>
   z

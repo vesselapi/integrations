@@ -14,23 +14,26 @@ import {
 
 const base64 = (str: string) => Buffer.from(str).toString('base64');
 
-const request = makeRequestFactory(async (auth, options) => ({
-  ...options,
-  url: `${BASE_URL}/${options.url}`,
-  headers: {
-    ...options.headers,
-    Authorization:
-      auth.type === 'oauth2'
-        ? `Bearer ${await auth.getToken()}`
-        : `Basic ${base64(await auth.getToken())}`,
-  },
-}));
+const request = makeRequestFactory(async (auth, options) => {
+  const { answers } = await auth.getMetadata();
+  return {
+    ...options,
+    url: `${BASE_URL}${options.url}`,
+    headers: {
+      ...options.headers,
+      Authorization:
+        auth.type === 'oauth2'
+          ? `Bearer ${await auth.getToken()}`
+          : `Basic ${base64(`${answers['api-id']}:${await auth.getToken()}`)}`,
+    },
+  };
+});
 
 export const client = {
   users: {
     find: request(({ id }: { id: number | string }) => ({
       url: `/users/${id}`,
-      method: 'get',
+      method: 'GET',
       schema: z
         .object({
           user: aircallUser,
@@ -48,7 +51,7 @@ export const client = {
         per_page?: number;
       }) => ({
         url: next_page_link ?? `/users`,
-        method: 'get',
+        method: 'GET',
         query: shake({ from, per_page: `${per_page}` }),
         schema: z
           .object({
@@ -61,7 +64,7 @@ export const client = {
     startCall: request(
       (call: { id: string | number } & AircallStartUserCall) => ({
         url: `/users/${call.id}/calls`,
-        method: 'post',
+        method: 'POST',
         json: call,
         schema: z.any(),
       }),
@@ -70,7 +73,7 @@ export const client = {
   calls: {
     find: request(({ id }: { id: number | string }) => ({
       url: `/calls/${id}`,
-      method: 'get',
+      method: 'GET',
       schema: z
         .object({
           call: aircallCall,
@@ -88,7 +91,7 @@ export const client = {
         per_page?: number;
       }) => ({
         url: next_page_link ?? `/calls`,
-        method: 'get',
+        method: 'GET',
         query: shake({ from, per_page: `${per_page}` }),
         schema: z
           .object({
@@ -102,7 +105,7 @@ export const client = {
   contacts: {
     find: request(({ id }: { id: number | string }) => ({
       url: `/contacts/${id}`,
-      method: 'get',
+      method: 'GET',
       schema: z
         .object({
           contact: aircallContact,
@@ -120,7 +123,7 @@ export const client = {
         per_page?: number;
       }) => ({
         url: next_page_link ?? `/contacts`,
-        method: 'get',
+        method: 'GET',
         query: shake({ from, per_page: `${per_page}` }),
         schema: z
           .object({
@@ -132,7 +135,7 @@ export const client = {
     ),
     create: request((contact: AircallContactCreate) => ({
       url: `/contacts`,
-      method: 'post',
+      method: 'POST',
       json: contact,
       schema: z
         .object({
@@ -143,7 +146,7 @@ export const client = {
     update: request(
       (contact: { id: string | number } & AircallContactUpdate) => ({
         url: `/contacts/${contact.id}`,
-        method: 'post',
+        method: 'POST',
         json: contact,
         schema: z
           .object({
