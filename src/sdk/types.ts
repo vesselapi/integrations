@@ -7,7 +7,7 @@ export type OAuth2Metadata = {
   type: 'oauth2';
   answers: Record<string, string>;
   accessToken: string;
-  refreshToken: string;
+  refreshToken: string | null;
   oauthResponse: Record<string, unknown>;
 };
 
