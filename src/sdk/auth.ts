@@ -8,11 +8,10 @@ import {
 } from './types';
 
 const toQueryString = (query: Record<string, string>): string => {
-  const params = new URLSearchParams();
-  for (const [key, value] of Object.entries(query)) {
-    params.set(key, value);
-  }
-  return params.toString();
+  return Object.entries(query)
+    .map(([key, value]) => [key, encodeURIComponent(value)])
+    .map((x) => x.join('='))
+    .join('&');
 };
 
 export const auth = {
@@ -52,7 +51,7 @@ export const auth = {
         const query: Record<string, string> = {
           client_id: clientId,
           redirect_uri: redirectUrl,
-          scope: scopes.join(options.scopeSeparator ?? '+'),
+          scope: scopes.join(options.scopeSeparator ?? ' '),
           state,
           response_type: 'code',
         };
