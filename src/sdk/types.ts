@@ -185,12 +185,17 @@ export type Platform<
 export type ActionFunction<
   TInput extends {},
   TOutput extends {} | null | void,
-> = (props: { input: TInput; auth: Auth }) => Promise<ActionResult<TOutput>>;
+  TIncludeNative extends boolean = true,
+> = (props: {
+  input: TInput;
+  auth: Auth;
+}) => Promise<ActionResult<TOutput, TIncludeNative>>;
 
 export type Action<
   TName extends string,
   TInput extends {},
   TOutput extends {} | null | void,
+  TIncludeNative extends boolean = true,
 > = {
   name: TName;
   schema: z.ZodType<TInput>;
@@ -198,7 +203,7 @@ export type Action<
   resource: string;
   scopes?: string[];
   mutation?: boolean;
-  func: ActionFunction<TInput, TOutput>;
+  func: ActionFunction<TInput, TOutput, TIncludeNative>;
 };
 
 export type DirectlyInvokedAction<
@@ -211,7 +216,7 @@ export type UnifiedAction<
   TVertical extends string,
   TInput extends {},
   TOutput extends {} | null,
-> = Action<TName, TInput, TOutput> & {
+> = Action<TName, TInput, TOutput, false> & {
   integrationId: string;
   vertical: TVertical;
 };
@@ -231,7 +236,17 @@ export type ClientResult<TValidated> = {
   $native: RawResponse;
 };
 
-export type ActionResult<TTransformed> =
-  CamelCasedPropertiesDeep<TTransformed> & {
-    $native: RawResponse | RawResponse[];
-  };
+export type ActionResult<
+  TTransformed,
+  TIncludeNative extends boolean = true,
+> = CamelCasedPropertiesDeep<TTransformed> & TIncludeNative extends true
+  ? {
+      $native: RawResponse | RawResponse[];
+    }
+  : {};
+
+export type NativelessAction<
+  TName extends string,
+  TInput extends {},
+  TOutput extends {} | null | void,
+> = Action<TName, TInput, TOutput, false>;
