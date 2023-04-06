@@ -63,6 +63,7 @@ export const apolloContactCreate = z.object({
   contact_stage_id: z.string().nullish(),
   present_raw_address: z.string().nullish(),
   label_names: z.array(z.string()).nullish(),
+  typed_custom_fields: z.record(z.string()).optional(),
 });
 
 export const apolloContactUpdate = z.object({
@@ -77,6 +78,7 @@ export const apolloContactUpdate = z.object({
   website_url: z.string().nullish(),
   present_raw_address: z.string().nullish(),
   label_names: z.array(z.string()).nullish(),
+  typed_custom_fields: z.record(z.string()).optional(),
 });
 
 export type ApolloContactCreate = z.infer<typeof apolloContactCreate>;

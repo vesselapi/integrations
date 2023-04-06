@@ -21,6 +21,7 @@ export default action(
       contactStageId: z.string().nullish(),
       presentRawAddress: z.string().nullish(),
       labelNames: z.array(z.string()).nullish(),
+      typedCustomFields: z.record(z.string()),
     }),
     scopes: [],
   },
@@ -37,6 +38,7 @@ export default action(
       contact_stage_id: input.contactStageId,
       present_raw_address: input.presentRawAddress,
       label_names: input.labelNames,
+      typed_custom_fields: input.typedCustomFields,
     });
 
     return {
