@@ -14,6 +14,16 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.emailAccounts.list(auth, input);
+    const result = await client.emailAccounts.list(auth, input);
+
+    return {
+      emailAccounts: result.data.email_accounts.map((emailAccount) => ({
+        id: emailAccount.id,
+        default: emailAccount.default,
+        email: emailAccount.email,
+        userId: emailAccount.user_id,
+      })),
+      $native: result.$native,
+    };
   },
 );

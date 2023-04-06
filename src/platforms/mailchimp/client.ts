@@ -16,7 +16,9 @@ const metaRequest = makeRequestFactory(async (auth, options) => ({
 }));
 
 const request = makeRequestFactory(async (auth, options) => {
-  const { dc } = await metaRequest(({}) => ({
+  const {
+    data: { dc },
+  } = await metaRequest(({}) => ({
     url: 'https://login.mailchimp.com/oauth2/metadata',
     method: 'GET',
     schema: custom.object({ dc: z.string() }),
@@ -37,7 +39,7 @@ export const client = {
     find: request(({ id }: { id: string }) => ({
       url: `/lists/${id}`,
       method: 'GET',
-      schema: z.any(),
+      schema: mailchimpList,
     })),
     list: request(({ count, offset }: { count?: number; offset?: number }) => ({
       url: `/lists`,

@@ -1,3 +1,4 @@
+import { transformUser } from '@/platforms/aircall/actions/mappers';
 import { z } from 'zod';
 import { action } from '../../../../sdk';
 import { client } from '../../client';
@@ -11,16 +12,21 @@ export default action(
     mutation: false,
     schema: z.object({
       from: z.string().optional(),
-      per_page: z.number().optional(),
-      next_page_link: aircallUrl().optional(),
+      perPage: z.number().optional(),
+      nextPageLink: aircallUrl().optional(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.users.list(auth, {
+    const result = await client.users.list(auth, {
       from: input.from,
-      per_page: input.per_page,
-      next_page_link: input.next_page_link,
+      per_page: input.perPage,
+      next_page_link: input.nextPageLink,
     });
+
+    return {
+      users: result.data.users.map(transformUser),
+      $native: result.$native,
+    };
   },
 );

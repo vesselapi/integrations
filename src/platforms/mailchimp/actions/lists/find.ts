@@ -1,3 +1,4 @@
+import { transformList } from '@/platforms/mailchimp/actions/mappers';
 import { client } from '@/platforms/mailchimp/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
@@ -14,6 +15,11 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.lists.find(auth, input);
+    const result = await client.lists.find(auth, input);
+
+    return {
+      ...transformList(result.data),
+      $native: result.$native,
+    };
   },
 );

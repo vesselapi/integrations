@@ -1,3 +1,4 @@
+import { transformEmailBody } from '@/platforms/salesloft/actions/mappers';
 import { client } from '@/platforms/salesloft/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
@@ -6,7 +7,7 @@ export default action(
   'find-email-body',
   {
     operation: 'find',
-    resource: 'emailBodies',
+    resource: 'email-bodies',
     mutation: true,
     schema: z.object({
       id: z.string(),
@@ -14,6 +15,11 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.emailBodies.find(auth, input);
+    const result = await client.emailBodies.find(auth, input);
+
+    return {
+      data: transformEmailBody(result.data.data),
+      $native: result.$native,
+    };
   },
 );

@@ -14,8 +14,16 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.conversations.list(auth, {
+    const result = await client.conversations.list(auth, {
       cursor: input.cursor,
     });
+
+    return {
+      channels: result.data.channels,
+      responseMetadata: {
+        nextCursor: result.data.response_metadata.next_cursor,
+      },
+      $native: result.$native,
+    };
   },
 );

@@ -45,42 +45,34 @@ export const client = {
           per_page,
           page,
         }),
-        schema: z
-          .object({
-            data: z.array(salesloftPerson),
-            metadata: salesloftResponseMetadata,
-          })
-          .passthrough(),
+        schema: z.object({
+          data: z.array(salesloftPerson),
+          metadata: salesloftResponseMetadata,
+        }),
       }),
     ),
     find: request(({ id }: { id: string }) => ({
       url: `/people/${id}.json`,
       method: 'GET',
-      schema: z
-        .object({
-          data: salesloftPerson,
-        })
-        .passthrough(),
+      schema: z.object({
+        data: salesloftPerson,
+      }),
     })),
     create: request((person: SalesloftPersonCreate) => ({
       url: `/people.json`,
       method: 'POST',
       json: person,
-      schema: z
-        .object({
-          data: salesloftPerson,
-        })
-        .passthrough(),
+      schema: z.object({
+        data: salesloftPerson,
+      }),
     })),
     update: request((person: SalesloftPersonUpdate & { id: string }) => ({
       url: `/people/${person.id}.json`,
       method: 'PUT',
       json: person,
-      schema: z
-        .object({
-          data: salesloftPerson,
-        })
-        .passthrough(),
+      schema: z.object({
+        data: salesloftPerson,
+      }),
     })),
   },
   cadences: {
@@ -98,12 +90,10 @@ export const client = {
           per_page,
           page,
         }),
-        schema: z
-          .object({
-            data: z.array(salesloftCadence),
-            metadata: salesloftResponseMetadata,
-          })
-          .passthrough(),
+        schema: z.object({
+          data: z.array(salesloftCadence),
+          metadata: salesloftResponseMetadata,
+        }),
       }),
     ),
     import: request((cadence: SalesloftCadenceImport) => ({
@@ -127,11 +117,9 @@ export const client = {
         url: `/cadence_memberships.json`,
         method: 'POST',
         json: shake({ cadence_id, person_id, user_id }),
-        schema: z
-          .object({
-            data: salesloftCadenceMembership,
-          })
-          .passthrough(),
+        schema: z.object({
+          data: salesloftCadenceMembership,
+        }),
       }),
     ),
   },
@@ -139,11 +127,9 @@ export const client = {
     find: request(({ id }: { id: string }) => ({
       url: `/users/${id}.json`,
       method: 'GET',
-      schema: z
-        .object({
-          data: salesloftUser,
-        })
-        .passthrough(),
+      schema: z.object({
+        data: salesloftUser,
+      }),
     })),
     list: request(
       ({
@@ -159,12 +145,10 @@ export const client = {
           per_page,
           page,
         }),
-        schema: z
-          .object({
-            data: z.array(salesloftUser),
-            metadata: salesloftResponseMetadata,
-          })
-          .passthrough(),
+        schema: z.object({
+          data: z.array(salesloftUser),
+          metadata: salesloftResponseMetadata,
+        }),
       }),
     ),
   },
@@ -189,33 +173,27 @@ export const client = {
           person_id,
           cadence_id,
         }),
-        schema: z
-          .object({
-            data: z.array(salesloftEmail),
-            metadata: salesloftResponseMetadata,
-          })
-          .passthrough(),
+        schema: z.object({
+          data: z.array(salesloftEmail),
+          metadata: salesloftResponseMetadata,
+        }),
       }),
     ),
     find: request(({ id }: { id: string }) => ({
       url: `/activities/emails/${id}.json`,
       method: 'GET',
-      schema: z
-        .object({
-          data: salesloftEmail,
-        })
-        .passthrough(),
+      schema: z.object({
+        data: salesloftEmail,
+      }),
     })),
   },
   emailBodies: {
     find: request(({ id }: { id: string }) => ({
       url: `/mime_email_payloads/${id}.json`,
       method: 'GET',
-      schema: z
-        .object({
-          data: salesloftEmailBody,
-        })
-        .passthrough(),
+      schema: z.object({
+        data: salesloftEmailBody,
+      }),
     })),
   },
   customFields: {
@@ -236,23 +214,19 @@ export const client = {
           page,
           field_type,
         }),
-        schema: z
-          .object({
-            data: z.array(salesloftCustomField),
-            metadata: salesloftResponseMetadata,
-          })
-          .passthrough(),
+        schema: z.object({
+          data: z.array(salesloftCustomField),
+          metadata: salesloftResponseMetadata,
+        }),
       }),
     ),
     create: request((customField: SalesloftCustomFieldCreate) => ({
       url: `/custom_fields.json`,
       method: 'POST',
       json: customField,
-      schema: z
-        .object({
-          data: salesloftCustomField,
-        })
-        .passthrough(),
+      schema: z.object({
+        data: salesloftCustomField,
+      }),
     })),
   },
   passthrough: request.passthrough(),

@@ -1,5 +1,5 @@
 import { IntegrationError } from '@/sdk/error';
-import { Auth, HttpsUrl } from '@/sdk/types';
+import { Auth, ClientResult, HttpsUrl } from '@/sdk/types';
 import { guard, isFunction, trim } from 'radash';
 import { z } from 'zod';
 
@@ -28,7 +28,10 @@ export const makeRequestFactory = (
     options: RequestFetchOptions<z.ZodType>,
   ) => Promise<FetchOptions>,
 ) => {
-  function createRequest<TArgs extends {}, TResponseSchema extends z.ZodType>(
+  function createRequest<
+    TArgs extends {},
+    TResponseSchema extends z.ZodType<unknown>,
+  >(
     formatRequestOptions:
       | RequestFetchOptions<TResponseSchema>
       | ((args: TArgs) => RequestFetchOptions<TResponseSchema>),
@@ -36,7 +39,7 @@ export const makeRequestFactory = (
     return async function makeRequest(
       auth: Auth,
       args: TArgs,
-    ): Promise<z.infer<TResponseSchema>> {
+    ): Promise<ClientResult<z.infer<TResponseSchema>>> {
       const options = await formatFetchOptions(
         auth,
         isFunction(formatRequestOptions)
@@ -95,10 +98,23 @@ export const makeRequestFactory = (
         console.error('Validation failed on client response', {
           zodError: zodResult.error,
         });
-        return body as z.infer<TResponseSchema>;
+
+        return {
+          data: body as z.infer<TResponseSchema>,
+          $native: {
+            headers: { test: 'value' }, // todo fix
+            body: body,
+          },
+        };
       }
 
-      return zodResult.data;
+      return {
+        data: zodResult.data,
+        $native: {
+          headers: { test: 'value' }, // todo fix
+          body: body,
+        },
+      };
     };
   }
 

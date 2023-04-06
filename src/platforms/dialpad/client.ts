@@ -100,7 +100,7 @@ const makeClient = (): DialpadClient => {
         url: `/call`,
         method: 'POST',
         schema: z.object({
-          id: z.string(),
+          call_id: z.number(),
         }),
         json: body,
       })),

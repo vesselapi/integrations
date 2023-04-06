@@ -50,12 +50,10 @@ export const client = {
       url: `/users/search`,
       method: 'GET',
       query: shake({ page }),
-      schema: z
-        .object({
-          users: z.array(apolloUser),
-          pagination: apolloPaginatedResponse,
-        })
-        .passthrough(),
+      schema: z.object({
+        users: z.array(apolloUser),
+        pagination: apolloPaginatedResponse,
+      }),
     })),
   },
   accounts: {
@@ -70,33 +68,27 @@ export const client = {
         url: `/accounts/search`,
         method: 'POST',
         json: shake({ page, q_organization_name }),
-        schema: z
-          .object({
-            accounts: z.array(apolloAccount),
-            pagination: apolloPaginatedResponse,
-          })
-          .passthrough(),
+        schema: z.object({
+          accounts: z.array(apolloAccount),
+          pagination: apolloPaginatedResponse,
+        }),
       }),
     ),
     create: request((account: ApolloAccountCreate) => ({
       url: `/accounts`,
       method: 'POST',
       json: shake(account),
-      schema: z
-        .object({
-          account: apolloAccount,
-        })
-        .passthrough(),
+      schema: z.object({
+        account: apolloAccount,
+      }),
     })),
     update: request((account: { id: string } & ApolloAccountUpdate) => ({
       url: `/accounts/${account.id}`,
       method: 'PUT',
       json: shake(account),
-      schema: z
-        .object({
-          account: apolloAccount,
-        })
-        .passthrough(),
+      schema: z.object({
+        account: apolloAccount,
+      }),
     })),
   },
   contacts: {
@@ -105,33 +97,27 @@ export const client = {
         url: `/contacts/search`,
         method: 'POST',
         json: shake({ page, q_keywords }),
-        schema: z
-          .object({
-            contacts: z.array(apolloContact),
-            pagination: apolloPaginatedResponse,
-          })
-          .passthrough(),
+        schema: z.object({
+          contacts: z.array(apolloContact),
+          pagination: apolloPaginatedResponse,
+        }),
       }),
     ),
     create: request((contact: ApolloContactCreate) => ({
       url: `/contacts`,
       method: 'POST',
       json: shake(contact),
-      schema: z
-        .object({
-          contact: apolloContact,
-        })
-        .passthrough(),
+      schema: z.object({
+        contact: apolloContact,
+      }),
     })),
     update: request((contact: { id: string } & ApolloContactUpdate) => ({
       url: `/contacts/${contact.id}`,
       method: 'PUT',
       json: shake(contact),
-      schema: z
-        .object({
-          contact: apolloContact,
-        })
-        .passthrough(),
+      schema: z.object({
+        contact: apolloContact,
+      }),
     })),
   },
   emails: {
@@ -146,11 +132,9 @@ export const client = {
         url: `/emailer_messages/search`,
         method: 'POST',
         json: shake({ page, emailer_campaign_id }),
-        schema: z
-          .object({
-            emailer_messages: z.array(apolloEmailMessage),
-          })
-          .passthrough(),
+        schema: z.object({
+          emailer_messages: z.array(apolloEmailMessage),
+        }),
       }),
     ),
   },
@@ -169,11 +153,9 @@ export const client = {
               )
             : {}),
         }),
-        schema: z
-          .object({
-            activities: z.array(apolloEmailActivity),
-          })
-          .passthrough(),
+        schema: z.object({
+          activities: z.array(apolloEmailActivity),
+        }),
       }),
     ),
   },
@@ -183,23 +165,19 @@ export const client = {
         url: `/emailer_campaigns/search`,
         method: 'POST',
         json: shake({ page, q_keywords }),
-        schema: z
-          .object({
-            emailer_campaigns: z.array(apolloSequence),
-            pagination: apolloPaginatedResponse,
-          })
-          .passthrough(),
+        schema: z.object({
+          emailer_campaigns: z.array(apolloSequence),
+          pagination: apolloPaginatedResponse,
+        }),
       }),
     ),
     create: request((sequence: ApolloCreateSequence) => ({
       url: `/emailer_campaigns`,
       method: 'POST',
       json: shake(sequence),
-      schema: z
-        .object({
-          emailer_campaign: apolloSequence,
-        })
-        .passthrough(),
+      schema: z.object({
+        emailer_campaign: apolloSequence,
+      }),
     })),
     start: request(
       ({
@@ -218,12 +196,10 @@ export const client = {
           emailer_campaign_id,
           send_email_from_email_account_id,
         }),
-        schema: z
-          .object({
-            contacts: z.array(apolloContact),
-            emailer_campaign: apolloSequence,
-          })
-          .passthrough(),
+        schema: z.object({
+          contacts: z.array(apolloContact),
+          emailer_campaign: apolloSequence,
+        }),
       }),
     ),
   },
@@ -232,32 +208,26 @@ export const client = {
       url: `/typed_custom_fields`,
       method: 'GET',
       query: shake({ page }),
-      schema: z
-        .object({
-          typed_custom_fields: z.array(apolloCustomField),
-        })
-        .passthrough(),
+      schema: z.object({
+        typed_custom_fields: z.array(apolloCustomField),
+      }),
     })),
     create: request((customFieldCreate: ApolloCreateCustomField) => ({
       url: `/typed_custom_fields`,
       method: 'POST',
       json: shake(customFieldCreate),
-      schema: z
-        .object({
-          typed_custom_field: apolloCustomField,
-        })
-        .passthrough(),
+      schema: z.object({
+        typed_custom_field: apolloCustomField,
+      }),
     })),
   },
   emailAccounts: {
     list: request(() => ({
       url: `/email_accounts`,
       method: 'GET',
-      schema: z
-        .object({
-          email_accounts: z.array(apolloEmailAccount),
-        })
-        .passthrough(),
+      schema: z.object({
+        email_accounts: z.array(apolloEmailAccount),
+      }),
     })),
   },
   sequenceSteps: {
@@ -274,15 +244,11 @@ export const client = {
         url: `/emailer_touches/${template.id}`,
         method: 'PUT',
         json: shake(template),
-        schema: z
-          .object({
-            emailer_touch: z
-              .object({
-                id: z.string(),
-              })
-              .passthrough(),
-          })
-          .passthrough(),
+        schema: z.object({
+          emailer_touch: z.object({
+            id: z.string(),
+          }),
+        }),
       }),
     ),
   },

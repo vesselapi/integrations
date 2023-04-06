@@ -1,3 +1,4 @@
+import { transformCall } from '@/platforms/aircall/actions/mappers';
 import { z } from 'zod';
 import { action } from '../../../../sdk';
 import { client } from '../../client';
@@ -14,6 +15,11 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.calls.find(auth, { id: input.id });
+    const result = await client.calls.find(auth, { id: input.id });
+
+    return {
+      contact: transformCall(result.data.call),
+      $native: result.$native,
+    };
   },
 );

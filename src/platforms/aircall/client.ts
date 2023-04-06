@@ -34,11 +34,9 @@ export const client = {
     find: request(({ id }: { id: number | string }) => ({
       url: `/users/${id}`,
       method: 'GET',
-      schema: z
-        .object({
-          user: aircallUser,
-        })
-        .passthrough(),
+      schema: z.object({
+        user: aircallUser,
+      }),
     })),
     list: request(
       ({
@@ -53,12 +51,10 @@ export const client = {
         url: next_page_link ?? `/users`,
         method: 'GET',
         query: shake({ from, per_page: `${per_page}` }),
-        schema: z
-          .object({
-            users: z.array(aircallUser),
-            meta: aircallPagination,
-          })
-          .passthrough(),
+        schema: z.object({
+          users: z.array(aircallUser),
+          meta: aircallPagination,
+        }),
       }),
     ),
     startCall: request(
@@ -74,11 +70,9 @@ export const client = {
     find: request(({ id }: { id: number | string }) => ({
       url: `/calls/${id}`,
       method: 'GET',
-      schema: z
-        .object({
-          call: aircallCall,
-        })
-        .passthrough(),
+      schema: z.object({
+        call: aircallCall,
+      }),
     })),
     list: request(
       ({
@@ -93,12 +87,10 @@ export const client = {
         url: next_page_link ?? `/calls`,
         method: 'GET',
         query: shake({ from, per_page: `${per_page}` }),
-        schema: z
-          .object({
-            calls: z.array(aircallCall),
-            meta: aircallPagination,
-          })
-          .passthrough(),
+        schema: z.object({
+          calls: z.array(aircallCall),
+          meta: aircallPagination,
+        }),
       }),
     ),
   },
@@ -106,11 +98,9 @@ export const client = {
     find: request(({ id }: { id: number | string }) => ({
       url: `/contacts/${id}`,
       method: 'GET',
-      schema: z
-        .object({
-          contact: aircallContact,
-        })
-        .passthrough(),
+      schema: z.object({
+        contact: aircallContact,
+      }),
     })),
     list: request(
       ({
@@ -125,34 +115,28 @@ export const client = {
         url: next_page_link ?? `/contacts`,
         method: 'GET',
         query: shake({ from, per_page: `${per_page}` }),
-        schema: z
-          .object({
-            contacts: z.array(aircallContact),
-            meta: aircallPagination,
-          })
-          .passthrough(),
+        schema: z.object({
+          contacts: z.array(aircallContact),
+          meta: aircallPagination,
+        }),
       }),
     ),
     create: request((contact: AircallContactCreate) => ({
       url: `/contacts`,
       method: 'POST',
       json: contact,
-      schema: z
-        .object({
-          contact: aircallContact,
-        })
-        .passthrough(),
+      schema: z.object({
+        contact: aircallContact,
+      }),
     })),
     update: request(
       (contact: { id: string | number } & AircallContactUpdate) => ({
         url: `/contacts/${contact.id}`,
         method: 'POST',
         json: contact,
-        schema: z
-          .object({
-            contact: aircallContact,
-          })
-          .passthrough(),
+        schema: z.object({
+          contact: aircallContact,
+        }),
       }),
     ),
   },

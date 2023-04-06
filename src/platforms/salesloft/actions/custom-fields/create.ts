@@ -1,3 +1,4 @@
+import { transformCustomField } from '@/platforms/salesloft/actions/mappers';
 import { client } from '@/platforms/salesloft/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
@@ -10,11 +11,19 @@ export default action(
     mutation: true,
     schema: z.object({
       name: z.string(),
-      field_type: z.string(),
+      fieldType: z.string(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.customFields.create(auth, input);
+    const result = await client.customFields.create(auth, {
+      name: input.name,
+      field_type: input.fieldType,
+    });
+
+    return {
+      data: transformCustomField(result.data.data),
+      $native: result.$native,
+    };
   },
 );
