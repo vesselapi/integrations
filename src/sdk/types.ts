@@ -84,12 +84,19 @@ export type StandardAuthConfig<
  * https://github.com/lelylan/simple-oauth2/blob/fbb295b1ae0ea998bcdf4ad22a6ef2fcf6930d12/API.md#new-authorizationcodeoptions
  */
 export type OAuth2AuthConfig<
-  T extends Record<string, string> = Record<string, string>,
+  TAnswers extends Record<string, string> = Record<string, string>,
+  TOAuth2AppMeta extends Record<string, unknown> = Record<string, unknown>,
 > = {
   type: 'oauth2';
   default: boolean;
-  authUrl: (options: { answers: T }) => HttpsUrl;
-  tokenUrl: (options: { answers: T }) => HttpsUrl;
+  authUrl: (options: {
+    answers: TAnswers;
+    appMetadata: TOAuth2AppMeta;
+  }) => HttpsUrl;
+  tokenUrl: (options: {
+    answers: TAnswers;
+    appMetadata: TOAuth2AppMeta;
+  }) => HttpsUrl;
   /**
    * Depending on the end platform wrote their OAuth, the clientId and
    * clientSecret could be requested in the Auth header using Basic Auth
@@ -104,16 +111,20 @@ export type OAuth2AuthConfig<
   questions: AuthQuestion[];
   oauthBodyFormat: 'json' | 'form';
   url: (arg: {
-    answers: T;
+    answers: TAnswers;
     scopes: string[];
     clientId: string;
     redirectUrl: string;
     state: string;
+    appMetadata: TOAuth2AppMeta;
   }) => HttpsUrl;
   isRetryable: RetryableCheckFunction;
   display: {
     markdown: string | ((platform: Platform<{}, any, string>) => string);
   };
+  appMetadataSchema: z.ZodType<TOAuth2AppMeta>;
+  refreshTokenExpiresAt: () => Date | null;
+  accessTokenExpiresAt: () => Date | null;
 };
 
 export type Json =
@@ -146,11 +157,15 @@ export type Platform<
   TActions extends Record<string, Action<string, any, any>>,
   TClient extends PlatformClient,
   TId extends string,
-  TAnswers extends Record<string, string> = Record<string, string>,
+  TStandardAnswers extends Record<string, string> = Record<string, string>,
   TOAuth2Answers extends Record<string, string> = Record<string, string>,
+  TOAuth2AppMeta extends Record<string, unknown> = Record<string, unknown>,
 > = {
   id: TId;
-  auth: (StandardAuthConfig<TAnswers> | OAuth2AuthConfig<TOAuth2Answers>)[];
+  auth: (
+    | StandardAuthConfig<TStandardAnswers>
+    | OAuth2AuthConfig<TOAuth2Answers, TOAuth2AppMeta>
+  )[];
   rawActions: Action<string, any, any>[];
   client: TClient;
   constants: PlatformConstants;
