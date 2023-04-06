@@ -31,7 +31,10 @@ export default platform('ringcentral', {
         type: 'select',
         id: 'accountType',
         label: 'Account Type',
-        options: [{ label: 'Sandbox', value: 'sandbox', default: true }],
+        options: [
+          { label: 'Production', value: 'production', default: true },
+          { label: 'Sandbox', value: 'sandbox' },
+        ],
       },
     ],
   }),
