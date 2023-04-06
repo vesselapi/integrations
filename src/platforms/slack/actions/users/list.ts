@@ -14,8 +14,16 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.users.list(auth, {
+    const result = await client.users.list(auth, {
       cursor: input.cursor,
     });
+
+    return {
+      members: result.data.members,
+      responseMetadata: {
+        nextCursor: result.data.response_metadata.next_cursor,
+      },
+      $native: result.$native,
+    };
   },
 );

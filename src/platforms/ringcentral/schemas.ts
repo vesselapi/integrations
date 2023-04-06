@@ -15,94 +15,84 @@ export const ringcentralUrlsByAccountType: Record<
 };
 
 export const listResponseSchema = (itemSchema: z.ZodSchema<any>) =>
-  z
-    .object({
-      records: z.array(itemSchema).optional(),
-      navigation: z
-        .object({
-          firstPage: z.object({
-            uri: z.string(),
-          }),
-          lastPage: z.object({
-            uri: z.string(),
-          }),
-        })
-        .optional(),
-      paging: z
-        .object({
-          page: z.number(),
-          totalPages: z.number(),
-          perPage: z.number(),
-          totalElements: z.number(),
-          pageStart: z.number(),
-          pageEnd: z.number(),
-        })
-        .optional(),
-    })
-    .passthrough();
-
-export const ringcentralExtensionSchema = z
-  .object({
-    id: z.string(),
-    extensionNumber: z.string(),
-    contact: z
+  z.object({
+    records: z.array(itemSchema).optional(),
+    navigation: z
       .object({
-        firstName: z.string(),
-        lastName: z.string(),
-        email: z.string(),
-        company: z.string(),
-        jobTitle: z.string(),
-        businessPhone: z.string(),
+        firstPage: z.object({
+          uri: z.string(),
+        }),
+        lastPage: z.object({
+          uri: z.string(),
+        }),
       })
       .optional(),
-    status: z.string(),
-    type: z.string(),
-    permissions: z
+    paging: z
       .object({
-        admin: z.object({
-          enabled: z.boolean(),
-        }),
-        internationalCalling: z.object({
-          enabled: z.boolean(),
-        }),
+        page: z.number(),
+        totalPages: z.number(),
+        perPage: z.number(),
+        totalElements: z.number(),
+        pageStart: z.number(),
+        pageEnd: z.number(),
       })
-      .passthrough(),
-  })
-  .passthrough();
+      .optional(),
+  });
 
-export const ringcentralCallLogSchema = z
-  .object({
-    id: z.string(),
-    sessionId: z.string(),
-    startTime: custom.date(),
-    duration: z.number(),
-    type: z.string(),
-    direction: z.enum(['Inbound', 'Outbound']),
-    action: z.string(),
-    result: z.string(),
-    from: z.object({
-      phoneNumber: custom.formattedPhoneNumber(),
-      extensionId: z.string().optional(),
-      name: z.string().optional(),
+export const ringcentralExtensionSchema = z.object({
+  id: z.string(),
+  extensionNumber: z.string(),
+  contact: z
+    .object({
+      firstName: z.string(),
+      lastName: z.string(),
+      email: z.string(),
+      company: z.string(),
+      jobTitle: z.string(),
+      businessPhone: z.string(),
+    })
+    .optional(),
+  status: z.string(),
+  type: z.string(),
+  permissions: z.object({
+    admin: z.object({
+      enabled: z.boolean(),
     }),
-    to: z.object({
-      phoneNumber: custom.formattedPhoneNumber(),
-      extensionId: z.string().optional(),
-      name: z.string().optional(),
+    internationalCalling: z.object({
+      enabled: z.boolean(),
     }),
-  })
-  .passthrough();
+  }),
+});
 
-export const ringcentralContactSchema = z
-  .object({
-    id: z.string(),
-    firstName: z.string(),
-    lastName: z.string(),
-    company: z.string().optional(),
-    email: z.string().optional(),
-    businessPhone: custom.formattedPhoneNumber(),
-  })
-  .passthrough();
+export const ringcentralCallLogSchema = z.object({
+  id: z.string(),
+  sessionId: z.string(),
+  startTime: custom.date(),
+  duration: z.number(),
+  type: z.string(),
+  direction: z.enum(['Inbound', 'Outbound']),
+  action: z.string(),
+  result: z.string(),
+  from: z.object({
+    phoneNumber: custom.formattedPhoneNumber(),
+    extensionId: z.string().optional(),
+    name: z.string().optional(),
+  }),
+  to: z.object({
+    phoneNumber: custom.formattedPhoneNumber(),
+    extensionId: z.string().optional(),
+    name: z.string().optional(),
+  }),
+});
+
+export const ringcentralContactSchema = z.object({
+  id: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
+  company: z.string().optional(),
+  email: z.string().optional(),
+  businessPhone: custom.formattedPhoneNumber(),
+});
 
 export const ringcentralContactCreateSchema = ringcentralContactSchema
   .partial()
@@ -119,46 +109,42 @@ export const ringcentralContactUpdateSchema = ringcentralContactSchema
     id: true,
   });
 
-export const ringcentralRingOutStartSchema = z
-  .object({
-    extensionId: z.string().default('~'),
-    from: z.object({
+export const ringcentralRingOutStartSchema = z.object({
+  extensionId: z.string().default('~'),
+  from: z.object({
+    phoneNumber: custom.formattedPhoneNumber(),
+  }),
+  to: z.object({
+    phoneNumber: custom.formattedPhoneNumber(),
+  }),
+  playPrompt: z.boolean().optional(),
+  callerId: z
+    .object({
       phoneNumber: custom.formattedPhoneNumber(),
-    }),
-    to: z.object({
-      phoneNumber: custom.formattedPhoneNumber(),
-    }),
-    playPrompt: z.boolean().optional(),
-    callerId: z
-      .object({
-        phoneNumber: custom.formattedPhoneNumber(),
-      })
-      .optional(),
-    callId: z.string().optional(),
-    sipInfo: z
-      .array(
-        z.object({
-          transport: z.string(),
-          uri: z.string(),
-          username: z.string(),
-          password: z.string(),
-        }),
-      )
-      .optional(),
-  })
-  .passthrough();
+    })
+    .optional(),
+  callId: z.string().optional(),
+  sipInfo: z
+    .array(
+      z.object({
+        transport: z.string(),
+        uri: z.string(),
+        username: z.string(),
+        password: z.string(),
+      }),
+    )
+    .optional(),
+});
 
-export const ringcentralRingOutStatusSchema = z
-  .object({
-    uri: z.string(),
-    id: z.string(),
-    status: z.object({
-      callStatus: z.string(),
-      callerStatus: z.string(),
-      calleeStatus: z.string(),
-    }),
-  })
-  .passthrough();
+export const ringcentralRingOutStatusSchema = z.object({
+  uri: z.string(),
+  id: z.string(),
+  status: z.object({
+    callStatus: z.string(),
+    callerStatus: z.string(),
+    calleeStatus: z.string(),
+  }),
+});
 
 export type RingcentralExtension = z.infer<typeof ringcentralExtensionSchema>;
 export type RingcentralCallLog = z.infer<typeof ringcentralCallLogSchema>;

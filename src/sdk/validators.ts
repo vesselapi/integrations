@@ -23,6 +23,9 @@ export const formattedPhoneNumber = (format?: NumberFormat) =>
       return parsePhoneNumber(value)?.format(format ?? 'E.164');
     });
 
+// TODO: remove this since we no longer use passthrough
+export const object = z.object;
+
 // Create a shorthand for zod object passthrough since we need to use it everywhere.
-export const object = ((shape: any, params: any) =>
-  z.object(shape, params).passthrough()) as unknown as typeof z.object;
+// export const object = ((shape: any, params: any) =>
+//   z.object(shape, params).passthrough()) as unknown as typeof z.object;

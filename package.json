@@ -43,6 +43,7 @@
     "date-fns": "^2.29.3",
     "libphonenumber-js": "^1.10.24",
     "radash": "^10.8.1",
+    "type-fest": "^3.8.0",
     "zod": "^3.21.4"
   }
 }

@@ -1,3 +1,4 @@
+import { transformEmailActivity } from '@/platforms/apollo/actions/mappers';
 import { client } from '@/platforms/apollo/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
@@ -9,12 +10,20 @@ export default action(
     resource: 'activities',
     mutation: true,
     schema: z.object({
-      contact_id: z.string().optional(),
+      contactId: z.string().optional(),
       types: z.array(z.string()).optional(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.activities.list(auth, input);
+    const result = await client.activities.list(auth, {
+      contact_id: input.contactId,
+      types: input.types,
+    });
+
+    return {
+      activities: result.data.activities.map(transformEmailActivity),
+      $native: result.$native,
+    };
   },
 );

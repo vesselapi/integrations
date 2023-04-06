@@ -1,3 +1,4 @@
+import { transformAccount } from '@/platforms/apollo/actions/mappers';
 import { client } from '@/platforms/apollo/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
@@ -9,12 +10,20 @@ export default action(
     resource: 'accounts',
     mutation: true,
     schema: z.object({
-      q_organization_name: z.string().optional(),
+      qOrganizationName: z.string().optional(),
       page: z.number().optional(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.accounts.search(auth, input);
+    const result = await client.accounts.search(auth, {
+      q_organization_name: input.qOrganizationName,
+      page: input.page,
+    });
+
+    return {
+      accounts: result.data.accounts.map(transformAccount),
+      $native: result.$native,
+    };
   },
 );

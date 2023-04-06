@@ -1,3 +1,4 @@
+import { CamelCasedPropertiesDeep } from 'type-fest';
 import { z } from 'zod';
 import { HttpOptions } from './client';
 
@@ -184,7 +185,7 @@ export type Platform<
 export type ActionFunction<
   TInput extends {},
   TOutput extends {} | null | void,
-> = (props: { input: TInput; auth: Auth }) => Promise<TOutput>;
+> = (props: { input: TInput; auth: Auth }) => Promise<ActionResult<TOutput>>;
 
 export type Action<
   TName extends string,
@@ -203,7 +204,7 @@ export type Action<
 export type DirectlyInvokedAction<
   TInput extends {},
   TOutput extends {} | null | void,
-> = (input: TInput, auth: Auth) => Promise<TOutput>;
+> = (input: TInput, auth: Auth) => Promise<ActionResult<TOutput>>;
 
 export type UnifiedAction<
   TName extends string,
@@ -219,3 +220,18 @@ export type Unification<TVertical extends string = string> = {
   vertical: TVertical;
   actions: UnifiedAction<string, TVertical, any, any>[];
 };
+
+type RawResponse = {
+  headers: Record<string, string>;
+  body: Json;
+};
+
+export type ClientResult<TValidated> = {
+  data: TValidated;
+  $native: RawResponse;
+};
+
+export type ActionResult<TTransformed> =
+  CamelCasedPropertiesDeep<TTransformed> & {
+    $native: RawResponse | RawResponse[];
+  };

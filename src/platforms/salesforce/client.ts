@@ -49,12 +49,10 @@ const query = {
         limit,
       })}`,
       method: 'GET',
-      schema: z
-        .object({
-          records: z.array(schema),
-          totalSize: z.number(),
-        })
-        .passthrough(),
+      schema: z.object({
+        records: z.array(schema),
+        totalSize: z.number(),
+      }),
     })),
 };
 
@@ -115,12 +113,10 @@ export const client = {
           limit,
         })}`,
         method: 'GET',
-        schema: z
-          .object({
-            records: z.array(salesforceListView),
-            totalSize: z.number(),
-          })
-          .passthrough(),
+        schema: z.object({
+          records: z.array(salesforceListView),
+          totalSize: z.number(),
+        }),
       }),
     ),
   },

@@ -1,3 +1,4 @@
+import { transformUser } from '@/platforms/dialpad/actions/mappers';
 import { action } from '@/sdk';
 import { z } from 'zod';
 import client from '../../client';
@@ -13,8 +14,14 @@ export default action(
     }),
     scopes: [],
   },
-  ({ auth, input }) =>
-    client.users.find(auth, {
+  async ({ auth, input }) => {
+    const result = await client.users.find(auth, {
       id: input.id,
-    }),
+    });
+
+    return {
+      ...transformUser(result.data),
+      $native: result.$native,
+    };
+  },
 );

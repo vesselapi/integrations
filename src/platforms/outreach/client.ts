@@ -34,11 +34,9 @@ export const client = {
     find: request(({ id }: { id: number }) => ({
       url: `/users/${id}`,
       method: 'GET',
-      schema: z
-        .object({
-          data: outreachUser,
-        })
-        .passthrough(),
+      schema: z.object({
+        data: outreachUser,
+      }),
     })),
     list: request(
       ({ cursor }: { cursor?: `${typeof BASE_URL}/${string}` }) => ({
@@ -46,11 +44,9 @@ export const client = {
         method: 'GET',
         query: { count: 'false', 'page[size]': `${DEFAULT_PAGE_SIZE}` },
         schema: z.intersection(
-          z
-            .object({
-              data: z.array(outreachUser),
-            })
-            .passthrough(),
+          z.object({
+            data: z.array(outreachUser),
+          }),
           outreachPaginatedResponse,
         ),
       }),
@@ -60,11 +56,9 @@ export const client = {
     find: request(({ id }: { id: number }) => ({
       url: `/prospects/${id}`,
       method: 'GET',
-      schema: z
-        .object({
-          data: outreachProspect,
-        })
-        .passthrough(),
+      schema: z.object({
+        data: outreachProspect,
+      }),
     })),
     list: request(
       ({
@@ -82,11 +76,9 @@ export const client = {
         },
         method: 'GET',
         schema: z.intersection(
-          z
-            .object({
-              data: z.array(outreachProspect),
-            })
-            .passthrough(),
+          z.object({
+            data: z.array(outreachProspect),
+          }),
           outreachPaginatedResponse,
         ),
       }),
@@ -126,11 +118,9 @@ export const client = {
           data: { type: 'prospect', ...prospect },
         },
         method: 'POST',
-        schema: z
-          .object({
-            data: outreachProspect,
-          })
-          .passthrough(),
+        schema: z.object({
+          data: outreachProspect,
+        }),
       }),
     ),
     update: request(
@@ -152,11 +142,9 @@ export const client = {
         url: `/prospects/${prospect.id}`,
         json: { data: { type: 'prospect', ...prospect } },
         method: 'PATCH',
-        schema: z
-          .object({
-            data: outreachProspect,
-          })
-          .passthrough(),
+        schema: z.object({
+          data: outreachProspect,
+        }),
       }),
     ),
   },
@@ -164,11 +152,9 @@ export const client = {
     find: request(({ id }: { id: number }) => ({
       url: `/accounts/${id}`,
       method: 'GET',
-      schema: z
-        .object({
-          data: outreachAccount,
-        })
-        .passthrough(),
+      schema: z.object({
+        data: outreachAccount,
+      }),
     })),
     list: request(
       ({
@@ -188,11 +174,9 @@ export const client = {
         },
         method: 'GET',
         schema: z.intersection(
-          z
-            .object({
-              data: z.array(outreachAccount),
-            })
-            .passthrough(),
+          z.object({
+            data: z.array(outreachAccount),
+          }),
           outreachPaginatedResponse,
         ),
       }),
@@ -202,11 +186,9 @@ export const client = {
     find: request(({ id }: { id: number }) => ({
       url: `/mailings/${id}`,
       method: 'GET',
-      schema: z
-        .object({
-          data: outreachMailing,
-        })
-        .passthrough(),
+      schema: z.object({
+        data: outreachMailing,
+      }),
     })),
     list: request(
       ({
@@ -229,11 +211,9 @@ export const client = {
             : {}),
         },
         schema: z.intersection(
-          z
-            .object({
-              data: z.array(outreachMailing),
-            })
-            .passthrough(),
+          z.object({
+            data: z.array(outreachMailing),
+          }),
           outreachPaginatedResponse,
         ),
       }),
@@ -243,11 +223,9 @@ export const client = {
     find: request(({ id }: { id: number }) => ({
       url: `/sequences/${id}`,
       method: 'GET',
-      schema: z
-        .object({
-          data: outreachSequence,
-        })
-        .passthrough(),
+      schema: z.object({
+        data: outreachSequence,
+      }),
     })),
     list: request(
       ({ cursor }: { cursor?: `${typeof BASE_URL}/${string}` }) => ({
@@ -255,11 +233,9 @@ export const client = {
         method: 'GET',
         query: { count: 'false', 'page[size]': `${DEFAULT_PAGE_SIZE}` },
         schema: z.intersection(
-          z
-            .object({
-              data: z.array(outreachSequence),
-            })
-            .passthrough(),
+          z.object({
+            data: z.array(outreachSequence),
+          }),
           outreachPaginatedResponse,
         ),
       }),
@@ -277,11 +253,9 @@ export const client = {
         json: {
           data: { type: 'sequence', ...sequence },
         },
-        schema: z
-          .object({
-            data: outreachSequence,
-          })
-          .passthrough(),
+        schema: z.object({
+          data: outreachSequence,
+        }),
       }),
     ),
   },
@@ -317,11 +291,9 @@ export const client = {
           },
         },
         method: 'POST',
-        schema: z
-          .object({
-            data: outreachSequenceState,
-          })
-          .passthrough(),
+        schema: z.object({
+          data: outreachSequenceState,
+        }),
       }),
     ),
   },
@@ -362,11 +334,9 @@ export const client = {
         url: cursor ?? `/mailboxes`,
         method: 'GET',
         schema: z.intersection(
-          z
-            .object({
-              data: z.array(outreachMailbox),
-            })
-            .passthrough(),
+          z.object({
+            data: z.array(outreachMailbox),
+          }),
           outreachPaginatedResponse,
         ),
       }),
@@ -451,11 +421,9 @@ export const client = {
         url: `/emailAddresses`,
         json: { data: { type: 'emailAddress', ...emailAddress } },
         method: 'POST',
-        schema: z
-          .object({
-            data: outreachEmailAddress,
-          })
-          .passthrough(),
+        schema: z.object({
+          data: outreachEmailAddress,
+        }),
       }),
     ),
   },

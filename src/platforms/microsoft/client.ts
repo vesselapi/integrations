@@ -118,7 +118,5 @@ export const client = {
       ),
     },
   },
-  conversations: {},
-  messages: {},
   passthrough: request.passthrough(),
 };

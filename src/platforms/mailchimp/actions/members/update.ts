@@ -2,7 +2,6 @@ import { client } from '@/platforms/mailchimp/client';
 import { action } from '@/sdk';
 import * as custom from '@/sdk/validators';
 import * as z from 'zod';
-import { mailchimpMember } from '../../schemas';
 
 export default action(
   'update-member',
@@ -10,21 +9,30 @@ export default action(
     operation: 'update',
     resource: 'members',
     mutation: true,
-    schema: custom.object({
-      list_id: z.string(),
-      member: mailchimpMember.partial().required({
-        id: true,
-        email_address: true,
-        status: true,
+    schema: z.object({
+      listId: z.string(),
+      member: z.object({
+        id: z.string(),
+        emailAddress: z.string(),
+        fullName: z.string().optional(),
+        status: z.string(),
+        lastChanged: custom.date().optional(),
+        timestampSignup: custom.date().optional(),
       }),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
     return await client.members.update(auth, {
-      list_id: input.list_id,
+      list_id: input.listId,
       subscriber_hash: input.member.id,
-      member: input.member,
+      member: {
+        email_address: input.member.emailAddress,
+        full_name: input.member.fullName,
+        status: input.member.status,
+        last_changed: input.member.lastChanged,
+        timestamp_signup: input.member.timestampSignup,
+      },
     });
   },
 );

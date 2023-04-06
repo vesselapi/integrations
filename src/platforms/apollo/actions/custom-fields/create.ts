@@ -16,6 +16,11 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.customFields.create(auth, input);
+    const result = await client.customFields.create(auth, input);
+
+    return {
+      typedCustomField: result.data.typed_custom_field,
+      $native: result.$native,
+    };
   },
 );

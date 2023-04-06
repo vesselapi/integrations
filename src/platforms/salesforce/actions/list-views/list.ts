@@ -1,3 +1,4 @@
+import { transformListView } from '@/platforms/salesforce/actions/mappers';
 import { client } from '@/platforms/salesforce/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
@@ -17,17 +18,19 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    const resp = await client.listViews.list(auth, {
+    const result = await client.listViews.list(auth, {
       cursor: input.cursor,
       objectType: input.objectType,
       limit: MAX_QUERY_PAGE_SIZE,
     });
     return {
-      ...resp,
+      records: result.data.records.map(transformListView),
+      totalSize: result.data.totalSize,
       cursor: getNextCursor({
-        records: resp.records,
+        records: result.data.records,
         limit: MAX_QUERY_PAGE_SIZE,
       }),
+      $native: result.$native,
     };
   },
 );

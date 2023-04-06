@@ -1,3 +1,4 @@
+import { transformUser } from '@/platforms/salesforce/actions/mappers';
 import { client } from '@/platforms/salesforce/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
@@ -16,16 +17,17 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    const resp = await client.users.list(auth, {
+    const result = await client.users.list(auth, {
       cursor: input.cursor,
       limit: MAX_QUERY_PAGE_SIZE,
     });
     return {
-      ...resp,
+      records: result.data.records.map(transformUser),
       cursor: getNextCursor({
-        records: resp.records,
+        records: result.data.records,
         limit: MAX_QUERY_PAGE_SIZE,
       }),
+      $native: result.$native,
     };
   },
 );

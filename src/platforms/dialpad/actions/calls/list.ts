@@ -1,3 +1,4 @@
+import { transformCall } from '@/platforms/dialpad/actions/mappers';
 import { action } from '@/sdk';
 import { z } from 'zod';
 import client from '../../client';
@@ -13,5 +14,13 @@ export default action(
     }),
     scopes: [],
   },
-  ({ auth, input }) => client.calls.list(auth, input),
+  async ({ auth, input }) => {
+    const result = await client.calls.list(auth, input);
+
+    return {
+      cursor: result.data.cursor,
+      items: result.data.items?.map(transformCall),
+      $native: result.$native,
+    };
+  },
 );

@@ -1,3 +1,4 @@
+import { transformAccount } from '@/platforms/apollo/actions/mappers';
 import { client } from '@/platforms/apollo/client';
 import { apolloAccountCreate } from '@/platforms/apollo/schemas';
 import { action } from '@/sdk';
@@ -12,6 +13,11 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.accounts.create(auth, input);
+    const result = await client.accounts.create(auth, input);
+
+    return {
+      account: transformAccount(result.data.account),
+      $native: result.$native,
+    };
   },
 );

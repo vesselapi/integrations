@@ -26,11 +26,9 @@ export const client = {
     list: request(() => ({
       url: `/api/3/users`,
       method: 'GET',
-      schema: z
-        .object({
-          users: z.array(activeCampaignUser),
-        })
-        .passthrough(),
+      schema: z.object({
+        users: z.array(activeCampaignUser),
+      }),
     })),
   },
   lists: {
@@ -40,40 +38,32 @@ export const client = {
       query: shake({
         limit,
       }),
-      schema: z
-        .object({
-          lists: z.array(activeCampaignList),
-        })
-        .passthrough(),
+      schema: z.object({
+        lists: z.array(activeCampaignList),
+      }),
     })),
     find: request(({ id }: { id: string }) => ({
       url: `/api/3/lists/${id}`,
       method: 'GET',
-      schema: z
-        .object({
-          list: activeCampaignList,
-        })
-        .passthrough(),
+      schema: z.object({
+        list: activeCampaignList,
+      }),
     })),
   },
   contacts: {
     list: request(() => ({
       url: `/api/3/contacts`,
       method: 'GET',
-      schema: z
-        .object({
-          contacts: z.array(activeCampaignContact),
-        })
-        .passthrough(),
+      schema: z.object({
+        contacts: z.array(activeCampaignContact),
+      }),
     })),
     find: request(({ id }: { id: string }) => ({
       url: `/api/3/contacts/${id}`,
       method: 'GET',
-      schema: z
-        .object({
-          contact: activeCampaignContact,
-        })
-        .passthrough(),
+      schema: z.object({
+        contact: activeCampaignContact,
+      }),
     })),
     update: request(
       ({
@@ -90,11 +80,9 @@ export const client = {
       }) => ({
         url: `/api/3/contacts/${id}`,
         method: 'PUT',
-        schema: z
-          .object({
-            contact: activeCampaignContact,
-          })
-          .passthrough(),
+        schema: z.object({
+          contact: activeCampaignContact,
+        }),
         json: {
           contact: shake({
             email: properties.email,
@@ -114,11 +102,9 @@ export const client = {
       }) => ({
         url: `/api/3/contacts`,
         method: 'POST',
-        schema: z
-          .object({
-            contact: activeCampaignContact,
-          })
-          .passthrough(),
+        schema: z.object({
+          contact: activeCampaignContact,
+        }),
         json: {
           contact,
         },
