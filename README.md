@@ -5,10 +5,8 @@ Embedded GTM Integrations OS
 </h1>
 
 <div align="center">
-_Get up and running with top GTM integrations in minutes_
+<i>Get up and running with top GTM integrations in minutes</i>
 </div>
-
-<br />
 
 <p align="center">
   <br/>
