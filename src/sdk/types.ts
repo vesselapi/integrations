@@ -161,6 +161,7 @@ export type Platform<
   TStandardAnswers extends Record<string, string> = Record<string, string>,
   TOAuth2Answers extends Record<string, string> = Record<string, string>,
   TOAuth2AppMeta extends Record<string, unknown> = Record<string, unknown>,
+  TConstants extends PlatformConstants = PlatformConstants,
 > = {
   id: TId;
   auth: (
@@ -169,33 +170,20 @@ export type Platform<
   )[];
   rawActions: Action<string, any, any>[];
   client: TClient;
-  constants: PlatformConstants;
-  actions: {
-    [Key in keyof TActions]: TActions[Key] extends Action<
-      string,
-      infer TInput,
-      infer TOutput
-    >
-      ? DirectlyInvokedAction<TInput, TOutput>
-      : never;
-  };
+  constants: TConstants;
+  actions: TActions;
   display: PlatformDisplayConfig;
 };
 
 export type ActionFunction<
   TInput extends {},
   TOutput extends {} | null | void,
-  TIncludeNative extends boolean = true,
-> = (props: {
-  input: TInput;
-  auth: Auth;
-}) => Promise<ActionResult<TOutput, TIncludeNative>>;
+> = (props: { input: TInput; auth: Auth }) => Promise<ActionResult<TOutput>>;
 
 export type Action<
   TName extends string,
   TInput extends {},
   TOutput extends {} | null | void,
-  TIncludeNative extends boolean = true,
 > = {
   name: TName;
   schema: z.ZodType<TInput>;
@@ -203,7 +191,7 @@ export type Action<
   resource: string;
   scopes?: string[];
   mutation?: boolean;
-  func: ActionFunction<TInput, TOutput, TIncludeNative>;
+  func: ActionFunction<TInput, TOutput>;
 };
 
 export type DirectlyInvokedAction<
@@ -216,7 +204,7 @@ export type UnifiedAction<
   TVertical extends string,
   TInput extends {},
   TOutput extends {} | null,
-> = Action<TName, TInput, TOutput, false> & {
+> = Action<TName, TInput, TOutput> & {
   integrationId: string;
   vertical: TVertical;
 };
@@ -236,17 +224,6 @@ export type ClientResult<TValidated> = {
   $native: RawResponse;
 };
 
-export type ActionResult<
-  TTransformed,
-  TIncludeNative extends boolean = true,
-> = CamelCasedPropertiesDeep<TTransformed> & TIncludeNative extends true
-  ? {
-      $native: RawResponse | RawResponse[];
-    }
-  : {};
-
-export type NativelessAction<
-  TName extends string,
-  TInput extends {},
-  TOutput extends {} | null | void,
-> = Action<TName, TInput, TOutput, false>;
+export type ActionResult<TOutput> = CamelCasedPropertiesDeep<TOutput> & {
+  $native?: RawResponse | RawResponse[];
+};
