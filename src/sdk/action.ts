@@ -13,12 +13,11 @@ export const action = <
   TName extends string,
   TZodSchema extends z.ZodType<any, any, any>,
   TOutput extends {} | null | void,
-  TIncludeNative extends boolean,
 >(
   name: TName,
   options: ActionOptions<TZodSchema>,
-  func: ActionFunction<z.infer<TZodSchema>, TOutput, TIncludeNative>,
-): Action<TName, z.infer<TZodSchema>, TOutput, TIncludeNative> => {
+  func: ActionFunction<z.infer<TZodSchema>, TOutput>,
+): Action<TName, z.infer<TZodSchema>, TOutput> => {
   return {
     name,
     schema: options.schema,

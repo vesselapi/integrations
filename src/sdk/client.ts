@@ -97,12 +97,16 @@ export const makeRequestFactory = (
         // We may also support an injectable logger object.
         console.error('Validation failed on client response', {
           zodError: zodResult.error,
+          received: body,
         });
 
         return {
           data: body as z.infer<TResponseSchema>,
           $native: {
-            headers: { test: 'value' }, // todo fix
+            headers: [...response.headers].reduce(
+              (obj, [key, value]) => ({ ...obj, [key]: value }),
+              {},
+            ),
             body: body,
           },
         };
@@ -111,7 +115,10 @@ export const makeRequestFactory = (
       return {
         data: zodResult.data,
         $native: {
-          headers: { test: 'value' }, // todo fix
+          headers: [...response.headers].reduce(
+            (obj, [key, value]) => ({ ...obj, [key]: value }),
+            {},
+          ),
           body: body,
         },
       };

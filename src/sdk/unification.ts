@@ -2,7 +2,7 @@ import { Action, Unification, UnifiedAction } from '../sdk';
 
 export const unification = <
   TPlatforms extends string,
-  TUnifiedAction extends Action<string, any, any, false>,
+  TUnifiedAction extends Action<string, any, any>,
   TVertical extends string = string,
 >(
   vertical: TVertical,
