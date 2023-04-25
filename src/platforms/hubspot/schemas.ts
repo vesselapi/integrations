@@ -1,6 +1,6 @@
 import * as custom from '@/sdk/validators';
 import { z } from 'zod';
-import { HUBSPOT_COMMON_ASSOCIATIONS } from './constants';
+import { HUBSPOT_COMMON_ASSOCIATIONS, HUBSPOT_MODULES } from './constants';
 
 export const hubspotCommonAssociationsSchema = z.enum(
   HUBSPOT_COMMON_ASSOCIATIONS,
@@ -51,18 +51,6 @@ export const listResponseSchema = (itemSchema: z.ZodSchema) =>
     })
     .passthrough();
 
-export const HUBSPOT_MODULES = [
-  'owners',
-  'contacts',
-  'deals',
-  'companies',
-  'notes',
-  'tasks',
-  'meetings',
-  'emails',
-  'calls',
-  'contact_lists',
-] as const;
 export const hubspotModuleSchema = z.enum(HUBSPOT_MODULES);
 export type HubspotModule = (typeof HUBSPOT_MODULES)[number];
 
@@ -103,7 +91,8 @@ export const baseHubspotObjectSchema = <T extends z.ZodSchema>(properties: T) =>
           deals: hubspotAssociationSchema,
         })
         .partial()
-        .passthrough(),
+        .passthrough()
+        .optional(),
     })
     .passthrough();
 
@@ -258,6 +247,7 @@ const notePropertiesSchema = z
   .object({
     hubspot_owner_id: hubspotIdSchema,
     hs_note_body: z.string(),
+    hs_timestamp: z.string(),
   })
   .partial()
   .passthrough();
@@ -608,6 +598,17 @@ export const hubspotAssociationResponseSchema = z
 export type HubspotAssociationResponse = z.infer<
   typeof hubspotAssociationResponseSchema
 >;
+
+export const hubspotAssociationDeleteSchema = z.object({
+  fromId: hubspotIdSchema,
+  fromType: hubspotModuleSchema,
+  toId: hubspotIdSchema,
+  toType: hubspotModuleSchema,
+});
+export type HubspotAssociationDelete = z.infer<
+  typeof hubspotAssociationDeleteSchema
+>;
+
 export const hubspotAssociationLabelInputSchema = z.object({
   fromType: hubspotModuleSchema,
   toType: hubspotModuleSchema,

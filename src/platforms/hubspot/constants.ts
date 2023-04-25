@@ -7,3 +7,15 @@ export const HUBSPOT_COMMON_ASSOCIATIONS = [
   'contacts',
   'deals',
 ] as const;
+export const HUBSPOT_MODULES = [
+  'owners',
+  'contacts',
+  'deals',
+  'companies',
+  'notes',
+  'tasks',
+  'meetings',
+  'emails',
+  'calls',
+  'contact_lists',
+] as const;

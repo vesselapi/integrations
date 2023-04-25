@@ -1,4 +1,5 @@
 import { auth, platform } from '@/sdk';
+import { guard } from 'radash';
 import callDispositions from './actions/calls/dispositions';
 import client from './client';
 import * as constants from './constants';
@@ -11,7 +12,10 @@ export default platform('hubspot', {
     tokenUrl: `https://api.hubapi.com/oauth/v1/token`,
     tokenAuth: 'body',
     isRetryable: async ({ response }) => {
-      return (await response.json()).category === 'EXPIRED_AUTHENTICATION';
+      if (response.status === 204) return false;
+      const checkExpiredAuth = async () =>
+        (await response.json()).category === 'EXPIRED_AUTHENTICATION';
+      return (await guard(checkExpiredAuth)) ?? false;
     },
     default: true,
   }),
