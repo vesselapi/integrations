@@ -25,7 +25,7 @@ export default platform('aircall', {
     auth.apiToken({
       questions: [
         {
-          type: 'string',
+          type: 'text',
           id: 'api-id',
           label: 'API ID',
         },

@@ -35,7 +35,7 @@ export type StandardAuth = BaseAuth & {
 export type Auth = OAuth2Auth | StandardAuth;
 
 export type HttpsUrl = `https://${string}`;
-export type AuthQuestionType = 'string' | 'select';
+export type AuthQuestionType = 'text' | 'select';
 export type AuthQuestionOption = {
   value: string;
   label: string;
@@ -53,7 +53,7 @@ export type SelectAuthQuestion = BaseAuthQuestion & {
 };
 
 export type StringAuthQuestion = BaseAuthQuestion & {
-  type: 'string';
+  type: 'text';
 };
 
 export type AuthQuestion = SelectAuthQuestion | StringAuthQuestion;
