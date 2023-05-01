@@ -4,6 +4,7 @@ import {
   SalesloftCustomField,
   SalesloftEmail,
   SalesloftEmailBody,
+  SalesloftMetadata,
   SalesloftPerson,
   SalesloftUser,
 } from '@/platforms/salesloft/schemas';
@@ -175,5 +176,18 @@ export const transformUser = (user: SalesloftUser) => {
     clickToCallEnabled: user.click_to_call_enabled,
     emailClientConfigured: user.email_client_configured,
     crmConnected: user.crm_connected,
+  };
+};
+
+export const transformMetadata = (metadata: SalesloftMetadata) => {
+  return {
+    paging: metadata.paging
+      ? {
+          perPage: metadata.paging.per_page,
+          currentPage: metadata.paging.current_page,
+          nextPage: metadata.paging.next_page,
+          prevPage: metadata.paging.prev_page,
+        }
+      : null,
   };
 };

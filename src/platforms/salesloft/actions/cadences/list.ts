@@ -1,4 +1,7 @@
-import { transformCadence } from '@/platforms/salesloft/actions/mappers';
+import {
+  transformCadence,
+  transformMetadata,
+} from '@/platforms/salesloft/actions/mappers';
 import { client } from '@/platforms/salesloft/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
@@ -22,7 +25,10 @@ export default action(
     });
 
     return {
-      data: result.data.data.map(transformCadence),
+      data: {
+        data: result.data.data.map(transformCadence),
+        metadata: transformMetadata(result.data.metadata),
+      },
       $native: result.$native,
     };
   },
