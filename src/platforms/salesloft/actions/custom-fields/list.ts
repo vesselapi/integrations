@@ -1,4 +1,7 @@
-import { transformCustomField } from '@/platforms/salesloft/actions/mappers';
+import {
+  transformCustomField,
+  transformMetadata,
+} from '@/platforms/salesloft/actions/mappers';
 import { client } from '@/platforms/salesloft/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
@@ -24,7 +27,10 @@ export default action(
     });
 
     return {
-      data: result.data.data.map(transformCustomField),
+      data: {
+        data: result.data.data.map(transformCustomField),
+        metadata: transformMetadata(result.data.metadata),
+      },
       $native: result.$native,
     };
   },

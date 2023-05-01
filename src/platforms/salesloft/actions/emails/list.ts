@@ -1,4 +1,7 @@
-import { transformEmail } from '@/platforms/salesloft/actions/mappers';
+import {
+  transformEmail,
+  transformMetadata,
+} from '@/platforms/salesloft/actions/mappers';
 import { client } from '@/platforms/salesloft/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
@@ -26,7 +29,10 @@ export default action(
     });
 
     return {
-      data: result.data.data.map(transformEmail),
+      data: {
+        data: result.data.data.map(transformEmail),
+        metadata: transformMetadata(result.data.metadata),
+      },
       $native: result.$native,
     };
   },
