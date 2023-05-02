@@ -9,7 +9,7 @@ export const slackPaginated = custom.object({
 
 export const slackExpiredAuth = custom.object({
   ok: z.literal(false),
-  error: z.literal('token_expired'),
+  error: z.enum(['token_expired', 'invalid_auth']),
 });
 
 export const slackUser = custom.object({
