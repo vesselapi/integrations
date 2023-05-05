@@ -410,6 +410,13 @@ export type HubspotEmailUpdate = z.infer<typeof hubspotEmailUpdateSchema> & {
 // -
 // Calls
 // -
+export const callDispositionsSchema = z.array(
+  z.object({
+    label: z.string(),
+    id: z.string(),
+  }),
+);
+
 const callPropertiesSchema = z
   .object({
     hs_call_disposition: z.string(),
