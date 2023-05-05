@@ -121,16 +121,19 @@ const makeClient = () => {
   const createObject = <TInput extends Record<string, unknown>, TOutput>(
     module: HubspotModule | `objects/${HubspotModule}`,
     schema: z.ZodSchema,
+    properties?: string[],
   ): requestFunctionType<TInput, TOutput> =>
     request((body: TInput) => ({
       url: `/crm/${API_VERSION}/${module}/`,
       method: 'POST',
       schema,
       json: {
-        properties: {
-          hs_timestamp: new Date().toISOString(),
+        properties: shake({
+          hs_timestamp: properties?.includes('hs_timestamp')
+            ? new Date().toISOString()
+            : undefined,
           ...shake(body),
-        },
+        }),
       },
     }));
 
@@ -189,7 +192,7 @@ const makeClient = () => {
       listResponseSchema(schema),
       properties,
     ),
-    create: createObject<TCreate, TOutput>(module, schema),
+    create: createObject<TCreate, TOutput>(module, schema, properties),
     update: updateObject<TUpdate, TOutput>(module, schema),
     delete: deleteObject(module, schema),
     batchRead: batchReadObject<ListOutput<TOutput>>(
