@@ -5,6 +5,7 @@ import * as z from 'zod';
 import { API_VERSION, BASE_URL, HUBSPOT_MAX_PAGE_SIZE } from './constants';
 import {
   BatchReadObjectInput,
+  callDispositionsSchema,
   callProperties,
   companyProperties,
   contactProperties,
@@ -241,11 +242,18 @@ const makeClient = () => {
       hubspotEmailSchema,
       emailProperties,
     ),
-    calls: crud<HubspotCallCreate, HubspotCallUpdate, HubspotCall>(
-      'objects/calls',
-      hubspotCallSchema,
-      callProperties,
-    ),
+    calls: {
+      ...crud<HubspotCallCreate, HubspotCallUpdate, HubspotCall>(
+        'objects/calls',
+        hubspotCallSchema,
+        callProperties,
+      ),
+      dispositions: request(({}) => ({
+        url: `/calling/v1/dispositions`,
+        method: 'GET',
+        schema: callDispositionsSchema,
+      })),
+    },
     // HubSpot only has support for contact lists in v1 of the API
     contactLists: {
       find: request(({ id }: { id: string }) => ({

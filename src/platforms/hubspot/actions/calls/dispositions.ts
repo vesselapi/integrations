@@ -11,13 +11,8 @@ export default action(
     schema: z.object({}),
     scopes: [],
   },
-  async ({ auth, input }) => {
-    const result: { data: { label: string; id: string }[]; $native: any } =
-      await client.passthrough(auth, {
-        url: `/calling/v1/dispositions`,
-        method: 'GET',
-      });
-
+  async ({ auth }) => {
+    const result = await client.calls.dispositions(auth, {});
     return {
       result: {
         dispositions: result.data.map((disposition) => ({
