@@ -300,7 +300,7 @@ export const hubspotTaskUpsertSchema = z
     hs_task_subject: z.string(),
     hs_task_status: z.string(),
     hs_task_priority: z.string(),
-    hs_timestamp: z.string(),
+    hs_timestamp: z.string().optional(),
     hubspot_owner_id: z.string(),
   })
   .partial();
@@ -332,7 +332,7 @@ export type HubspotMeeting = z.infer<typeof hubspotMeetingSchema>;
 
 export const hubspotMeetingUpsertSchema = z
   .object({
-    hs_timestamp: z.string(),
+    hs_timestamp: z.string().optional(),
     hs_meeting_title: z.string(),
     hs_meeting_body: z.string(),
     hs_meeting_location: z.string(),
@@ -433,11 +433,9 @@ export const hubspotCallCreateSchema = callPropertiesSchema
     hs_call_body: true,
     hs_call_title: true,
     hubspot_owner_id: true,
+    hs_timestamp: true,
   })
-  .partial()
-  .extend({
-    hs_timestamp: z.string(),
-  });
+  .partial();
 export type HubspotCallCreate = z.infer<typeof hubspotCallCreateSchema>;
 
 export const hubspotCallUpdateSchema = callPropertiesSchema
