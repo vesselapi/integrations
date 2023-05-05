@@ -40,17 +40,17 @@ export const makeRequestFactory = (
       auth: Auth,
       args: TArgs,
     ): Promise<ClientResult<z.infer<TResponseSchema>>> {
-      const options = await formatFetchOptions(
-        auth,
-        isFunction(formatRequestOptions)
-          ? formatRequestOptions(args)
-          : formatRequestOptions,
-      );
-      const response = await auth.retry(async () => {
+      const { response, options } = await auth.retry(async () => {
+        const options = await formatFetchOptions(
+          auth,
+          isFunction(formatRequestOptions)
+            ? formatRequestOptions(args)
+            : formatRequestOptions,
+        );
         const url = options.query
           ? `${trim(options.url, '/')}?${toQueryString(options.query)}`
           : options.url;
-        return await fetch(url, {
+        const response = await fetch(url, {
           body: options.json ? JSON.stringify(options.json) : undefined,
           method: options.method,
           headers: options.json
@@ -64,6 +64,7 @@ export const makeRequestFactory = (
                 Accept: 'application/json',
               },
         });
+        return { response, options };
       });
 
       if (!response.ok) {
