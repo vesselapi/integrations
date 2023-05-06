@@ -137,6 +137,7 @@ const contactPropertiesSchema = z
     company: z.string(),
     hubspot_owner_id: z.string(),
   })
+  .partial()
   .passthrough();
 export const contactProperties = Object.keys(contactPropertiesSchema.shape);
 
@@ -178,6 +179,7 @@ const dealPropertiesSchema = z
     hs_is_closed: hubspotBooleanSchema,
     hubspot_owner_id: z.string(),
   })
+  .partial()
   .passthrough();
 export const dealProperties = Object.keys(dealPropertiesSchema.shape);
 
@@ -218,6 +220,7 @@ const companyPropertiesSchema = z
     description: z.string(),
     hubspot_owner_id: z.string(),
   })
+  .partial()
   .passthrough();
 export const companyProperties = Object.keys(companyPropertiesSchema.shape);
 
@@ -256,6 +259,7 @@ const notePropertiesSchema = z
     hubspot_owner_id: hubspotIdSchema,
     hs_note_body: z.string(),
   })
+  .partial()
   .passthrough();
 export const noteProperties = Object.keys(notePropertiesSchema.shape);
 
@@ -287,6 +291,7 @@ const taskPropertiesSchema = z
     hs_task_priority: z.string(),
     hubspot_owner_id: hubspotIdSchema,
   })
+  .partial()
   .passthrough();
 export const taskProperties = Object.keys(taskPropertiesSchema.shape);
 
@@ -322,6 +327,7 @@ const meetingPropertiesSchema = z
     hs_meeting_end_time: custom.date().optional(),
     hubspot_owner_id: hubspotIdSchema,
   })
+  .partial()
   .passthrough();
 export const meetingProperties = Object.keys(meetingPropertiesSchema.shape);
 
@@ -371,6 +377,7 @@ const emailPropertiesSchema = z
     hs_email_status: z.string(),
     hubspot_owner_id: hubspotIdSchema,
   })
+  .partial()
   .passthrough();
 export const emailProperties = Object.keys(emailPropertiesSchema.shape);
 
@@ -426,6 +433,7 @@ const callPropertiesSchema = z
     hs_call_title: z.string(),
     hubspot_owner_id: hubspotIdSchema,
   })
+  .partial()
   .passthrough();
 export const callProperties = Object.keys(callPropertiesSchema.shape);
 
