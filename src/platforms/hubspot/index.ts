@@ -1,4 +1,5 @@
 import { auth, platform } from '@/sdk';
+import callDispositions from './actions/calls/dispositions';
 import client from './client';
 import * as constants from './constants';
 import { icon } from './icon';
@@ -17,5 +18,7 @@ export default platform('hubspot', {
   display: { name: 'HubSpot', iconURI: icon, categories: ['crm'] },
   constants,
   client,
-  actions: {},
+  actions: {
+    callDispositions,
+  },
 });
