@@ -1,28 +1,30 @@
-import { transformContact } from '@/platforms/apollo/actions/mappers';
+import { transformLabel } from '@/platforms/apollo/actions/mappers';
 import { client } from '@/platforms/apollo/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
 
 export default action(
-  'search-contacts',
+  'search-labels',
   {
     operation: 'search',
-    resource: 'contacts',
+    resource: 'labels',
     mutation: false,
     schema: z.object({
-      page: z.number().optional(),
       qKeywords: z.string().optional(),
+      page: z.number().optional(),
+      teamListsOnly: z.boolean().optional().default(false),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    const result = await client.contacts.search(auth, {
-      page: input.page,
+    const result = await client.labels.search(auth, {
       q_keywords: input.qKeywords,
+      page: input.page,
+      team_lists_only: input.teamListsOnly,
     });
 
     return {
-      contacts: result.data.contacts.map(transformContact),
+      labels: result.data.labels.map(transformLabel),
       $native: result.$native,
     };
   },

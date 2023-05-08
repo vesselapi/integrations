@@ -30,6 +30,10 @@ import updateSequenceTemplate from './actions/sequence-templates/update';
 
 import searchUsers from './actions/users/search';
 
+import searchLabels from './actions/labels/search';
+
+import searchPeople from './actions/people/search';
+
 export * as types from './schemas';
 export default platform('apollo', {
   auth: [
@@ -74,5 +78,9 @@ export default platform('apollo', {
     updateSequenceTemplate,
 
     searchUsers,
+
+    searchLabels,
+
+    searchPeople,
   },
 });

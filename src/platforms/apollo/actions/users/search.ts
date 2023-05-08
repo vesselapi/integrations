@@ -8,7 +8,7 @@ export default action(
   {
     operation: 'search',
     resource: 'users',
-    mutation: true,
+    mutation: false,
     schema: z.object({
       page: z.number().optional(),
     }),

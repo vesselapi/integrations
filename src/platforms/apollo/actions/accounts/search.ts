@@ -8,7 +8,7 @@ export default action(
   {
     operation: 'search',
     resource: 'accounts',
-    mutation: true,
+    mutation: false,
     schema: z.object({
       qOrganizationName: z.string().optional(),
       page: z.number().optional(),

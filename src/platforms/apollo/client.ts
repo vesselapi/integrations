@@ -16,7 +16,9 @@ import {
   apolloEmailAccount,
   apolloEmailActivity,
   apolloEmailMessage,
+  apolloLabel,
   apolloPaginatedResponse,
+  apolloPerson,
   apolloSequence,
   apolloSequenceStep,
   ApolloUpdateSequenceTemplate,
@@ -229,6 +231,52 @@ export const client = {
         email_accounts: z.array(apolloEmailAccount),
       }),
     })),
+  },
+  labels: {
+    search: request(
+      ({
+        team_lists_only,
+        q_keywords,
+        page,
+      }: {
+        team_lists_only: boolean;
+        q_keywords?: string;
+        page?: number;
+      }) => ({
+        url: `/labels/search`,
+        method: 'POST',
+        json: {
+          ...shake({ q_keywords, page }),
+          team_lists_only: team_lists_only ? ['yes'] : ['no'],
+        },
+        schema: z.object({
+          labels: z.array(apolloLabel),
+          pagination: apolloPaginatedResponse,
+        }),
+      }),
+    ),
+  },
+  people: {
+    search: request(
+      ({
+        q_keywords,
+        contact_label_ids,
+        page,
+      }: {
+        q_keywords?: string;
+        contact_label_ids?: string[];
+        page?: number;
+      }) => ({
+        url: `/mixed_people/search`,
+        method: 'POST',
+        json: shake({ page, contact_label_ids, q_keywords }),
+        schema: z.object({
+          contacts: z.array(apolloContact),
+          people: z.array(apolloPerson),
+          pagination: apolloPaginatedResponse,
+        }),
+      }),
+    ),
   },
   sequenceSteps: {
     create: request((step: ApolloCreateSequenceStep) => ({
