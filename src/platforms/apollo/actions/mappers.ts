@@ -4,6 +4,7 @@ import {
   ApolloEmailActivity,
   ApolloEmailMessage,
   ApolloLabel,
+  ApolloPaginatedResponse,
   ApolloPerson,
   ApolloSequence,
   ApolloUser,
@@ -143,5 +144,14 @@ export const transformPerson = (person: ApolloPerson) => {
     firstName: person.first_name,
     lastName: person.last_name,
     name: person.name,
+  };
+};
+
+export const transformPagination = (pagination: ApolloPaginatedResponse) => {
+  return {
+    page: pagination.page,
+    perPage: pagination.per_page,
+    totalEntries: pagination.total_entries,
+    totalPages: pagination.total_pages,
   };
 };

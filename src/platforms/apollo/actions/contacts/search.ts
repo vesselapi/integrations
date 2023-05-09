@@ -1,4 +1,7 @@
-import { transformContact } from '@/platforms/apollo/actions/mappers';
+import {
+  transformContact,
+  transformPagination,
+} from '@/platforms/apollo/actions/mappers';
 import { client } from '@/platforms/apollo/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
@@ -23,6 +26,7 @@ export default action(
 
     return {
       contacts: result.data.contacts.map(transformContact),
+      pagination: transformPagination(result.data.pagination),
       $native: result.$native,
     };
   },
