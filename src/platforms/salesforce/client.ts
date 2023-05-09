@@ -4,12 +4,22 @@ import { z } from 'zod';
 import { salesforceQueryBuilder } from './actions/query-builder';
 import { SALESFORCE_API_VERSION } from './constants';
 import {
+  salesforceAccount,
+  SalesforceAccountCreate,
+  salesforceAccountCreateResponse,
+  salesforceAccountRelationalSelect,
+  SalesforceAccountUpdate,
   salesforceContact,
-  SalesforceContactCreateInput,
+  SalesforceContactCreate,
   salesforceContactCreateResponse,
   SalesforceContactUpdate,
   salesforceListView,
   salesforceListViewResult,
+  salesforceOpportunity,
+  SalesforceOpportunityCreate,
+  salesforceOpportunityCreateResponse,
+  SalesforceOpportunityUpdate,
+  salesforceQueryResponse,
   SalesforceSupportedObjectType,
   salesforceUser,
 } from './schemas';
@@ -41,22 +51,66 @@ const query = {
     objectType: SalesforceSupportedObjectType;
     relationalSelect?: string;
   }) =>
-    request(({ cursor, limit }: { cursor?: string; limit: number }) => ({
-      url: `/query/?q=${salesforceQueryBuilder.list({
-        objectType,
+    request(
+      ({
         cursor,
-        relationalSelect,
         limit,
-      })}`,
-      method: 'GET',
-      schema: z.object({
-        records: z.array(schema),
-        totalSize: z.number(),
+        includeAssociations = false,
+      }: {
+        cursor?: string;
+        limit: number;
+        includeAssociations?: boolean;
+      }) => ({
+        url: `/query/?q=${salesforceQueryBuilder.list({
+          objectType,
+          cursor,
+          relationalSelect: includeAssociations ? relationalSelect : undefined,
+          limit,
+        })}`,
+        method: 'GET',
+        schema: z.object({
+          records: z.array(schema),
+          totalSize: z.number(),
+        }),
       }),
-    })),
+    ),
+  find: <T extends z.ZodType>({
+    schema,
+    objectType,
+    relationalSelect,
+  }: {
+    schema: T;
+    objectType: SalesforceSupportedObjectType;
+    relationalSelect?: string;
+  }) =>
+    request(
+      ({
+        Id,
+        includeAssociations = false,
+      }: {
+        Id: string;
+        includeAssociations?: boolean;
+      }) => ({
+        url: `/query/?q=${salesforceQueryBuilder.find({
+          id: Id,
+          objectType,
+          relationalSelect: includeAssociations ? relationalSelect : undefined,
+        })}`,
+        method: 'GET',
+        schema: z.object({
+          records: z.array(schema),
+        }),
+      }),
+    ),
 };
 
 export const client = {
+  query: request(({ query }: { query: string }) => ({
+    url: `/query/`,
+    method: 'GET',
+    query: { q: query.replace(/ /g, '+') },
+    schema: salesforceQueryResponse,
+  })),
   users: {
     find: request(({ Id }: { Id: string }) => ({
       url: `/sobjects/User/${Id}/`,
@@ -69,19 +123,18 @@ export const client = {
     }),
   },
   contacts: {
-    find: request(({ Id }: { Id: string }) => ({
-      url: `/sobjects/Contact/${Id}/`,
-      method: 'GET',
-      schema: salesforceContact,
-    })),
-    list: query.list({
+    find: query.find<typeof salesforceContact>({
       objectType: 'Contact',
       schema: salesforceContact,
     }),
-    create: request((contact: SalesforceContactCreateInput) => ({
+    list: query.list<typeof salesforceContact>({
+      objectType: 'Contact',
+      schema: salesforceContact,
+    }),
+    create: request(({ Contact }: SalesforceContactCreate) => ({
       url: `/sobjects/Contact`,
       method: 'POST',
-      json: contact,
+      json: Contact,
       schema: salesforceContactCreateResponse,
     })),
     update: request(({ Id, Contact }: SalesforceContactUpdate) => ({
@@ -89,6 +142,11 @@ export const client = {
       method: 'PATCH',
       json: Contact,
       schema: salesforceContact,
+    })),
+    delete: request(({ Id }: { Id: string }) => ({
+      url: `/sobjects/Contact/${Id}/`,
+      method: 'DELETE',
+      schema: z.undefined(),
     })),
   },
   listViews: {
@@ -125,6 +183,62 @@ export const client = {
       url: `/sobjects/${objectType}/listviews/${Id}/results`,
       method: 'GET',
       schema: salesforceListViewResult,
+    })),
+  },
+  accounts: {
+    find: query.find<typeof salesforceAccount>({
+      objectType: 'Account',
+      schema: salesforceAccount,
+      relationalSelect: salesforceAccountRelationalSelect,
+    }),
+    list: query.list<typeof salesforceAccount>({
+      objectType: 'Account',
+      schema: salesforceAccount,
+      relationalSelect: salesforceAccountRelationalSelect,
+    }),
+    create: request(({ Account }: SalesforceAccountCreate) => ({
+      url: `/sobjects/Account`,
+      method: 'POST',
+      json: Account,
+      schema: salesforceAccountCreateResponse,
+    })),
+    update: request(({ Id, Account }: SalesforceAccountUpdate) => ({
+      url: `/sobjects/Account/${Id}/`,
+      method: 'PATCH',
+      json: Account,
+      schema: salesforceAccount,
+    })),
+    delete: request(({ Id }: { Id: string }) => ({
+      url: `/sobjects/Account/${Id}/`,
+      method: 'DELETE',
+      schema: z.undefined(),
+    })),
+  },
+  opportunities: {
+    find: query.find<typeof salesforceOpportunity>({
+      objectType: 'Opportunity',
+      schema: salesforceOpportunity,
+    }),
+    list: query.list({
+      objectType: 'Opportunity',
+      schema: salesforceOpportunity,
+    }),
+    create: request(({ Opportunity }: SalesforceOpportunityCreate) => ({
+      url: `/sobjects/Opportunity`,
+      method: 'POST',
+      json: Opportunity,
+      schema: salesforceOpportunityCreateResponse,
+    })),
+    update: request(({ Id, Opportunity }: SalesforceOpportunityUpdate) => ({
+      url: `/sobjects/Opportunity/${Id}/`,
+      method: 'PATCH',
+      json: Opportunity,
+      schema: salesforceOpportunity,
+    })),
+    delete: request(({ Id }: { Id: string }) => ({
+      url: `/sobjects/Opportunity/${Id}/`,
+      method: 'DELETE',
+      schema: z.undefined(),
     })),
   },
   passthrough: request.passthrough(),
