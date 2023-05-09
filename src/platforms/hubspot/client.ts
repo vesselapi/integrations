@@ -13,7 +13,9 @@ import {
   emailProperties,
   FindObjectInput,
   HubspotAssociationCreate,
+  HubspotAssociationDelete,
   HubspotAssociationLabelInput,
+  HubspotAssociationLabelOutput,
   hubspotAssociationLabelOutputSchema,
   HubspotCall,
   HubspotCallCreate,
@@ -152,12 +154,11 @@ const makeClient = () => {
 
   const deleteObject = (
     module: HubspotModule | `objects/${HubspotModule}`,
-    schema: z.ZodSchema,
   ): requestFunctionType<FindObjectInput, void> =>
     request((body: FindObjectInput) => ({
       url: `/crm/${API_VERSION}/${module}/${body.id}`,
       method: 'DELETE',
-      schema,
+      schema: z.undefined(),
     }));
 
   const batchReadObject = <TOutput>(
@@ -169,8 +170,7 @@ const makeClient = () => {
       url: `/crm/${API_VERSION}/${module}/batch/read`,
       method: 'POST',
       json: {
-        properties: properties?.join(','),
-        idProperty: 'id',
+        properties: properties ?? null,
         inputs: ids.map((id) => ({ id })),
         propertiesWithHistory: null,
       },
@@ -194,7 +194,7 @@ const makeClient = () => {
     ),
     create: createObject<TCreate, TOutput>(module, schema, properties),
     update: updateObject<TUpdate, TOutput>(module, schema),
-    delete: deleteObject(module, schema),
+    delete: deleteObject(module),
     batchRead: batchReadObject<ListOutput<TOutput>>(
       module,
       listResponseSchema(schema),
@@ -331,17 +331,29 @@ const makeClient = () => {
           url: `/crm/v4/objects/${fromType}/${fromId}/associations/${toType}/${toId}`,
           method: 'PUT',
           schema: listResponseSchema(hubspotPropertySchema),
-          json: shake({
-            associationCategory: category,
-            associationTypeId: typeId,
-          }),
+          json: [
+            shake({
+              associationCategory: category,
+              associationTypeId: typeId,
+            }),
+          ],
+        }),
+      ),
+      delete: request(
+        ({ fromId, fromType, toId, toType }: HubspotAssociationDelete) => ({
+          url: `/crm/v4/objects/${fromType}/${fromId}/associations/${toType}/${toId}`,
+          method: 'DELETE',
+          schema: z.undefined(),
         }),
       ),
       labels: request(({ fromType, toType }: HubspotAssociationLabelInput) => ({
         url: `/crm/v4/associations/${fromType}/${toType}/labels`,
         method: 'GET',
         schema: listResponseSchema(hubspotAssociationLabelOutputSchema),
-      })),
+      })) as requestFunctionType<
+        HubspotAssociationLabelInput,
+        ListOutput<HubspotAssociationLabelOutput>
+      >,
     },
     passthrough: request.passthrough(),
   };

@@ -8,7 +8,7 @@ export type HttpOptions = {
   url: `${HttpsUrl}/${string}` | `/${string}`;
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   headers?: Record<string, string>;
-  json?: Record<string, unknown>;
+  json?: Record<string, unknown> | Record<string, unknown>[];
   query?: Record<string, string>;
 };
 
@@ -67,27 +67,21 @@ export const makeRequestFactory = (
         return { response, options };
       });
 
-      if (!response.ok) {
-        const text = await response.text();
-
-        throw new IntegrationError('HTTP error in client', {
-          type: 'http',
-          body:
-            guard(
-              () => JSON.parse(text),
-              (err) => err instanceof SyntaxError,
-            ) ?? text,
-          status: response.status,
-          headers: response.headers,
-          cause: response,
-        });
-      }
-
       const text = await response.text();
       const body = guard(
         () => JSON.parse(text),
         (err) => err instanceof SyntaxError,
       ) ?? { body: text };
+
+      if (!response.ok) {
+        throw new IntegrationError('HTTP error in client', {
+          type: 'http',
+          body,
+          status: response.status,
+          headers: response.headers,
+          cause: response,
+        });
+      }
 
       const zodResult = await options.schema.safeParseAsync(body);
       if (!zodResult.success) {

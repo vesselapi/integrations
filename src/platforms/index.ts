@@ -44,16 +44,16 @@ export { default as slack, types as slackTypes } from '@/platforms/slack';
 export { default as teams, types as teamsTypes } from '@/platforms/teams';
 
 export const integrationsList: Platform<any, any, any, any, any>[] = [
-  aircall,
   activeCampaign,
+  aircall,
   apollo,
   dialpad,
+  hubspot,
+  mailchimp,
   outreach,
   ringcentral,
   salesforce,
   salesloft,
   slack,
-  mailchimp,
   teams,
-  hubspot,
 ];
