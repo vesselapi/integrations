@@ -7,7 +7,7 @@ export default action(
   {
     operation: 'list',
     resource: 'custom-fields',
-    mutation: true,
+    mutation: false,
     schema: z.object({
       page: z.number().optional(),
     }),

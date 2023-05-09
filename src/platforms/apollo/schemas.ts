@@ -51,6 +51,15 @@ export const apolloContact = z.object({
 
 export type ApolloContact = z.infer<typeof apolloContact>;
 
+export const apolloPerson = z.object({
+  id: z.string(),
+  first_name: z.string().nullish(),
+  last_name: z.string().nullish(),
+  name: z.string().nullish(),
+});
+
+export type ApolloPerson = z.infer<typeof apolloPerson>;
+
 export const apolloContactCreate = z.object({
   first_name: z.string().nullish(),
   last_name: z.string().nullish(),
@@ -84,6 +93,15 @@ export const apolloContactUpdate = z.object({
 export type ApolloContactCreate = z.infer<typeof apolloContactCreate>;
 
 export type ApolloContactUpdate = z.infer<typeof apolloContactUpdate>;
+
+export const apolloLabel = z.object({
+  id: z.string(),
+  name: z.string(),
+  created_at: custom.date(),
+  updated_at: custom.date(),
+});
+
+export type ApolloLabel = z.infer<typeof apolloLabel>;
 
 export const apolloSequence = z.object({
   id: z.string(),

@@ -8,7 +8,7 @@ export default action(
   {
     operation: 'search',
     resource: 'sequences',
-    mutation: true,
+    mutation: false,
     schema: z.object({
       qKeywords: z.string().optional(),
       page: z.number().optional(),

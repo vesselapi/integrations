@@ -3,6 +3,8 @@ import {
   ApolloContact,
   ApolloEmailActivity,
   ApolloEmailMessage,
+  ApolloLabel,
+  ApolloPerson,
   ApolloSequence,
   ApolloUser,
 } from '@/platforms/apollo/schemas';
@@ -123,5 +125,23 @@ export const transformUser = (user: ApolloUser) => {
     email: user.email,
     teamId: user.team_id,
     createdAt: user.created_at,
+  };
+};
+
+export const transformLabel = (label: ApolloLabel) => {
+  return {
+    id: label.id,
+    name: label.name,
+    createdAt: label.created_at,
+    updatedAt: label.updated_at,
+  };
+};
+
+export const transformPerson = (person: ApolloPerson) => {
+  return {
+    id: person.id,
+    firstName: person.first_name,
+    lastName: person.last_name,
+    name: person.name,
   };
 };
