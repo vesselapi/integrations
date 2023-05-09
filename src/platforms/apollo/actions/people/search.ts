@@ -1,5 +1,6 @@
 import {
   transformContact,
+  transformPagination,
   transformPerson,
 } from '@/platforms/apollo/actions/mappers';
 import { client } from '@/platforms/apollo/client';
@@ -29,6 +30,7 @@ export default action(
     return {
       people: result.data.people.map(transformPerson),
       contacts: result.data.contacts.map(transformContact),
+      pagination: transformPagination(result.data.pagination),
       $native: result.$native,
     };
   },

@@ -1,4 +1,7 @@
-import { transformLabel } from '@/platforms/apollo/actions/mappers';
+import {
+  transformLabel,
+  transformPagination,
+} from '@/platforms/apollo/actions/mappers';
 import { client } from '@/platforms/apollo/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
@@ -25,6 +28,7 @@ export default action(
 
     return {
       labels: result.data.labels.map(transformLabel),
+      pagination: transformPagination(result.data.pagination),
       $native: result.$native,
     };
   },

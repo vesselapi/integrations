@@ -1,4 +1,7 @@
-import { transformAccount } from '@/platforms/apollo/actions/mappers';
+import {
+  transformAccount,
+  transformPagination,
+} from '@/platforms/apollo/actions/mappers';
 import { client } from '@/platforms/apollo/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
@@ -23,6 +26,7 @@ export default action(
 
     return {
       accounts: result.data.accounts.map(transformAccount),
+      pagination: transformPagination(result.data.pagination),
       $native: result.$native,
     };
   },
