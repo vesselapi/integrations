@@ -1,6 +1,7 @@
 import { transformContact } from '@/platforms/salesforce/actions/mappers';
 import { client } from '@/platforms/salesforce/client';
 import { action } from '@/sdk';
+import { first } from 'radash';
 import { z } from 'zod';
 
 export default action(
@@ -16,11 +17,12 @@ export default action(
   },
   async ({ input, auth }) => {
     const result = await client.contacts.find(auth, { Id: input.id });
-
-    result.data;
-
+    const contact = first(result.data.records);
+    if (!contact) {
+      throw new Error('Contact not found');
+    }
     return {
-      ...transformContact(result.data),
+      ...transformContact(contact),
       $native: result.$native,
     };
   },

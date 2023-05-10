@@ -22,14 +22,16 @@ export default action(
   },
   async ({ input, auth }) => {
     return await client.contacts.create(auth, {
-      Email: input.email,
-      FirstName: input.firstName,
-      LastName: input.lastName,
-      Title: input.title,
-      Phone: input.phone,
-      MobilePhone: input.mobilePhone,
-      AccountId: input.accountId,
-      OwnerId: input.ownerId,
+      Contact: {
+        Email: input.email,
+        FirstName: input.firstName,
+        LastName: input.lastName,
+        Title: input.title,
+        Phone: input.phone,
+        MobilePhone: input.mobilePhone,
+        AccountId: input.accountId,
+        OwnerId: input.ownerId,
+      },
     });
   },
 );

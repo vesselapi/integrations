@@ -19,6 +19,23 @@ export const salesforceQueryBuilder: Record<
   string,
   (...args: any[]) => SalesforceQuery
 > = {
+  find: ({
+    id,
+    objectType,
+    relationalSelect,
+  }: {
+    id: string;
+    objectType: SalesforceSupportedObjectType;
+    relationalSelect?: string;
+  }) => {
+    const select =
+      'SELECT FIELDS(ALL)' + (relationalSelect ? `, ${relationalSelect}` : '');
+    return formatQuery(`
+      ${select}
+      FROM ${objectType}
+      WHERE Id = '${id}'
+    `);
+  },
   list: ({
     objectType,
     cursor,
