@@ -48,7 +48,7 @@ export const salesforceContact = validators.object({
 
 export const salesforceContactCreate = validators.object({
   Contact: z.object({
-    Email: z.string().email(),
+    Email: z.string().email().optional(),
     FirstName: z.string().optional(),
     LastName: z.string().optional(),
     Title: z.string().optional(),
@@ -99,9 +99,13 @@ export const salesforceAccount = validators.object({
   CreatedDate: validators.date(),
   LastModifiedDate: validators.date(),
   OwnerId: z.string(),
+  Contacts: z.object({ records: z.array(z.object({ Id: z.string() })) }),
+  Opportunities: z.object({ records: z.array(z.object({ Id: z.string() })) }),
 });
-export const salesforceAccountRelationalSelect =
-  '(SELECT Id FROM Opportunities), (SELECT Id FROM Contacts)';
+export const salesforceAccountRelationalSelect = {
+  Contact: '(SELECT Id FROM Contacts)',
+  Opportunity: '(SELECT Id FROM Opportunities)',
+};
 
 export const salesforceAccountCreate = validators.object({
   Account: z

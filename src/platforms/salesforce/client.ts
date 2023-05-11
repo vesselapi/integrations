@@ -49,23 +49,24 @@ const query = {
   }: {
     schema: T;
     objectType: SalesforceSupportedObjectType;
-    relationalSelect?: string;
+    relationalSelect?: Partial<Record<SalesforceSupportedObjectType, string>>;
   }) =>
     request(
       ({
         cursor,
         limit,
-        includeAssociations = false,
+        associations,
       }: {
         cursor?: string;
         limit: number;
-        includeAssociations?: boolean;
+        associations?: SalesforceSupportedObjectType[];
       }) => ({
         url: `/query/?q=${salesforceQueryBuilder.list({
           objectType,
           cursor,
-          relationalSelect: includeAssociations ? relationalSelect : undefined,
           limit,
+          relationalSelect,
+          associations,
         })}`,
         method: 'GET',
         schema: z.object({
@@ -81,20 +82,21 @@ const query = {
   }: {
     schema: T;
     objectType: SalesforceSupportedObjectType;
-    relationalSelect?: string;
+    relationalSelect?: Partial<Record<SalesforceSupportedObjectType, string>>;
   }) =>
     request(
       ({
         Id,
-        includeAssociations = false,
+        associations,
       }: {
         Id: string;
-        includeAssociations?: boolean;
+        associations?: SalesforceSupportedObjectType[];
       }) => ({
         url: `/query/?q=${salesforceQueryBuilder.find({
           id: Id,
           objectType,
-          relationalSelect: includeAssociations ? relationalSelect : undefined,
+          relationalSelect,
+          associations,
         })}`,
         method: 'GET',
         schema: z.object({
