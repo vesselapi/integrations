@@ -1,4 +1,4 @@
-import { trim } from 'radash';
+import { sift, trim } from 'radash';
 import { MAX_QUERY_PAGE_SIZE } from '../constants';
 import { SalesforceSupportedObjectType } from '../schemas';
 
@@ -15,6 +15,18 @@ const formatQuery = (query: string): SalesforceQuery => {
   return cleanedQuery.replace(/ +/g, '+') as SalesforceQuery;
 };
 
+const buildRelationalSelectClause = (
+  relationalSelect?: Partial<Record<SalesforceSupportedObjectType, string>>,
+  associations?: SalesforceSupportedObjectType[],
+) => {
+  if (!relationalSelect || !associations) return undefined;
+  const clauses = sift(
+    associations.map((objectType) => relationalSelect[objectType]),
+  );
+  if (clauses.length === 0) return undefined;
+  return clauses.join(', ');
+};
+
 export const salesforceQueryBuilder: Record<
   string,
   (...args: any[]) => SalesforceQuery
@@ -23,15 +35,19 @@ export const salesforceQueryBuilder: Record<
     id,
     objectType,
     relationalSelect,
+    associations,
   }: {
     id: string;
     objectType: SalesforceSupportedObjectType;
-    relationalSelect?: string;
+    relationalSelect?: Partial<Record<SalesforceSupportedObjectType, string>>;
+    associations?: SalesforceSupportedObjectType[];
   }) => {
-    const select =
-      'SELECT FIELDS(ALL)' + (relationalSelect ? `, ${relationalSelect}` : '');
+    const selectClauses = sift([
+      'SELECT FIELDS(ALL)',
+      buildRelationalSelectClause(relationalSelect, associations),
+    ]);
     return formatQuery(`
-      ${select}
+      ${selectClauses.join(', ')}
       FROM ${objectType}
       WHERE Id = '${id}'
     `);
@@ -39,16 +55,20 @@ export const salesforceQueryBuilder: Record<
   list: ({
     objectType,
     cursor,
-    relationalSelect,
     limit = MAX_QUERY_PAGE_SIZE,
+    relationalSelect,
+    associations,
   }: {
     objectType: SalesforceSupportedObjectType;
     cursor?: number;
-    relationalSelect?: string;
     limit?: number;
+    relationalSelect?: Partial<Record<SalesforceSupportedObjectType, string>>;
+    associations?: SalesforceSupportedObjectType[];
   }) => {
-    const select =
-      'SELECT FIELDS(ALL)' + (relationalSelect ? `, ${relationalSelect}` : '');
+    const selectClauses = sift([
+      'SELECT FIELDS(ALL)',
+      buildRelationalSelectClause(relationalSelect, associations),
+    ]);
     const getWhere = () => {
       if (!cursor) {
         return '';
@@ -57,7 +77,7 @@ export const salesforceQueryBuilder: Record<
     };
     const where = getWhere();
     return formatQuery(`
-      ${select}
+      ${selectClauses.join(', ')}
       FROM ${objectType}
       ${where}
       ORDER BY Id DESC
