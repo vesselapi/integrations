@@ -134,7 +134,8 @@ const makeClient = () => {
           hs_timestamp: properties?.includes('hs_timestamp')
             ? new Date().toISOString()
             : undefined,
-          ...shake(body),
+          ...shake(omit(body, ['$native'])),
+          ...(body.$native ? body.$native : {}),
         }),
       },
     }));
@@ -148,7 +149,10 @@ const makeClient = () => {
       method: 'PATCH',
       schema,
       json: {
-        properties: shake(omit(body, ['id'])),
+        properties: {
+          ...shake(omit(body, ['id', '$native'])),
+          ...(body.$native ? body.$native : {}),
+        },
       },
     }));
 
