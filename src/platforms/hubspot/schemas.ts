@@ -104,9 +104,9 @@ export const hubspotOwnerSchema = z
     id: hubspotIdSchema,
     createdAt: z.string().transform((val) => new Date(val)),
     updatedAt: z.string().transform((val) => new Date(val)),
-    firstName: z.string(),
-    lastName: z.string(),
-    email: z.string(),
+    firstName: z.string().nullish(),
+    lastName: z.string().nullish(),
+    email: z.string().nullish(),
   })
   .passthrough();
 export type HubspotOwner = z.infer<typeof hubspotOwnerSchema>;
@@ -116,17 +116,16 @@ export type HubspotOwner = z.infer<typeof hubspotOwnerSchema>;
 // -
 const contactPropertiesSchema = z
   .object({
-    firstname: z.string(),
-    lastname: z.string(),
-    email: z.string(),
-    jobtitle: z.string(),
-    phone: z.string(),
-    mobilephone: z.string(),
-    hs_lead_status: z.string(),
-    company: z.string(),
-    hubspot_owner_id: z.string(),
+    firstname: z.string().nullish(),
+    lastname: z.string().nullish(),
+    email: z.string().nullish(),
+    jobtitle: z.string().nullish(),
+    phone: z.string().nullish(),
+    mobilephone: z.string().nullish(),
+    hs_lead_status: z.string().nullish(),
+    company: z.string().nullish(),
+    hubspot_owner_id: z.string().nullish(),
   })
-  .partial()
   .passthrough();
 export const contactProperties = Object.keys(contactPropertiesSchema.shape);
 
@@ -158,17 +157,21 @@ export type HubspotContactUpdate = z.infer<
 // -
 const dealPropertiesSchema = z
   .object({
-    amount: z.union([z.string(), z.number()]),
-    dealname: z.string(),
-    closedate: z.string().transform((val) => new Date(val)),
-    dealstage: z.string(),
-    hs_deal_stage_probability: z.union([z.string(), z.number()]),
-    hs_projected_amount: z.union([z.string(), z.number()]),
-    hs_is_closed_won: hubspotBooleanSchema,
-    hs_is_closed: hubspotBooleanSchema,
-    hubspot_owner_id: z.string(),
+    amount: z.union([z.string(), z.number()]).nullish(),
+    dealname: z.string().nullish(),
+    closedate: z
+      .string()
+      .transform((val) => new Date(val))
+      .nullish(),
+    dealstage: z.string().nullish(),
+    hs_deal_stage_probability: z
+      .union([z.string().nullish(), z.number()])
+      .nullish(),
+    hs_projected_amount: z.union([z.string().nullish(), z.number()]).nullish(),
+    hs_is_closed_won: hubspotBooleanSchema.nullish(),
+    hs_is_closed: hubspotBooleanSchema.nullish(),
+    hubspot_owner_id: z.string().nullish(),
   })
-  .partial()
   .passthrough();
 export const dealProperties = Object.keys(dealPropertiesSchema.shape);
 
@@ -196,21 +199,20 @@ export type HubspotDealUpdate = z.infer<typeof hubspotDealUpsertSchema> & {
 // -
 const companyPropertiesSchema = z
   .object({
-    name: z.string(),
-    website: z.string(),
-    industry: z.string(),
-    phone: z.string(),
-    address: z.string(),
-    city: z.string(),
-    state: z.string(),
-    zip: z.string(),
-    country: z.string(),
-    numberofemployees: z.union([z.string(), z.number()]),
-    annualrevenue: z.union([z.string(), z.number()]),
-    description: z.string(),
-    hubspot_owner_id: z.string(),
+    name: z.string().nullish(),
+    website: z.string().nullish(),
+    industry: z.string().nullish(),
+    phone: z.string().nullish(),
+    address: z.string().nullish(),
+    city: z.string().nullish(),
+    state: z.string().nullish(),
+    zip: z.string().nullish(),
+    country: z.string().nullish(),
+    numberofemployees: z.union([z.string(), z.number()]).nullish(),
+    annualrevenue: z.union([z.string(), z.number()]).nullish(),
+    description: z.string().nullish(),
+    hubspot_owner_id: z.string().nullish(),
   })
-  .partial()
   .passthrough();
 export const companyProperties = Object.keys(companyPropertiesSchema.shape);
 
@@ -247,11 +249,10 @@ export type HubspotCompanyUpdate = z.infer<
 // -
 const notePropertiesSchema = z
   .object({
-    hubspot_owner_id: hubspotIdSchema,
-    hs_note_body: z.string(),
-    hs_timestamp: z.string(),
+    hubspot_owner_id: hubspotIdSchema.nullish(),
+    hs_note_body: z.string().nullish(),
+    hs_timestamp: z.string().nullish(),
   })
-  .partial()
   .passthrough();
 export const noteProperties = Object.keys(notePropertiesSchema.shape);
 
@@ -277,14 +278,16 @@ export type HubspotNoteCreate = z.infer<typeof hubspotNoteUpsertSchema>;
 // -
 const taskPropertiesSchema = z
   .object({
-    hs_task_body: z.string(),
-    hs_task_subject: z.string(),
-    hs_task_status: z.string(),
-    hs_timestamp: z.string().transform((val) => new Date(val)),
-    hs_task_priority: z.string(),
-    hubspot_owner_id: hubspotIdSchema,
+    hs_task_body: z.string().nullish(),
+    hs_task_subject: z.string().nullish(),
+    hs_task_status: z.string().nullish(),
+    hs_timestamp: z
+      .string()
+      .transform((val) => new Date(val))
+      .nullish(),
+    hs_task_priority: z.string().nullish(),
+    hubspot_owner_id: hubspotIdSchema.nullish(),
   })
-  .partial()
   .passthrough();
 export const taskProperties = Object.keys(taskPropertiesSchema.shape);
 
@@ -313,15 +316,14 @@ export type HubspotTaskCreate = z.infer<typeof hubspotTaskUpsertSchema>;
 // -
 const meetingPropertiesSchema = z
   .object({
-    hs_timestamp: custom.date(),
-    hs_meeting_title: z.string(),
-    hs_meeting_body: z.string(),
-    hs_meeting_location: z.string(),
-    hs_meeting_start_time: custom.date().optional(),
-    hs_meeting_end_time: custom.date().optional(),
-    hubspot_owner_id: hubspotIdSchema,
+    hs_timestamp: custom.date().nullish(),
+    hs_meeting_title: z.string().nullish(),
+    hs_meeting_body: z.string().nullish(),
+    hs_meeting_location: z.string().nullish(),
+    hs_meeting_start_time: custom.date().optional().nullish(),
+    hs_meeting_end_time: custom.date().optional().nullish(),
+    hubspot_owner_id: hubspotIdSchema.nullish(),
   })
-  .partial()
   .passthrough();
 export const meetingProperties = Object.keys(meetingPropertiesSchema.shape);
 
@@ -358,21 +360,23 @@ export const hubspotEmailDirectionSchema = z.enum([
 
 const emailPropertiesSchema = z
   .object({
-    hs_email_from_email: z.string(),
-    hs_email_to_email: z.string(),
-    hs_email_cc_email: z.string(),
-    hs_email_bcc_email: z.string(),
-    hs_email_html: z.string(),
-    hs_email_text: z.string(),
-    hs_email_direction: hubspotEmailDirectionSchema,
-    hs_email_subject: z.string(),
-    hs_email_bounce_error_detail_status_code: z.number(),
-    hs_attachment_ids: z.array(hubspotIdSchema),
-    hs_timestamp: z.string().transform((val) => new Date(val)),
-    hs_email_status: z.string(),
-    hubspot_owner_id: hubspotIdSchema,
+    hs_email_from_email: z.string().nullish(),
+    hs_email_to_email: z.string().nullish(),
+    hs_email_cc_email: z.string().nullish(),
+    hs_email_bcc_email: z.string().nullish(),
+    hs_email_html: z.string().nullish(),
+    hs_email_text: z.string().nullish(),
+    hs_email_direction: hubspotEmailDirectionSchema.nullish(),
+    hs_email_subject: z.string().nullish(),
+    hs_email_bounce_error_detail_status_code: z.number().nullish(),
+    hs_attachment_ids: z.array(hubspotIdSchema).nullish(),
+    hs_timestamp: z
+      .string()
+      .transform((val) => new Date(val))
+      .nullish(),
+    hs_email_status: z.string().nullish(),
+    hubspot_owner_id: hubspotIdSchema.nullish(),
   })
-  .partial()
   .passthrough();
 export const emailProperties = Object.keys(emailPropertiesSchema.shape);
 
@@ -421,14 +425,18 @@ export const callDispositionsSchema = z.array(
 
 const callPropertiesSchema = z
   .object({
-    hs_call_disposition: z.string(),
-    hs_call_direction: z.union([z.literal('INBOUND'), z.literal('OUTBOUND')]),
-    hs_timestamp: z.string().transform((val) => new Date(val)),
-    hs_call_body: z.string(),
-    hs_call_title: z.string(),
-    hubspot_owner_id: hubspotIdSchema,
+    hs_call_disposition: z.string().nullish(),
+    hs_call_direction: z
+      .union([z.literal('INBOUND'), z.literal('OUTBOUND')])
+      .nullish(),
+    hs_timestamp: z
+      .string()
+      .transform((val) => new Date(val))
+      .nullish(),
+    hs_call_body: z.string().nullish(),
+    hs_call_title: z.string().nullish(),
+    hubspot_owner_id: hubspotIdSchema.nullish(),
   })
-  .partial()
   .passthrough();
 export const callProperties = Object.keys(callPropertiesSchema.shape);
 
@@ -464,7 +472,7 @@ export type HubspotCallUpdate = z.infer<typeof hubspotCallUpdateSchema> & {
 export const hubspotContactListSchema = z
   .object({
     listId: hubspotIdSchema,
-    name: z.string(),
+    name: z.string().nullish(),
     dynamic: z.boolean(),
     createdAt: z.number().transform((val) => new Date(val)),
     updatedAt: z.number().transform((val) => new Date(val)),
