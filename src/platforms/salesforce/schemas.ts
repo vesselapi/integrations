@@ -15,6 +15,13 @@ const requiredFields = {
 } as const;
 
 // -
+// SObjects
+// -
+export const salesforceSObject = validators.object({
+  sobjects: z.array(z.object({ name: z.string() })),
+});
+
+// -
 // Query
 // -
 export const salesforceQueryResponse = validators.object({
@@ -320,6 +327,89 @@ export const salesforceNoteUpdate = validators.object({
   Note: z
     .object({
       Body: z.string(),
+      OwnerId: z.string(),
+    })
+    .partial(),
+});
+
+// -
+// ContentDocumentLink (used for ContentNote)
+// -
+export const salesforceContentDocumentLink = z
+  .object({
+    Id: z.string(),
+    ContentDocumentId: z.string(),
+    LinkedEntityId: z.string(),
+    IsDeleted: z.boolean(),
+  })
+  .partial();
+
+export const salesforceContentDocumentLinkCreate = validators.object({
+  ContentDocumentLink: z.object({
+    ContentDocumentId: z.string(),
+    LinkedEntityId: z.string(),
+  }),
+});
+
+export const salesforceContentDocumentLinkCreateResponse = validators.object({
+  id: z.string(),
+});
+
+// -
+// ContentNoteContent
+// -
+export const salesforceContentNoteContent = validators.object({
+  body: z.object({
+    _readableState: z.any(),
+  }),
+});
+
+// -
+// ContentNote
+// -
+export const salesforceContentNote = validators
+  .object({
+    Id: z.string(),
+    CreatedDate: validators.date(),
+    LastModifiedDate: validators.date(),
+    TextPreview: z.string(),
+    Content: z.string(),
+    OwnerId: z.string(),
+    ContentDocumentLinks: z.object({
+      records: z.array(salesforceContentDocumentLink),
+    }),
+  })
+  .partial()
+  .required(requiredFields);
+export const salesforceContentNoteRelationalSelect = {
+  Account:
+    '(SELECT Id, ContentDocumentId, LinkedEntityId, IsDeleted FROM ContentDocumentLinks)',
+  Contact:
+    '(SELECT Id, ContentDocumentId, LinkedEntityId, IsDeleted FROM ContentDocumentLinks)',
+  Opportunity:
+    '(SELECT Id, ContentDocumentId, LinkedEntityId, IsDeleted FROM ContentDocumentLinks)',
+  Lead: '(SELECT Id, ContentDocumentId, LinkedEntityId, IsDeleted FROM ContentDocumentLinks)',
+};
+
+export const salesforceContentNoteCreate = validators.object({
+  ContentNote: z
+    .object({
+      Content: z.string(),
+      OwnerId: z.string(),
+      Title: z.string(),
+    })
+    .partial(),
+});
+
+export const salesforceContentNoteCreateResponse = validators.object({
+  id: z.string(),
+});
+
+export const salesforceContentNoteUpdate = validators.object({
+  Id: z.string(),
+  ContentNote: z
+    .object({
+      Content: z.string(),
       OwnerId: z.string(),
     })
     .partial(),
@@ -671,6 +761,7 @@ export const SalesforceSchemaByObjectType: Record<
   Opportunity: salesforceOpportunity,
   Lead: salesforceLead,
   Note: salesforceNote,
+  ContentNote: salesforceContentNote,
   Task: salesforceTask,
   Event: salesforceEvent,
   EventRelation: salesforceEventRelation,
@@ -692,6 +783,7 @@ export const salesforceOAuthUrlsByAccountType: Record<
 
 export type SalesforceSupportedObjectType =
   (typeof SALESFORCE_SUPPORTED_OBJECT_TYPE)[number];
+export type SalesforceSObject = z.infer<typeof salesforceSObject>;
 export type SalesforceUser = z.infer<typeof salesforceUser>;
 export type SalesforceContact = z.infer<typeof salesforceContact>;
 export type SalesforceContactCreate = z.infer<typeof salesforceContactCreate>;
@@ -712,6 +804,22 @@ export type SalesforceLeadUpdate = z.infer<typeof salesforceLeadUpdate>;
 export type SalesforceNote = z.infer<typeof salesforceNote>;
 export type SalesforceNoteCreate = z.infer<typeof salesforceNoteCreate>;
 export type SalesforceNoteUpdate = z.infer<typeof salesforceNoteUpdate>;
+export type SalesforceContentNote = z.infer<typeof salesforceContentNote>;
+export type SalesforceContentNoteCreate = z.infer<
+  typeof salesforceContentNoteCreate
+>;
+export type SalesforceContentNoteUpdate = z.infer<
+  typeof salesforceContentNoteUpdate
+>;
+export type SalesforceContentDocumentLink = z.infer<
+  typeof salesforceContentDocumentLink
+>;
+export type SalesforceContentDocumentLinkCreate = z.infer<
+  typeof salesforceContentDocumentLinkCreate
+>;
+export type SalesforceContentNoteContent = z.infer<
+  typeof salesforceContentNoteContent
+>;
 export type SalesforceTask = z.infer<typeof salesforceTask>;
 export type SalesforceTaskCreate = z.infer<typeof salesforceTaskCreate>;
 export type SalesforceTaskUpdate = z.infer<typeof salesforceTaskUpdate>;
