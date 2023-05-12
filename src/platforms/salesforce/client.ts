@@ -13,14 +13,45 @@ import {
   SalesforceContactCreate,
   salesforceContactCreateResponse,
   SalesforceContactUpdate,
+  salesforceEmailMessage,
+  SalesforceEmailMessageCreate,
+  salesforceEmailMessageCreateResponse,
+  salesforceEmailMessageRelation,
+  salesforceEmailMessageRelationalSelect,
+  SalesforceEmailMessageRelationCreate,
+  salesforceEmailMessageRelationCreateResponse,
+  SalesforceEmailMessageUpdate,
+  salesforceEvent,
+  SalesforceEventCreate,
+  salesforceEventCreateResponse,
+  salesforceEventRelation,
+  salesforceEventRelationalSelect,
+  SalesforceEventRelationCreate,
+  salesforceEventRelationCreateResponse,
+  SalesforceEventRelationUpdate,
+  SalesforceEventUpdate,
+  salesforceLead,
+  SalesforceLeadCreate,
+  salesforceLeadCreateResponse,
+  SalesforceLeadUpdate,
   salesforceListView,
   salesforceListViewResult,
+  salesforceNote,
+  SalesforceNoteCreate,
+  salesforceNoteCreateResponse,
+  salesforceNoteRelationalSelect,
+  SalesforceNoteUpdate,
   salesforceOpportunity,
   SalesforceOpportunityCreate,
   salesforceOpportunityCreateResponse,
   SalesforceOpportunityUpdate,
   salesforceQueryResponse,
   SalesforceSupportedObjectType,
+  salesforceTask,
+  SalesforceTaskCreate,
+  salesforceTaskCreateResponse,
+  salesforceTaskRelationalSelect,
+  SalesforceTaskUpdate,
   salesforceUser,
 } from './schemas';
 
@@ -181,11 +212,21 @@ export const client = {
     ),
   },
   listViewResults: {
-    find: request(({ Id, objectType }: { Id: string; objectType: string }) => ({
-      url: `/sobjects/${objectType}/listviews/${Id}/results`,
-      method: 'GET',
-      schema: salesforceListViewResult,
-    })),
+    find: request(
+      ({
+        Id,
+        objectType,
+        cursor,
+      }: {
+        Id: string;
+        objectType: string;
+        cursor?: `/${string}`;
+      }) => ({
+        url: cursor ?? `/sobjects/${objectType}/listviews/${Id}/results`,
+        method: 'GET',
+        schema: salesforceListViewResult,
+      }),
+    ),
   },
   accounts: {
     find: query.find<typeof salesforceAccount>({
@@ -239,6 +280,199 @@ export const client = {
     })),
     delete: request(({ Id }: { Id: string }) => ({
       url: `/sobjects/Opportunity/${Id}/`,
+      method: 'DELETE',
+      schema: z.undefined(),
+    })),
+  },
+  leads: {
+    find: query.find<typeof salesforceLead>({
+      objectType: 'Lead',
+      schema: salesforceLead,
+    }),
+    list: query.list<typeof salesforceLead>({
+      objectType: 'Lead',
+      schema: salesforceLead,
+    }),
+    create: request(({ Lead }: SalesforceLeadCreate) => ({
+      url: `/sobjects/Lead`,
+      method: 'POST',
+      json: Lead,
+      schema: salesforceLeadCreateResponse,
+    })),
+    update: request(({ Id, Lead }: SalesforceLeadUpdate) => ({
+      url: `/sobjects/Lead/${Id}/`,
+      method: 'PATCH',
+      json: Lead,
+      schema: salesforceLead,
+    })),
+    delete: request(({ Id }: { Id: string }) => ({
+      url: `/sobjects/Lead/${Id}/`,
+      method: 'DELETE',
+      schema: z.undefined(),
+    })),
+  },
+  notes: {
+    find: query.find<typeof salesforceNote>({
+      objectType: 'Note',
+      schema: salesforceNote,
+      relationalSelect: salesforceNoteRelationalSelect,
+    }),
+    list: query.list<typeof salesforceNote>({
+      objectType: 'Note',
+      schema: salesforceNote,
+      relationalSelect: salesforceNoteRelationalSelect,
+    }),
+    create: request(({ Note }: SalesforceNoteCreate) => ({
+      url: `/sobjects/Note`,
+      method: 'POST',
+      json: Note,
+      schema: salesforceNoteCreateResponse,
+    })),
+    update: request(({ Id, Note }: SalesforceNoteUpdate) => ({
+      url: `/sobjects/Note/${Id}/`,
+      method: 'PATCH',
+      json: Note,
+      schema: salesforceNote,
+    })),
+    delete: request(({ Id }: { Id: string }) => ({
+      url: `/sobjects/Note/${Id}/`,
+      method: 'DELETE',
+      schema: z.undefined(),
+    })),
+  },
+  tasks: {
+    find: query.find<typeof salesforceTask>({
+      objectType: 'Task',
+      schema: salesforceTask,
+      relationalSelect: salesforceTaskRelationalSelect,
+    }),
+    list: query.list<typeof salesforceTask>({
+      objectType: 'Task',
+      schema: salesforceTask,
+      relationalSelect: salesforceTaskRelationalSelect,
+    }),
+    create: request(({ Task }: SalesforceTaskCreate) => ({
+      url: `/sobjects/Task`,
+      method: 'POST',
+      json: Task,
+      schema: salesforceTaskCreateResponse,
+    })),
+    update: request(({ Id, Task }: SalesforceTaskUpdate) => ({
+      url: `/sobjects/Task/${Id}/`,
+      method: 'PATCH',
+      json: Task,
+      schema: salesforceTask,
+    })),
+    delete: request(({ Id }: { Id: string }) => ({
+      url: `/sobjects/Task/${Id}/`,
+      method: 'DELETE',
+      schema: z.undefined(),
+    })),
+  },
+  events: {
+    find: query.find<typeof salesforceEvent>({
+      objectType: 'Event',
+      schema: salesforceEvent,
+      relationalSelect: salesforceEventRelationalSelect,
+    }),
+    list: query.list<typeof salesforceEvent>({
+      objectType: 'Event',
+      schema: salesforceEvent,
+      relationalSelect: salesforceEventRelationalSelect,
+    }),
+    create: request(({ Event }: SalesforceEventCreate) => ({
+      url: `/sobjects/Event`,
+      method: 'POST',
+      json: Event,
+      schema: salesforceEventCreateResponse,
+    })),
+    update: request(({ Id, Event }: SalesforceEventUpdate) => ({
+      url: `/sobjects/Event/${Id}/`,
+      method: 'PATCH',
+      json: Event,
+      schema: salesforceEvent,
+    })),
+    delete: request(({ Id }: { Id: string }) => ({
+      url: `/sobjects/Event/${Id}/`,
+      method: 'DELETE',
+      schema: z.undefined(),
+    })),
+  },
+  eventRelations: {
+    find: query.find<typeof salesforceEventRelation>({
+      objectType: 'EventRelation',
+      schema: salesforceEventRelation,
+    }),
+    list: query.list<typeof salesforceEventRelation>({
+      objectType: 'EventRelation',
+      schema: salesforceEventRelation,
+    }),
+    create: request(({ EventRelation }: SalesforceEventRelationCreate) => ({
+      url: `/sobjects/EventRelation`,
+      method: 'POST',
+      json: EventRelation,
+      schema: salesforceEventRelationCreateResponse,
+    })),
+    update: request(({ Id, EventRelation }: SalesforceEventRelationUpdate) => ({
+      url: `/sobjects/EventRelation/${Id}/`,
+      method: 'PATCH',
+      json: EventRelation,
+      schema: salesforceEventRelation,
+    })),
+    delete: request(({ Id }: { Id: string }) => ({
+      url: `/sobjects/EventRelation/${Id}/`,
+      method: 'DELETE',
+      schema: z.undefined(),
+    })),
+  },
+  emailMessages: {
+    find: query.find<typeof salesforceEmailMessage>({
+      objectType: 'EmailMessage',
+      schema: salesforceEmailMessage,
+      relationalSelect: salesforceEmailMessageRelationalSelect,
+    }),
+    list: query.list<typeof salesforceEmailMessage>({
+      objectType: 'EmailMessage',
+      schema: salesforceEmailMessage,
+      relationalSelect: salesforceEmailMessageRelationalSelect,
+    }),
+    create: request(({ EmailMessage }: SalesforceEmailMessageCreate) => ({
+      url: `/sobjects/EmailMessage`,
+      method: 'POST',
+      json: EmailMessage,
+      schema: salesforceEmailMessageCreateResponse,
+    })),
+    update: request(({ Id, EmailMessage }: SalesforceEmailMessageUpdate) => ({
+      url: `/sobjects/EmailMessage/${Id}/`,
+      method: 'PATCH',
+      json: EmailMessage,
+      schema: salesforceEmailMessage,
+    })),
+    delete: request(({ Id }: { Id: string }) => ({
+      url: `/sobjects/EmailMessage/${Id}/`,
+      method: 'DELETE',
+      schema: z.undefined(),
+    })),
+  },
+  emailMessageRelations: {
+    find: query.find<typeof salesforceEmailMessageRelation>({
+      objectType: 'EmailMessageRelation',
+      schema: salesforceEmailMessageRelation,
+    }),
+    list: query.list<typeof salesforceEmailMessageRelation>({
+      objectType: 'EmailMessageRelation',
+      schema: salesforceEmailMessageRelation,
+    }),
+    create: request(
+      ({ EmailMessageRelation }: SalesforceEmailMessageRelationCreate) => ({
+        url: `/sobjects/EmailMessageRelation`,
+        method: 'POST',
+        json: EmailMessageRelation,
+        schema: salesforceEmailMessageRelationCreateResponse,
+      }),
+    ),
+    delete: request(({ Id }: { Id: string }) => ({
+      url: `/sobjects/EmailMessageRelation/${Id}/`,
       method: 'DELETE',
       schema: z.undefined(),
     })),
