@@ -164,12 +164,8 @@ const dealPropertiesSchema = z
       .transform((val) => new Date(val))
       .nullable(),
     dealstage: z.string().nullable(),
-    hs_deal_stage_probability: z
-      .union([z.string().nullable(), z.number()])
-      .nullable(),
-    hs_projected_amount: z
-      .union([z.string().nullable(), z.number()])
-      .nullable(),
+    hs_deal_stage_probability: z.union([z.string(), z.number()]).nullable(),
+    hs_projected_amount: z.union([z.string(), z.number()]).nullable(),
     hs_is_closed_won: hubspotBooleanSchema.nullable(),
     hs_is_closed: hubspotBooleanSchema.nullable(),
     hubspot_owner_id: z.string().nullable(),
@@ -322,8 +318,8 @@ const meetingPropertiesSchema = z
     hs_meeting_title: z.string().nullable(),
     hs_meeting_body: z.string().nullable(),
     hs_meeting_location: z.string().nullable(),
-    hs_meeting_start_time: custom.date().optional().nullable(),
-    hs_meeting_end_time: custom.date().optional().nullable(),
+    hs_meeting_start_time: custom.date().nullable(),
+    hs_meeting_end_time: custom.date().nullable(),
     hubspot_owner_id: hubspotIdSchema.nullable(),
   })
   .passthrough();
