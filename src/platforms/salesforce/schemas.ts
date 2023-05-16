@@ -238,6 +238,7 @@ export const salesforceLead = validators
     Company: z.string(),
     Phone: z.string(),
     MobilePhone: z.string(),
+    OwnerId: z.string(),
     CreatedDate: validators.date(),
     LastModifiedDate: validators.date(),
   })
