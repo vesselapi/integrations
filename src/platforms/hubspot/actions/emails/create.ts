@@ -1,4 +1,5 @@
 import { action } from '@/sdk';
+import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 import client from '../../client';
 
@@ -21,10 +22,7 @@ export default action(
       hsEmailDirection: hubspotEmailDirectionSchema.optional(),
       hsEmailSubject: z.string().optional(),
       hsEmailStatus: z.string().optional(),
-      hsTimestamp: z
-        .string()
-        .transform((v) => new Date(v))
-        .optional(),
+      hsTimestamp: custom.date().optional(),
       hubspotOwnerId: z.string().optional(),
     }),
     scopes: ['sales-email-read'],

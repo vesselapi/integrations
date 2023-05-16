@@ -168,10 +168,9 @@ export const transformContactList = (list: HubspotContactList) => {
 export const transformContactListContact = (
   contact: HubspotContactListContact,
 ) => {
-  return transformContact({
-    ...contact,
+  return {
     id: contact.vid,
-  });
+  };
 };
 
 export const transformProperty = (property: HubspotProperty) => {
