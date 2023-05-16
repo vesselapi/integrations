@@ -540,7 +540,10 @@ export const salesforceEmailMessage = validators
     }),
   })
   .partial()
-  .required(requiredFields);
+  .required({
+    ...requiredFields,
+    FromAddress: true,
+  });
 export const salesforceEmailMessageRelationalSelect = {
   Account: 'RelatedTo.Type, RelatedTo.Id',
   Opportunity: 'RelatedTo.Type, RelatedTo.Id',
