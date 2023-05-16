@@ -632,7 +632,10 @@ export const salesforceListView = validators
     CreatedById: z.string(),
   })
   .partial()
-  .required(requiredFields);
+  .required({
+    ...requiredFields,
+    Name: true,
+  });
 
 export const salesforceListViewResult = validators.object({
   developerName: z.string(),
