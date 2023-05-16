@@ -36,7 +36,7 @@ export const salesforceUser = validators
     Id: z.string(),
     FirstName: z.string(),
     LastName: z.string(),
-    Email: z.string().email(),
+    Email: z.string(),
     CreatedDate: validators.date(),
     LastModifiedDate: validators.date(),
   })
@@ -52,7 +52,7 @@ export const salesforceContact = validators
     FirstName: z.string(),
     LastName: z.string(),
     Title: z.string(),
-    Email: z.string().email(),
+    Email: z.string(),
     Phone: z.string(),
     MobilePhone: z.string(),
     CreatedDate: validators.date(),
@@ -65,7 +65,7 @@ export const salesforceContact = validators
 
 export const salesforceContactCreate = validators.object({
   Contact: z.object({
-    Email: z.string().email().optional(),
+    Email: z.string().optional(),
     FirstName: z.string().optional(),
     LastName: z.string().optional(),
     Title: z.string().optional(),
@@ -83,7 +83,7 @@ export const salesforceContactCreateResponse = validators.object({
 export const salesforceContactUpdate = validators.object({
   Id: z.string(),
   Contact: z.object({
-    Email: z.string().email().optional(),
+    Email: z.string().optional(),
     FirstName: z.string().optional(),
     LastName: z.string().optional(),
     Title: z.string().optional(),
@@ -305,10 +305,6 @@ export const salesforceNoteCreate = validators.object({
       ParentId: z.string(),
       Body: z.string(),
       OwnerId: z.string(),
-      // TODO: This is a required property in Salesforce
-      // but can't be set by the other APIs so we've hard coded the
-      // value, but we'll need to eventually allow for some form
-      // of customization.
       Title: z.string(),
     })
     .partial(),
