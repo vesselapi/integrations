@@ -488,11 +488,8 @@ export type ListResponseHubspotContactList = z.infer<
   typeof listResponseHubspotContactListSchema
 >;
 
-export const hubspotContactListContactsSchema = hubspotContactSchema
-  .omit({ id: true })
-  .extend({
-    vid: hubspotIdSchema,
-  })
+export const hubspotContactListContactsSchema = z
+  .object({ vid: hubspotIdSchema })
   .passthrough();
 export type HubspotContactListContact = z.infer<
   typeof hubspotContactListContactsSchema
