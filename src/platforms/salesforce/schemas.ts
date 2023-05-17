@@ -373,7 +373,7 @@ export const salesforceContentNote = validators
     CreatedDate: validators.date(),
     LastModifiedDate: validators.date(),
     TextPreview: z.string(),
-    Content: z.string(),
+    Content: z.string(), // url to fetch the Content Body.
     OwnerId: z.string(),
     ContentDocumentLinks: z.object({
       records: z.array(salesforceContentDocumentLink),

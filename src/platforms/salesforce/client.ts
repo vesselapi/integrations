@@ -15,7 +15,6 @@ import {
   SalesforceContactUpdate,
   SalesforceContentDocumentLinkCreate,
   salesforceContentDocumentLinkCreateResponse,
-  SalesforceContentNote,
   salesforceContentNote,
   salesforceContentNoteContent,
   SalesforceContentNoteCreate,
@@ -385,13 +384,11 @@ export const client = {
       method: 'DELETE',
       schema: z.undefined(),
     })),
-    contentBody: request(
-      ({ ContentNote }: { ContentNote: SalesforceContentNote }) => ({
-        url: `${ContentNote.Content as `/${string}`}`,
-        method: 'GET',
-        schema: salesforceContentNoteContent,
-      }),
-    ),
+    contentBody: request(({ Content }: { Content: string }) => ({
+      url: Content as `/${string}`,
+      method: 'GET',
+      schema: salesforceContentNoteContent,
+    })),
   },
   contentDocumentLinks: {
     create: request(
