@@ -6,4 +6,17 @@ export const SALESFORCE_SUPPORTED_OBJECT_TYPE = [
   'ListView',
   'Account',
   'Opportunity',
+  'Lead',
+  'Note',
+  'ContentNote',
+  'Task',
+  'Event',
+  'EventRelation',
+  'EmailMessage',
+  'EmailMessageRelation',
+] as const;
+export const SALESFORCE_CALL_TYPES = [
+  'Inbound',
+  'Outbound',
+  'Internal',
 ] as const;

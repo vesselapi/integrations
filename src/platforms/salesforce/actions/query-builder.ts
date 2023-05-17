@@ -1,4 +1,4 @@
-import { sift, trim } from 'radash';
+import { sift, trim, unique } from 'radash';
 import { MAX_QUERY_PAGE_SIZE } from '../constants';
 import { SalesforceSupportedObjectType } from '../schemas';
 
@@ -20,8 +20,8 @@ const buildRelationalSelectClause = (
   associations?: SalesforceSupportedObjectType[],
 ) => {
   if (!relationalSelect || !associations) return undefined;
-  const clauses = sift(
-    associations.map((objectType) => relationalSelect[objectType]),
+  const clauses = unique(
+    sift(associations.map((objectType) => relationalSelect[objectType])),
   );
   if (clauses.length === 0) return undefined;
   return clauses.join(', ');
