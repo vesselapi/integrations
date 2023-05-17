@@ -1,5 +1,5 @@
 import { HttpsUrl } from '@/sdk';
-import { makeRequestFactory } from '@/sdk/client';
+import { formatUpsertInputWithNative, makeRequestFactory } from '@/sdk/client';
 import { omit, shake } from 'radash';
 import * as z from 'zod';
 import { API_VERSION } from './constants';
@@ -60,7 +60,7 @@ const createObject = <T extends Record<string, unknown>>(
     url: `/${endpoint}`,
     method: 'POST',
     schema,
-    json: body,
+    json: formatUpsertInputWithNative(body),
   }));
 
 const updateObject = <T extends Record<string, unknown>>(
@@ -71,7 +71,7 @@ const updateObject = <T extends Record<string, unknown>>(
     url: `/${endpoint}/${obj.id}`,
     method: 'PUT',
     schema,
-    json: omit(obj, ['id']),
+    json: formatUpsertInputWithNative(omit(obj, ['id'])),
   }));
 
 const makeClient = () => {
@@ -85,7 +85,7 @@ const makeClient = () => {
       ringOut: request((body: RingcentralRingOutStart) => ({
         url: `/account/~/extension/${body.extensionId}/ring-out`,
         method: 'POST',
-        json: omit(body, ['extensionId']),
+        json: formatUpsertInputWithNative(omit(body, ['extensionId'])),
         schema: ringcentralRingOutStatusSchema,
       })),
     },

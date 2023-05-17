@@ -1,6 +1,8 @@
 import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
+export type WithNative<T> = T & { $native?: Record<string, unknown> };
+
 export const mailchimpMember = custom.object({
   id: z.string(),
   email_address: z.string(),

@@ -51,26 +51,39 @@ export const client = {
     })),
   },
   messages: {
-    create: request(({ channel, text }: { channel: string; text: string }) => ({
-      url: '/chat.postMessage',
-      method: 'POST',
-      json: {
+    create: request(
+      ({
         channel,
         text,
-      },
-      schema: custom.object({
-        ts: z.string(),
+        $native,
+      }: {
+        channel: string;
+        text: string;
+        $native?: Record<string, unknown>;
+      }) => ({
+        url: '/chat.postMessage',
+        method: 'POST',
+        json: {
+          channel,
+          text,
+          ...($native ?? {}),
+        },
+        schema: custom.object({
+          ts: z.string(),
+        }),
       }),
-    })),
+    ),
     update: request(
       ({
         channel,
         ts,
         text,
+        $native,
       }: {
         channel: string;
         ts: string;
         text: string;
+        $native?: Record<string, unknown>;
       }) => ({
         url: '/chat.update',
         method: 'POST',
@@ -78,6 +91,7 @@ export const client = {
           channel,
           ts,
           text,
+          ...($native ?? {}),
         },
         schema: custom.object({
           ts: z.string(),

@@ -1,6 +1,6 @@
 import { IntegrationError } from '@/sdk/error';
 import { Auth, ClientResult, HttpsUrl } from '@/sdk/types';
-import { guard, isFunction, trim } from 'radash';
+import { guard, isFunction, omit, trim } from 'radash';
 import { z } from 'zod';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
@@ -10,6 +10,17 @@ export type HttpOptions = {
   headers?: Record<string, string>;
   json?: Record<string, unknown> | Record<string, unknown>[];
   query?: Record<string, string>;
+};
+
+export const formatUpsertInputWithNative = <
+  T extends { $native?: Record<string, unknown> } & Record<string, unknown>,
+>(
+  input: T,
+): Omit<T, '$native'> => {
+  return {
+    ...omit(input, ['$native']),
+    ...(input.$native ?? {}),
+  };
 };
 
 export type FetchOptions = HttpOptions & {

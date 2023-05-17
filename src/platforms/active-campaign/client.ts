@@ -76,6 +76,7 @@ export const client = {
           firstName?: string;
           lastName?: string;
           phone?: string;
+          $native?: Record<string, unknown>;
         };
       }) => ({
         url: `/api/3/contacts/${id}`,
@@ -89,6 +90,7 @@ export const client = {
             firstName: properties.firstName,
             lastName: properties.lastName,
             phone: properties.phone,
+            ...(properties.$native ?? {}),
           }),
         },
       }),
@@ -99,6 +101,7 @@ export const client = {
         firstName?: string;
         lastName?: string;
         phone?: string;
+        $native?: Record<string, unknown>;
       }) => ({
         url: `/api/3/contacts`,
         method: 'POST',
@@ -106,7 +109,10 @@ export const client = {
           contact: activeCampaignContact,
         }),
         json: {
-          contact,
+          contact: {
+            ...contact,
+            ...(contact.$native ?? {}),
+          },
         },
       }),
     ),
