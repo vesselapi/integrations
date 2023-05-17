@@ -13,6 +13,14 @@ import {
   SalesforceContactCreate,
   salesforceContactCreateResponse,
   SalesforceContactUpdate,
+  SalesforceContentDocumentLinkCreate,
+  salesforceContentDocumentLinkCreateResponse,
+  salesforceContentNote,
+  salesforceContentNoteContent,
+  SalesforceContentNoteCreate,
+  salesforceContentNoteCreateResponse,
+  salesforceContentNoteRelationalSelect,
+  SalesforceContentNoteUpdate,
   salesforceEmailMessage,
   SalesforceEmailMessageCreate,
   salesforceEmailMessageCreateResponse,
@@ -46,6 +54,7 @@ import {
   salesforceOpportunityCreateResponse,
   SalesforceOpportunityUpdate,
   salesforceQueryResponse,
+  salesforceSObject,
   SalesforceSupportedObjectType,
   salesforceTask,
   SalesforceTaskCreate,
@@ -138,6 +147,13 @@ const query = {
 };
 
 export const client = {
+  sobjects: {
+    list: request(() => ({
+      url: `/sobjects`,
+      method: 'GET',
+      schema: salesforceSObject,
+    })),
+  },
   query: request(({ query }: { query: string }) => ({
     url: `/query/`,
     method: 'GET',
@@ -339,6 +355,50 @@ export const client = {
       method: 'DELETE',
       schema: z.undefined(),
     })),
+  },
+  contentNotes: {
+    find: query.find<typeof salesforceContentNote>({
+      objectType: 'ContentNote',
+      schema: salesforceContentNote,
+      relationalSelect: salesforceContentNoteRelationalSelect,
+    }),
+    list: query.list<typeof salesforceContentNote>({
+      objectType: 'ContentNote',
+      schema: salesforceContentNote,
+      relationalSelect: salesforceContentNoteRelationalSelect,
+    }),
+    create: request(({ ContentNote }: SalesforceContentNoteCreate) => ({
+      url: `/sobjects/ContentNote`,
+      method: 'POST',
+      json: ContentNote,
+      schema: salesforceContentNoteCreateResponse,
+    })),
+    update: request(({ Id, ContentNote }: SalesforceContentNoteUpdate) => ({
+      url: `/sobjects/ContentNote/${Id}/`,
+      method: 'PATCH',
+      json: ContentNote,
+      schema: salesforceContentNote,
+    })),
+    delete: request(({ Id }: { Id: string }) => ({
+      url: `/sobjects/ContentNote/${Id}/`,
+      method: 'DELETE',
+      schema: z.undefined(),
+    })),
+    contentBody: request(({ Content }: { Content: string }) => ({
+      url: Content as `/${string}`,
+      method: 'GET',
+      schema: salesforceContentNoteContent,
+    })),
+  },
+  contentDocumentLinks: {
+    create: request(
+      ({ ContentDocumentLink }: SalesforceContentDocumentLinkCreate) => ({
+        url: `/sobjects/ContentDocumentLink`,
+        method: 'POST',
+        json: ContentDocumentLink,
+        schema: salesforceContentDocumentLinkCreateResponse,
+      }),
+    ),
   },
   tasks: {
     find: query.find<typeof salesforceTask>({

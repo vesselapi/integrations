@@ -8,6 +8,7 @@ export const SALESFORCE_SUPPORTED_OBJECT_TYPE = [
   'Opportunity',
   'Lead',
   'Note',
+  'ContentNote',
   'Task',
   'Event',
   'EventRelation',
