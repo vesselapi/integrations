@@ -40,7 +40,7 @@ export default platform('apollo', {
     auth.apiToken({
       display: {
         markdown: `- Please ensure your Apollo API key is a Master Key.
-- For detailed steps on how to create your Apollo API key, please see this [tutorial](https://docs.vessel.land/integrations/apollo).`,
+- For detailed steps on how to create your Apollo API key, please see this [tutorial](https://docs.vessel.dev/pages/home/hidden/apollo).`,
       },
     }),
   ],
