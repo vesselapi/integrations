@@ -105,14 +105,14 @@ const makeClient = () => {
     request(
       ({
         after,
-        pageSize = HUBSPOT_MAX_PAGE_SIZE,
+        limit = HUBSPOT_MAX_PAGE_SIZE,
         associations,
       }: ListObjectInput) => ({
         url: `/crm/${API_VERSION}/${module}`,
         method: 'GET',
         query: shake({
           after,
-          pageSize,
+          limit,
           properties: properties?.join(','),
           associations: associations?.join(','),
         }),
