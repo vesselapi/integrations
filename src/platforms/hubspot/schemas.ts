@@ -19,7 +19,7 @@ export type FindObjectInput = {
 };
 export type ListObjectInput = {
   after?: string;
-  pageSize?: number;
+  limit?: number;
   associations?: HubspotCommonAssociations[];
 };
 export type BatchReadObjectInput = {
