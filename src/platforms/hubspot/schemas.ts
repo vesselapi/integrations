@@ -1,6 +1,11 @@
 import * as custom from '@/sdk/validators';
 import { z } from 'zod';
-import { HUBSPOT_COMMON_ASSOCIATIONS, HUBSPOT_MODULES } from './constants';
+import {
+  HUBSPOT_COMMON_ASSOCIATIONS,
+  HUBSPOT_MODULES,
+  HUBSPOT_PROPERTY_FIELD_TYPES,
+  HUBSPOT_PROPERTY_TYPES,
+} from './constants';
 
 export const hubspotCommonAssociationsSchema = z.enum(
   HUBSPOT_COMMON_ASSOCIATIONS,
@@ -516,31 +521,14 @@ export type ListResponseHubspotContactListContacts = z.infer<
 // -
 // Properties
 // -
-export const hubspotPropertyTypeSchema = z.enum([
-  'bool',
-  'string',
-  'number',
-  'date',
-  'datetime',
-  'enumeration',
-  'json',
-  'phone_number',
-  'object_coordinates',
-]);
-export type HubspotPropertyType = z.infer<typeof hubspotPropertyTypeSchema>;
+export const hubspotPropertyTypeSchema = z.enum(HUBSPOT_PROPERTY_TYPES);
+export type HubspotPropertyType = (typeof HUBSPOT_PROPERTY_TYPES)[number];
 
-export const hubspotPropertyFieldTypeSchema = z.enum([
-  'textarea',
-  'text',
-  'date',
-  'file',
-  'number',
-  'select',
-  'radio',
-  'checkbox',
-  'datetime',
-  'booleancheckbox',
-]);
+export const hubspotPropertyFieldTypeSchema = z.enum(
+  HUBSPOT_PROPERTY_FIELD_TYPES,
+);
+export type HubspotPropertyFieldType =
+  (typeof HUBSPOT_PROPERTY_FIELD_TYPES)[number];
 
 export const hubspotPropertyOptionSchema = z.object({
   label: z.string(),
@@ -567,17 +555,19 @@ export type HubspotCustomPropertyCreate = z.infer<
   typeof hubspotCustomPropertyCreateSchema
 >;
 
-export const hubspotPropertySchema = z.object({
-  name: z.string(),
-  label: z.string(),
-  type: hubspotPropertyTypeSchema,
-  fieldType: hubspotPropertyFieldTypeSchema,
-  hubspotDefined: z.boolean(),
-  options: z.array(hubspotPropertyOptionSchema).optional(),
-  modificationMetadata: z.object({
-    readOnlyValue: z.boolean(),
-  }),
-});
+export const hubspotPropertySchema = z
+  .object({
+    name: z.string(),
+    label: z.string(),
+    type: z.string().transform((v) => v as HubspotPropertyType),
+    fieldType: z.string().transform((v) => v as HubspotPropertyFieldType),
+    hubspotDefined: z.boolean(),
+    options: z.array(hubspotPropertyOptionSchema).optional(),
+    modificationMetadata: z.object({
+      readOnlyValue: z.boolean(),
+    }),
+  })
+  .passthrough();
 export type HubspotProperty = z.infer<typeof hubspotPropertySchema>;
 
 // -

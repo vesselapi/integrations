@@ -19,3 +19,26 @@ export const HUBSPOT_MODULES = [
   'calls',
   'contact_lists',
 ] as const;
+export const HUBSPOT_PROPERTY_TYPES = [
+  'bool',
+  'string',
+  'number',
+  'date',
+  'datetime',
+  'enumeration',
+  'json',
+  'phone_number',
+  'object_coordinates',
+] as const;
+export const HUBSPOT_PROPERTY_FIELD_TYPES = [
+  'textarea',
+  'text',
+  'date',
+  'file',
+  'number',
+  'select',
+  'radio',
+  'checkbox',
+  'datetime',
+  'booleancheckbox',
+] as const;

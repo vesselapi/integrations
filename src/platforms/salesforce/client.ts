@@ -21,6 +21,7 @@ import {
   salesforceContentNoteCreateResponse,
   salesforceContentNoteRelationalSelect,
   SalesforceContentNoteUpdate,
+  salesforceDescribeResponse,
   salesforceEmailMessage,
   SalesforceEmailMessageCreate,
   salesforceEmailMessageCreateResponse,
@@ -211,6 +212,13 @@ export const client = {
       method: 'GET',
       schema: salesforceSObject,
     })),
+    describe: request(
+      ({ objectType }: { objectType: SalesforceSupportedObjectType }) => ({
+        url: `/sobjects/${objectType}/describe`,
+        method: 'GET',
+        schema: salesforceDescribeResponse,
+      }),
+    ),
   },
   query: request(({ query }: { query: string }) => ({
     url: `/query/`,
