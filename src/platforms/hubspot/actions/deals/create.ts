@@ -11,13 +11,15 @@ export default action(
     operation: 'create',
     resource: 'deals',
     mutation: true,
-    schema: z.object({
-      closeDate: custom.date(),
-      dealName: z.string().optional(),
-      amount: z.string().optional(),
-      hsDealStageProbability: z.string().optional(),
-      dealStage: z.string().optional(),
-    }),
+    schema: z
+      .object({
+        closeDate: custom.date(),
+        dealName: z.string(),
+        amount: z.string(),
+        hsDealStageProbability: z.string(),
+        dealStage: z.string(),
+      })
+      .partial(),
     scopes: ['crm.objects.deals.write'],
   },
   async ({ auth, input }) => {

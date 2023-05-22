@@ -12,9 +12,9 @@ export default action(
     mutation: true,
     schema: z
       .object({
-        hsEmailDirection: hubspotEmailDirectionSchema.optional(),
-        hsEmailStatus: z.string().optional(),
-        hubspotOwnerId: z.string().optional(),
+        hsEmailDirection: hubspotEmailDirectionSchema,
+        hsEmailStatus: z.string(),
+        hubspotOwnerId: z.string(),
       })
       .partial()
       .extend({

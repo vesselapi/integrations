@@ -13,10 +13,10 @@ export default action(
     schema: z
       .object({
         closeDate: custom.date(),
-        dealName: z.string().optional(),
-        amount: z.string().optional(),
-        hsDealStageProbability: z.string().optional(),
-        dealStage: z.string().optional(),
+        dealName: z.string(),
+        amount: z.string(),
+        hsDealStageProbability: z.string(),
+        dealStage: z.string(),
       })
       .partial()
       .extend({

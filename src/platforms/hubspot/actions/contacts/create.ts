@@ -11,14 +11,16 @@ export default action(
     operation: 'create',
     resource: 'contacts',
     mutation: true,
-    schema: z.object({
-      firstName: z.string().optional(),
-      lastName: z.string(),
-      email: z.string().optional(),
-      jobTitle: z.string().optional(),
-      phone: custom.formattedPhoneNumber().optional(),
-      mobilePhone: custom.formattedPhoneNumber().optional(),
-    }),
+    schema: z
+      .object({
+        firstName: z.string(),
+        lastName: z.string(),
+        email: z.string(),
+        jobTitle: z.string(),
+        phone: custom.formattedPhoneNumber(),
+        mobilePhone: custom.formattedPhoneNumber(),
+      })
+      .partial(),
     scopes: ['crm.objects.contacts.write'],
   },
   async ({ auth, input }) => {
