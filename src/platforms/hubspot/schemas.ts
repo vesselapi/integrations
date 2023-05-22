@@ -96,11 +96,9 @@ export const baseHubspotObjectSchema = <T extends z.ZodSchema>(properties: T) =>
     })
     .passthrough();
 
-export const upsertResponseSchema = z
-  .object({
-    id: hubspotIdSchema,
-  })
-  .passthrough();
+export const upsertResponseSchema = z.object({
+  id: hubspotIdSchema,
+});
 
 // -
 // Owners
