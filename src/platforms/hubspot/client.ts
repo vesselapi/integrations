@@ -63,6 +63,7 @@ import {
   meetingProperties,
   noteProperties,
   taskProperties,
+  upsertResponseSchema,
 } from './schemas';
 
 const request = makeRequestFactory(async (auth, options) => {
@@ -196,8 +197,12 @@ const makeClient = () => {
       listResponseSchema(schema),
       properties,
     ),
-    create: createObject<TCreate, TOutput>(module, schema, properties),
-    update: updateObject<TUpdate, TOutput>(module, schema),
+    create: createObject<TCreate, TOutput>(
+      module,
+      upsertResponseSchema,
+      properties,
+    ),
+    update: updateObject<TUpdate, TOutput>(module, upsertResponseSchema),
     delete: deleteObject(module),
     batchRead: batchReadObject<ListOutput<TOutput>>(
       module,
