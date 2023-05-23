@@ -18,6 +18,7 @@ export type ClientErrorMeta = {
 
 export class IntegrationError extends Error {
   meta: ActionErrorMeta | HttpErrorMeta | ClientErrorMeta;
+  alert: boolean;
 
   constructor(
     message: string,
@@ -27,5 +28,6 @@ export class IntegrationError extends Error {
     this.name = 'IntegrationError';
     this.meta = meta;
     this.cause = meta.cause;
+    this.alert = true;
   }
 }
