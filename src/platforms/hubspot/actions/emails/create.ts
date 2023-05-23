@@ -35,9 +35,9 @@ export default action(
         from: {
           email: input.fromEmail,
         },
-        to: input.toEmails.map((email) => ({ email })),
-        cc: input.ccEmails.map((email) => ({ email })),
-        bcc: input.bccEmails.map((email) => ({ email })),
+        to: input.toEmails?.map((email) => ({ email })) ?? [],
+        cc: input.ccEmails?.map((email) => ({ email })) ?? [],
+        bcc: input.bccEmails?.map((email) => ({ email })) ?? [],
       }),
       hs_email_html: input.hsEmailHtml,
       hs_email_text: input.hsEmailText,
