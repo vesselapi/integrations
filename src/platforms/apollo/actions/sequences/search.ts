@@ -1,4 +1,7 @@
-import { transformSequence } from '@/platforms/apollo/actions/mappers';
+import {
+  transformPagination,
+  transformSequence,
+} from '@/platforms/apollo/actions/mappers';
 import { client } from '@/platforms/apollo/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
@@ -8,7 +11,7 @@ export default action(
   {
     operation: 'search',
     resource: 'sequences',
-    mutation: true,
+    mutation: false,
     schema: z.object({
       qKeywords: z.string().optional(),
       page: z.number().optional(),
@@ -22,12 +25,7 @@ export default action(
     });
 
     return {
-      pagination: {
-        page: result.data.pagination.page,
-        perPage: result.data.pagination.per_page,
-        totalEntries: result.data.pagination.total_entries,
-        totalPages: result.data.pagination.total_pages,
-      },
+      pagination: transformPagination(result.data.pagination),
       emailerCampaigns: result.data.emailer_campaigns.map(transformSequence),
       $native: result.$native,
     };

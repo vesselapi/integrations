@@ -94,7 +94,7 @@ export const auth = {
     default: options.default ?? false,
     questions: [
       {
-        type: 'string',
+        type: 'text',
         id: 'api-key',
         label: 'API key',
       },

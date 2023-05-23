@@ -1,7 +1,6 @@
-import { isArray, mapValues, unique } from 'radash';
+import { isArray, unique } from 'radash';
 import {
   Action,
-  DirectlyInvokedAction,
   OAuth2AuthConfig,
   Platform,
   PlatformClient,
@@ -24,6 +23,7 @@ export type PlatformOptions<
   TAnswers extends Record<string, string>,
   TOAuth2Answers extends Record<string, string>,
   TOAuth2AppMeta extends Record<string, unknown>,
+  TConstants extends PlatformConstants,
 > = {
   auth:
     | StandardAuthConfig<TAnswers>
@@ -32,7 +32,7 @@ export type PlatformOptions<
         | StandardAuthConfig<TAnswers>
         | OAuth2AuthConfig<TOAuth2Answers, TOAuth2AppMeta>
       )[];
-  constants: PlatformConstants;
+  constants: TConstants;
   actions: TActions;
   display: PlatformDisplayConfig;
   client: TClient;
@@ -53,6 +53,7 @@ export const platform = <
   TStandardAnswers extends Record<string, string>,
   TOAuth2Answers extends Record<string, string>,
   TOAuth2AppMeta extends Record<string, unknown>,
+  TConstants extends PlatformConstants,
 >(
   id: TId,
   options: PlatformOptions<
@@ -60,7 +61,8 @@ export const platform = <
     TClient,
     TStandardAnswers,
     TOAuth2Answers,
-    TOAuth2AppMeta
+    TOAuth2AppMeta,
+    TConstants
   >,
 ): Platform<
   TActions,
@@ -68,7 +70,8 @@ export const platform = <
   string,
   TStandardAnswers,
   TOAuth2Answers,
-  TOAuth2AppMeta
+  TOAuth2AppMeta,
+  TConstants
 > => {
   const authConfigs = isArray(options.auth)
     ? options.auth.length === 1
@@ -95,20 +98,6 @@ export const platform = <
       } auths (${defaultAuthConfigs.map((x) => x.type).join(', ')})`,
     );
   }
-  const wrapAction =
-    <
-      TInput extends {},
-      TOutput extends {},
-      TAction extends Action<string, TInput, TOutput>,
-    >(
-      action: TAction,
-    ): DirectlyInvokedAction<TInput, TOutput> =>
-    async (input, auth) => {
-      return await action.func({
-        input,
-        auth,
-      });
-    };
 
   return {
     id,
@@ -117,17 +106,6 @@ export const platform = <
     display: options.display,
     rawActions: Object.values(options.actions),
     constants: options.constants,
-    actions: mapValues(
-      options.actions as Record<string, Action<string, {}, {}>>,
-      wrapAction,
-    ) as {
-      [Key in keyof TActions]: TActions[Key] extends Action<
-        string,
-        infer TInput,
-        infer TOutput
-      >
-        ? DirectlyInvokedAction<TInput, TOutput>
-        : never;
-    },
+    actions: options.actions,
   };
 };

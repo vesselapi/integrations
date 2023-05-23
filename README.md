@@ -5,7 +5,7 @@ Embedded Sales Integrations OS
 </h1>
 
 <div align="center">
-<i>Get up and running with top Sales integrations in minutes</i>
+<i>Get up and running with top GTM integrations in minutes</i>
 </div>
 
 <p align="center">

@@ -1,6 +1,6 @@
 import { CamelCasedPropertiesDeep } from 'type-fest';
 import { z } from 'zod';
-import { HttpOptions } from './client';
+import { FetchOptions, HttpOptions } from './client';
 
 export type Fetch = typeof fetch;
 
@@ -19,7 +19,15 @@ export type StandardMetadata = {
 
 type BaseAuth = {
   getToken: () => Promise<string>;
-  retry: (func: () => Promise<Response>) => Promise<Response>;
+  retry: (
+    func: () => Promise<{
+      response: Response;
+      options: FetchOptions;
+    }>,
+  ) => Promise<{
+    response: Response;
+    options: FetchOptions;
+  }>;
 };
 
 export type OAuth2Auth = BaseAuth & {
@@ -35,7 +43,7 @@ export type StandardAuth = BaseAuth & {
 export type Auth = OAuth2Auth | StandardAuth;
 
 export type HttpsUrl = `https://${string}`;
-export type AuthQuestionType = 'string' | 'select';
+export type AuthQuestionType = 'text' | 'select';
 export type AuthQuestionOption = {
   value: string;
   label: string;
@@ -53,7 +61,7 @@ export type SelectAuthQuestion = BaseAuthQuestion & {
 };
 
 export type StringAuthQuestion = BaseAuthQuestion & {
-  type: 'string';
+  type: 'text';
 };
 
 export type AuthQuestion = SelectAuthQuestion | StringAuthQuestion;
@@ -161,6 +169,7 @@ export type Platform<
   TStandardAnswers extends Record<string, string> = Record<string, string>,
   TOAuth2Answers extends Record<string, string> = Record<string, string>,
   TOAuth2AppMeta extends Record<string, unknown> = Record<string, unknown>,
+  TConstants extends PlatformConstants = PlatformConstants,
 > = {
   id: TId;
   auth: (
@@ -169,16 +178,8 @@ export type Platform<
   )[];
   rawActions: Action<string, any, any>[];
   client: TClient;
-  constants: PlatformConstants;
-  actions: {
-    [Key in keyof TActions]: TActions[Key] extends Action<
-      string,
-      infer TInput,
-      infer TOutput
-    >
-      ? DirectlyInvokedAction<TInput, TOutput>
-      : never;
-  };
+  constants: TConstants;
+  actions: TActions;
   display: PlatformDisplayConfig;
 };
 
@@ -231,7 +232,6 @@ export type ClientResult<TValidated> = {
   $native: RawResponse;
 };
 
-export type ActionResult<TTransformed> =
-  CamelCasedPropertiesDeep<TTransformed> & {
-    $native: RawResponse | RawResponse[];
-  };
+export type ActionResult<TOutput> = CamelCasedPropertiesDeep<TOutput> & {
+  $native?: RawResponse | RawResponse[];
+};

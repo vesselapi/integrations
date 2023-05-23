@@ -2,6 +2,7 @@ import activeCampaign from '@/platforms/active-campaign';
 import aircall from '@/platforms/aircall';
 import apollo from '@/platforms/apollo';
 import dialpad from '@/platforms/dialpad';
+import hubspot from '@/platforms/hubspot';
 import mailchimp from '@/platforms/mailchimp';
 import outreach from '@/platforms/outreach';
 import ringcentral from '@/platforms/ringcentral';
@@ -18,6 +19,7 @@ export {
 export { default as aircall, types as aircallTypes } from '@/platforms/aircall';
 export { default as apollo, types as apolloTypes } from '@/platforms/apollo';
 export { default as dialpad, types as dialpadTypes } from '@/platforms/dialpad';
+export { default as hubspot, types as hubspotTypes } from '@/platforms/hubspot';
 export {
   default as mailchimp,
   types as mailchimpTypes,
@@ -42,15 +44,16 @@ export { default as slack, types as slackTypes } from '@/platforms/slack';
 export { default as teams, types as teamsTypes } from '@/platforms/teams';
 
 export const integrationsList: Platform<any, any, any, any, any>[] = [
-  aircall,
   activeCampaign,
+  aircall,
   apollo,
   dialpad,
+  hubspot,
+  mailchimp,
   outreach,
   ringcentral,
   salesforce,
   salesloft,
   slack,
-  mailchimp,
   teams,
 ];

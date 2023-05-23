@@ -9,12 +9,14 @@ export const salesloftOAuthResponse = z.object({
 export type SalesloftOAuthResponse = z.infer<typeof salesloftOAuthResponse>;
 
 export const salesloftResponseMetadata = z.object({
-  paging: z.object({
-    per_page: z.number(),
-    current_page: z.number(),
-    next_page: z.number().nullish(),
-    prev_page: z.number().nullish(),
-  }),
+  paging: z
+    .object({
+      per_page: z.number(),
+      current_page: z.number(),
+      next_page: z.number().nullish(),
+      prev_page: z.number().nullish(),
+    })
+    .optional(),
 });
 export type SalesloftMetadata = z.infer<typeof salesloftResponseMetadata>;
 
@@ -208,7 +210,7 @@ export type SalesloftCadenceImport = {
     target_daily_people: number;
     remove_replied: boolean;
     remove_bounced: boolean;
-    external_identifier?: string;
+    external_identifier: string | null;
     cadence_function: string;
   };
   sharing_settings?: {

@@ -8,7 +8,7 @@ export default action(
   {
     operation: 'list',
     resource: 'activities',
-    mutation: true,
+    mutation: false,
     schema: z.object({
       contactId: z.string().optional(),
       types: z.array(z.string()).optional(),

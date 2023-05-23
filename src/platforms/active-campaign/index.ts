@@ -17,7 +17,7 @@ export default platform('activecampaign', {
     questions: [
       {
         id: 'domain',
-        type: 'string',
+        type: 'text',
         label:
           'What is your account API URL? Your API URL can be found in your account on the My Settings page under the "Developer" tab. It will look something like https://<your-account>.api-us1.com',
       },

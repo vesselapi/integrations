@@ -8,7 +8,7 @@ export type HttpOptions = {
   url: `${HttpsUrl}/${string}` | `/${string}`;
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   headers?: Record<string, string>;
-  json?: Record<string, unknown>;
+  json?: Record<string, unknown> | Record<string, unknown>[];
   query?: Record<string, string>;
 };
 
@@ -40,17 +40,17 @@ export const makeRequestFactory = (
       auth: Auth,
       args: TArgs,
     ): Promise<ClientResult<z.infer<TResponseSchema>>> {
-      const options = await formatFetchOptions(
-        auth,
-        isFunction(formatRequestOptions)
-          ? formatRequestOptions(args)
-          : formatRequestOptions,
-      );
-      const response = await auth.retry(async () => {
+      const { response, options } = await auth.retry(async () => {
+        const options = await formatFetchOptions(
+          auth,
+          isFunction(formatRequestOptions)
+            ? formatRequestOptions(args)
+            : formatRequestOptions,
+        );
         const url = options.query
           ? `${trim(options.url, '/')}?${toQueryString(options.query)}`
           : options.url;
-        return await fetch(url, {
+        const response = await fetch(url, {
           body: options.json ? JSON.stringify(options.json) : undefined,
           method: options.method,
           headers: options.json
@@ -64,29 +64,24 @@ export const makeRequestFactory = (
                 Accept: 'application/json',
               },
         });
+        return { response, options };
       });
-
-      if (!response.ok) {
-        const text = await response.text();
-
-        throw new IntegrationError('HTTP error in client', {
-          type: 'http',
-          body:
-            guard(
-              () => JSON.parse(text),
-              (err) => err instanceof SyntaxError,
-            ) ?? text,
-          status: response.status,
-          headers: response.headers,
-          cause: response,
-        });
-      }
 
       const text = await response.text();
       const body = guard(
         () => JSON.parse(text),
         (err) => err instanceof SyntaxError,
       ) ?? { body: text };
+
+      if (!response.ok) {
+        throw new IntegrationError('HTTP error in client', {
+          type: 'http',
+          body,
+          status: response.status,
+          headers: response.headers,
+          cause: response,
+        });
+      }
 
       const zodResult = await options.schema.safeParseAsync(body);
       if (!zodResult.success) {
@@ -97,12 +92,16 @@ export const makeRequestFactory = (
         // We may also support an injectable logger object.
         console.error('Validation failed on client response', {
           zodError: zodResult.error,
+          received: body,
         });
 
         return {
           data: body as z.infer<TResponseSchema>,
           $native: {
-            headers: { test: 'value' }, // todo fix
+            headers: [...response.headers].reduce(
+              (obj, [key, value]) => ({ ...obj, [key]: value }),
+              {},
+            ),
             body: body,
           },
         };
@@ -111,7 +110,10 @@ export const makeRequestFactory = (
       return {
         data: zodResult.data,
         $native: {
-          headers: { test: 'value' }, // todo fix
+          headers: [...response.headers].reduce(
+            (obj, [key, value]) => ({ ...obj, [key]: value }),
+            {},
+          ),
           body: body,
         },
       };

@@ -15,7 +15,7 @@ export default action(
           target_daily_people: z.number(),
           remove_replied: z.boolean(),
           remove_bounced: z.boolean(),
-          external_identifier: z.string().optional(),
+          external_identifier: z.string().nullable(),
           cadence_function: z.string(),
         })
 

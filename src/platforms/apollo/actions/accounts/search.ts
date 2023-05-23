@@ -1,4 +1,7 @@
-import { transformAccount } from '@/platforms/apollo/actions/mappers';
+import {
+  transformAccount,
+  transformPagination,
+} from '@/platforms/apollo/actions/mappers';
 import { client } from '@/platforms/apollo/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
@@ -8,7 +11,7 @@ export default action(
   {
     operation: 'search',
     resource: 'accounts',
-    mutation: true,
+    mutation: false,
     schema: z.object({
       qOrganizationName: z.string().optional(),
       page: z.number().optional(),
@@ -23,6 +26,7 @@ export default action(
 
     return {
       accounts: result.data.accounts.map(transformAccount),
+      pagination: transformPagination(result.data.pagination),
       $native: result.$native,
     };
   },
