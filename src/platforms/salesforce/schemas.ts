@@ -26,11 +26,9 @@ export const salesforceSObject = validators.object({
 // -
 export const salesforceQueryResponse = validators.object({
   records: z.array(
-    z
-      .object({
-        Id: z.string(),
-      })
-      .passthrough(),
+    z.object({
+      Id: z.string(),
+    }),
   ),
   totalSize: z.number(),
 });
@@ -296,7 +294,7 @@ export const salesforceNote = validators
     Body: z.string(),
     OwnerId: z.string(),
     ParentId: z.string(),
-    Parent: z.object({ Type: z.string() }).passthrough(),
+    Parent: z.object({ Type: z.string() }),
   })
   .partial()
   .required(requiredFields);
