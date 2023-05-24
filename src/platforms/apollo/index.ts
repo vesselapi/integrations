@@ -42,6 +42,7 @@ export default platform('apollo', {
         markdown: `- Please ensure your Apollo API key is a Master Key.
 - For detailed steps on how to create your Apollo API key, please see this [tutorial](https://docs.vessel.dev/pages/home/hidden/apollo).`,
       },
+      default: true,
     }),
   ],
   display: {

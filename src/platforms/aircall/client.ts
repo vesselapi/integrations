@@ -1,4 +1,4 @@
-import { makeRequestFactory } from '@/sdk/client';
+import { formatUrl, makeRequestFactory } from '@/sdk/client';
 import { shake } from 'radash';
 import { z } from 'zod';
 import { BASE_URL, DEFAULT_PAGE_SIZE } from './constants';
@@ -18,7 +18,7 @@ const request = makeRequestFactory(async (auth, options) => {
   const { answers } = await auth.getMetadata();
   return {
     ...options,
-    url: `${BASE_URL}${options.url}`,
+    url: formatUrl(BASE_URL, options.url),
     headers: {
       ...options.headers,
       Authorization:

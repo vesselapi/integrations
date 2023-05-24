@@ -28,6 +28,7 @@ export default platform('outreach', {
     tokenUrl: 'https://api.outreach.io/oauth/token',
     oauthBodyFormat: 'form',
     scopeSeparator: ' ',
+    default: true,
   }),
   display: {
     name: 'Outreach',

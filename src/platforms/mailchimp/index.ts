@@ -15,6 +15,7 @@ export default platform('mailchimp', {
     authUrl: 'https://login.mailchimp.com/oauth2/authorize',
     tokenUrl: 'https://login.mailchimp.com/oauth2/token',
     isRetryable: async ({}) => false,
+    default: true,
   }),
   display: {
     name: 'Mailchimp',

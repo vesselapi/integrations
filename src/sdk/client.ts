@@ -14,6 +14,7 @@ export type HttpOptions = {
 
 export type FetchOptions = HttpOptions & {
   schema: z.ZodType;
+  url: `${HttpsUrl}/${string}`;
 };
 
 export type RequestFetchOptions<TResponseSchema extends z.ZodType> =
@@ -21,6 +22,15 @@ export type RequestFetchOptions<TResponseSchema extends z.ZodType> =
     url: `${HttpsUrl}/${string}` | `/${string}`;
     schema: TResponseSchema;
   };
+
+export const formatUrl = (
+  baseUrl: `${HttpsUrl}`,
+  url: `${HttpsUrl}/${string}` | `/${string}`,
+): `${HttpsUrl}/${string}` => {
+  return !url.startsWith(baseUrl)
+    ? `${baseUrl}${url}`
+    : (url as `${HttpsUrl}/${string}`);
+};
 
 export const makeRequestFactory = (
   formatFetchOptions: (

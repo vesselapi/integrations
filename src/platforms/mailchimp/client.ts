@@ -1,5 +1,5 @@
 import { HttpsUrl } from '@/sdk';
-import { makeRequestFactory } from '@/sdk/client';
+import { formatUrl, makeRequestFactory } from '@/sdk/client';
 import * as custom from '@/sdk/validators';
 import { shake } from 'radash';
 import * as z from 'zod';
@@ -10,6 +10,7 @@ const BASE_URL = `${API_DOMAIN}/${API_VERSION}` as HttpsUrl;
 
 const metaRequest = makeRequestFactory(async (auth, options) => ({
   ...options,
+  url: formatUrl(BASE_URL, options.url),
   headers: {
     Authorization: `OAuth ${await auth.getToken()}`,
   },

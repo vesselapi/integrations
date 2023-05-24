@@ -1,5 +1,5 @@
 import { Auth, ClientResult } from '@/sdk';
-import { makeRequestFactory } from '@/sdk/client';
+import { formatUrl, makeRequestFactory } from '@/sdk/client';
 import { omit, shake } from 'radash';
 import * as z from 'zod';
 import { API_VERSION, BASE_URL, HUBSPOT_MAX_PAGE_SIZE } from './constants';
@@ -69,7 +69,7 @@ import {
 const request = makeRequestFactory(async (auth, options) => {
   return {
     ...options,
-    url: `${BASE_URL}${options.url}`,
+    url: formatUrl(BASE_URL, options.url),
     headers: {
       ...options.headers,
       Authorization: `Bearer ${await auth.getToken()}`,

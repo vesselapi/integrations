@@ -37,6 +37,7 @@ export default platform('ringcentral', {
         ],
       },
     ],
+    default: true,
   }),
   display: {
     name: 'Ringcentral',
