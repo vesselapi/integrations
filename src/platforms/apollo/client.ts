@@ -1,4 +1,4 @@
-import { makeRequestFactory } from '@/sdk/client';
+import { formatUrl, makeRequestFactory } from '@/sdk/client';
 import { objectify, shake } from 'radash';
 import { z } from 'zod';
 import { BASE_URL } from './constants';
@@ -29,7 +29,7 @@ const request = makeRequestFactory(async (auth, options) => {
   const api_key = await auth.getToken();
   return {
     ...options,
-    url: `${BASE_URL}/${options.url}`,
+    url: formatUrl(BASE_URL, options.url),
     query:
       options.method === 'GET'
         ? {

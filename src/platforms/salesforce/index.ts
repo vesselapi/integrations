@@ -40,6 +40,7 @@ export default platform('salesforce', {
         ],
       },
     ],
+    default: true,
   }),
   display: {
     name: 'Salesforce',
