@@ -161,9 +161,43 @@ export type PlatformDisplayConfig = {
   categories: Category[];
 };
 
+export type ActionValidation<
+  Actions extends Action<string, string, any, any>[],
+  Accumulator extends Action<string, string, any, any>[] = [],
+> = Actions extends []
+  ? Accumulator
+  : Actions extends [infer Head, ...infer Tail]
+  ? Head extends Action<string, string, any, any>
+    ? [Head['operation'], Head['resource']] extends [
+        Accumulator[number]['operation'],
+        Accumulator[number]['resource'],
+      ]
+      ? Tail extends Action<string, string, any, any>[]
+        ? ActionValidation<
+            Tail,
+            [
+              ...Accumulator,
+              {
+                name: never;
+                schema: never;
+                operation: never;
+                resource: never;
+                scopes: never;
+                mutation: never;
+                func: never;
+              },
+            ]
+          >
+        : never
+      : Tail extends Action<string, string, any, any>[]
+      ? ActionValidation<Tail, [...Accumulator, Head]>
+      : never
+    : never
+  : Actions;
+
 export type PlatformConstants = Record<string, any>;
 export type Platform<
-  TActions extends Record<string, Action<string, any, any>>,
+  TActions extends Record<string, Action<string, string, any, any>>,
   TClient extends PlatformClient,
   TId extends string,
   TStandardAnswers extends Record<string, string> = Record<string, string>,
@@ -176,7 +210,7 @@ export type Platform<
     | StandardAuthConfig<TStandardAnswers>
     | OAuth2AuthConfig<TOAuth2Answers, TOAuth2AppMeta>
   )[];
-  rawActions: Action<string, any, any>[];
+  rawActions: Action<string, string, any, any>[];
   client: TClient;
   constants: TConstants;
   actions: TActions;
@@ -189,14 +223,15 @@ export type ActionFunction<
 > = (props: { input: TInput; auth: Auth }) => Promise<ActionResult<TOutput>>;
 
 export type Action<
-  TName extends string,
+  TOperation extends string,
+  TResource extends string,
   TInput extends {},
   TOutput extends {} | null | void,
 > = {
-  name: TName;
+  name: string;
   schema: z.ZodType<TInput>;
-  operation: string;
-  resource: string;
+  operation: TOperation;
+  resource: TResource;
   scopes?: string[];
   mutation?: boolean;
   func: ActionFunction<TInput, TOutput>;
@@ -208,18 +243,19 @@ export type DirectlyInvokedAction<
 > = (input: TInput, auth: Auth) => Promise<ActionResult<TOutput>>;
 
 export type UnifiedAction<
-  TName extends string,
+  TOperation extends string,
+  TResource extends string,
   TVertical extends string,
   TInput extends {},
   TOutput extends {} | null,
-> = Action<TName, TInput, TOutput> & {
+> = Action<TOperation, TResource, TInput, TOutput> & {
   integrationId: string;
   vertical: TVertical;
 };
 
 export type Unification<TVertical extends string = string> = {
   vertical: TVertical;
-  actions: UnifiedAction<string, TVertical, any, any>[];
+  actions: UnifiedAction<string, string, TVertical, any, any>[];
 };
 
 type RawResponse = {

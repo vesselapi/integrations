@@ -13,10 +13,11 @@ export type PlatformOptions<
   TActions extends {
     [Key in keyof TActions]: TActions[Key] extends Action<
       string,
+      string,
       infer TInput,
       infer TOutput
     >
-      ? Action<string, TInput, TOutput>
+      ? Action<string, string, TInput, TOutput>
       : never;
   },
   TClient extends PlatformClient,
@@ -42,10 +43,11 @@ export const platform = <
   TActions extends {
     [Key in keyof TActions]: TActions[Key] extends Action<
       string,
+      string,
       infer TInput,
       infer TOutput
     >
-      ? Action<string, TInput, TOutput>
+      ? Action<string, string, TInput, TOutput>
       : never;
   },
   TClient extends PlatformClient,

@@ -1,13 +1,14 @@
-import { Action, Unification, UnifiedAction } from '../sdk';
+import { Action, ActionValidation, Unification, UnifiedAction } from '../sdk';
 
 export const unification = <
   TPlatforms extends string,
-  TUnifiedAction extends Action<string, any, any>,
+  TUnifiedAction extends Action<string, string, any, any>,
   TVertical extends string = string,
+  TUnifiedActions extends TUnifiedAction[] = TUnifiedAction[],
 >(
   vertical: TVertical,
   actions: {
-    [P in TPlatforms]: Record<string, TUnifiedAction>;
+    [P in TPlatforms]: ActionValidation<[...TUnifiedActions]>;
   },
 ): Unification<TVertical> => {
   const keys = Object.keys(actions) as (keyof typeof actions)[];
@@ -16,12 +17,12 @@ export const unification = <
     actions: keys.reduce((acc, integrationId) => {
       return [
         ...acc,
-        ...Object.values(actions[integrationId]).map((a) => ({
+        ...actions[integrationId].map((a) => ({
           ...a,
           integrationId,
           vertical,
         })),
       ];
-    }, [] as UnifiedAction<string, TVertical, any, any>[]),
+    }, [] as UnifiedAction<string, string, TVertical, any, any>[]),
   };
 };
