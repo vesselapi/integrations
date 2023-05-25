@@ -173,16 +173,23 @@ const makeClient = () => {
     schema: z.ZodSchema,
     properties?: string[],
   ): requestFunctionType<BatchReadObjectInput, TOutput> =>
-    request(({ ids }: BatchReadObjectInput) => ({
-      url: `/crm/${API_VERSION}/${module}/batch/read`,
-      method: 'POST',
-      json: {
-        properties: properties ?? null,
-        inputs: ids.map((id) => ({ id })),
-        propertiesWithHistory: null,
-      },
-      schema,
-    }));
+    request(
+      ({
+        ids,
+        after,
+        limit = HUBSPOT_MAX_PAGE_SIZE,
+      }: BatchReadObjectInput) => ({
+        url: `/crm/${API_VERSION}/${module}/batch/read`,
+        method: 'POST',
+        json: {
+          properties: properties ?? null,
+          inputs: ids.map((id) => ({ id })),
+          propertiesWithHistory: null,
+          limit,
+        },
+        schema,
+      }),
+    );
 
   const crud = <
     TCreate extends Record<string, unknown>,
@@ -217,6 +224,10 @@ const makeClient = () => {
     owners: {
       find: findObject<HubspotOwner>('owners', hubspotOwnerSchema),
       list: listObject<ListOutput<HubspotOwner>>(
+        'owners',
+        listResponseSchema(hubspotOwnerSchema),
+      ),
+      batchRead: batchReadObject<ListOutput<HubspotOwner>>(
         'owners',
         listResponseSchema(hubspotOwnerSchema),
       ),
