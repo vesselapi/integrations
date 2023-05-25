@@ -78,6 +78,7 @@ export const salesforceContactCreate = validators.object({
     MobilePhone: z.string().optional(),
     AccountId: z.string().optional(),
     OwnerId: z.string().optional(),
+    $native: z.object({}).passthrough().optional(),
   }),
 });
 
@@ -96,6 +97,7 @@ export const salesforceContactUpdate = validators.object({
     MobilePhone: z.string().optional(),
     AccountId: z.string().optional(),
     OwnerId: z.string().optional(),
+    $native: z.object({}).passthrough().optional(),
   }),
 });
 
@@ -148,6 +150,7 @@ export const salesforceAccountCreate = validators.object({
       BillingCountry: z.string(),
       Phone: z.string(),
       OwnerId: z.string(),
+      $native: z.object({}).passthrough(),
     })
     .partial(),
 });
@@ -173,6 +176,7 @@ export const salesforceAccountUpdate = validators.object({
       BillingCountry: z.string(),
       Phone: z.string(),
       OwnerId: z.string(),
+      $native: z.object({}).passthrough(),
     })
     .partial(),
 });
@@ -209,6 +213,7 @@ export const salesforceOpportunityCreate = validators.object({
       Probability: z.string(),
       AccountId: z.string(),
       StageName: z.string(),
+      $native: z.object({}).passthrough(),
     })
     .partial(),
 });
@@ -226,6 +231,7 @@ export const salesforceOpportunityUpdate = validators.object({
       CloseDate: validators.date(),
       Probability: z.string(),
       AccountId: z.string(),
+      $native: z.object({}).passthrough(),
     })
     .partial(),
 });
@@ -260,6 +266,7 @@ export const salesforceLeadCreate = validators.object({
       Title: z.string(),
       MobilePhone: z.string(),
       Company: z.string(),
+      $native: z.object({}).passthrough(),
     })
     .partial(),
 });
@@ -279,6 +286,7 @@ export const salesforceLeadUpdate = validators.object({
       Title: z.string(),
       MobilePhone: z.string(),
       Company: z.string(),
+      $native: z.object({}).passthrough(),
     })
     .partial(),
 });
@@ -312,6 +320,7 @@ export const salesforceNoteCreate = validators.object({
       Body: z.string(),
       OwnerId: z.string(),
       Title: z.string(),
+      $native: z.object({}).passthrough(),
     })
     .partial(),
 });
@@ -326,6 +335,7 @@ export const salesforceNoteUpdate = validators.object({
     .object({
       Body: z.string(),
       OwnerId: z.string(),
+      $native: z.object({}).passthrough(),
     })
     .partial(),
 });
@@ -461,6 +471,7 @@ export const salesforceTaskCreate = validators.object({
       CallType: z.enum(SALESFORCE_CALL_TYPES),
       TaskSubtype: z.literal('Call'),
       Type: z.literal('Call'),
+      $native: z.object({}).passthrough(),
     })
     .partial(),
 });
@@ -483,6 +494,7 @@ export const salesforceTaskUpdate = validators.object({
       CallType: z.enum(SALESFORCE_CALL_TYPES),
       TaskSubtype: z.literal('Call'),
       Type: z.literal('Call'),
+      $native: z.object({}).passthrough(),
     })
     .partial(),
 });
@@ -538,6 +550,7 @@ export const salesforceEventCreate = validators.object({
       IsAllDayEvent: z.boolean(),
       WhoId: z.string(),
       WhatId: z.string(),
+      $native: z.object({}).passthrough(),
     })
     .partial(),
 });
@@ -557,6 +570,7 @@ export const salesforceEventUpdate = validators.object({
       EndDateTime: validators.date(),
       Location: z.string(),
       IsAllDayEvent: z.boolean(),
+      $native: z.object({}).passthrough(),
     })
     .partial(),
 });
@@ -583,6 +597,7 @@ export const salesforceEventRelationCreate = validators.object({
       EventId: z.string(),
       RelationId: z.string(),
       Status: z.string(),
+      $native: z.object({}).passthrough(),
     })
     .partial(),
 });
@@ -596,6 +611,7 @@ export const salesforceEventRelationUpdate = validators.object({
   EventRelation: z
     .object({
       Status: z.string(),
+      $native: z.object({}).passthrough(),
     })
     .partial(),
 });
@@ -655,6 +671,7 @@ export const salesforceEmailMessageCreate = validators.object({
       Status: z.number(),
       CreatedById: z.string(),
       RelatedToId: z.string(),
+      $native: z.object({}).passthrough(),
     })
     .partial(),
 });
@@ -668,6 +685,7 @@ export const salesforceEmailMessageUpdate = validators.object({
   EmailMessage: z
     .object({
       Status: z.number(),
+      $native: z.object({}).passthrough(),
     })
     .partial(),
 });
@@ -701,6 +719,7 @@ export const salesforceEmailMessageRelationCreate = validators.object({
         'FromAddress',
         'OtherAddress',
       ]),
+      $native: z.object({}).passthrough(),
     })
     .partial(),
 });

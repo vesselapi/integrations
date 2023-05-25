@@ -1,5 +1,9 @@
 import { Auth, ClientResult } from '@/sdk';
-import { formatUrl, makeRequestFactory } from '@/sdk/client';
+import {
+  formatUpsertInputWithNative,
+  formatUrl,
+  makeRequestFactory,
+} from '@/sdk/client';
 import { omit, shake } from 'radash';
 import * as z from 'zod';
 import { API_VERSION, BASE_URL, HUBSPOT_MAX_PAGE_SIZE } from './constants';
@@ -135,8 +139,7 @@ const makeClient = () => {
           hs_timestamp: properties?.includes('hs_timestamp')
             ? new Date().toISOString()
             : undefined,
-          ...shake(omit(body, ['$native'])),
-          ...(body.$native ? body.$native : {}),
+          ...formatUpsertInputWithNative(body),
         }),
       },
     }));
@@ -151,8 +154,7 @@ const makeClient = () => {
       schema,
       json: {
         properties: {
-          ...shake(omit(body, ['id', '$native'])),
-          ...(body.$native ? body.$native : {}),
+          ...formatUpsertInputWithNative(omit(body, ['id'])),
         },
       },
     }));
@@ -323,7 +325,7 @@ const makeClient = () => {
           url: `/crm/${API_VERSION}/properties/${objectType}`,
           method: 'POST',
           schema: hubspotPropertySchema,
-          json: shake(property),
+          json: shake(formatUpsertInputWithNative(property)),
         }),
       ),
     },

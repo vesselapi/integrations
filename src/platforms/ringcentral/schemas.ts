@@ -102,11 +102,17 @@ export const ringcentralContactCreateSchema = ringcentralContactSchema
   })
   .omit({
     id: true,
+  })
+  .extend({
+    $native: z.object({}).passthrough().optional(),
   });
 export const ringcentralContactUpdateSchema = ringcentralContactSchema
   .partial()
   .required({
     id: true,
+  })
+  .extend({
+    $native: z.object({}).passthrough().optional(),
   });
 
 export const ringcentralRingOutStartSchema = z.object({
@@ -134,6 +140,7 @@ export const ringcentralRingOutStartSchema = z.object({
       }),
     )
     .optional(),
+  $native: z.object({}).passthrough().optional(),
 });
 
 export const ringcentralRingOutStatusSchema = z.object({

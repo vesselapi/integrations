@@ -99,10 +99,12 @@ export const client = {
           teamId,
           channelId,
           text,
+          $native,
         }: {
           teamId: string;
           channelId: string;
           text: string;
+          $native?: Record<string, unknown>;
         }) => ({
           url: `/teams/${teamId}/channels/${channelId}/messages`,
           method: 'POST',
@@ -110,6 +112,7 @@ export const client = {
             body: {
               content: text,
             },
+            ...($native ?? {}),
           },
           schema: microsoftMessage,
         }),
