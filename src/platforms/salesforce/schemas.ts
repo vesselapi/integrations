@@ -212,6 +212,7 @@ export const salesforceOpportunityCreate = validators.object({
       CloseDate: validators.date(),
       Probability: z.string(),
       AccountId: z.string(),
+      ContactId: z.string(),
       StageName: z.string(),
       $native: z.record(z.any()),
     })
