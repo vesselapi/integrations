@@ -73,7 +73,7 @@ export const apolloContactCreate = z.object({
   present_raw_address: z.string().nullish(),
   label_names: z.array(z.string()).nullish(),
   typed_custom_fields: z.record(z.string()).optional(),
-  $native: z.object({}).passthrough().optional(),
+  $native: z.record(z.any()).optional(),
 });
 
 export const apolloContactUpdate = z.object({
@@ -89,7 +89,7 @@ export const apolloContactUpdate = z.object({
   present_raw_address: z.string().nullish(),
   label_names: z.array(z.string()).nullish(),
   typed_custom_fields: z.record(z.string()).optional(),
-  $native: z.object({}).passthrough().optional(),
+  $native: z.record(z.any()).optional(),
 });
 
 export type ApolloContactCreate = z.infer<typeof apolloContactCreate>;
@@ -169,14 +169,14 @@ export const apolloAccountUpdate = z.object({
   name: z.string().nullish(),
   domain: z.string().nullish(),
   phone: z.string().nullish(),
-  $native: z.object({}).passthrough().optional(),
+  $native: z.record(z.any()).optional(),
 });
 
 export const apolloAccountCreate = z.object({
   name: z.string().nullish(),
   domain: z.string().nullish(),
   phone: z.string().nullish(),
-  $native: z.object({}).passthrough().optional(),
+  $native: z.record(z.any()).optional(),
 });
 export type ApolloAccountCreate = z.infer<typeof apolloAccountCreate>;
 
@@ -218,7 +218,7 @@ export const apolloCreateSequence = z.object({
   permissions: z.string(),
   type: z.string().optional(),
   active: z.boolean().optional(),
-  $native: z.object({}).passthrough().optional(),
+  $native: z.record(z.any()).optional(),
 });
 
 export type ApolloCreateSequence = z.infer<typeof apolloCreateSequence>;
@@ -245,7 +245,7 @@ export const apolloCreateSequenceStep = z.object({
   wait_mode: z.string().optional(),
   wait_time: z.number().optional(),
   exact_datetime: z.string().optional(),
-  $native: z.object({}).passthrough().optional(),
+  $native: z.record(z.any()).optional(),
 });
 
 export type ApolloCreateSequenceStep = z.infer<typeof apolloCreateSequenceStep>;
@@ -259,7 +259,7 @@ export const apolloCreateTemplate = z.object({
   body_text: z.string().optional(),
   creation_type: z.string().optional(),
   label_ids: z.array(z.string()).optional(),
-  $native: z.object({}).passthrough().optional(),
+  $native: z.record(z.any()).optional(),
 });
 
 export type ApolloCreateTemplate = z.infer<typeof apolloCreateTemplate>;
@@ -272,7 +272,7 @@ export const apolloUpdateSequenceTemplate = z.object({
   status: z.string().optional(),
   type: z.string().optional(),
   include_signature: z.boolean().optional(),
-  $native: z.object({}).passthrough().optional(),
+  $native: z.record(z.any()).optional(),
 });
 
 export type ApolloUpdateSequenceTemplate = z.infer<
