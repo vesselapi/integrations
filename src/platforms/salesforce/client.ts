@@ -144,6 +144,35 @@ const query = {
         }),
       }),
     ),
+  batchRead: <T extends z.ZodType>({
+    schema,
+    objectType,
+    relationalSelect,
+  }: {
+    schema: T;
+    objectType: SalesforceSupportedObjectType;
+    relationalSelect?: Partial<Record<SalesforceSupportedObjectType, string>>;
+  }) =>
+    request(
+      ({
+        Ids,
+        associations,
+      }: {
+        Ids: string[];
+        associations?: SalesforceSupportedObjectType[];
+      }) => ({
+        url: `/query/?q=${salesforceQueryBuilder.batchRead({
+          ids: Ids,
+          objectType,
+          relationalSelect,
+          associations,
+        })}`,
+        method: 'GET',
+        schema: z.object({
+          records: z.array(schema),
+        }),
+      }),
+    ),
 };
 
 export const client = {
@@ -166,7 +195,11 @@ export const client = {
       method: 'GET',
       schema: salesforceUser,
     })),
-    list: query.list({
+    list: query.list<typeof salesforceUser>({
+      objectType: 'User',
+      schema: salesforceUser,
+    }),
+    batchRead: query.batchRead<typeof salesforceUser>({
       objectType: 'User',
       schema: salesforceUser,
     }),
@@ -177,6 +210,10 @@ export const client = {
       schema: salesforceContact,
     }),
     list: query.list<typeof salesforceContact>({
+      objectType: 'Contact',
+      schema: salesforceContact,
+    }),
+    batchRead: query.batchRead<typeof salesforceContact>({
       objectType: 'Contact',
       schema: salesforceContact,
     }),
@@ -255,6 +292,11 @@ export const client = {
       schema: salesforceAccount,
       relationalSelect: salesforceAccountRelationalSelect,
     }),
+    batchRead: query.batchRead<typeof salesforceAccount>({
+      objectType: 'Account',
+      schema: salesforceAccount,
+      relationalSelect: salesforceAccountRelationalSelect,
+    }),
     create: request(({ Account }: SalesforceAccountCreate) => ({
       url: `/sobjects/Account`,
       method: 'POST',
@@ -282,6 +324,10 @@ export const client = {
       objectType: 'Opportunity',
       schema: salesforceOpportunity,
     }),
+    batchRead: query.batchRead({
+      objectType: 'Opportunity',
+      schema: salesforceOpportunity,
+    }),
     create: request(({ Opportunity }: SalesforceOpportunityCreate) => ({
       url: `/sobjects/Opportunity`,
       method: 'POST',
@@ -306,6 +352,10 @@ export const client = {
       schema: salesforceLead,
     }),
     list: query.list<typeof salesforceLead>({
+      objectType: 'Lead',
+      schema: salesforceLead,
+    }),
+    batchRead: query.batchRead<typeof salesforceLead>({
       objectType: 'Lead',
       schema: salesforceLead,
     }),
@@ -338,6 +388,11 @@ export const client = {
       schema: salesforceNote,
       relationalSelect: salesforceNoteRelationalSelect,
     }),
+    batchRead: query.batchRead<typeof salesforceNote>({
+      objectType: 'Note',
+      schema: salesforceNote,
+      relationalSelect: salesforceNoteRelationalSelect,
+    }),
     create: request(({ Note }: SalesforceNoteCreate) => ({
       url: `/sobjects/Note`,
       method: 'POST',
@@ -363,6 +418,11 @@ export const client = {
       relationalSelect: salesforceContentNoteRelationalSelect,
     }),
     list: query.list<typeof salesforceContentNote>({
+      objectType: 'ContentNote',
+      schema: salesforceContentNote,
+      relationalSelect: salesforceContentNoteRelationalSelect,
+    }),
+    batchRead: query.batchRead<typeof salesforceContentNote>({
       objectType: 'ContentNote',
       schema: salesforceContentNote,
       relationalSelect: salesforceContentNoteRelationalSelect,
@@ -411,6 +471,11 @@ export const client = {
       schema: salesforceTask,
       relationalSelect: salesforceTaskRelationalSelect,
     }),
+    batchRead: query.batchRead<typeof salesforceTask>({
+      objectType: 'Task',
+      schema: salesforceTask,
+      relationalSelect: salesforceTaskRelationalSelect,
+    }),
     create: request(({ Task }: SalesforceTaskCreate) => ({
       url: `/sobjects/Task`,
       method: 'POST',
@@ -440,6 +505,11 @@ export const client = {
       schema: salesforceEvent,
       relationalSelect: salesforceEventRelationalSelect,
     }),
+    batchRead: query.batchRead<typeof salesforceEvent>({
+      objectType: 'Event',
+      schema: salesforceEvent,
+      relationalSelect: salesforceEventRelationalSelect,
+    }),
     create: request(({ Event }: SalesforceEventCreate) => ({
       url: `/sobjects/Event`,
       method: 'POST',
@@ -464,6 +534,10 @@ export const client = {
       schema: salesforceEventRelation,
     }),
     list: query.list<typeof salesforceEventRelation>({
+      objectType: 'EventRelation',
+      schema: salesforceEventRelation,
+    }),
+    batchRead: query.batchRead<typeof salesforceEventRelation>({
       objectType: 'EventRelation',
       schema: salesforceEventRelation,
     }),
@@ -496,6 +570,11 @@ export const client = {
       schema: salesforceEmailMessage,
       relationalSelect: salesforceEmailMessageRelationalSelect,
     }),
+    batchRead: query.batchRead<typeof salesforceEmailMessage>({
+      objectType: 'EmailMessage',
+      schema: salesforceEmailMessage,
+      relationalSelect: salesforceEmailMessageRelationalSelect,
+    }),
     create: request(({ EmailMessage }: SalesforceEmailMessageCreate) => ({
       url: `/sobjects/EmailMessage`,
       method: 'POST',
@@ -520,6 +599,10 @@ export const client = {
       schema: salesforceEmailMessageRelation,
     }),
     list: query.list<typeof salesforceEmailMessageRelation>({
+      objectType: 'EmailMessageRelation',
+      schema: salesforceEmailMessageRelation,
+    }),
+    batchRead: query.batchRead<typeof salesforceEmailMessageRelation>({
       objectType: 'EmailMessageRelation',
       schema: salesforceEmailMessageRelation,
     }),

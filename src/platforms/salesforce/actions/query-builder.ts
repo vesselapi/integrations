@@ -84,6 +84,27 @@ export const salesforceQueryBuilder: Record<
       LIMIT ${limit}
     `);
   },
+  batchRead: ({
+    ids,
+    objectType,
+    relationalSelect,
+    associations,
+  }: {
+    ids: string[];
+    objectType: SalesforceSupportedObjectType;
+    relationalSelect?: Partial<Record<SalesforceSupportedObjectType, string>>;
+    associations?: SalesforceSupportedObjectType[];
+  }) => {
+    const selectClauses = sift([
+      'SELECT FIELDS(ALL)',
+      buildRelationalSelectClause(relationalSelect, associations),
+    ]);
+    return formatQuery(`
+      ${selectClauses.join(', ')}
+      FROM ${objectType}
+      WHERE Id IN ('${ids.join("','")}')
+    `);
+  },
   listListView: ({
     objectType,
     cursor,

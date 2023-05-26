@@ -24,7 +24,7 @@ export type ListObjectInput = {
 };
 export type BatchReadObjectInput = {
   ids: string[];
-};
+} & ListObjectInput;
 export type ListOutput<T> = {
   results?: T[];
   paging?: {
