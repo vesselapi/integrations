@@ -104,7 +104,7 @@ export const ringcentralContactCreateSchema = ringcentralContactSchema
     id: true,
   })
   .extend({
-    $native: z.object({}).passthrough().optional(),
+    $native: z.record(z.any()).optional(),
   });
 export const ringcentralContactUpdateSchema = ringcentralContactSchema
   .partial()
@@ -112,7 +112,7 @@ export const ringcentralContactUpdateSchema = ringcentralContactSchema
     id: true,
   })
   .extend({
-    $native: z.object({}).passthrough().optional(),
+    $native: z.record(z.any()).optional(),
   });
 
 export const ringcentralRingOutStartSchema = z.object({
@@ -140,7 +140,7 @@ export const ringcentralRingOutStartSchema = z.object({
       }),
     )
     .optional(),
-  $native: z.object({}).passthrough().optional(),
+  $native: z.record(z.any()).optional(),
 });
 
 export const ringcentralRingOutStatusSchema = z.object({
