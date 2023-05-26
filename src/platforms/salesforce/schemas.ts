@@ -528,6 +528,13 @@ export const salesforceEvent = validators
       Id: z.string(),
       Type: z.string(),
     }),
+    EventRelations: z.object({
+      records: z.array(
+        z.object({
+          Id: z.string(),
+        }),
+      ),
+    }),
   })
   .partial()
   .required(requiredFields);
@@ -536,6 +543,7 @@ export const salesforceEventRelationalSelect = {
   Opportunity: 'What.Id',
   Contact: 'Who.Id',
   Lead: 'Who.Id',
+  EventRelation: '(SELECT Id, RelationId FROM EventRelations)',
 };
 
 export const salesforceEventCreate = validators.object({
