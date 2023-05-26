@@ -1,15 +1,25 @@
 import { HttpsUrl } from '@/sdk';
-import { makeRequestFactory } from '@/sdk/client';
+import {
+  formatUpsertInputWithNative,
+  formatUrl,
+  makeRequestFactory,
+} from '@/sdk/client';
 import * as custom from '@/sdk/validators';
 import { shake } from 'radash';
 import * as z from 'zod';
 import { API_DOMAIN, API_VERSION } from './constants';
-import { mailchimpList, mailchimpMember, MailchimpMember } from './schemas';
+import {
+  mailchimpList,
+  mailchimpMember,
+  MailchimpMember,
+  WithNative,
+} from './schemas';
 
 const BASE_URL = `${API_DOMAIN}/${API_VERSION}` as HttpsUrl;
 
 const metaRequest = makeRequestFactory(async (auth, options) => ({
   ...options,
+  url: formatUrl(BASE_URL, options.url),
   headers: {
     Authorization: `OAuth ${await auth.getToken()}`,
   },
@@ -93,14 +103,14 @@ export const client = {
         member,
       }: {
         list_id: string;
-        member: Partial<MailchimpMember>;
+        member: Partial<WithNative<MailchimpMember>>;
       }) => ({
         url: `/lists/${list_id}/members`,
         method: 'POST',
         schema: custom.object({
           id: z.string(),
         }),
-        json: member,
+        json: formatUpsertInputWithNative(member),
       }),
     ),
     update: request(
@@ -111,14 +121,14 @@ export const client = {
       }: {
         list_id: string;
         subscriber_hash: string;
-        member: Partial<MailchimpMember>;
+        member: Partial<WithNative<MailchimpMember>>;
       }) => ({
         url: `/lists/${list_id}/members/${subscriber_hash}`,
         method: 'PATCH',
         schema: custom.object({
           id: z.string(),
         }),
-        json: member,
+        json: formatUpsertInputWithNative(member),
       }),
     ),
   },

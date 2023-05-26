@@ -74,6 +74,9 @@ export const dialpadContactCreateSchema = dialpadContactSchema
     primary_email: true,
     primary_phone: true,
     type: true,
+  })
+  .extend({
+    $native: z.record(z.any()).optional(),
   });
 export const dialpadContactUpdateSchema = dialpadContactSchema
   .partial()
@@ -92,6 +95,7 @@ export const dialpadContactUpdateSchema = dialpadContactSchema
   })
   .extend({
     uid: z.string(),
+    $native: z.record(z.any()).optional(),
   });
 
 export const routingBreadcrumbSchema = z.object({
@@ -169,6 +173,7 @@ export const dialpadCallStartSchema = z.object({
   outbound_caller_id: z.string().optional(),
   phone_number: custom.formattedPhoneNumber(),
   user_id: z.string(),
+  $native: z.record(z.any()).optional(),
 });
 
 export type DialpadModules = 'users' | 'calls' | 'contacts';

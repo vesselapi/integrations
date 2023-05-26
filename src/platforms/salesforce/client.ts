@@ -1,5 +1,5 @@
 import { HttpsUrl } from '@/sdk';
-import { makeRequestFactory } from '@/sdk/client';
+import { formatUpsertInputWithNative, makeRequestFactory } from '@/sdk/client';
 import { z } from 'zod';
 import { salesforceQueryBuilder } from './actions/query-builder';
 import { SALESFORCE_API_VERSION } from './constants';
@@ -144,6 +144,35 @@ const query = {
         }),
       }),
     ),
+  batchRead: <T extends z.ZodType>({
+    schema,
+    objectType,
+    relationalSelect,
+  }: {
+    schema: T;
+    objectType: SalesforceSupportedObjectType;
+    relationalSelect?: Partial<Record<SalesforceSupportedObjectType, string>>;
+  }) =>
+    request(
+      ({
+        Ids,
+        associations,
+      }: {
+        Ids: string[];
+        associations?: SalesforceSupportedObjectType[];
+      }) => ({
+        url: `/query/?q=${salesforceQueryBuilder.batchRead({
+          ids: Ids,
+          objectType,
+          relationalSelect,
+          associations,
+        })}`,
+        method: 'GET',
+        schema: z.object({
+          records: z.array(schema),
+        }),
+      }),
+    ),
 };
 
 export const client = {
@@ -166,7 +195,11 @@ export const client = {
       method: 'GET',
       schema: salesforceUser,
     })),
-    list: query.list({
+    list: query.list<typeof salesforceUser>({
+      objectType: 'User',
+      schema: salesforceUser,
+    }),
+    batchRead: query.batchRead<typeof salesforceUser>({
       objectType: 'User',
       schema: salesforceUser,
     }),
@@ -180,16 +213,20 @@ export const client = {
       objectType: 'Contact',
       schema: salesforceContact,
     }),
+    batchRead: query.batchRead<typeof salesforceContact>({
+      objectType: 'Contact',
+      schema: salesforceContact,
+    }),
     create: request(({ Contact }: SalesforceContactCreate) => ({
       url: `/sobjects/Contact`,
       method: 'POST',
-      json: Contact,
+      json: formatUpsertInputWithNative(Contact),
       schema: salesforceContactCreateResponse,
     })),
     update: request(({ Id, Contact }: SalesforceContactUpdate) => ({
       url: `/sobjects/Contact/${Id}/`,
       method: 'PATCH',
-      json: Contact,
+      json: formatUpsertInputWithNative(Contact),
       schema: salesforceContact,
     })),
     delete: request(({ Id }: { Id: string }) => ({
@@ -255,16 +292,21 @@ export const client = {
       schema: salesforceAccount,
       relationalSelect: salesforceAccountRelationalSelect,
     }),
+    batchRead: query.batchRead<typeof salesforceAccount>({
+      objectType: 'Account',
+      schema: salesforceAccount,
+      relationalSelect: salesforceAccountRelationalSelect,
+    }),
     create: request(({ Account }: SalesforceAccountCreate) => ({
       url: `/sobjects/Account`,
       method: 'POST',
-      json: Account,
+      json: formatUpsertInputWithNative(Account),
       schema: salesforceAccountCreateResponse,
     })),
     update: request(({ Id, Account }: SalesforceAccountUpdate) => ({
       url: `/sobjects/Account/${Id}/`,
       method: 'PATCH',
-      json: Account,
+      json: formatUpsertInputWithNative(Account),
       schema: salesforceAccount,
     })),
     delete: request(({ Id }: { Id: string }) => ({
@@ -282,16 +324,20 @@ export const client = {
       objectType: 'Opportunity',
       schema: salesforceOpportunity,
     }),
+    batchRead: query.batchRead({
+      objectType: 'Opportunity',
+      schema: salesforceOpportunity,
+    }),
     create: request(({ Opportunity }: SalesforceOpportunityCreate) => ({
       url: `/sobjects/Opportunity`,
       method: 'POST',
-      json: Opportunity,
+      json: formatUpsertInputWithNative(Opportunity),
       schema: salesforceOpportunityCreateResponse,
     })),
     update: request(({ Id, Opportunity }: SalesforceOpportunityUpdate) => ({
       url: `/sobjects/Opportunity/${Id}/`,
       method: 'PATCH',
-      json: Opportunity,
+      json: formatUpsertInputWithNative(Opportunity),
       schema: salesforceOpportunity,
     })),
     delete: request(({ Id }: { Id: string }) => ({
@@ -309,16 +355,20 @@ export const client = {
       objectType: 'Lead',
       schema: salesforceLead,
     }),
+    batchRead: query.batchRead<typeof salesforceLead>({
+      objectType: 'Lead',
+      schema: salesforceLead,
+    }),
     create: request(({ Lead }: SalesforceLeadCreate) => ({
       url: `/sobjects/Lead`,
       method: 'POST',
-      json: Lead,
+      json: formatUpsertInputWithNative(Lead),
       schema: salesforceLeadCreateResponse,
     })),
     update: request(({ Id, Lead }: SalesforceLeadUpdate) => ({
       url: `/sobjects/Lead/${Id}/`,
       method: 'PATCH',
-      json: Lead,
+      json: formatUpsertInputWithNative(Lead),
       schema: salesforceLead,
     })),
     delete: request(({ Id }: { Id: string }) => ({
@@ -338,16 +388,21 @@ export const client = {
       schema: salesforceNote,
       relationalSelect: salesforceNoteRelationalSelect,
     }),
+    batchRead: query.batchRead<typeof salesforceNote>({
+      objectType: 'Note',
+      schema: salesforceNote,
+      relationalSelect: salesforceNoteRelationalSelect,
+    }),
     create: request(({ Note }: SalesforceNoteCreate) => ({
       url: `/sobjects/Note`,
       method: 'POST',
-      json: Note,
+      json: formatUpsertInputWithNative(Note),
       schema: salesforceNoteCreateResponse,
     })),
     update: request(({ Id, Note }: SalesforceNoteUpdate) => ({
       url: `/sobjects/Note/${Id}/`,
       method: 'PATCH',
-      json: Note,
+      json: formatUpsertInputWithNative(Note),
       schema: salesforceNote,
     })),
     delete: request(({ Id }: { Id: string }) => ({
@@ -367,16 +422,21 @@ export const client = {
       schema: salesforceContentNote,
       relationalSelect: salesforceContentNoteRelationalSelect,
     }),
+    batchRead: query.batchRead<typeof salesforceContentNote>({
+      objectType: 'ContentNote',
+      schema: salesforceContentNote,
+      relationalSelect: salesforceContentNoteRelationalSelect,
+    }),
     create: request(({ ContentNote }: SalesforceContentNoteCreate) => ({
       url: `/sobjects/ContentNote`,
       method: 'POST',
-      json: ContentNote,
+      json: formatUpsertInputWithNative(ContentNote),
       schema: salesforceContentNoteCreateResponse,
     })),
     update: request(({ Id, ContentNote }: SalesforceContentNoteUpdate) => ({
       url: `/sobjects/ContentNote/${Id}/`,
       method: 'PATCH',
-      json: ContentNote,
+      json: formatUpsertInputWithNative(ContentNote),
       schema: salesforceContentNote,
     })),
     delete: request(({ Id }: { Id: string }) => ({
@@ -395,7 +455,7 @@ export const client = {
       ({ ContentDocumentLink }: SalesforceContentDocumentLinkCreate) => ({
         url: `/sobjects/ContentDocumentLink`,
         method: 'POST',
-        json: ContentDocumentLink,
+        json: formatUpsertInputWithNative(ContentDocumentLink),
         schema: salesforceContentDocumentLinkCreateResponse,
       }),
     ),
@@ -411,16 +471,21 @@ export const client = {
       schema: salesforceTask,
       relationalSelect: salesforceTaskRelationalSelect,
     }),
+    batchRead: query.batchRead<typeof salesforceTask>({
+      objectType: 'Task',
+      schema: salesforceTask,
+      relationalSelect: salesforceTaskRelationalSelect,
+    }),
     create: request(({ Task }: SalesforceTaskCreate) => ({
       url: `/sobjects/Task`,
       method: 'POST',
-      json: Task,
+      json: formatUpsertInputWithNative(Task),
       schema: salesforceTaskCreateResponse,
     })),
     update: request(({ Id, Task }: SalesforceTaskUpdate) => ({
       url: `/sobjects/Task/${Id}/`,
       method: 'PATCH',
-      json: Task,
+      json: formatUpsertInputWithNative(Task),
       schema: salesforceTask,
     })),
     delete: request(({ Id }: { Id: string }) => ({
@@ -440,16 +505,21 @@ export const client = {
       schema: salesforceEvent,
       relationalSelect: salesforceEventRelationalSelect,
     }),
+    batchRead: query.batchRead<typeof salesforceEvent>({
+      objectType: 'Event',
+      schema: salesforceEvent,
+      relationalSelect: salesforceEventRelationalSelect,
+    }),
     create: request(({ Event }: SalesforceEventCreate) => ({
       url: `/sobjects/Event`,
       method: 'POST',
-      json: Event,
+      json: formatUpsertInputWithNative(Event),
       schema: salesforceEventCreateResponse,
     })),
     update: request(({ Id, Event }: SalesforceEventUpdate) => ({
       url: `/sobjects/Event/${Id}/`,
       method: 'PATCH',
-      json: Event,
+      json: formatUpsertInputWithNative(Event),
       schema: salesforceEvent,
     })),
     delete: request(({ Id }: { Id: string }) => ({
@@ -467,16 +537,20 @@ export const client = {
       objectType: 'EventRelation',
       schema: salesforceEventRelation,
     }),
+    batchRead: query.batchRead<typeof salesforceEventRelation>({
+      objectType: 'EventRelation',
+      schema: salesforceEventRelation,
+    }),
     create: request(({ EventRelation }: SalesforceEventRelationCreate) => ({
       url: `/sobjects/EventRelation`,
       method: 'POST',
-      json: EventRelation,
+      json: formatUpsertInputWithNative(EventRelation),
       schema: salesforceEventRelationCreateResponse,
     })),
     update: request(({ Id, EventRelation }: SalesforceEventRelationUpdate) => ({
       url: `/sobjects/EventRelation/${Id}/`,
       method: 'PATCH',
-      json: EventRelation,
+      json: formatUpsertInputWithNative(EventRelation),
       schema: salesforceEventRelation,
     })),
     delete: request(({ Id }: { Id: string }) => ({
@@ -496,16 +570,21 @@ export const client = {
       schema: salesforceEmailMessage,
       relationalSelect: salesforceEmailMessageRelationalSelect,
     }),
+    batchRead: query.batchRead<typeof salesforceEmailMessage>({
+      objectType: 'EmailMessage',
+      schema: salesforceEmailMessage,
+      relationalSelect: salesforceEmailMessageRelationalSelect,
+    }),
     create: request(({ EmailMessage }: SalesforceEmailMessageCreate) => ({
       url: `/sobjects/EmailMessage`,
       method: 'POST',
-      json: EmailMessage,
+      json: formatUpsertInputWithNative(EmailMessage),
       schema: salesforceEmailMessageCreateResponse,
     })),
     update: request(({ Id, EmailMessage }: SalesforceEmailMessageUpdate) => ({
       url: `/sobjects/EmailMessage/${Id}/`,
       method: 'PATCH',
-      json: EmailMessage,
+      json: formatUpsertInputWithNative(EmailMessage),
       schema: salesforceEmailMessage,
     })),
     delete: request(({ Id }: { Id: string }) => ({
@@ -523,11 +602,15 @@ export const client = {
       objectType: 'EmailMessageRelation',
       schema: salesforceEmailMessageRelation,
     }),
+    batchRead: query.batchRead<typeof salesforceEmailMessageRelation>({
+      objectType: 'EmailMessageRelation',
+      schema: salesforceEmailMessageRelation,
+    }),
     create: request(
       ({ EmailMessageRelation }: SalesforceEmailMessageRelationCreate) => ({
         url: `/sobjects/EmailMessageRelation`,
         method: 'POST',
-        json: EmailMessageRelation,
+        json: formatUpsertInputWithNative(EmailMessageRelation),
         schema: salesforceEmailMessageRelationCreateResponse,
       }),
     ),

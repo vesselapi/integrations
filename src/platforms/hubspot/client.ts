@@ -1,5 +1,9 @@
 import { Auth, ClientResult } from '@/sdk';
-import { makeRequestFactory } from '@/sdk/client';
+import {
+  formatUpsertInputWithNative,
+  formatUrl,
+  makeRequestFactory,
+} from '@/sdk/client';
 import { omit, shake } from 'radash';
 import * as z from 'zod';
 import { API_VERSION, BASE_URL, HUBSPOT_MAX_PAGE_SIZE } from './constants';
@@ -63,12 +67,13 @@ import {
   meetingProperties,
   noteProperties,
   taskProperties,
+  upsertResponseSchema,
 } from './schemas';
 
 const request = makeRequestFactory(async (auth, options) => {
   return {
     ...options,
-    url: `${BASE_URL}${options.url}`,
+    url: formatUrl(BASE_URL, options.url),
     headers: {
       ...options.headers,
       Authorization: `Bearer ${await auth.getToken()}`,
@@ -134,8 +139,7 @@ const makeClient = () => {
           hs_timestamp: properties?.includes('hs_timestamp')
             ? new Date().toISOString()
             : undefined,
-          ...shake(omit(body, ['$native'])),
-          ...(body.$native ? body.$native : {}),
+          ...formatUpsertInputWithNative(body),
         }),
       },
     }));
@@ -150,8 +154,7 @@ const makeClient = () => {
       schema,
       json: {
         properties: {
-          ...shake(omit(body, ['id', '$native'])),
-          ...(body.$native ? body.$native : {}),
+          ...formatUpsertInputWithNative(omit(body, ['id'])),
         },
       },
     }));
@@ -170,16 +173,24 @@ const makeClient = () => {
     schema: z.ZodSchema,
     properties?: string[],
   ): requestFunctionType<BatchReadObjectInput, TOutput> =>
-    request(({ ids }: BatchReadObjectInput) => ({
-      url: `/crm/${API_VERSION}/${module}/batch/read`,
-      method: 'POST',
-      json: {
-        properties: properties ?? null,
-        inputs: ids.map((id) => ({ id })),
-        propertiesWithHistory: null,
-      },
-      schema,
-    }));
+    request(
+      ({
+        ids,
+        after,
+        limit = HUBSPOT_MAX_PAGE_SIZE,
+      }: BatchReadObjectInput) => ({
+        url: `/crm/${API_VERSION}/${module}/batch/read`,
+        method: 'POST',
+        json: {
+          properties: properties ?? null,
+          inputs: ids.map((id) => ({ id })),
+          propertiesWithHistory: null,
+          limit,
+          after,
+        },
+        schema,
+      }),
+    );
 
   const crud = <
     TCreate extends Record<string, unknown>,
@@ -196,8 +207,12 @@ const makeClient = () => {
       listResponseSchema(schema),
       properties,
     ),
-    create: createObject<TCreate, TOutput>(module, schema, properties),
-    update: updateObject<TUpdate, TOutput>(module, schema),
+    create: createObject<TCreate, TOutput>(
+      module,
+      upsertResponseSchema,
+      properties,
+    ),
+    update: updateObject<TUpdate, TOutput>(module, upsertResponseSchema),
     delete: deleteObject(module),
     batchRead: batchReadObject<ListOutput<TOutput>>(
       module,
@@ -210,6 +225,10 @@ const makeClient = () => {
     owners: {
       find: findObject<HubspotOwner>('owners', hubspotOwnerSchema),
       list: listObject<ListOutput<HubspotOwner>>(
+        'owners',
+        listResponseSchema(hubspotOwnerSchema),
+      ),
+      batchRead: batchReadObject<ListOutput<HubspotOwner>>(
         'owners',
         listResponseSchema(hubspotOwnerSchema),
       ),
@@ -318,7 +337,7 @@ const makeClient = () => {
           url: `/crm/${API_VERSION}/properties/${objectType}`,
           method: 'POST',
           schema: hubspotPropertySchema,
-          json: shake(property),
+          json: shake(formatUpsertInputWithNative(property)),
         }),
       ),
     },

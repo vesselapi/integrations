@@ -12,7 +12,11 @@ import {
   outreachTemplate,
   outreachUser,
 } from '@/platforms/outreach/schemas';
-import { makeRequestFactory } from '@/sdk/client';
+import {
+  formatUpsertInputWithNative,
+  formatUrl,
+  makeRequestFactory,
+} from '@/sdk/client';
 import * as custom from '@/sdk/validators';
 import { mapKeys, shake } from 'radash';
 import { z } from 'zod';
@@ -20,9 +24,7 @@ import { BASE_URL, DEFAULT_PAGE_SIZE } from './constants';
 
 const request = makeRequestFactory(async (auth, options) => ({
   ...options,
-  url: !options.url.startsWith(BASE_URL)
-    ? `${BASE_URL}${options.url}`
-    : options.url,
+  url: formatUrl(BASE_URL, options.url),
   headers: {
     ...options.headers,
     Authorization: `Bearer ${await auth.getToken()}`,
@@ -97,6 +99,7 @@ export const client = {
           addressZip?: string | null;
           emails?: string[];
           [key: `custom${number}`]: string | null;
+          $native?: Record<string, unknown>;
         };
         relationships: {
           owner?: {
@@ -115,7 +118,11 @@ export const client = {
       }) => ({
         url: `/prospects`,
         json: {
-          data: { type: 'prospect', ...prospect },
+          data: {
+            type: 'prospect',
+            ...prospect,
+            attributes: formatUpsertInputWithNative(prospect.attributes),
+          },
         },
         method: 'POST',
         schema: z.object({
@@ -137,10 +144,17 @@ export const client = {
           addressStreet2?: string | null;
           addressZip?: string | null;
           [key: `custom${number}`]: string | null;
+          $native?: Record<string, unknown>;
         };
       }) => ({
         url: `/prospects/${prospect.id}`,
-        json: { data: { type: 'prospect', ...prospect } },
+        json: {
+          data: {
+            type: 'prospect',
+            ...prospect,
+            attributes: formatUpsertInputWithNative(prospect.attributes),
+          },
+        },
         method: 'PATCH',
         schema: z.object({
           data: outreachProspect,
@@ -246,12 +260,16 @@ export const client = {
           name: string;
           sequenceType: 'date' | 'interval';
           shareType: 'private' | 'read_only' | 'shared';
+          $native?: Record<string, unknown>;
         };
       }) => ({
         url: `/sequences`,
         method: 'POST',
         json: {
-          data: { type: 'sequence', ...sequence },
+          data: {
+            type: 'sequence',
+            attributes: formatUpsertInputWithNative(sequence.attributes),
+          },
         },
         schema: z.object({
           data: outreachSequence,
@@ -281,13 +299,16 @@ export const client = {
               type: 'mailbox';
             };
           };
+          $native?: Record<string, unknown>;
         };
       }) => ({
         url: `/sequenceStates`,
         json: {
           data: {
             type: 'sequenceState',
-            ...sequenceState,
+            relationships: formatUpsertInputWithNative(
+              sequenceState.relationships,
+            ),
           },
         },
         method: 'POST',
@@ -304,6 +325,7 @@ export const client = {
           order?: number;
           stepType: 'auto_email' | 'manual_email' | 'call' | 'task';
           interval?: number;
+          $native?: Record<string, unknown>;
         };
         relationships: {
           sequence: {
@@ -320,6 +342,7 @@ export const client = {
           data: {
             type: 'sequenceStep',
             ...sequenceStep,
+            attributes: formatUpsertInputWithNative(sequenceStep.attributes),
           },
         },
         schema: custom.object({
@@ -350,6 +373,7 @@ export const client = {
           name: string;
           subject?: string | null;
           trackOpens?: boolean;
+          $native?: Record<string, unknown>;
         };
       }) => ({
         url: `/templates`,
@@ -357,7 +381,7 @@ export const client = {
         json: {
           data: {
             type: 'template',
-            ...template,
+            attributes: formatUpsertInputWithNative(template.attributes),
           },
         },
         schema: custom.object({
@@ -371,6 +395,7 @@ export const client = {
       (sequenceTemplate: {
         attributes: {
           isReply: boolean;
+          $native?: Record<string, unknown>;
         };
         relationships: {
           sequenceStep: {
@@ -393,6 +418,9 @@ export const client = {
           data: {
             type: 'sequenceTemplate',
             ...sequenceTemplate,
+            attributes: formatUpsertInputWithNative(
+              sequenceTemplate.attributes,
+            ),
           },
         },
         schema: custom.object({
@@ -408,6 +436,7 @@ export const client = {
           email: string;
           emailType?: 'work' | 'personal';
           order?: number;
+          $native?: Record<string, unknown>;
         };
         relationships: {
           prospect: {
@@ -419,7 +448,13 @@ export const client = {
         };
       }) => ({
         url: `/emailAddresses`,
-        json: { data: { type: 'emailAddress', ...emailAddress } },
+        json: {
+          data: {
+            type: 'emailAddress',
+            ...emailAddress,
+            attributes: formatUpsertInputWithNative(emailAddress.attributes),
+          },
+        },
         method: 'POST',
         schema: z.object({
           data: outreachEmailAddress,

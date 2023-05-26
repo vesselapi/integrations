@@ -28,7 +28,11 @@ export const aircallUser = z.object({
 
 export type AircallUser = z.infer<typeof aircallUser>;
 
-export type AircallStartUserCall = { number_id: number | string; to: string };
+export type AircallStartUserCall = {
+  number_id: number | string;
+  to: string;
+  $native?: Record<string, unknown>;
+};
 
 export const aircallContact = z.object({
   id: z.number(),
@@ -75,6 +79,7 @@ export type AircallContactCreate = {
     label?: string;
     value: string;
   }[];
+  $native?: Record<string, unknown>;
 };
 
 export type AircallContactUpdate = {
@@ -82,6 +87,7 @@ export type AircallContactUpdate = {
   last_name?: string;
   company_name?: string;
   information?: string;
+  $native?: Record<string, unknown>;
 };
 
 const aircallNumber = z.object({

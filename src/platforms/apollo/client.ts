@@ -1,4 +1,8 @@
-import { makeRequestFactory } from '@/sdk/client';
+import {
+  formatUpsertInputWithNative,
+  formatUrl,
+  makeRequestFactory,
+} from '@/sdk/client';
 import { objectify, shake } from 'radash';
 import { z } from 'zod';
 import { BASE_URL } from './constants';
@@ -29,7 +33,7 @@ const request = makeRequestFactory(async (auth, options) => {
   const api_key = await auth.getToken();
   return {
     ...options,
-    url: `${BASE_URL}/${options.url}`,
+    url: formatUrl(BASE_URL, options.url),
     query:
       options.method === 'GET'
         ? {
@@ -79,7 +83,7 @@ export const client = {
     create: request((account: ApolloAccountCreate) => ({
       url: `/accounts`,
       method: 'POST',
-      json: shake(account),
+      json: shake(formatUpsertInputWithNative(account)),
       schema: z.object({
         account: apolloAccount,
       }),
@@ -87,7 +91,7 @@ export const client = {
     update: request((account: { id: string } & ApolloAccountUpdate) => ({
       url: `/accounts/${account.id}`,
       method: 'PUT',
-      json: shake(account),
+      json: shake(formatUpsertInputWithNative(account)),
       schema: z.object({
         account: apolloAccount,
       }),
@@ -108,7 +112,7 @@ export const client = {
     create: request((contact: ApolloContactCreate) => ({
       url: `/contacts`,
       method: 'POST',
-      json: shake(contact),
+      json: shake(formatUpsertInputWithNative(contact)),
       schema: z.object({
         contact: apolloContact,
       }),
@@ -116,7 +120,7 @@ export const client = {
     update: request((contact: { id: string } & ApolloContactUpdate) => ({
       url: `/contacts/${contact.id}`,
       method: 'PUT',
-      json: shake(contact),
+      json: shake(formatUpsertInputWithNative(contact)),
       schema: z.object({
         contact: apolloContact,
       }),
@@ -176,7 +180,7 @@ export const client = {
     create: request((sequence: ApolloCreateSequence) => ({
       url: `/emailer_campaigns`,
       method: 'POST',
-      json: shake(sequence),
+      json: shake(formatUpsertInputWithNative(sequence)),
       schema: z.object({
         emailer_campaign: apolloSequence,
       }),
@@ -186,10 +190,12 @@ export const client = {
         emailer_campaign_id,
         contact_ids,
         send_email_from_email_account_id,
+        $native,
       }: {
         emailer_campaign_id: string;
         contact_ids: string[];
         send_email_from_email_account_id?: string;
+        $native?: Record<string, unknown>;
       }) => ({
         url: `/emailer_campaigns/${emailer_campaign_id}/add_contact_ids`,
         method: 'POST',
@@ -197,6 +203,7 @@ export const client = {
           contact_ids,
           emailer_campaign_id,
           send_email_from_email_account_id,
+          ...($native ?? {}),
         }),
         schema: z.object({
           contacts: z.array(apolloContact),
@@ -217,7 +224,7 @@ export const client = {
     create: request((customFieldCreate: ApolloCreateCustomField) => ({
       url: `/typed_custom_fields`,
       method: 'POST',
-      json: shake(customFieldCreate),
+      json: shake(formatUpsertInputWithNative(customFieldCreate)),
       schema: z.object({
         typed_custom_field: apolloCustomField,
       }),
@@ -282,7 +289,7 @@ export const client = {
     create: request((step: ApolloCreateSequenceStep) => ({
       url: `/emailer_steps`,
       method: 'POST',
-      json: shake(step),
+      json: shake(formatUpsertInputWithNative(step)),
       schema: apolloSequenceStep,
     })),
   },
@@ -291,7 +298,7 @@ export const client = {
       (template: { id: string } & ApolloUpdateSequenceTemplate) => ({
         url: `/emailer_touches/${template.id}`,
         method: 'PUT',
-        json: shake(template),
+        json: shake(formatUpsertInputWithNative(template)),
         schema: z.object({
           emailer_touch: z.object({
             id: z.string(),

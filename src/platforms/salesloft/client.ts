@@ -1,5 +1,9 @@
 import { BASE_URL, DEFAULT_PAGE_SIZE } from '@/platforms/salesloft/constants';
-import { makeRequestFactory } from '@/sdk/client';
+import {
+  formatUpsertInputWithNative,
+  formatUrl,
+  makeRequestFactory,
+} from '@/sdk/client';
 import { shake } from 'radash';
 import { z } from 'zod';
 import {
@@ -20,9 +24,7 @@ import {
 
 const request = makeRequestFactory(async (auth, options) => ({
   ...options,
-  url: !options.url.startsWith(BASE_URL)
-    ? `${BASE_URL}${options.url}`
-    : options.url,
+  url: formatUrl(BASE_URL, options.url),
   headers: {
     ...options.headers,
     Authorization: `Bearer ${await auth.getToken()}`,
@@ -64,7 +66,7 @@ export const client = {
     create: request((person: SalesloftPersonCreate) => ({
       url: `/people.json`,
       method: 'POST',
-      json: person,
+      json: formatUpsertInputWithNative(person),
       schema: z.object({
         data: salesloftPerson,
       }),
@@ -72,7 +74,7 @@ export const client = {
     update: request((person: SalesloftPersonUpdate & { id: string }) => ({
       url: `/people/${person.id}.json`,
       method: 'PUT',
-      json: person,
+      json: formatUpsertInputWithNative(person),
       schema: z.object({
         data: salesloftPerson,
       }),
@@ -112,14 +114,21 @@ export const client = {
         cadence_id,
         person_id,
         user_id,
+        $native,
       }: {
         cadence_id: string;
         person_id: string;
         user_id: string;
+        $native?: Record<string, unknown>;
       }) => ({
         url: `/cadence_memberships.json`,
         method: 'POST',
-        json: shake({ cadence_id, person_id, user_id }),
+        json: shake({
+          cadence_id,
+          person_id,
+          user_id,
+          ...($native ?? {}),
+        }),
         schema: z.object({
           data: salesloftCadenceMembership,
         }),
@@ -226,7 +235,7 @@ export const client = {
     create: request((customField: SalesloftCustomFieldCreate) => ({
       url: `/custom_fields.json`,
       method: 'POST',
-      json: customField,
+      json: formatUpsertInputWithNative(customField),
       schema: z.object({
         data: salesloftCustomField,
       }),

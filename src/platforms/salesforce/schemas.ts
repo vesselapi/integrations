@@ -26,11 +26,9 @@ export const salesforceSObject = validators.object({
 // -
 export const salesforceQueryResponse = validators.object({
   records: z.array(
-    z
-      .object({
-        Id: z.string(),
-      })
-      .passthrough(),
+    z.object({
+      Id: z.string(),
+    }),
   ),
   totalSize: z.number(),
 });
@@ -80,6 +78,7 @@ export const salesforceContactCreate = validators.object({
     MobilePhone: z.string().optional(),
     AccountId: z.string().optional(),
     OwnerId: z.string().optional(),
+    $native: z.record(z.any()).optional(),
   }),
 });
 
@@ -98,6 +97,7 @@ export const salesforceContactUpdate = validators.object({
     MobilePhone: z.string().optional(),
     AccountId: z.string().optional(),
     OwnerId: z.string().optional(),
+    $native: z.record(z.any()).optional(),
   }),
 });
 
@@ -150,6 +150,7 @@ export const salesforceAccountCreate = validators.object({
       BillingCountry: z.string(),
       Phone: z.string(),
       OwnerId: z.string(),
+      $native: z.record(z.any()),
     })
     .partial(),
 });
@@ -175,6 +176,7 @@ export const salesforceAccountUpdate = validators.object({
       BillingCountry: z.string(),
       Phone: z.string(),
       OwnerId: z.string(),
+      $native: z.record(z.any()),
     })
     .partial(),
 });
@@ -212,6 +214,7 @@ export const salesforceOpportunityCreate = validators.object({
       AccountId: z.string(),
       ContactId: z.string(),
       StageName: z.string(),
+      $native: z.record(z.any()),
     })
     .partial(),
 });
@@ -229,6 +232,7 @@ export const salesforceOpportunityUpdate = validators.object({
       CloseDate: validators.date(),
       Probability: z.string(),
       AccountId: z.string(),
+      $native: z.record(z.any()),
     })
     .partial(),
 });
@@ -263,6 +267,7 @@ export const salesforceLeadCreate = validators.object({
       Title: z.string(),
       MobilePhone: z.string(),
       Company: z.string(),
+      $native: z.record(z.any()),
     })
     .partial(),
 });
@@ -282,6 +287,7 @@ export const salesforceLeadUpdate = validators.object({
       Title: z.string(),
       MobilePhone: z.string(),
       Company: z.string(),
+      $native: z.record(z.any()),
     })
     .partial(),
 });
@@ -297,7 +303,7 @@ export const salesforceNote = validators
     Body: z.string(),
     OwnerId: z.string(),
     ParentId: z.string(),
-    Parent: z.object({ Type: z.string() }).passthrough(),
+    Parent: z.object({ Type: z.string() }),
   })
   .partial()
   .required(requiredFields);
@@ -315,6 +321,7 @@ export const salesforceNoteCreate = validators.object({
       Body: z.string(),
       OwnerId: z.string(),
       Title: z.string(),
+      $native: z.record(z.any()),
     })
     .partial(),
 });
@@ -329,6 +336,7 @@ export const salesforceNoteUpdate = validators.object({
     .object({
       Body: z.string(),
       OwnerId: z.string(),
+      $native: z.record(z.any()),
     })
     .partial(),
 });
@@ -464,6 +472,7 @@ export const salesforceTaskCreate = validators.object({
       CallType: z.enum(SALESFORCE_CALL_TYPES),
       TaskSubtype: z.literal('Call'),
       Type: z.literal('Call'),
+      $native: z.record(z.any()),
     })
     .partial(),
 });
@@ -486,6 +495,7 @@ export const salesforceTaskUpdate = validators.object({
       CallType: z.enum(SALESFORCE_CALL_TYPES),
       TaskSubtype: z.literal('Call'),
       Type: z.literal('Call'),
+      $native: z.record(z.any()),
     })
     .partial(),
 });
@@ -519,6 +529,13 @@ export const salesforceEvent = validators
       Id: z.string(),
       Type: z.string(),
     }),
+    EventRelations: z.object({
+      records: z.array(
+        z.object({
+          Id: z.string(),
+        }),
+      ),
+    }),
   })
   .partial()
   .required(requiredFields);
@@ -527,6 +544,7 @@ export const salesforceEventRelationalSelect = {
   Opportunity: 'What.Id',
   Contact: 'Who.Id',
   Lead: 'Who.Id',
+  EventRelation: '(SELECT Id, RelationId FROM EventRelations)',
 };
 
 export const salesforceEventCreate = validators.object({
@@ -541,6 +559,7 @@ export const salesforceEventCreate = validators.object({
       IsAllDayEvent: z.boolean(),
       WhoId: z.string(),
       WhatId: z.string(),
+      $native: z.record(z.any()),
     })
     .partial(),
 });
@@ -560,6 +579,7 @@ export const salesforceEventUpdate = validators.object({
       EndDateTime: validators.date(),
       Location: z.string(),
       IsAllDayEvent: z.boolean(),
+      $native: z.record(z.any()),
     })
     .partial(),
 });
@@ -586,6 +606,7 @@ export const salesforceEventRelationCreate = validators.object({
       EventId: z.string(),
       RelationId: z.string(),
       Status: z.string(),
+      $native: z.record(z.any()),
     })
     .partial(),
 });
@@ -599,6 +620,7 @@ export const salesforceEventRelationUpdate = validators.object({
   EventRelation: z
     .object({
       Status: z.string(),
+      $native: z.record(z.any()),
     })
     .partial(),
 });
@@ -658,6 +680,7 @@ export const salesforceEmailMessageCreate = validators.object({
       Status: z.number(),
       CreatedById: z.string(),
       RelatedToId: z.string(),
+      $native: z.record(z.any()),
     })
     .partial(),
 });
@@ -671,6 +694,7 @@ export const salesforceEmailMessageUpdate = validators.object({
   EmailMessage: z
     .object({
       Status: z.number(),
+      $native: z.record(z.any()),
     })
     .partial(),
 });
@@ -704,6 +728,7 @@ export const salesforceEmailMessageRelationCreate = validators.object({
         'FromAddress',
         'OtherAddress',
       ]),
+      $native: z.record(z.any()),
     })
     .partial(),
 });

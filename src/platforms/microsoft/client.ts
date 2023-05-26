@@ -7,16 +7,14 @@ import {
   microsoftMessage,
   microsoftPaginated,
 } from '@/platforms/microsoft/schemas';
-import { makeRequestFactory } from '@/sdk/client';
+import { formatUrl, makeRequestFactory } from '@/sdk/client';
 import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
 const request = makeRequestFactory(async (auth, options) => {
   return {
     ...options,
-    url: !options.url.startsWith(BASE_URL)
-      ? `${BASE_URL}${options.url}`
-      : options.url,
+    url: formatUrl(BASE_URL, options.url),
     headers: {
       ...options.headers,
       Authorization: `Bearer ${await auth.getToken()}`,
@@ -101,10 +99,12 @@ export const client = {
           teamId,
           channelId,
           text,
+          $native,
         }: {
           teamId: string;
           channelId: string;
           text: string;
+          $native?: Record<string, unknown>;
         }) => ({
           url: `/teams/${teamId}/channels/${channelId}/messages`,
           method: 'POST',
@@ -112,6 +112,7 @@ export const client = {
             body: {
               content: text,
             },
+            ...($native ?? {}),
           },
           schema: microsoftMessage,
         }),

@@ -1,5 +1,5 @@
 import { HttpsUrl } from '@/sdk';
-import { makeRequestFactory } from '@/sdk/client';
+import { formatUpsertInputWithNative, makeRequestFactory } from '@/sdk/client';
 import * as z from 'zod';
 import { API_VERSION } from './constants';
 import {
@@ -58,7 +58,7 @@ const makeClient = (): DialpadClient => {
       url: `/${module}/`,
       method: 'POST',
       schema,
-      json: body,
+      json: formatUpsertInputWithNative(body),
     }));
 
   const updateObject = <T extends Record<string, unknown>>(
@@ -69,7 +69,7 @@ const makeClient = (): DialpadClient => {
       url: `/${module}/`,
       method: 'PUT',
       schema,
-      json: body,
+      json: formatUpsertInputWithNative(body),
     }));
 
   return {
@@ -102,7 +102,7 @@ const makeClient = (): DialpadClient => {
         schema: z.object({
           call_id: z.number(),
         }),
-        json: body,
+        json: formatUpsertInputWithNative(body),
       })),
     },
     passthrough: request.passthrough(),

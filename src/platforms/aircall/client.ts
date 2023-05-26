@@ -1,4 +1,8 @@
-import { makeRequestFactory } from '@/sdk/client';
+import {
+  formatUpsertInputWithNative,
+  formatUrl,
+  makeRequestFactory,
+} from '@/sdk/client';
 import { shake } from 'radash';
 import { z } from 'zod';
 import { BASE_URL, DEFAULT_PAGE_SIZE } from './constants';
@@ -18,7 +22,7 @@ const request = makeRequestFactory(async (auth, options) => {
   const { answers } = await auth.getMetadata();
   return {
     ...options,
-    url: `${BASE_URL}${options.url}`,
+    url: formatUrl(BASE_URL, options.url),
     headers: {
       ...options.headers,
       Authorization:
@@ -61,7 +65,7 @@ export const client = {
       (call: { id: string | number } & AircallStartUserCall) => ({
         url: `/users/${call.id}/calls`,
         method: 'POST',
-        json: call,
+        json: formatUpsertInputWithNative(call),
         schema: z.any(),
       }),
     ),
@@ -124,7 +128,7 @@ export const client = {
     create: request((contact: AircallContactCreate) => ({
       url: `/contacts`,
       method: 'POST',
-      json: contact,
+      json: formatUpsertInputWithNative(contact),
       schema: z.object({
         contact: aircallContact,
       }),
@@ -133,7 +137,7 @@ export const client = {
       (contact: { id: string | number } & AircallContactUpdate) => ({
         url: `/contacts/${contact.id}`,
         method: 'POST',
-        json: contact,
+        json: formatUpsertInputWithNative(contact),
         schema: z.object({
           contact: aircallContact,
         }),

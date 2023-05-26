@@ -74,6 +74,7 @@ export type SalesloftPersonCreate = {
   secondary_email_address?: string | null;
   personal_email_address?: string | null;
   custom_fields?: Record<string, any>;
+  $native?: Record<string, unknown>;
 };
 
 export type SalesloftPersonUpdate = {
@@ -89,6 +90,7 @@ export type SalesloftPersonUpdate = {
   secondary_email_address?: string | null;
   personal_email_address?: string | null;
   custom_fields?: Record<string, any>;
+  $native?: Record<string, unknown>;
 };
 
 export const salesloftUser = z.object({
@@ -314,4 +316,5 @@ export type SalesloftCustomField = z.infer<typeof salesloftCustomField>;
 export type SalesloftCustomFieldCreate = {
   name: string;
   field_type: string;
+  $native?: Record<string, unknown>;
 };
