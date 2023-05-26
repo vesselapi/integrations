@@ -186,6 +186,7 @@ const makeClient = () => {
           inputs: ids.map((id) => ({ id })),
           propertiesWithHistory: null,
           limit,
+          after,
         },
         schema,
       }),
