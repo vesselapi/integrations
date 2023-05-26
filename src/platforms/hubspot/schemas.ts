@@ -133,7 +133,7 @@ export const hubspotContactUpsertSchema = z
     mobilephone: z.string(),
     company: z.string().optional(),
     hubspot_owner_id: z.string().optional(),
-    $native: z.object({}).passthrough(),
+    $native: z.record(z.any()),
   })
   .partial();
 export type HubspotContactCreate = z.infer<typeof hubspotContactUpsertSchema>;
@@ -171,7 +171,7 @@ export const hubspotDealUpsertSchema = z
     closedate: custom.date(),
     hs_deal_stage_probability: z.string(),
     dealstage: z.string().optional(),
-    $native: z.object({}).passthrough(),
+    $native: z.record(z.any()),
   })
   .partial();
 export type HubspotDealCreate = z.infer<typeof hubspotDealUpsertSchema>;
@@ -219,7 +219,7 @@ export const hubspotCompanyUpsertSchema = z
     description: z.string(),
     phone: z.string(),
     hubspot_owner_id: z.string(),
-    $native: z.object({}).passthrough(),
+    $native: z.record(z.any()),
   })
   .partial();
 export type HubspotCompanyCreate = z.infer<typeof hubspotCompanyUpsertSchema>;
@@ -246,7 +246,7 @@ export const hubspotNoteUpsertSchema = z
     hs_note_body: z.string(),
     hubspot_owner_id: z.string(),
     hs_timestamp: z.string().optional(),
-    $native: z.object({}).passthrough(),
+    $native: z.record(z.any()),
   })
   .partial();
 export type HubspotNoteUpdate = z.infer<typeof hubspotNoteUpsertSchema> & {
@@ -282,7 +282,7 @@ export const hubspotTaskUpsertSchema = z
     hs_task_priority: z.string(),
     hs_timestamp: z.string().optional(),
     hubspot_owner_id: z.string(),
-    $native: z.object({}).passthrough(),
+    $native: z.record(z.any()),
   })
   .partial();
 export type HubspotTaskUpdate = z.infer<typeof hubspotTaskUpsertSchema> & {
@@ -318,7 +318,7 @@ export const hubspotMeetingUpsertSchema = z
     hs_meeting_start_time: z.string(),
     hs_meeting_end_time: z.string(),
     hubspot_owner_id: z.string(),
-    $native: z.object({}).passthrough(),
+    $native: z.record(z.any()),
   })
   .partial();
 export type HubspotMeetingUpdate = z.infer<
@@ -373,7 +373,7 @@ export const hubspotEmailCreateSchema = emailPropertiesSchema
   .partial()
   .extend({
     hs_email_headers: z.string(), // json
-    $native: z.object({}).passthrough().optional(),
+    $native: z.record(z.any()).optional(),
   });
 
 export type HubspotEmailCreate = z.infer<typeof hubspotEmailCreateSchema>;
@@ -386,7 +386,7 @@ export const hubspotEmailUpdateSchema = emailPropertiesSchema
   })
   .partial()
   .extend({
-    $native: z.object({}).passthrough().optional(),
+    $native: z.record(z.any()).optional(),
   });
 export type HubspotEmailUpdate = z.infer<typeof hubspotEmailUpdateSchema> & {
   id: string;
@@ -432,7 +432,7 @@ export const hubspotCallCreateSchema = callPropertiesSchema
   })
   .partial()
   .extend({
-    $native: z.object({}).passthrough().optional(),
+    $native: z.record(z.any()).optional(),
   });
 export type HubspotCallCreate = z.infer<typeof hubspotCallCreateSchema>;
 
@@ -443,7 +443,7 @@ export const hubspotCallUpdateSchema = callPropertiesSchema
   })
   .partial()
   .extend({
-    $native: z.object({}).passthrough().optional(),
+    $native: z.record(z.any()).optional(),
   });
 export type HubspotCallUpdate = z.infer<typeof hubspotCallUpdateSchema> & {
   id: string;
@@ -528,7 +528,7 @@ export const hubspotCustomPropertySchema = z.object({
   fieldType: hubspotPropertyFieldTypeSchema,
   groupName: z.string(),
   options: z.array(hubspotPropertyOptionSchema).optional(),
-  $native: z.object({}).passthrough().optional(),
+  $native: z.record(z.any()).optional(),
 });
 export const hubspotCustomPropertyCreateSchema = z.object({
   objectType: hubspotModuleSchema,
