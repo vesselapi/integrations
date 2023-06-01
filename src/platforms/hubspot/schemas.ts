@@ -6,7 +6,7 @@ export const hubspotCommonAssociationsSchema = z.enum(
   HUBSPOT_COMMON_ASSOCIATIONS,
 );
 export type HubspotCommonAssociations =
-  (typeof HUBSPOT_COMMON_ASSOCIATIONS)[number];
+  typeof HUBSPOT_COMMON_ASSOCIATIONS[number];
 
 export const HUBSPOT_TASK_STATUS_COMPLETED = 'COMPLETED';
 
@@ -24,6 +24,31 @@ export type ListObjectInput = {
 };
 export type BatchReadObjectInput = {
   ids: string[];
+} & ListObjectInput;
+export type SearchOperator =
+  | 'LT'
+  | 'LTE'
+  | 'GT'
+  | 'GTE'
+  | 'EQ'
+  | 'NEQ'
+  | 'BETWEEN'
+  | 'IN'
+  | 'NOT_IN'
+  | 'HAS_PROPERTY'
+  | 'NOT_HAS_PROPERTY'
+  | 'CONTAINS_TOKEN'
+  | 'NOT_CONTAINS_TOKEN';
+export type SearchObjectInput = {
+  filterGroups: {
+    filters: {
+      propertyName: string;
+      operator: SearchOperator;
+      value?: string;
+      values?: string[];
+      highValue?: string;
+    }[];
+  }[];
 } & ListObjectInput;
 export type ListOutput<T> = {
   results?: T[];
@@ -48,7 +73,7 @@ export const listResponseSchema = (itemSchema: z.ZodSchema) =>
   });
 
 export const hubspotModuleSchema = z.enum(HUBSPOT_MODULES);
-export type HubspotModule = (typeof HUBSPOT_MODULES)[number];
+export type HubspotModule = typeof HUBSPOT_MODULES[number];
 
 export const hubspotAssociationSchema = z.object({
   results: z.array(
