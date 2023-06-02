@@ -14,7 +14,9 @@ export default platform('hubspot', {
     isRetryable: async ({ response }) => {
       if (response.status === 204) return false;
       const checkExpiredAuth = async () =>
-        (await response.json()).category === 'EXPIRED_AUTHENTICATION';
+        ['EXPIRED_AUTHENTICATION', 'INVALID_AUTHENTICATION'].includes(
+          (await response.json()).category,
+        );
       return (await guard(checkExpiredAuth)) ?? false;
     },
     default: true,
