@@ -6,7 +6,7 @@ export const hubspotCommonAssociationsSchema = z.enum(
   HUBSPOT_COMMON_ASSOCIATIONS,
 );
 export type HubspotCommonAssociations =
-  typeof HUBSPOT_COMMON_ASSOCIATIONS[number];
+  (typeof HUBSPOT_COMMON_ASSOCIATIONS)[number];
 
 export const HUBSPOT_TASK_STATUS_COMPLETED = 'COMPLETED';
 
@@ -73,7 +73,7 @@ export const listResponseSchema = (itemSchema: z.ZodSchema) =>
   });
 
 export const hubspotModuleSchema = z.enum(HUBSPOT_MODULES);
-export type HubspotModule = typeof HUBSPOT_MODULES[number];
+export type HubspotModule = (typeof HUBSPOT_MODULES)[number];
 
 export const hubspotAssociationSchema = z.object({
   results: z.array(
