@@ -66,6 +66,7 @@ import {
   listResponseSchema,
   meetingProperties,
   noteProperties,
+  SearchObjectInput,
   taskProperties,
   upsertResponseSchema,
 } from './schemas';
@@ -192,6 +193,31 @@ const makeClient = () => {
       }),
     );
 
+  const searchObject = <TOutput>(
+    module: HubspotModule | `objects/${HubspotModule}`,
+    schema: z.ZodSchema,
+    properties?: string[],
+  ): requestFunctionType<SearchObjectInput, TOutput> =>
+    request(
+      ({
+        filterGroups,
+        after,
+        limit = HUBSPOT_MAX_PAGE_SIZE,
+      }: SearchObjectInput) => ({
+        url: `/crm/${API_VERSION}/${module}/search`,
+        method: 'POST',
+        json: {
+          filterGroups,
+          sorts: [],
+          properties: properties ?? null,
+          propertiesWithHistory: null,
+          limit,
+          after: after ?? 0,
+        },
+        schema,
+      }),
+    );
+
   const crud = <
     TCreate extends Record<string, unknown>,
     TUpdate extends Record<string, unknown> & { id: string },
@@ -215,6 +241,11 @@ const makeClient = () => {
     update: updateObject<TUpdate, TOutput>(module, upsertResponseSchema),
     delete: deleteObject(module),
     batchRead: batchReadObject<ListOutput<TOutput>>(
+      module,
+      listResponseSchema(schema),
+      properties,
+    ),
+    search: searchObject<ListOutput<TOutput>>(
       module,
       listResponseSchema(schema),
       properties,

@@ -25,6 +25,31 @@ export type ListObjectInput = {
 export type BatchReadObjectInput = {
   ids: string[];
 } & ListObjectInput;
+export type SearchOperator =
+  | 'LT'
+  | 'LTE'
+  | 'GT'
+  | 'GTE'
+  | 'EQ'
+  | 'NEQ'
+  | 'BETWEEN'
+  | 'IN'
+  | 'NOT_IN'
+  | 'HAS_PROPERTY'
+  | 'NOT_HAS_PROPERTY'
+  | 'CONTAINS_TOKEN'
+  | 'NOT_CONTAINS_TOKEN';
+export type SearchObjectInput = {
+  filterGroups: {
+    filters: {
+      propertyName: string;
+      operator: SearchOperator;
+      value?: string;
+      values?: string[];
+      highValue?: string;
+    }[];
+  }[];
+} & ListObjectInput;
 export type ListOutput<T> = {
   results?: T[];
   paging?: {
