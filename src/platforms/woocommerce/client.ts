@@ -1,5 +1,6 @@
 import { HttpsUrl } from '@/sdk';
 import { formatUrl, makeRequestFactory } from '@/sdk/client';
+import { API_VERSION } from './constants';
 
 const request = makeRequestFactory(async (auth, options) => {
   const { answers } = await auth.getMetadata();
@@ -9,7 +10,7 @@ const request = makeRequestFactory(async (auth, options) => {
   ).toString('base64');
   return {
     ...options,
-    url: formatUrl(`${url}/wp-json/wc/v3`, options.url),
+    url: formatUrl(`${url}/wp-json/wc/${API_VERSION}`, options.url),
     headers: {
       ...options.headers,
       Authorization: `Basic ${creds}`,

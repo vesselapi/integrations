@@ -1,6 +1,7 @@
 import { client } from '@/platforms/woocommerce/client';
 import { icon } from '@/platforms/woocommerce/icon';
 import { auth, platform } from '@/sdk';
+import * as constants from './constants';
 
 export default platform('woocommerce', {
   auth: auth.apiToken({
@@ -16,6 +17,6 @@ export default platform('woocommerce', {
     categories: [],
   },
   client,
-  constants: {},
+  constants,
   actions: {},
 });
