@@ -140,6 +140,7 @@ const contactPropertiesSchema = z.object({
   hs_lead_status: z.string().nullable(),
   company: z.string().nullable(),
   hubspot_owner_id: z.string().nullable(),
+  hs_all_contact_vids: z.string().nullable(),
 });
 export const contactProperties = Object.keys(contactPropertiesSchema.shape);
 
