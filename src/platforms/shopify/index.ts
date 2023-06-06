@@ -5,7 +5,7 @@ import { auth, platform } from '@/sdk';
 
 export * as types from '@/platforms/slack/schemas';
 
-export default platform('slack', {
+export default platform('shopify', {
   auth: auth.oauth2({
     authUrl: ({ answers }) =>
       `https://${answers.shop}.myshopify.com/admin/oauth/authorize`,

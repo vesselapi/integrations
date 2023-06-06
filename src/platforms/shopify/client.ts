@@ -7,7 +7,7 @@ const request = makeRequestFactory(async (auth, options) => {
   return {
     ...options,
     url: formatUrl(
-      `https://${answers.shop}.myshopify.com/admin/api/2021-07`,
+      `https://${answers.shop}.myshopify.com/admin/api/${constants.API_VERSION}`,
       options.url,
     ),
     headers: {
