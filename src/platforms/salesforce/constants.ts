@@ -43,3 +43,10 @@ export const SALESFORCE_FIELD_TYPES = [
   'location',
   'encryptedstring',
 ] as const;
+export const SALESFORCE_JOB_STATES = [
+  'UploadComplete',
+  'InProgress',
+  'Aborted',
+  'JobComplete',
+  'Failed',
+] as const;
