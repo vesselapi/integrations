@@ -183,6 +183,7 @@ const dealPropertiesSchema = z.object({
   hs_is_closed_won: hubspotBooleanSchema.nullable(),
   hs_is_closed: hubspotBooleanSchema.nullable(),
   hubspot_owner_id: z.string().nullable(),
+  hs_merged_object_ids: z.string().nullable(),
 });
 export const dealProperties = Object.keys(dealPropertiesSchema.shape);
 
@@ -222,6 +223,7 @@ const companyPropertiesSchema = z.object({
   annualrevenue: z.union([z.string(), z.number()]).nullable(),
   description: z.string().nullable(),
   hubspot_owner_id: z.string().nullable(),
+  hs_merged_object_ids: z.string().nullable(),
 });
 export const companyProperties = Object.keys(companyPropertiesSchema.shape);
 
