@@ -59,9 +59,6 @@ const makeClient = () => {
     request(({ id }: FindObjectInput) => ({
       url: `/${API_VERSION}/${module}/${id}`,
       method: 'GET',
-      query: shake({
-        properties: properties?.join(','),
-      }),
       schema,
     }));
 

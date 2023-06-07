@@ -76,27 +76,6 @@ export const searchResponseSchema = (itemSchema: z.ZodSchema) =>
       .optional(),
   });
 
-// export const searchResponseSchema = (itemSchema: z.ZodSchema) =>
-//   z.object({
-//     data: z
-//       .object({
-//         items: z
-//           .array(z.object({ result_score: z.number(), item: itemSchema }))
-//           .optional(),
-//       })
-//       .optional(),
-//     additional_data: z
-//       .object({
-//         properties: z
-//           .object({
-//             more_items_in_collection: z.boolean().optional(),
-//             start: z.number().optional(),
-//           })
-//           .optional(),
-//       })
-//       .optional(),
-//   });
-
 export const pipedriveModuleSchema = z.enum(PIPEDRIVE_MODULES);
 export type PipedriveModule = (typeof PIPEDRIVE_MODULES)[number];
 
