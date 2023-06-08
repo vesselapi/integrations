@@ -289,6 +289,7 @@ const taskPropertiesSchema = z.object({
   hs_task_body: z.string().nullable(),
   hs_task_subject: z.string().nullable(),
   hs_task_status: z.string().nullable(),
+  hs_task_type: z.string().nullable(),
   hs_timestamp: z
     .string()
     .transform((val) => new Date(val))
