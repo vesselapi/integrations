@@ -1,3 +1,4 @@
+import { transformContact } from '@/platforms/salesforce/actions/mappers';
 import { client } from '@/platforms/salesforce/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
@@ -16,16 +17,18 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    const resp = await client.contacts.list(auth, {
+    const result = await client.contacts.list(auth, {
       cursor: input.cursor,
       limit: MAX_QUERY_PAGE_SIZE,
     });
     return {
-      ...resp,
+      records: result.data.records.map(transformContact),
+      totalSize: result.data.totalSize,
       cursor: getNextCursor({
-        records: resp.records,
+        records: result.data.records,
         limit: MAX_QUERY_PAGE_SIZE,
       }),
+      $native: result.$native,
     };
   },
 );

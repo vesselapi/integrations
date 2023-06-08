@@ -30,14 +30,19 @@ import updateSequenceTemplate from './actions/sequence-templates/update';
 
 import searchUsers from './actions/users/search';
 
+import searchLabels from './actions/labels/search';
+
+import searchPeople from './actions/people/search';
+
 export * as types from './schemas';
 export default platform('apollo', {
   auth: [
     auth.apiToken({
       display: {
         markdown: `- Please ensure your Apollo API key is a Master Key.
-- For detailed steps on how to create your Apollo API key, please see this [tutorial](https://docs.vessel.land/integrations/apollo).`,
+- For detailed steps on how to create your Apollo API key, please see this [tutorial](https://docs.vessel.dev/pages/home/hidden/apollo).`,
       },
+      default: true,
     }),
   ],
   display: {
@@ -74,5 +79,9 @@ export default platform('apollo', {
     updateSequenceTemplate,
 
     searchUsers,
+
+    searchLabels,
+
+    searchPeople,
   },
 });

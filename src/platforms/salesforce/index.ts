@@ -23,6 +23,7 @@ import listUsers from '@/platforms/salesforce/actions/users/list';
 export * as utils from './actions/pagination';
 export * as constants from './constants';
 export * as types from './schemas';
+
 export default platform('salesforce', {
   auth: auth.oauth2<SalesforceAuthAnswers>({
     authUrl: ({ answers }) =>
@@ -40,6 +41,7 @@ export default platform('salesforce', {
         ],
       },
     ],
+    default: true,
   }),
   display: {
     name: 'Salesforce',

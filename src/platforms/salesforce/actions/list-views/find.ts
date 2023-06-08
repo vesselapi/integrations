@@ -1,3 +1,4 @@
+import { transformListView } from '@/platforms/salesforce/actions/mappers';
 import { client } from '@/platforms/salesforce/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
@@ -9,11 +10,16 @@ export default action(
     resource: 'list-views',
     mutation: false,
     schema: z.object({
-      Id: z.string(),
+      id: z.string(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.listViews.find(auth, { Id: input.Id });
+    const result = await client.listViews.find(auth, { Id: input.id });
+
+    return {
+      ...transformListView(result.data),
+      $native: result.$native,
+    };
   },
 );

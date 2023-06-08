@@ -25,55 +25,45 @@ export const client = {
   users: {
     list: request(() => ({
       url: `/api/3/users`,
-      method: 'get',
-      schema: z
-        .object({
-          users: z.array(activeCampaignUser),
-        })
-        .passthrough(),
+      method: 'GET',
+      schema: z.object({
+        users: z.array(activeCampaignUser),
+      }),
     })),
   },
   lists: {
     list: request(({ limit }: { limit?: number }) => ({
       url: `/api/3/lists`,
-      method: 'get',
+      method: 'GET',
       query: shake({
         limit,
       }),
-      schema: z
-        .object({
-          lists: z.array(activeCampaignList),
-        })
-        .passthrough(),
+      schema: z.object({
+        lists: z.array(activeCampaignList),
+      }),
     })),
     find: request(({ id }: { id: string }) => ({
       url: `/api/3/lists/${id}`,
-      method: 'get',
-      schema: z
-        .object({
-          list: activeCampaignList,
-        })
-        .passthrough(),
+      method: 'GET',
+      schema: z.object({
+        list: activeCampaignList,
+      }),
     })),
   },
   contacts: {
     list: request(() => ({
       url: `/api/3/contacts`,
-      method: 'get',
-      schema: z
-        .object({
-          contacts: z.array(activeCampaignContact),
-        })
-        .passthrough(),
+      method: 'GET',
+      schema: z.object({
+        contacts: z.array(activeCampaignContact),
+      }),
     })),
     find: request(({ id }: { id: string }) => ({
       url: `/api/3/contacts/${id}`,
-      method: 'get',
-      schema: z
-        .object({
-          contact: activeCampaignContact,
-        })
-        .passthrough(),
+      method: 'GET',
+      schema: z.object({
+        contact: activeCampaignContact,
+      }),
     })),
     update: request(
       ({
@@ -86,21 +76,21 @@ export const client = {
           firstName?: string;
           lastName?: string;
           phone?: string;
+          $native?: Record<string, unknown>;
         };
       }) => ({
         url: `/api/3/contacts/${id}`,
-        method: 'put',
-        schema: z
-          .object({
-            contact: activeCampaignContact,
-          })
-          .passthrough(),
+        method: 'PUT',
+        schema: z.object({
+          contact: activeCampaignContact,
+        }),
         json: {
           contact: shake({
             email: properties.email,
             firstName: properties.firstName,
             lastName: properties.lastName,
             phone: properties.phone,
+            ...(properties.$native ?? {}),
           }),
         },
       }),
@@ -111,16 +101,18 @@ export const client = {
         firstName?: string;
         lastName?: string;
         phone?: string;
+        $native?: Record<string, unknown>;
       }) => ({
         url: `/api/3/contacts`,
-        method: 'post',
-        schema: z
-          .object({
-            contact: activeCampaignContact,
-          })
-          .passthrough(),
+        method: 'POST',
+        schema: z.object({
+          contact: activeCampaignContact,
+        }),
         json: {
-          contact,
+          contact: {
+            ...contact,
+            ...(contact.$native ?? {}),
+          },
         },
       }),
     ),

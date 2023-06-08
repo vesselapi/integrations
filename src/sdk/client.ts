@@ -1,19 +1,31 @@
 import { IntegrationError } from '@/sdk/error';
-import { Auth, HttpsUrl } from '@/sdk/types';
-import { guard, isFunction, trim } from 'radash';
+import { Auth, ClientResult, HttpsUrl } from '@/sdk/types';
+import { guard, isFunction, omit, trim } from 'radash';
 import { z } from 'zod';
 
-export type HttpMethod = 'get' | 'post' | 'put' | 'delete' | 'patch';
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 export type HttpOptions = {
   url: `${HttpsUrl}/${string}` | `/${string}`;
-  method: 'get' | 'post' | 'put' | 'delete' | 'patch';
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   headers?: Record<string, string>;
-  json?: Record<string, unknown>;
+  json?: Record<string, unknown> | Record<string, unknown>[];
   query?: Record<string, string>;
+};
+
+export const formatUpsertInputWithNative = <
+  T extends { $native?: Record<string, unknown> } & Record<string, unknown>,
+>(
+  input: T,
+): Omit<T, '$native'> => {
+  return {
+    ...omit(input, ['$native']),
+    ...(input.$native ?? {}),
+  };
 };
 
 export type FetchOptions = HttpOptions & {
   schema: z.ZodType;
+  url: `${HttpsUrl}/${string}`;
 };
 
 export type RequestFetchOptions<TResponseSchema extends z.ZodType> =
@@ -22,13 +34,25 @@ export type RequestFetchOptions<TResponseSchema extends z.ZodType> =
     schema: TResponseSchema;
   };
 
+export const formatUrl = (
+  baseUrl: `${HttpsUrl}`,
+  url: `${HttpsUrl}/${string}` | `/${string}`,
+): `${HttpsUrl}/${string}` => {
+  return !url.startsWith(baseUrl)
+    ? `${baseUrl}${url}`
+    : (url as `${HttpsUrl}/${string}`);
+};
+
 export const makeRequestFactory = (
   formatFetchOptions: (
     auth: Auth,
     options: RequestFetchOptions<z.ZodType>,
   ) => Promise<FetchOptions>,
 ) => {
-  function createRequest<TArgs extends {}, TResponseSchema extends z.ZodType>(
+  function createRequest<
+    TArgs extends {},
+    TResponseSchema extends z.ZodType<unknown>,
+  >(
     formatRequestOptions:
       | RequestFetchOptions<TResponseSchema>
       | ((args: TArgs) => RequestFetchOptions<TResponseSchema>),
@@ -36,18 +60,18 @@ export const makeRequestFactory = (
     return async function makeRequest(
       auth: Auth,
       args: TArgs,
-    ): Promise<z.infer<TResponseSchema>> {
-      const options = await formatFetchOptions(
-        auth,
-        isFunction(formatRequestOptions)
-          ? formatRequestOptions(args)
-          : formatRequestOptions,
-      );
-      const response = await auth.retry(async () => {
+    ): Promise<ClientResult<z.infer<TResponseSchema>>> {
+      const { response, options } = await auth.retry(async () => {
+        const options = await formatFetchOptions(
+          auth,
+          isFunction(formatRequestOptions)
+            ? formatRequestOptions(args)
+            : formatRequestOptions,
+        );
         const url = options.query
           ? `${trim(options.url, '/')}?${toQueryString(options.query)}`
           : options.url;
-        return await fetch(url, {
+        const response = await fetch(url, {
           body: options.json ? JSON.stringify(options.json) : undefined,
           method: options.method,
           headers: options.json
@@ -61,25 +85,24 @@ export const makeRequestFactory = (
                 Accept: 'application/json',
               },
         });
+        return { response, options };
       });
 
-      if (!response.ok) {
-        const text = await response.text();
+      const text = await response.text();
+      const body = guard(
+        () => JSON.parse(text),
+        (err) => err instanceof SyntaxError,
+      ) ?? { body: text };
 
+      if (!response.ok) {
         throw new IntegrationError('HTTP error in client', {
           type: 'http',
-          body:
-            guard(
-              () => JSON.parse(text),
-              (err) => err instanceof SyntaxError,
-            ) ?? text,
+          body,
           status: response.status,
           headers: response.headers,
           cause: response,
         });
       }
-
-      const body = await response.json();
 
       const zodResult = await options.schema.safeParseAsync(body);
       if (!zodResult.success) {
@@ -90,11 +113,31 @@ export const makeRequestFactory = (
         // We may also support an injectable logger object.
         console.error('Validation failed on client response', {
           zodError: zodResult.error,
+          received: body,
         });
-        return body as z.infer<TResponseSchema>;
+
+        return {
+          data: body as z.infer<TResponseSchema>,
+          $native: {
+            headers: [...response.headers].reduce(
+              (obj, [key, value]) => ({ ...obj, [key]: value }),
+              {},
+            ),
+            body: body,
+          },
+        };
       }
 
-      return zodResult.data;
+      return {
+        data: zodResult.data,
+        $native: {
+          headers: [...response.headers].reduce(
+            (obj, [key, value]) => ({ ...obj, [key]: value }),
+            {},
+          ),
+          body: body,
+        },
+      };
     };
   }
 

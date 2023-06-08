@@ -1,3 +1,4 @@
+import { transformContact } from '@/platforms/aircall/actions/mappers';
 import { z } from 'zod';
 import { action } from '../../../../sdk';
 import { client } from '../../client';
@@ -10,20 +11,25 @@ export default action(
     mutation: true,
     schema: z.object({
       id: z.number().or(z.string()),
-      first_name: z.string().optional(),
-      last_name: z.string().optional(),
-      company_name: z.string().optional(),
+      firstName: z.string().optional(),
+      lastName: z.string().optional(),
+      companyName: z.string().optional(),
       information: z.string().optional(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.contacts.update(auth, {
+    const result = await client.contacts.update(auth, {
       id: input.id,
-      first_name: input.first_name,
-      last_name: input.last_name,
-      company_name: input.company_name,
+      first_name: input.firstName,
+      last_name: input.lastName,
+      company_name: input.companyName,
       information: input.information,
     });
+
+    return {
+      contact: transformContact(result.data.contact),
+      $native: result.$native,
+    };
   },
 );

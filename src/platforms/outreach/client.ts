@@ -12,7 +12,11 @@ import {
   outreachTemplate,
   outreachUser,
 } from '@/platforms/outreach/schemas';
-import { makeRequestFactory } from '@/sdk/client';
+import {
+  formatUpsertInputWithNative,
+  formatUrl,
+  makeRequestFactory,
+} from '@/sdk/client';
 import * as custom from '@/sdk/validators';
 import { mapKeys, shake } from 'radash';
 import { z } from 'zod';
@@ -20,9 +24,7 @@ import { BASE_URL, DEFAULT_PAGE_SIZE } from './constants';
 
 const request = makeRequestFactory(async (auth, options) => ({
   ...options,
-  url: !options.url.startsWith(BASE_URL)
-    ? `${BASE_URL}${options.url}`
-    : options.url,
+  url: formatUrl(BASE_URL, options.url),
   headers: {
     ...options.headers,
     Authorization: `Bearer ${await auth.getToken()}`,
@@ -33,24 +35,20 @@ export const client = {
   users: {
     find: request(({ id }: { id: number }) => ({
       url: `/users/${id}`,
-      method: 'get',
-      schema: z
-        .object({
-          data: outreachUser,
-        })
-        .passthrough(),
+      method: 'GET',
+      schema: z.object({
+        data: outreachUser,
+      }),
     })),
     list: request(
       ({ cursor }: { cursor?: `${typeof BASE_URL}/${string}` }) => ({
         url: cursor ?? `/users`,
-        method: 'get',
+        method: 'GET',
         query: { count: 'false', 'page[size]': `${DEFAULT_PAGE_SIZE}` },
         schema: z.intersection(
-          z
-            .object({
-              data: z.array(outreachUser),
-            })
-            .passthrough(),
+          z.object({
+            data: z.array(outreachUser),
+          }),
           outreachPaginatedResponse,
         ),
       }),
@@ -59,12 +57,10 @@ export const client = {
   prospects: {
     find: request(({ id }: { id: number }) => ({
       url: `/prospects/${id}`,
-      method: 'get',
-      schema: z
-        .object({
-          data: outreachProspect,
-        })
-        .passthrough(),
+      method: 'GET',
+      schema: z.object({
+        data: outreachProspect,
+      }),
     })),
     list: request(
       ({
@@ -80,13 +76,11 @@ export const client = {
           'page[size]': `${DEFAULT_PAGE_SIZE}`,
           ...(filters ? mapKeys(filters, (key) => `filter[${key}]`) : {}),
         },
-        method: 'get',
+        method: 'GET',
         schema: z.intersection(
-          z
-            .object({
-              data: z.array(outreachProspect),
-            })
-            .passthrough(),
+          z.object({
+            data: z.array(outreachProspect),
+          }),
           outreachPaginatedResponse,
         ),
       }),
@@ -105,6 +99,7 @@ export const client = {
           addressZip?: string | null;
           emails?: string[];
           [key: `custom${number}`]: string | null;
+          $native?: Record<string, unknown>;
         };
         relationships: {
           owner?: {
@@ -123,14 +118,16 @@ export const client = {
       }) => ({
         url: `/prospects`,
         json: {
-          data: { type: 'prospect', ...prospect },
+          data: {
+            type: 'prospect',
+            ...prospect,
+            attributes: formatUpsertInputWithNative(prospect.attributes),
+          },
         },
-        method: 'post',
-        schema: z
-          .object({
-            data: outreachProspect,
-          })
-          .passthrough(),
+        method: 'POST',
+        schema: z.object({
+          data: outreachProspect,
+        }),
       }),
     ),
     update: request(
@@ -147,28 +144,31 @@ export const client = {
           addressStreet2?: string | null;
           addressZip?: string | null;
           [key: `custom${number}`]: string | null;
+          $native?: Record<string, unknown>;
         };
       }) => ({
         url: `/prospects/${prospect.id}`,
-        json: { data: { type: 'prospect', ...prospect } },
-        method: 'patch',
-        schema: z
-          .object({
-            data: outreachProspect,
-          })
-          .passthrough(),
+        json: {
+          data: {
+            type: 'prospect',
+            ...prospect,
+            attributes: formatUpsertInputWithNative(prospect.attributes),
+          },
+        },
+        method: 'PATCH',
+        schema: z.object({
+          data: outreachProspect,
+        }),
       }),
     ),
   },
   accounts: {
     find: request(({ id }: { id: number }) => ({
       url: `/accounts/${id}`,
-      method: 'get',
-      schema: z
-        .object({
-          data: outreachAccount,
-        })
-        .passthrough(),
+      method: 'GET',
+      schema: z.object({
+        data: outreachAccount,
+      }),
     })),
     list: request(
       ({
@@ -186,13 +186,11 @@ export const client = {
             ? mapKeys(shake(filters), (key) => `filter[${key}]`)
             : {}),
         },
-        method: 'get',
+        method: 'GET',
         schema: z.intersection(
-          z
-            .object({
-              data: z.array(outreachAccount),
-            })
-            .passthrough(),
+          z.object({
+            data: z.array(outreachAccount),
+          }),
           outreachPaginatedResponse,
         ),
       }),
@@ -201,12 +199,10 @@ export const client = {
   mailings: {
     find: request(({ id }: { id: number }) => ({
       url: `/mailings/${id}`,
-      method: 'get',
-      schema: z
-        .object({
-          data: outreachMailing,
-        })
-        .passthrough(),
+      method: 'GET',
+      schema: z.object({
+        data: outreachMailing,
+      }),
     })),
     list: request(
       ({
@@ -220,7 +216,7 @@ export const client = {
         };
       }) => ({
         url: cursor ?? `/mailings`,
-        method: 'get',
+        method: 'GET',
         query: {
           count: 'false',
           'page[size]': `${DEFAULT_PAGE_SIZE}`,
@@ -229,11 +225,9 @@ export const client = {
             : {}),
         },
         schema: z.intersection(
-          z
-            .object({
-              data: z.array(outreachMailing),
-            })
-            .passthrough(),
+          z.object({
+            data: z.array(outreachMailing),
+          }),
           outreachPaginatedResponse,
         ),
       }),
@@ -242,24 +236,20 @@ export const client = {
   sequences: {
     find: request(({ id }: { id: number }) => ({
       url: `/sequences/${id}`,
-      method: 'get',
-      schema: z
-        .object({
-          data: outreachSequence,
-        })
-        .passthrough(),
+      method: 'GET',
+      schema: z.object({
+        data: outreachSequence,
+      }),
     })),
     list: request(
       ({ cursor }: { cursor?: `${typeof BASE_URL}/${string}` }) => ({
         url: cursor ?? `/sequences`,
-        method: 'get',
+        method: 'GET',
         query: { count: 'false', 'page[size]': `${DEFAULT_PAGE_SIZE}` },
         schema: z.intersection(
-          z
-            .object({
-              data: z.array(outreachSequence),
-            })
-            .passthrough(),
+          z.object({
+            data: z.array(outreachSequence),
+          }),
           outreachPaginatedResponse,
         ),
       }),
@@ -270,18 +260,20 @@ export const client = {
           name: string;
           sequenceType: 'date' | 'interval';
           shareType: 'private' | 'read_only' | 'shared';
+          $native?: Record<string, unknown>;
         };
       }) => ({
         url: `/sequences`,
-        method: 'post',
+        method: 'POST',
         json: {
-          data: { type: 'sequence', ...sequence },
+          data: {
+            type: 'sequence',
+            attributes: formatUpsertInputWithNative(sequence.attributes),
+          },
         },
-        schema: z
-          .object({
-            data: outreachSequence,
-          })
-          .passthrough(),
+        schema: z.object({
+          data: outreachSequence,
+        }),
       }),
     ),
   },
@@ -307,21 +299,22 @@ export const client = {
               type: 'mailbox';
             };
           };
+          $native?: Record<string, unknown>;
         };
       }) => ({
         url: `/sequenceStates`,
         json: {
           data: {
             type: 'sequenceState',
-            ...sequenceState,
+            relationships: formatUpsertInputWithNative(
+              sequenceState.relationships,
+            ),
           },
         },
-        method: 'post',
-        schema: z
-          .object({
-            data: outreachSequenceState,
-          })
-          .passthrough(),
+        method: 'POST',
+        schema: z.object({
+          data: outreachSequenceState,
+        }),
       }),
     ),
   },
@@ -332,6 +325,7 @@ export const client = {
           order?: number;
           stepType: 'auto_email' | 'manual_email' | 'call' | 'task';
           interval?: number;
+          $native?: Record<string, unknown>;
         };
         relationships: {
           sequence: {
@@ -343,11 +337,12 @@ export const client = {
         };
       }) => ({
         url: `/sequenceSteps`,
-        method: 'post',
+        method: 'POST',
         json: {
           data: {
             type: 'sequenceStep',
             ...sequenceStep,
+            attributes: formatUpsertInputWithNative(sequenceStep.attributes),
           },
         },
         schema: custom.object({
@@ -360,13 +355,11 @@ export const client = {
     list: request(
       ({ cursor }: { cursor?: `${typeof BASE_URL}/${string}` }) => ({
         url: cursor ?? `/mailboxes`,
-        method: 'get',
+        method: 'GET',
         schema: z.intersection(
-          z
-            .object({
-              data: z.array(outreachMailbox),
-            })
-            .passthrough(),
+          z.object({
+            data: z.array(outreachMailbox),
+          }),
           outreachPaginatedResponse,
         ),
       }),
@@ -380,14 +373,15 @@ export const client = {
           name: string;
           subject?: string | null;
           trackOpens?: boolean;
+          $native?: Record<string, unknown>;
         };
       }) => ({
         url: `/templates`,
-        method: 'post',
+        method: 'POST',
         json: {
           data: {
             type: 'template',
-            ...template,
+            attributes: formatUpsertInputWithNative(template.attributes),
           },
         },
         schema: custom.object({
@@ -401,6 +395,7 @@ export const client = {
       (sequenceTemplate: {
         attributes: {
           isReply: boolean;
+          $native?: Record<string, unknown>;
         };
         relationships: {
           sequenceStep: {
@@ -418,11 +413,14 @@ export const client = {
         };
       }) => ({
         url: `/sequenceTemplates`,
-        method: 'post',
+        method: 'POST',
         json: {
           data: {
             type: 'sequenceTemplate',
             ...sequenceTemplate,
+            attributes: formatUpsertInputWithNative(
+              sequenceTemplate.attributes,
+            ),
           },
         },
         schema: custom.object({
@@ -438,6 +436,7 @@ export const client = {
           email: string;
           emailType?: 'work' | 'personal';
           order?: number;
+          $native?: Record<string, unknown>;
         };
         relationships: {
           prospect: {
@@ -449,13 +448,17 @@ export const client = {
         };
       }) => ({
         url: `/emailAddresses`,
-        json: { data: { type: 'emailAddress', ...emailAddress } },
-        method: 'post',
-        schema: z
-          .object({
-            data: outreachEmailAddress,
-          })
-          .passthrough(),
+        json: {
+          data: {
+            type: 'emailAddress',
+            ...emailAddress,
+            attributes: formatUpsertInputWithNative(emailAddress.attributes),
+          },
+        },
+        method: 'POST',
+        schema: z.object({
+          data: outreachEmailAddress,
+        }),
       }),
     ),
   },

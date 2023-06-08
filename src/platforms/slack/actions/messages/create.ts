@@ -3,11 +3,11 @@ import { action } from '@/sdk';
 import { z } from 'zod';
 
 export default action(
-  'create-messages',
+  'create-message',
   {
     operation: 'create',
     resource: 'messages',
-    mutation: false,
+    mutation: true,
     schema: z.object({
       text: z.string(),
       channel: z.string(),

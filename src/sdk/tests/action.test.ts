@@ -12,7 +12,12 @@ describe('action function', () => {
         schema: z.object({}),
       },
       async () => {
-        return {};
+        return {
+          $native: {
+            headers: {},
+            body: {},
+          },
+        };
       },
     );
   });

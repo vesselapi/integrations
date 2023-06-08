@@ -1,3 +1,4 @@
+import { transformContact } from '@/platforms/aircall/actions/mappers';
 import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 import { action } from '../../../../sdk';
@@ -10,9 +11,9 @@ export default action(
     resource: 'contacts',
     mutation: true,
     schema: z.object({
-      first_name: z.string().optional(),
-      last_name: z.string().optional(),
-      company_name: z.string().optional(),
+      firstName: z.string().optional(),
+      lastName: z.string().optional(),
+      companyName: z.string().optional(),
       information: z.string().optional(),
       emails: z
         .array(
@@ -22,7 +23,7 @@ export default action(
           }),
         )
         .optional(),
-      phone_numbers: z.array(
+      phoneNumbers: z.array(
         z.object({
           label: z.string().optional(),
           value: custom.formattedPhoneNumber(),
@@ -32,13 +33,18 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.contacts.create(auth, {
-      first_name: input.first_name,
-      last_name: input.last_name,
-      company_name: input.company_name,
+    const result = await client.contacts.create(auth, {
+      first_name: input.firstName,
+      last_name: input.lastName,
+      company_name: input.companyName,
       information: input.information,
       emails: input.emails,
-      phone_numbers: input.phone_numbers,
+      phone_numbers: input.phoneNumbers,
     });
+
+    return {
+      contact: transformContact(result.data.contact),
+      $native: result.$native,
+    };
   },
 );

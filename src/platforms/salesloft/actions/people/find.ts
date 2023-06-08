@@ -1,3 +1,4 @@
+import { transformPerson } from '@/platforms/salesloft/actions/mappers';
 import { client } from '@/platforms/salesloft/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
@@ -14,6 +15,11 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.people.find(auth, input);
+    const result = await client.people.find(auth, input);
+
+    return {
+      data: transformPerson(result.data.data),
+      $native: result.$native,
+    };
   },
 );

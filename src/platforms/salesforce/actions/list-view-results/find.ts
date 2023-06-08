@@ -9,14 +9,14 @@ export default action(
     resource: 'list-view-results',
     mutation: false,
     schema: z.object({
-      Id: z.string(),
+      id: z.string(),
       objectType: z.string(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
     return await client.listViewResults.find(auth, {
-      Id: input.Id,
+      Id: input.id,
       objectType: input.objectType,
     });
   },

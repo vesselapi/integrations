@@ -1,7 +1,11 @@
-import { makeRequestFactory } from '@/sdk/client';
+import { BASE_URL, DEFAULT_PAGE_SIZE } from '@/platforms/salesloft/constants';
+import {
+  formatUpsertInputWithNative,
+  formatUrl,
+  makeRequestFactory,
+} from '@/sdk/client';
 import { shake } from 'radash';
 import { z } from 'zod';
-import { DEFAULT_PAGE_SIZE } from './constants';
 import {
   salesloftCadence,
   SalesloftCadenceImport,
@@ -20,6 +24,7 @@ import {
 
 const request = makeRequestFactory(async (auth, options) => ({
   ...options,
+  url: formatUrl(BASE_URL, options.url),
   headers: {
     ...options.headers,
     Authorization: `Bearer ${await auth.getToken()}`,
@@ -39,48 +44,40 @@ export const client = {
         page?: number;
       }) => ({
         url: `/people.json`,
-        method: 'get',
+        method: 'GET',
         query: shake({
           email_addresses,
           per_page,
           page,
         }),
-        schema: z
-          .object({
-            data: z.array(salesloftPerson),
-            metadata: salesloftResponseMetadata,
-          })
-          .passthrough(),
+        schema: z.object({
+          data: z.array(salesloftPerson),
+          metadata: salesloftResponseMetadata,
+        }),
       }),
     ),
     find: request(({ id }: { id: string }) => ({
       url: `/people/${id}.json`,
-      method: 'get',
-      schema: z
-        .object({
-          data: salesloftPerson,
-        })
-        .passthrough(),
+      method: 'GET',
+      schema: z.object({
+        data: salesloftPerson,
+      }),
     })),
     create: request((person: SalesloftPersonCreate) => ({
       url: `/people.json`,
-      method: 'post',
-      json: person,
-      schema: z
-        .object({
-          data: salesloftPerson,
-        })
-        .passthrough(),
+      method: 'POST',
+      json: formatUpsertInputWithNative(person),
+      schema: z.object({
+        data: salesloftPerson,
+      }),
     })),
     update: request((person: SalesloftPersonUpdate & { id: string }) => ({
       url: `/people/${person.id}.json`,
-      method: 'put',
-      json: person,
-      schema: z
-        .object({
-          data: salesloftPerson,
-        })
-        .passthrough(),
+      method: 'PUT',
+      json: formatUpsertInputWithNative(person),
+      schema: z.object({
+        data: salesloftPerson,
+      }),
     })),
   },
   cadences: {
@@ -93,22 +90,20 @@ export const client = {
         page?: number;
       }) => ({
         url: `/cadences.json`,
-        method: 'get',
+        method: 'GET',
         query: shake({
           per_page,
           page,
         }),
-        schema: z
-          .object({
-            data: z.array(salesloftCadence),
-            metadata: salesloftResponseMetadata,
-          })
-          .passthrough(),
+        schema: z.object({
+          data: z.array(salesloftCadence),
+          metadata: salesloftResponseMetadata,
+        }),
       }),
     ),
     import: request((cadence: SalesloftCadenceImport) => ({
       url: `/cadence_imports.json`,
-      method: 'post',
+      method: 'POST',
       json: cadence,
       schema: salesloftCadenceImportResponse,
     })),
@@ -119,31 +114,34 @@ export const client = {
         cadence_id,
         person_id,
         user_id,
+        $native,
       }: {
         cadence_id: string;
         person_id: string;
         user_id: string;
+        $native?: Record<string, unknown>;
       }) => ({
         url: `/cadence_memberships.json`,
-        method: 'post',
-        json: shake({ cadence_id, person_id, user_id }),
-        schema: z
-          .object({
-            data: salesloftCadenceMembership,
-          })
-          .passthrough(),
+        method: 'POST',
+        json: shake({
+          cadence_id,
+          person_id,
+          user_id,
+          ...($native ?? {}),
+        }),
+        schema: z.object({
+          data: salesloftCadenceMembership,
+        }),
       }),
     ),
   },
   users: {
     find: request(({ id }: { id: string }) => ({
       url: `/users/${id}.json`,
-      method: 'get',
-      schema: z
-        .object({
-          data: salesloftUser,
-        })
-        .passthrough(),
+      method: 'GET',
+      schema: z.object({
+        data: salesloftUser,
+      }),
     })),
     list: request(
       ({
@@ -154,17 +152,15 @@ export const client = {
         page?: number;
       }) => ({
         url: `/users.json`,
-        method: 'get',
+        method: 'GET',
         query: shake({
           per_page,
           page,
         }),
-        schema: z
-          .object({
-            data: z.array(salesloftUser),
-            metadata: salesloftResponseMetadata,
-          })
-          .passthrough(),
+        schema: z.object({
+          data: z.array(salesloftUser),
+          metadata: salesloftResponseMetadata,
+        }),
       }),
     ),
   },
@@ -182,40 +178,34 @@ export const client = {
         cadence_id?: string;
       }) => ({
         url: `/activities/emails.json`,
-        method: 'get',
+        method: 'GET',
         query: shake({
           per_page,
           page,
           person_id,
           cadence_id,
         }),
-        schema: z
-          .object({
-            data: z.array(salesloftEmail),
-            metadata: salesloftResponseMetadata,
-          })
-          .passthrough(),
+        schema: z.object({
+          data: z.array(salesloftEmail),
+          metadata: salesloftResponseMetadata,
+        }),
       }),
     ),
     find: request(({ id }: { id: string }) => ({
       url: `/activities/emails/${id}.json`,
-      method: 'get',
-      schema: z
-        .object({
-          data: salesloftEmail,
-        })
-        .passthrough(),
+      method: 'GET',
+      schema: z.object({
+        data: salesloftEmail,
+      }),
     })),
   },
   emailBodies: {
     find: request(({ id }: { id: string }) => ({
       url: `/mime_email_payloads/${id}.json`,
-      method: 'get',
-      schema: z
-        .object({
-          data: salesloftEmailBody,
-        })
-        .passthrough(),
+      method: 'GET',
+      schema: z.object({
+        data: salesloftEmailBody,
+      }),
     })),
   },
   customFields: {
@@ -230,29 +220,25 @@ export const client = {
         field_type?: string;
       }) => ({
         url: `/custom_fields.json`,
-        method: 'get',
+        method: 'GET',
         query: shake({
           per_page,
           page,
           field_type,
         }),
-        schema: z
-          .object({
-            data: z.array(salesloftCustomField),
-            metadata: salesloftResponseMetadata,
-          })
-          .passthrough(),
+        schema: z.object({
+          data: z.array(salesloftCustomField),
+          metadata: salesloftResponseMetadata,
+        }),
       }),
     ),
     create: request((customField: SalesloftCustomFieldCreate) => ({
       url: `/custom_fields.json`,
-      method: 'post',
-      json: customField,
-      schema: z
-        .object({
-          data: salesloftCustomField,
-        })
-        .passthrough(),
+      method: 'POST',
+      json: formatUpsertInputWithNative(customField),
+      schema: z.object({
+        data: salesloftCustomField,
+      }),
     })),
   },
   passthrough: request.passthrough(),

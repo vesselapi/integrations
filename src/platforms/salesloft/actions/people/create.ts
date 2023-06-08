@@ -1,3 +1,4 @@
+import { transformPerson } from '@/platforms/salesloft/actions/mappers';
 import { client } from '@/platforms/salesloft/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
@@ -9,8 +10,8 @@ export default action(
     resource: 'people',
     mutation: true,
     schema: z.object({
-      first_name: z.string().optional(),
-      last_name: z.string().optional(),
+      firstName: z.string().optional(),
+      lastName: z.string().optional(),
       city: z.string().optional(),
       state: z.string().optional(),
       country: z.string().optional(),
@@ -25,14 +26,32 @@ export default action(
           id: z.string(),
         })
         .optional(),
-      email_address: z.string().optional(),
-      secondary_email_address: z.string().optional(),
-      personal_email_address: z.string().optional(),
-      custom_fields: z.object({}).passthrough(),
+      emailAddress: z.string().optional(),
+      secondaryEmailAddress: z.string().optional(),
+      personalEmailAddress: z.string().optional(),
+      customFields: z.object({}).passthrough(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.people.create(auth, input);
+    const result = await client.people.create(auth, {
+      first_name: input.firstName,
+      last_name: input.lastName,
+      city: input.city,
+      state: input.state,
+      country: input.country,
+      title: input.title,
+      owner: input.owner,
+      account: input.account,
+      email_address: input.emailAddress,
+      secondary_email_address: input.secondaryEmailAddress,
+      personal_email_address: input.personalEmailAddress,
+      custom_fields: input.customFields,
+    });
+
+    return {
+      data: transformPerson(result.data.data),
+      $native: result.$native,
+    };
   },
 );

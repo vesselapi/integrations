@@ -1,4 +1,8 @@
-import { makeRequestFactory } from '@/sdk/client';
+import {
+  formatUpsertInputWithNative,
+  formatUrl,
+  makeRequestFactory,
+} from '@/sdk/client';
 import { shake } from 'radash';
 import { z } from 'zod';
 import { BASE_URL, DEFAULT_PAGE_SIZE } from './constants';
@@ -14,28 +18,29 @@ import {
 
 const base64 = (str: string) => Buffer.from(str).toString('base64');
 
-const request = makeRequestFactory(async (auth, options) => ({
-  ...options,
-  url: `${BASE_URL}/${options.url}`,
-  headers: {
-    ...options.headers,
-    Authorization:
-      auth.type === 'oauth2'
-        ? `Bearer ${await auth.getToken()}`
-        : `Basic ${base64(await auth.getToken())}`,
-  },
-}));
+const request = makeRequestFactory(async (auth, options) => {
+  const { answers } = await auth.getMetadata();
+  return {
+    ...options,
+    url: formatUrl(BASE_URL, options.url),
+    headers: {
+      ...options.headers,
+      Authorization:
+        auth.type === 'oauth2'
+          ? `Bearer ${await auth.getToken()}`
+          : `Basic ${base64(`${answers['api-id']}:${await auth.getToken()}`)}`,
+    },
+  };
+});
 
 export const client = {
   users: {
     find: request(({ id }: { id: number | string }) => ({
       url: `/users/${id}`,
-      method: 'get',
-      schema: z
-        .object({
-          user: aircallUser,
-        })
-        .passthrough(),
+      method: 'GET',
+      schema: z.object({
+        user: aircallUser,
+      }),
     })),
     list: request(
       ({
@@ -48,21 +53,19 @@ export const client = {
         per_page?: number;
       }) => ({
         url: next_page_link ?? `/users`,
-        method: 'get',
+        method: 'GET',
         query: shake({ from, per_page: `${per_page}` }),
-        schema: z
-          .object({
-            users: z.array(aircallUser),
-            meta: aircallPagination,
-          })
-          .passthrough(),
+        schema: z.object({
+          users: z.array(aircallUser),
+          meta: aircallPagination,
+        }),
       }),
     ),
     startCall: request(
       (call: { id: string | number } & AircallStartUserCall) => ({
         url: `/users/${call.id}/calls`,
-        method: 'post',
-        json: call,
+        method: 'POST',
+        json: formatUpsertInputWithNative(call),
         schema: z.any(),
       }),
     ),
@@ -70,12 +73,10 @@ export const client = {
   calls: {
     find: request(({ id }: { id: number | string }) => ({
       url: `/calls/${id}`,
-      method: 'get',
-      schema: z
-        .object({
-          call: aircallCall,
-        })
-        .passthrough(),
+      method: 'GET',
+      schema: z.object({
+        call: aircallCall,
+      }),
     })),
     list: request(
       ({
@@ -88,26 +89,22 @@ export const client = {
         per_page?: number;
       }) => ({
         url: next_page_link ?? `/calls`,
-        method: 'get',
+        method: 'GET',
         query: shake({ from, per_page: `${per_page}` }),
-        schema: z
-          .object({
-            calls: z.array(aircallCall),
-            meta: aircallPagination,
-          })
-          .passthrough(),
+        schema: z.object({
+          calls: z.array(aircallCall),
+          meta: aircallPagination,
+        }),
       }),
     ),
   },
   contacts: {
     find: request(({ id }: { id: number | string }) => ({
       url: `/contacts/${id}`,
-      method: 'get',
-      schema: z
-        .object({
-          contact: aircallContact,
-        })
-        .passthrough(),
+      method: 'GET',
+      schema: z.object({
+        contact: aircallContact,
+      }),
     })),
     list: request(
       ({
@@ -120,36 +117,30 @@ export const client = {
         per_page?: number;
       }) => ({
         url: next_page_link ?? `/contacts`,
-        method: 'get',
+        method: 'GET',
         query: shake({ from, per_page: `${per_page}` }),
-        schema: z
-          .object({
-            contacts: z.array(aircallContact),
-            meta: aircallPagination,
-          })
-          .passthrough(),
+        schema: z.object({
+          contacts: z.array(aircallContact),
+          meta: aircallPagination,
+        }),
       }),
     ),
     create: request((contact: AircallContactCreate) => ({
       url: `/contacts`,
-      method: 'post',
-      json: contact,
-      schema: z
-        .object({
-          contact: aircallContact,
-        })
-        .passthrough(),
+      method: 'POST',
+      json: formatUpsertInputWithNative(contact),
+      schema: z.object({
+        contact: aircallContact,
+      }),
     })),
     update: request(
       (contact: { id: string | number } & AircallContactUpdate) => ({
         url: `/contacts/${contact.id}`,
-        method: 'post',
-        json: contact,
-        schema: z
-          .object({
-            contact: aircallContact,
-          })
-          .passthrough(),
+        method: 'POST',
+        json: formatUpsertInputWithNative(contact),
+        schema: z.object({
+          contact: aircallContact,
+        }),
       }),
     ),
   },

@@ -1,11 +1,12 @@
 import { HttpsUrl } from '@/sdk';
-import { makeRequestFactory } from '@/sdk/client';
+import { formatUpsertInputWithNative, makeRequestFactory } from '@/sdk/client';
 import { omit, shake } from 'radash';
 import * as z from 'zod';
-import { API_DOMAIN, API_VERSION } from './constants';
+import { API_VERSION } from './constants';
 import {
   ListObjectInput,
   listResponseSchema,
+  RingcentralAuthAnswers,
   ringcentralCallLogSchema,
   RingcentralContactCreate,
   ringcentralContactSchema,
@@ -13,30 +14,37 @@ import {
   ringcentralExtensionSchema,
   RingcentralRingOutStart,
   ringcentralRingOutStatusSchema,
+  ringcentralUrlsByAccountType,
 } from './schemas';
 
-const BASE_URL = `${API_DOMAIN}/${API_VERSION}` as HttpsUrl;
+const baseUrl = (answers: RingcentralAuthAnswers) =>
+  `${
+    ringcentralUrlsByAccountType[answers.accountType]
+  }/${API_VERSION}` as HttpsUrl;
 
-const request = makeRequestFactory(async (auth, options) => ({
-  ...options,
-  url: `${BASE_URL}${options.url}`,
-  headers: {
-    ...options.headers,
-    Authorization: `Bearer ${await auth.getToken()}`,
-  },
-}));
+const request = makeRequestFactory(async (auth, options) => {
+  const { answers } = await auth.getMetadata();
+  return {
+    ...options,
+    url: `${baseUrl(answers as RingcentralAuthAnswers)}${options.url}`,
+    headers: {
+      ...options.headers,
+      Authorization: `Bearer ${await auth.getToken()}`,
+    },
+  };
+});
 
 const findObject = (endpoint: string, schema: z.ZodSchema) =>
   request(({ id }: { id: string }) => ({
     url: `/${endpoint}/${id}`,
-    method: 'get',
+    method: 'GET',
     schema,
   }));
 
 const listObject = (endpoint: string, schema: z.ZodSchema) =>
   request(({ page, perPage }: ListObjectInput) => ({
     url: `/${endpoint}`,
-    method: 'get',
+    method: 'GET',
     query: shake({
       page: page ? `${page}` : undefined,
       perPage: perPage ? `${perPage}` : undefined,
@@ -50,9 +58,9 @@ const createObject = <T extends Record<string, unknown>>(
 ) =>
   request((body: T) => ({
     url: `/${endpoint}`,
-    method: 'post',
+    method: 'POST',
     schema,
-    json: body,
+    json: formatUpsertInputWithNative(body),
   }));
 
 const updateObject = <T extends Record<string, unknown>>(
@@ -61,9 +69,9 @@ const updateObject = <T extends Record<string, unknown>>(
 ) =>
   request((obj: T) => ({
     url: `/${endpoint}/${obj.id}`,
-    method: 'put',
+    method: 'PUT',
     schema,
-    json: omit(obj, ['id']),
+    json: formatUpsertInputWithNative(omit(obj, ['id'])),
   }));
 
 const makeClient = () => {
@@ -76,8 +84,8 @@ const makeClient = () => {
       ),
       ringOut: request((body: RingcentralRingOutStart) => ({
         url: `/account/~/extension/${body.extensionId}/ring-out`,
-        method: 'post',
-        json: omit(body, ['extensionId']),
+        method: 'POST',
+        json: formatUpsertInputWithNative(omit(body, ['extensionId'])),
         schema: ringcentralRingOutStatusSchema,
       })),
     },

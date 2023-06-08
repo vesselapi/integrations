@@ -1,3 +1,7 @@
+import {
+  transformCustomField,
+  transformMetadata,
+} from '@/platforms/salesloft/actions/mappers';
 import { client } from '@/platforms/salesloft/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
@@ -9,13 +13,25 @@ export default action(
     resource: 'custom-fields',
     mutation: true,
     schema: z.object({
-      per_page: z.number().optional(),
+      perPage: z.number().optional(),
       page: z.number().optional(),
-      field_type: z.string().optional(),
+      fieldType: z.string().optional(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.customFields.list(auth, input);
+    const result = await client.customFields.list(auth, {
+      per_page: input.perPage,
+      page: input.page,
+      field_type: input.fieldType,
+    });
+
+    return {
+      data: {
+        data: result.data.data.map(transformCustomField),
+        metadata: transformMetadata(result.data.metadata),
+      },
+      $native: result.$native,
+    };
   },
 );

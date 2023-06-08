@@ -1,8 +1,9 @@
 import { HttpsUrl } from '@/sdk';
-import { makeRequestFactory } from '@/sdk/client';
+import { formatUpsertInputWithNative, makeRequestFactory } from '@/sdk/client';
 import * as z from 'zod';
-import { API_DOMAIN, API_VERSION } from './constants';
+import { API_VERSION } from './constants';
 import {
+  DialpadAuthAnswers,
   dialpadCallSchema,
   DialpadCallStart,
   DialpadClient,
@@ -10,34 +11,41 @@ import {
   dialpadContactSchema,
   DialpadContactUpdate,
   DialpadModules,
+  dialpadUrlsByAccountType,
   dialpadUserSchema,
   listResponseSchema,
 } from './schemas';
 
-const BASE_URL = `${API_DOMAIN}/${API_VERSION}` as HttpsUrl;
+const baseUrl = (answers: DialpadAuthAnswers) =>
+  `${
+    dialpadUrlsByAccountType[answers.accountType]
+  }/api/${API_VERSION}` as HttpsUrl;
 
-const request = makeRequestFactory(async (auth, options) => ({
-  ...options,
-  url: `${BASE_URL}${options.url}`,
-  headers: {
-    ...options.headers,
-    Accept: 'application/json',
-    Authorization: `Bearer ${await auth.getToken()}`,
-  },
-}));
+const request = makeRequestFactory(async (auth, options) => {
+  const { answers } = await auth.getMetadata();
+  return {
+    ...options,
+    url: `${baseUrl(answers as DialpadAuthAnswers)}${options.url}`,
+    headers: {
+      ...options.headers,
+      Accept: 'application/json',
+      Authorization: `Bearer ${await auth.getToken()}`,
+    },
+  };
+});
 
 const makeClient = (): DialpadClient => {
   const findObject = (module: DialpadModules, schema: z.ZodSchema) =>
     request(({ id }: { id: string }) => ({
       url: `/${module}/${id}`,
-      method: 'get',
+      method: 'GET',
       schema,
     }));
 
   const listObject = (module: DialpadModules, schema: z.ZodSchema) =>
     request(({ cursor }: { cursor?: string }) => ({
       url: `/${module}`,
-      method: 'get',
+      method: 'GET',
       query: cursor ? { cursor } : undefined,
       schema,
     }));
@@ -48,9 +56,9 @@ const makeClient = (): DialpadClient => {
   ) =>
     request((body: T) => ({
       url: `/${module}/`,
-      method: 'post',
+      method: 'POST',
       schema,
-      json: body,
+      json: formatUpsertInputWithNative(body),
     }));
 
   const updateObject = <T extends Record<string, unknown>>(
@@ -59,9 +67,9 @@ const makeClient = (): DialpadClient => {
   ) =>
     request((body: T) => ({
       url: `/${module}/`,
-      method: 'put',
+      method: 'PUT',
       schema,
-      json: body,
+      json: formatUpsertInputWithNative(body),
     }));
 
   return {
@@ -90,11 +98,11 @@ const makeClient = (): DialpadClient => {
       list: listObject('calls', listResponseSchema(dialpadCallSchema)),
       start: request((body: DialpadCallStart) => ({
         url: `/call`,
-        method: 'post',
+        method: 'POST',
         schema: z.object({
-          id: z.string(),
+          call_id: z.number(),
         }),
-        json: body,
+        json: formatUpsertInputWithNative(body),
       })),
     },
     passthrough: request.passthrough(),

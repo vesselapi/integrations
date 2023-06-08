@@ -7,13 +7,18 @@ export default action(
   {
     operation: 'list',
     resource: 'custom-fields',
-    mutation: true,
+    mutation: false,
     schema: z.object({
       page: z.number().optional(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.customFields.list(auth, input);
+    const result = await client.customFields.list(auth, input);
+
+    return {
+      typedCustomFields: result.data.typed_custom_fields,
+      $native: result.$native,
+    };
   },
 );

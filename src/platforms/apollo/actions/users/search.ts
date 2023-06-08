@@ -1,3 +1,7 @@
+import {
+  transformPagination,
+  transformUser,
+} from '@/platforms/apollo/actions/mappers';
 import { client } from '@/platforms/apollo/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
@@ -7,13 +11,19 @@ export default action(
   {
     operation: 'search',
     resource: 'users',
-    mutation: true,
+    mutation: false,
     schema: z.object({
       page: z.number().optional(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    return await client.users.search(auth, input);
+    const result = await client.users.search(auth, input);
+
+    return {
+      pagination: transformPagination(result.data.pagination),
+      users: result.data.users.map(transformUser),
+      $native: result.$native,
+    };
   },
 );

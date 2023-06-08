@@ -1,4 +1,5 @@
 import { isFunction, isString } from 'radash';
+import { z } from 'zod';
 import {
   AuthQuestion,
   HttpsUrl,
@@ -8,26 +9,40 @@ import {
 } from './types';
 
 const toQueryString = (query: Record<string, string>): string => {
-  const params = new URLSearchParams();
-  for (const [key, value] of Object.entries(query)) {
-    params.set(key, value);
-  }
-  return params.toString();
+  return Object.entries(query)
+    .map(([key, value]) => [key, encodeURIComponent(value)])
+    .map((x) => x.join('='))
+    .join('&');
 };
 
 export const auth = {
-  oauth2: <T extends Record<string, string> = Record<string, string>>(options: {
-    authUrl: HttpsUrl | OAuth2AuthConfig<T>['authUrl'];
-    tokenUrl: HttpsUrl | OAuth2AuthConfig<T>['tokenUrl'];
+  oauth2: <
+    TAnswers extends Record<string, string> = Record<string, string>,
+    TOAuthAppConfigSchema extends z.ZodType = z.ZodType<
+      Record<string, unknown>
+    >,
+  >(options: {
+    authUrl:
+      | HttpsUrl
+      | OAuth2AuthConfig<TAnswers, z.infer<TOAuthAppConfigSchema>>['authUrl'];
+    tokenUrl:
+      | HttpsUrl
+      | OAuth2AuthConfig<TAnswers, z.infer<TOAuthAppConfigSchema>>['tokenUrl'];
     questions?: AuthQuestion[];
     default?: boolean;
-    scopeSeparator?: OAuth2AuthConfig<T>['scopeSeparator'];
-    tokenAuth?: OAuth2AuthConfig<T>['tokenAuth'];
-    oauthBodyFormat?: OAuth2AuthConfig<T>['oauthBodyFormat'];
-    url?: OAuth2AuthConfig<T>['url'];
+    scopeSeparator?: OAuth2AuthConfig<
+      TAnswers,
+      z.infer<TOAuthAppConfigSchema>
+    >['scopeSeparator'];
+    tokenAuth?: OAuth2AuthConfig<TAnswers>['tokenAuth'];
+    oauthBodyFormat?: OAuth2AuthConfig<TAnswers>['oauthBodyFormat'];
+    url?: OAuth2AuthConfig<TAnswers>['url'];
     isRetryable?: RetryableCheckFunction;
-    display?: OAuth2AuthConfig<T>['display'];
-  }): OAuth2AuthConfig<T> => ({
+    display?: OAuth2AuthConfig<TAnswers>['display'];
+    appMetadataSchema?: TOAuthAppConfigSchema;
+    refreshTokenExpiresAt?: () => Date | null;
+    accessTokenExpiresAt?: () => Date | null;
+  }): OAuth2AuthConfig<TAnswers, z.infer<TOAuthAppConfigSchema>> => ({
     type: 'oauth2',
     authUrl: isString(options.authUrl)
       ? () => options.authUrl as HttpsUrl
@@ -48,35 +63,38 @@ export const auth = {
     },
     url:
       options.url ??
-      (({ scopes, clientId, redirectUrl, state, answers }) => {
+      (({ scopes, clientId, redirectUrl, state, answers, appMetadata }) => {
         const query: Record<string, string> = {
           client_id: clientId,
           redirect_uri: redirectUrl,
-          scope: scopes.join(options.scopeSeparator ?? '+'),
+          scope: scopes.join(options.scopeSeparator ?? ' '),
           state,
           response_type: 'code',
         };
         return `${
           isFunction(options.authUrl)
-            ? options.authUrl({ answers })
+            ? options.authUrl({ answers, appMetadata })
             : options.authUrl
         }?${toQueryString(query)}`;
       }),
     isRetryable:
       options.isRetryable ?? (async ({ response }) => response.status === 401),
+    appMetadataSchema: options.appMetadataSchema ?? z.any(),
+    refreshTokenExpiresAt: options.refreshTokenExpiresAt ?? (() => null),
+    accessTokenExpiresAt: options.accessTokenExpiresAt ?? (() => null),
   }),
-  apiToken: <T extends Record<string, string> = Record<string, string>>(
+  apiToken: <TAnswers extends Record<string, string> = Record<string, string>>(
     options: {
       questions?: AuthQuestion[];
       default?: boolean;
       display?: OAuth2AuthConfig['display'];
     } = {},
-  ): StandardAuthConfig<T> => ({
+  ): StandardAuthConfig<TAnswers> => ({
     type: 'standard',
     default: options.default ?? false,
     questions: [
       {
-        type: 'string',
+        type: 'text',
         id: 'api-key',
         label: 'API key',
       },
