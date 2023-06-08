@@ -25,6 +25,31 @@ export type ListObjectInput = {
 export type BatchReadObjectInput = {
   ids: string[];
 } & ListObjectInput;
+export type SearchOperator =
+  | 'LT'
+  | 'LTE'
+  | 'GT'
+  | 'GTE'
+  | 'EQ'
+  | 'NEQ'
+  | 'BETWEEN'
+  | 'IN'
+  | 'NOT_IN'
+  | 'HAS_PROPERTY'
+  | 'NOT_HAS_PROPERTY'
+  | 'CONTAINS_TOKEN'
+  | 'NOT_CONTAINS_TOKEN';
+export type SearchObjectInput = {
+  filterGroups: {
+    filters: {
+      propertyName: string;
+      operator: SearchOperator;
+      value?: string;
+      values?: string[];
+      highValue?: string;
+    }[];
+  }[];
+} & ListObjectInput;
 export type ListOutput<T> = {
   results?: T[];
   paging?: {
@@ -115,6 +140,7 @@ const contactPropertiesSchema = z.object({
   hs_lead_status: z.string().nullable(),
   company: z.string().nullable(),
   hubspot_owner_id: z.string().nullable(),
+  hs_all_contact_vids: z.string().nullable(),
 });
 export const contactProperties = Object.keys(contactPropertiesSchema.shape);
 
@@ -157,6 +183,7 @@ const dealPropertiesSchema = z.object({
   hs_is_closed_won: hubspotBooleanSchema.nullable(),
   hs_is_closed: hubspotBooleanSchema.nullable(),
   hubspot_owner_id: z.string().nullable(),
+  hs_merged_object_ids: z.string().nullable(),
 });
 export const dealProperties = Object.keys(dealPropertiesSchema.shape);
 
@@ -196,6 +223,7 @@ const companyPropertiesSchema = z.object({
   annualrevenue: z.union([z.string(), z.number()]).nullable(),
   description: z.string().nullable(),
   hubspot_owner_id: z.string().nullable(),
+  hs_merged_object_ids: z.string().nullable(),
 });
 export const companyProperties = Object.keys(companyPropertiesSchema.shape);
 
@@ -261,6 +289,7 @@ const taskPropertiesSchema = z.object({
   hs_task_body: z.string().nullable(),
   hs_task_subject: z.string().nullable(),
   hs_task_status: z.string().nullable(),
+  hs_task_type: z.string().nullable(),
   hs_timestamp: z
     .string()
     .transform((val) => new Date(val))
