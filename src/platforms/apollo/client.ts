@@ -154,7 +154,7 @@ export const client = {
           ...(types
             ? objectify(
                 types,
-                () => 'type[]',
+                () => 'types[]',
                 (value: string) => value,
               )
             : {}),
