@@ -39,6 +39,7 @@ export const transformContact = (contact: HubspotContact) => {
     hsLeadStatus: contact.properties.hs_lead_status,
     company: contact.properties.company,
     hubspotOwnerId: contact.properties.hubspot_owner_id,
+    hsAllContactVids: contact.properties.hs_all_contact_vids,
   };
 };
 

@@ -1,4 +1,4 @@
-import { sift, trim, unique } from 'radash';
+import { isArray, sift, trim, unique } from 'radash';
 import { MAX_QUERY_PAGE_SIZE } from '../constants';
 import { SalesforceSupportedObjectType } from '../schemas';
 
@@ -130,6 +130,33 @@ export const salesforceQueryBuilder: Record<
       ${where}
       ORDER BY Id DESC
       LIMIT ${limit}
+    `);
+  },
+  search: ({
+    where,
+    objectType,
+    relationalSelect,
+    associations,
+  }: {
+    where: Record<string, string | string[]>;
+    objectType: SalesforceSupportedObjectType;
+    relationalSelect?: Partial<Record<SalesforceSupportedObjectType, string>>;
+    associations?: SalesforceSupportedObjectType[];
+  }) => {
+    const selectClauses = sift([
+      'SELECT FIELDS(ALL)',
+      buildRelationalSelectClause(relationalSelect, associations),
+    ]);
+    const whereClause = Object.entries(where)
+      .map(([key, value]) => {
+        if (isArray(value)) return `${key} IN ('${value.join("','")}')`;
+        return `${key} = '${value}'`;
+      })
+      .join(' AND ');
+    return formatQuery(`
+      ${selectClauses.join(', ')}
+      FROM ${objectType}
+      WHERE ${whereClause}')
     `);
   },
 };

@@ -5,6 +5,7 @@ import dialpad from '@/platforms/dialpad';
 import hubspot from '@/platforms/hubspot';
 import mailchimp from '@/platforms/mailchimp';
 import outreach from '@/platforms/outreach';
+import pipedrive from '@/platforms/pipedrive';
 import ringcentral from '@/platforms/ringcentral';
 import salesforce from '@/platforms/salesforce';
 import salesloft from '@/platforms/salesloft';
@@ -29,6 +30,10 @@ export {
   types as outreachTypes,
 } from '@/platforms/outreach';
 export {
+  default as pipedrive,
+  types as pipedriveTypes,
+} from '@/platforms/pipedrive';
+export {
   default as ringcentral,
   types as ringcentralTypes,
 } from '@/platforms/ringcentral';
@@ -51,6 +56,7 @@ export const integrationsList: Platform<any, any, any, any, any>[] = [
   hubspot,
   mailchimp,
   outreach,
+  pipedrive,
   ringcentral,
   salesforce,
   salesloft,

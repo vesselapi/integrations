@@ -173,6 +173,35 @@ const query = {
         }),
       }),
     ),
+  search: <T extends z.ZodType>({
+    schema,
+    objectType,
+    relationalSelect,
+  }: {
+    schema: T;
+    objectType: SalesforceSupportedObjectType;
+    relationalSelect?: Partial<Record<SalesforceSupportedObjectType, string>>;
+  }) =>
+    request(
+      ({
+        where,
+        associations,
+      }: {
+        where: Record<string, string | string[]>;
+        associations?: SalesforceSupportedObjectType[];
+      }) => ({
+        url: `/query/?q=${salesforceQueryBuilder.search({
+          where,
+          objectType,
+          relationalSelect,
+          associations,
+        })}`,
+        method: 'GET',
+        schema: z.object({
+          records: z.array(schema),
+        }),
+      }),
+    ),
 };
 
 export const client = {
@@ -214,6 +243,10 @@ export const client = {
       schema: salesforceContact,
     }),
     batchRead: query.batchRead<typeof salesforceContact>({
+      objectType: 'Contact',
+      schema: salesforceContact,
+    }),
+    search: query.search<typeof salesforceContact>({
       objectType: 'Contact',
       schema: salesforceContact,
     }),
