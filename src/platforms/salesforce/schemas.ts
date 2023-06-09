@@ -439,7 +439,6 @@ export const salesforceTask = validators
     Priority: z.string(),
     Status: z.string(),
     Subject: z.string(),
-    Type: z.string(),
     CallDisposition: z.string(),
     CallType: z.string(),
     TaskSubtype: z.string(),
@@ -471,7 +470,6 @@ export const salesforceTaskCreate = validators.object({
       CallDisposition: z.string(),
       CallType: z.enum(SALESFORCE_CALL_TYPES),
       TaskSubtype: z.literal('Call'),
-      Type: z.literal('Call'),
       $native: z.record(z.any()),
     })
     .partial(),
@@ -494,7 +492,6 @@ export const salesforceTaskUpdate = validators.object({
       CallDisposition: z.string(),
       CallType: z.enum(SALESFORCE_CALL_TYPES),
       TaskSubtype: z.literal('Call'),
-      Type: z.literal('Call'),
       $native: z.record(z.any()),
     })
     .partial(),
