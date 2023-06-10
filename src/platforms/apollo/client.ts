@@ -7,16 +7,15 @@ import { objectify, shake } from 'radash';
 import { z } from 'zod';
 import { BASE_URL } from './constants';
 import {
+  apolloAccount,
   ApolloAccountCreate,
   ApolloAccountUpdate,
+  apolloContact,
   ApolloContactCreate,
   ApolloContactUpdate,
   ApolloCreateCustomField,
   ApolloCreateSequence,
   ApolloCreateSequenceStep,
-  ApolloUpdateSequenceTemplate,
-  apolloAccount,
-  apolloContact,
   apolloCustomField,
   apolloEmailAccount,
   apolloEmailActivity,
@@ -26,6 +25,7 @@ import {
   apolloPerson,
   apolloSequence,
   apolloSequenceStep,
+  ApolloUpdateSequenceTemplate,
   apolloUser,
 } from './schemas';
 
