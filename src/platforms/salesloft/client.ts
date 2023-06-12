@@ -38,10 +38,14 @@ export const client = {
         email_addresses,
         per_page = DEFAULT_PAGE_SIZE,
         page,
+        tag_id,
+        cadence_id,
       }: {
         email_addresses?: string[];
         per_page?: number;
         page?: number;
+        tag_id?: string;
+        cadence_id?: string;
       }) => ({
         url: `/people.json`,
         method: 'GET',
@@ -49,6 +53,8 @@ export const client = {
           email_addresses,
           per_page,
           page,
+          tag_id,
+          cadence_id,
         }),
         schema: z.object({
           data: z.array(salesloftPerson),

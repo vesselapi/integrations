@@ -13,8 +13,11 @@ export default action(
     resource: 'people',
     mutation: true,
     schema: z.object({
+      email_addresses: z.array(z.string()).optional(),
       perPage: z.number().optional(),
       page: z.number().optional(),
+      tag_id: z.string().optional(), // tag id to filter by
+      cadence_id: z.string().optional(), // cadence id to filter by
     }),
     scopes: [],
   },
@@ -22,6 +25,9 @@ export default action(
     const result = await client.people.list(auth, {
       per_page: input.perPage,
       page: input.page,
+      email_addresses: input.email_addresses,
+      tag_id: input.tag_id,
+      cadence_id: input.cadence_id,
     });
 
     return {

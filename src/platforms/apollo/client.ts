@@ -268,15 +268,22 @@ export const client = {
       ({
         q_keywords,
         contact_label_ids,
+        emailer_campaign_ids,
         page,
       }: {
         q_keywords?: string;
         contact_label_ids?: string[];
+        emailer_campaign_ids?: string[];
         page?: number;
       }) => ({
         url: `/mixed_people/search`,
         method: 'POST',
-        json: shake({ page, contact_label_ids, q_keywords }),
+        json: shake({
+          page,
+          contact_label_ids,
+          q_keywords,
+          emailer_campaign_ids,
+        }),
         schema: z.object({
           contacts: z.array(apolloContact),
           people: z.array(apolloPerson),
