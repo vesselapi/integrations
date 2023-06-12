@@ -18,7 +18,7 @@ import {
   makeRequestFactory,
 } from '@/sdk/client';
 import * as custom from '@/sdk/validators';
-import { mapKeys, shake } from 'radash';
+import { mapKeys, omit, shake } from 'radash';
 import { z } from 'zod';
 import { BASE_URL, DEFAULT_PAGE_SIZE } from './constants';
 
@@ -68,14 +68,20 @@ export const client = {
         filters,
       }: {
         cursor?: `${typeof BASE_URL}/${string}`;
-        filters?: { emails: string };
+        filters?: { emails?: string; tags?: string; sequenceIds?: string };
       }) => ({
         url: cursor ?? `/prospects`,
-        query: {
+        query: shake({
           count: 'false',
           'page[size]': `${DEFAULT_PAGE_SIZE}`,
-          ...(filters ? mapKeys(filters, (key) => `filter[${key}]`) : {}),
-        },
+          'filter[sequenceStates][sequence][id]': filters?.sequenceIds,
+          ...(filters
+            ? mapKeys<any, any, any>(
+                omit(filters, ['sequenceIds']),
+                (key) => `filter[${key}]`,
+              )
+            : {}),
+        }),
         method: 'GET',
         schema: z.intersection(
           z.object({
