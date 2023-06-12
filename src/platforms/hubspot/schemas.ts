@@ -555,19 +555,17 @@ export type HubspotCustomPropertyCreate = z.infer<
   typeof hubspotCustomPropertyCreateSchema
 >;
 
-export const hubspotPropertySchema = z
-  .object({
-    name: z.string(),
-    label: z.string(),
-    type: z.string().transform((v) => v as HubspotPropertyType),
-    fieldType: z.string().transform((v) => v as HubspotPropertyFieldType),
-    hubspotDefined: z.boolean(),
-    options: z.array(hubspotPropertyOptionSchema).optional(),
-    modificationMetadata: z.object({
-      readOnlyValue: z.boolean(),
-    }),
-  })
-  .passthrough();
+export const hubspotPropertySchema = z.object({
+  name: z.string(),
+  label: z.string(),
+  type: z.string().transform((v) => v as HubspotPropertyType),
+  fieldType: z.string().transform((v) => v as HubspotPropertyFieldType),
+  hubspotDefined: z.boolean(),
+  options: z.array(hubspotPropertyOptionSchema).optional(),
+  modificationMetadata: z.object({
+    readOnlyValue: z.boolean(),
+  }),
+});
 export type HubspotProperty = z.infer<typeof hubspotPropertySchema>;
 
 // -
