@@ -12,9 +12,9 @@ export default action(
     schema: z.object({
       filters: z
         .object({
-          emails: z.string(), // comma separated list: email1,email2,email3
-          tags: z.string(), // comma separated list: tag1,tag2,tag3
-          sequenceIds: z.string(), // comma separated list: id1,id2,id3
+          emails: z.string().optional(), // comma separated list: email1,email2,email3
+          tags: z.string().optional(), // comma separated list: tag1,tag2,tag3
+          sequenceIds: z.string().optional(), // comma separated list: id1,id2,id3
         })
         .optional(),
       cursor: outreachUrl().optional(),
