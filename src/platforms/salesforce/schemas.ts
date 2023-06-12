@@ -3,11 +3,10 @@ import * as validators from '@/sdk/validators';
 import { z } from 'zod';
 import {
   SALESFORCE_CALL_TYPES,
+  SALESFORCE_FIELD_TYPES,
   SALESFORCE_SUPPORTED_OBJECT_TYPE,
 } from './constants';
 
-const salesforceWhoObjectSchema = z.enum(['User', 'Contact', 'Lead']);
-const salesforceWhatObjectSchema = z.enum(['Account', 'Opportunity']);
 const requiredFields = {
   Id: true,
   CreatedDate: true,
@@ -19,6 +18,34 @@ const requiredFields = {
 // -
 export const salesforceSObject = validators.object({
   sobjects: z.array(z.object({ name: z.string() })),
+});
+
+// -
+// SObject Describe
+//  -
+export type SalesforceFieldType = (typeof SALESFORCE_FIELD_TYPES)[number];
+export const salesforceField = validators.object({
+  name: z.string(),
+  label: z.string(),
+  type: z.string().transform((v) => v as SalesforceFieldType),
+  custom: z.boolean(),
+  createable: z.boolean(),
+  updateable: z.boolean(),
+  picklistValues: z
+    .array(
+      z.object({
+        value: z.string(),
+        label: z.string(),
+        active: z.boolean(),
+      }),
+    )
+    .optional(),
+  defaultedOnCreate: z.boolean(),
+  nillable: z.boolean(), // field can be null
+});
+
+export const salesforceDescribeResponse = validators.object({
+  fields: z.array(salesforceField),
 });
 
 // -
@@ -427,6 +454,7 @@ export const salesforceContentNoteUpdate = validators.object({
 // -
 // Task
 // -
+export type SalesforceCallType = (typeof SALESFORCE_CALL_TYPES)[number];
 export const salesforceTask = validators
   .object({
     Id: z.string(),
@@ -440,7 +468,7 @@ export const salesforceTask = validators
     Status: z.string(),
     Subject: z.string(),
     CallDisposition: z.string(),
-    CallType: z.string(),
+    CallType: z.string().transform((v) => v as SalesforceCallType),
     TaskSubtype: z.string(),
     Who: z.object({ Id: z.string(), Type: z.string() }),
     What: z.object({ Id: z.string(), Type: z.string() }),
@@ -454,7 +482,6 @@ export const salesforceTaskRelationalSelect = {
   Lead: 'Who.Id',
 };
 
-export type SalesforceCallType = (typeof SALESFORCE_CALL_TYPES)[number];
 export const salesforceTaskCreate = validators.object({
   Task: z
     .object({
@@ -807,6 +834,7 @@ export const salesforceOAuthUrlsByAccountType: Record<
 export type SalesforceSupportedObjectType =
   (typeof SALESFORCE_SUPPORTED_OBJECT_TYPE)[number];
 export type SalesforceSObject = z.infer<typeof salesforceSObject>;
+export type SalesforceField = z.infer<typeof salesforceField>;
 export type SalesforceUser = z.infer<typeof salesforceUser>;
 export type SalesforceContact = z.infer<typeof salesforceContact>;
 export type SalesforceContactCreate = z.infer<typeof salesforceContactCreate>;
