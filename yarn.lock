@@ -1157,6 +1157,11 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
+durhuman@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/durhuman/-/durhuman-1.0.0.tgz#77ae730e47e0d28b15590dd16c47e11076142c7c"
+  integrity sha512-uy/+lCu1EpmUPo3KMYt4PvJIgdD6nltQUYClczx2iiADgD3uH9YQ55cfIvCLRt/VQyTpNsN99CXy/ejxmEM/mQ==
+
 electron-to-chromium@^1.4.411:
   version "1.4.426"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.426.tgz#077107b6565c081ce7d0a988fbce6d4ac2d49557"

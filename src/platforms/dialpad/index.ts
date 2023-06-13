@@ -59,4 +59,7 @@ export default platform('dialpad', {
     callsList,
     callsStart,
   },
+  unification: {
+    resources: ['calls', 'contacts', 'users'],
+  },
 });

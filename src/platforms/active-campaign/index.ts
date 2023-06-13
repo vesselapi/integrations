@@ -40,4 +40,7 @@ export default platform('activecampaign', {
     listLists,
     listUsers,
   },
+  unification: {
+    resources: ['users', 'transforms', 'lists', 'contacts'],
+  },
 });

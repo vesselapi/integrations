@@ -84,4 +84,15 @@ export default platform('apollo', {
 
     searchPeople,
   },
+  unification: {
+    resources: [
+      'accounts',
+      'contacts',
+      'emails',
+      'mailboxes',
+      'sequence-steps',
+      'sequences',
+      'users',
+    ],
+  },
 });

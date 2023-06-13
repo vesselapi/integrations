@@ -1,4 +1,5 @@
-import { isArray, unique } from 'radash';
+import dur, { Duration } from 'durhuman';
+import { isArray, isString, unique } from 'radash';
 import {
   Action,
   OAuth2AuthConfig,
@@ -36,6 +37,32 @@ export type PlatformOptions<
   actions: TActions;
   display: PlatformDisplayConfig;
   client: TClient;
+  unification: {
+    resources:
+      | (
+          | string
+          | {
+              object: string;
+              frequency: {
+                min?: Duration;
+                max?: Duration;
+              };
+            }
+        )[]
+      | Record<
+          string,
+          (
+            | string
+            | {
+                object: string;
+                frequency: {
+                  min?: Duration;
+                  max?: Duration;
+                };
+              }
+          )[]
+        >;
+  };
 };
 
 export const platform = <
@@ -107,5 +134,47 @@ export const platform = <
     rawActions: Object.values(options.actions),
     constants: options.constants,
     actions: options.actions,
+    unification: {
+      verify: ({ vertical, objects }) => {
+        const resources = isArray(options.unification.resources)
+          ? options.unification.resources
+          : options.unification.resources[vertical];
+        if (!resources) {
+          throw new Error(
+            `The ${id} platform does not support the ${vertical} vertical`,
+          );
+        }
+        for (const { name, frequency } of objects) {
+          const match = resources.find((r) =>
+            isString(r) ? r === name : r.object === name,
+          );
+          if (!match) {
+            throw new Error(
+              `The ${id} platform does not support ${name} as a unified object`,
+            );
+          }
+          if (isString(match)) {
+            return true;
+          }
+          if (
+            match.frequency.max &&
+            dur(match.frequency.max) < dur(frequency)
+          ) {
+            throw new Error(
+              `The ${id} platform does not support syncing ${name} more often than every ${match.frequency.max}`,
+            );
+          }
+          if (
+            match.frequency.min &&
+            dur(match.frequency.min) > dur(frequency)
+          ) {
+            throw new Error(
+              `The ${id} platform does not support syncing ${name} less often than every ${match.frequency.min}`,
+            );
+          }
+        }
+        return true;
+      },
+    },
   };
 };

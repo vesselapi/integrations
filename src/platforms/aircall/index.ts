@@ -53,4 +53,7 @@ export default platform('aircall', {
     findCall,
     listCall,
   },
+  unification: {
+    resources: ['calls', 'contacts', 'users'],
+  },
 });

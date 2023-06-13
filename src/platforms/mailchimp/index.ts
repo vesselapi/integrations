@@ -32,4 +32,7 @@ export default platform('mailchimp', {
     findList,
     listLists,
   },
+  unification: {
+    resources: ['contacts', 'lists'],
+  },
 });

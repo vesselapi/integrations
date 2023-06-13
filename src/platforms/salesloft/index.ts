@@ -61,4 +61,15 @@ export default platform('salesloft', {
     findUsers,
     listUsers,
   },
+  unification: {
+    resources: [
+      'accounts',
+      'contacts',
+      'emails',
+      'mailboxes',
+      'sequence-steps',
+      'sequences',
+      'users',
+    ],
+  },
 });

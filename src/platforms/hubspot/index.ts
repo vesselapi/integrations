@@ -129,4 +129,18 @@ export default platform('hubspot', {
     listTasks,
     updateTask,
   },
+  unification: {
+    resources: [
+      'accounts',
+      'attendees',
+      'calls',
+      'contacts',
+      'deals',
+      'emails',
+      'events',
+      'leads',
+      'tasks',
+      'users',
+    ],
+  },
 });

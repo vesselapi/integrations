@@ -1,3 +1,4 @@
+import type { Duration } from 'durhuman';
 import { CamelCasedPropertiesDeep } from 'type-fest';
 import { z } from 'zod';
 import { FetchOptions, HttpOptions } from './client';
@@ -181,6 +182,12 @@ export type Platform<
   constants: TConstants;
   actions: TActions;
   display: PlatformDisplayConfig;
+  unification: {
+    verify: (sync: {
+      vertical: string;
+      objects: { name: string; frequency: Duration }[];
+    }) => true;
+  };
 };
 
 export type ActionFunction<

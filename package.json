@@ -41,6 +41,7 @@
   },
   "dependencies": {
     "date-fns": "^2.29.3",
+    "durhuman": "^1.0.0",
     "libphonenumber-js": "^1.10.24",
     "radash": "^10.8.1",
     "type-fest": "^3.8.0",

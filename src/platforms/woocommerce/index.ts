@@ -19,4 +19,7 @@ export default platform('woocommerce', {
   client,
   constants,
   actions: {},
+  unification: {
+    resources: [],
+  },
 });

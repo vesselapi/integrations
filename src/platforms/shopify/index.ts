@@ -21,4 +21,7 @@ export default platform('shopify', {
   client,
   constants,
   actions: {},
+  unification: {
+    resources: [],
+  },
 });

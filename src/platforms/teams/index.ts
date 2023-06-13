@@ -44,4 +44,7 @@ export default platform('teams', {
     listMembers,
     listTeams,
   },
+  unification: {
+    resources: [],
+  },
 });

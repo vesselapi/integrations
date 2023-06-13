@@ -56,4 +56,15 @@ export default platform('outreach', {
     createTemplate,
     createSequenceTemplate,
   },
+  unification: {
+    resources: [
+      'accounts',
+      'contacts',
+      'emails',
+      'mailboxes',
+      'sequence-steps',
+      'sequences',
+      'users',
+    ],
+  },
 });

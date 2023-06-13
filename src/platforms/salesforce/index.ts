@@ -61,4 +61,21 @@ export default platform('salesforce', {
     listUsers,
     findUser,
   },
+  unification: {
+    resources: {
+      crm: [
+        'accounts',
+        'attendees',
+        'calls',
+        'contacts',
+        'deals',
+        'emails',
+        'events',
+        'leads',
+        'tasks',
+        'users',
+      ],
+      'marketing-automation': ['contacts', 'lists'],
+    },
+  },
 });

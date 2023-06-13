@@ -16,4 +16,18 @@ export default platform('pipedrive', {
   constants,
   client,
   actions: {},
+  unification: {
+    resources: [
+      'accounts',
+      'attendees',
+      'calls',
+      'contacts',
+      'deals',
+      'emails',
+      'events',
+      'leads',
+      'tasks',
+      'users',
+    ],
+  },
 });

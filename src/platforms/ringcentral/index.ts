@@ -59,4 +59,7 @@ export default platform('ringcentral', {
     contactsCreate,
     contactsUpdate,
   },
+  unification: {
+    resources: ['calls', 'contacts', 'users'],
+  },
 });

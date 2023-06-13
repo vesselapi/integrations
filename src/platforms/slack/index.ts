@@ -35,4 +35,7 @@ export default platform('slack', {
     listUsers,
     listConversations,
   },
+  unification: {
+    resources: ['channels', 'messages', 'users'],
+  },
 });
