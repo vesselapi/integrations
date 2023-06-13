@@ -32,7 +32,7 @@ export default platform('salesloft', {
       tokenUrl: 'https://accounts.salesloft.com/oauth/token',
       default: true,
     }),
-    auth.apiToken({ default: true }),
+    auth.apiToken(),
   ],
   display: {
     name: 'Salesloft',
