@@ -85,7 +85,7 @@ export const makeRequestFactory = (
                 Accept: 'application/json',
               },
         });
-        return { response, options, url };
+        return { response, options, url: options.url };
       });
 
       const text = await response.text();
