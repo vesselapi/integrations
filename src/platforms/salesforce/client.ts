@@ -1,5 +1,6 @@
 import { HttpsUrl } from '@/sdk';
 import { formatUpsertInputWithNative, makeRequestFactory } from '@/sdk/client';
+import { shake } from 'radash';
 import { z } from 'zod';
 import { salesforceQueryBuilder } from './actions/query-builder';
 import { SALESFORCE_API_VERSION } from './constants';
@@ -310,14 +311,17 @@ export const client = {
       ({
         Id,
         objectType,
-        cursor,
+        limit,
+        offset,
       }: {
         Id: string;
         objectType: string;
-        cursor?: `/${string}`;
+        limit?: number;
+        offset?: number;
       }) => ({
-        url: cursor ?? `/sobjects/${objectType}/listviews/${Id}/results`,
+        url: `/sobjects/${objectType}/listviews/${Id}/results`,
         method: 'GET',
+        query: shake({ limit, offset }),
         schema: salesforceListViewResult,
       }),
     ),
