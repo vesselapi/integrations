@@ -1,4 +1,5 @@
 import {
+  formatBasicAuthHeader,
   formatUpsertInputWithNative,
   formatUrl,
   makeRequestFactory,
@@ -16,8 +17,6 @@ import {
   aircallUser,
 } from './schemas';
 
-const base64 = (str: string) => Buffer.from(str).toString('base64');
-
 const request = makeRequestFactory(async (auth, options) => {
   const { answers } = await auth.getMetadata();
   return {
@@ -28,7 +27,7 @@ const request = makeRequestFactory(async (auth, options) => {
       Authorization:
         auth.type === 'oauth2'
           ? `Bearer ${await auth.getToken()}`
-          : `Basic ${base64(`${answers['api-id']}:${await auth.getToken()}`)}`,
+          : formatBasicAuthHeader(answers['api-id'], await auth.getToken()),
     },
   };
 });
