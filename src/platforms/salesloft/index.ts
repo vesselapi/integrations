@@ -30,6 +30,7 @@ export default platform('salesloft', {
     auth.oauth2({
       authUrl: 'https://accounts.salesloft.com/oauth/authorize',
       tokenUrl: 'https://accounts.salesloft.com/oauth/token',
+      default: true,
     }),
     auth.apiToken({ default: true }),
   ],
