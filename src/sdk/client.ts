@@ -9,7 +9,7 @@ export type HttpOptions = {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   headers?: Record<string, string>;
   json?: Record<string, unknown> | Record<string, unknown>[];
-  query?: Record<string, string>;
+  query?: Record<string, string | number>;
 };
 
 export const formatUpsertInputWithNative = <
@@ -157,10 +157,10 @@ export const makeRequestFactory = (
   return createRequest;
 };
 
-const toQueryString = (query: Record<string, string>): string => {
+const toQueryString = (query: Record<string, string | number>): string => {
   const params = new URLSearchParams();
   for (const [key, value] of Object.entries(query)) {
-    params.set(key, value);
+    params.set(key, `${value}`);
   }
   return params.toString();
 };
