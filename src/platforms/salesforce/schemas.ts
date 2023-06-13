@@ -794,7 +794,6 @@ export const salesforceListViewResult = validators.object({
     }),
   ),
   size: z.number(),
-  nextRecordsUrl: z.string().nullish(),
 });
 
 // -
