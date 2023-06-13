@@ -6,6 +6,7 @@ export type ActionErrorMeta = {
 export type HttpErrorMeta = {
   type: 'http';
   status: number;
+  url: string;
   body: string | object | object[];
   cause?: unknown;
   headers: Headers;
