@@ -101,11 +101,43 @@ export const auth = {
       ...(options.questions ?? []),
     ],
     toTokenString: (answers) => answers['api-key'],
+    toAuthHeader: (answers) => `Bearer ${answers['api-key']}`,
     display: options.display ?? {
       markdown: (
         platform,
       ) => `- You will find an API Key under Settings in your ${platform.display.name} account.
 - Copy and paste the API Key above.`,
+    },
+  }),
+  basic: <TAnswers extends Record<string, string> = Record<string, string>>(
+    options: {
+      questions?: (
+        | [{ type: 'text'; id: 'password'; label: string }]
+        | [
+            { type: 'text'; id: 'username'; label: string },
+            { type: 'text'; id: 'password'; label: string },
+          ]
+      ) &
+        AuthQuestion[];
+      default?: boolean;
+      display?: OAuth2AuthConfig['display'];
+    } = {},
+  ): StandardAuthConfig<TAnswers> => ({
+    type: 'standard',
+    default: options.default ?? false,
+    questions: options.questions ?? [],
+    toTokenString: (answers) =>
+      Buffer.from(
+        `${answers.username ?? ''}:${answers.password ?? ''}`,
+      ).toString('base64'),
+    toAuthHeader: (answers) => {
+      const username = answers.username ?? '';
+      const password = answers.password ?? '';
+      const token = Buffer.from(`${username}:${password}`).toString('base64');
+      return `Basic ${token}`;
+    },
+    display: options.display ?? {
+      markdown: () => ``,
     },
   }),
 };
