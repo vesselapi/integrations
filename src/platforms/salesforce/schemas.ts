@@ -4,6 +4,7 @@ import { z } from 'zod';
 import {
   SALESFORCE_CALL_TYPES,
   SALESFORCE_FIELD_TYPES,
+  SALESFORCE_JOB_STATES,
   SALESFORCE_SUPPORTED_OBJECT_TYPE,
 } from './constants';
 
@@ -58,6 +59,25 @@ export const salesforceQueryResponse = validators.object({
     }),
   ),
   totalSize: z.number(),
+});
+
+// -
+// Jobs
+// -
+export type SalesforceJobState = (typeof SALESFORCE_JOB_STATES)[number];
+export const salesforceJob = validators.object({
+  id: z.string(),
+  operation: z.string(),
+  object: z.string().transform((v) => v as SalesforceSupportedObjectType),
+  createdById: z.string(),
+  createdDate: validators.date(),
+  systemModstamp: validators.date(),
+  state: z.string().transform((v) => v as SalesforceJobState),
+  concurrencyMode: z.string(),
+  contentType: z.string().transform((v) => v as 'CSV'), // Currently only CSV is supported.
+  apiVersion: z.string(),
+  lineEnding: z.string(),
+  columnDelimiter: z.string(),
 });
 
 // -
@@ -819,9 +839,6 @@ export const SalesforceSchemaByObjectType: Record<
 };
 
 export type SalesforceAccountType = 'Production' | 'Sandbox';
-export interface SalesforceAuthAnswers extends Record<string, string> {
-  accountType: SalesforceAccountType;
-}
 export const salesforceOAuthUrlsByAccountType: Record<
   SalesforceAccountType,
   HttpsUrl

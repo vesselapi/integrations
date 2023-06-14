@@ -1,4 +1,4 @@
-import { HttpsUrl } from '@/sdk';
+import { Auth, HttpsUrl } from '@/sdk';
 import { formatUpsertInputWithNative, makeRequestFactory } from '@/sdk/client';
 import { shake } from 'radash';
 import { z } from 'zod';
@@ -40,6 +40,7 @@ import {
   salesforceEventRelationCreateResponse,
   SalesforceEventRelationUpdate,
   SalesforceEventUpdate,
+  salesforceJob,
   salesforceLead,
   SalesforceLeadCreate,
   salesforceLeadCreateResponse,
@@ -227,6 +228,31 @@ export const client = {
     query: { q: query.replace(/ /g, '+') },
     schema: salesforceQueryResponse,
   })),
+  jobs: {
+    create: request(({ query }: { query: string }) => ({
+      url: `/jobs/query`,
+      method: 'POST',
+      body: {
+        operation: 'query',
+        query,
+      },
+      schema: salesforceJob,
+    })),
+    find: request(({ Id }: { Id: string }) => ({
+      url: `/jobs/query/${Id}`,
+      method: 'GET',
+      schema: salesforceJob,
+    })),
+    // Returns a raw response. Use `jobs.fetch` to get the CSV results.
+    fetch: async (auth: Auth, { Id }: { Id: string }) =>
+      await request.fetch()(auth, {
+        method: 'GET',
+        url: `/jobs/query/${Id}/results`,
+        headers: {
+          'Content-Type': 'text/csv',
+        },
+      }),
+  },
   users: {
     find: request(({ Id }: { Id: string }) => ({
       url: `/sobjects/User/${Id}/`,
@@ -666,4 +692,5 @@ export const client = {
     })),
   },
   passthrough: request.passthrough(),
+  fetch: request.fetch(),
 };
