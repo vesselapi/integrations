@@ -12,6 +12,7 @@ import salesloft from '@/platforms/salesloft';
 import slack from '@/platforms/slack';
 import teams from '@/platforms/teams';
 import { Platform } from '@/sdk';
+import freshdesk from './freshdesk';
 
 export {
   default as activeCampaign,
@@ -53,6 +54,7 @@ export const integrationsList: Platform<any, any, any, any, any>[] = [
   aircall,
   apollo,
   dialpad,
+  freshdesk,
   hubspot,
   mailchimp,
   outreach,
