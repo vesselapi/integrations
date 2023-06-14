@@ -111,14 +111,13 @@ export const auth = {
   }),
   basic: <TAnswers extends Record<string, string> = Record<string, string>>(
     options: {
-      questions?: (
-        | [{ type: 'text'; id: 'password'; label: string }]
+      questions?:
+        | [{ type: 'text'; id: 'password'; label: string }, ...AuthQuestion[]]
         | [
             { type: 'text'; id: 'username'; label: string },
             { type: 'text'; id: 'password'; label: string },
-          ]
-      ) &
-        AuthQuestion[];
+            ...AuthQuestion[],
+          ];
       default?: boolean;
       display?: OAuth2AuthConfig['display'];
     } = {},
