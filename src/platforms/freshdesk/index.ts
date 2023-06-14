@@ -10,7 +10,7 @@ export default platform('freshdesk', {
     ],
     display: {
       markdown: () =>
-        `- Find your Organization Subdomain by first logging into FreshDesk. The subdomain is the first part of the URL. For example, if your URL is https://example.freshdesk.com, your subdomain is "example".`,
+        `- Login to Freshdesk to find your Organization Subdomain. In your address bar, the subdomain is the first part of the URL. For example, if your URL is https://example-org.freshdesk.com, your subdomain is "example-org" without quotes.`,
     },
   }),
   display: {
