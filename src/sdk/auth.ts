@@ -101,7 +101,6 @@ export const auth = {
       ...(options.questions ?? []),
     ],
     toTokenString: (answers) => answers['api-key'],
-    toAuthHeader: (answers) => `Bearer ${answers['api-key']}`,
     display: options.display ?? {
       markdown: (
         platform,
@@ -129,12 +128,6 @@ export const auth = {
       Buffer.from(
         `${answers.username ?? ''}:${answers.password ?? ''}`,
       ).toString('base64'),
-    toAuthHeader: (answers) => {
-      const username = answers.username ?? '';
-      const password = answers.password ?? '';
-      const token = Buffer.from(`${username}:${password}`).toString('base64');
-      return `Basic ${token}`;
-    },
     display: options.display ?? {
       markdown: () => ``,
     },

@@ -89,7 +89,6 @@ export type StandardAuthConfig<
     markdown: string | ((platform: Platform<{}, any, string>) => string);
   };
   toTokenString: (answers: TAnswers) => string;
-  toAuthHeader: (answers: TAnswers) => string;
 };
 
 /**
