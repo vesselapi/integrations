@@ -61,7 +61,7 @@ export const makeRequestFactory = (
       auth: Auth,
       args: TArgs,
     ): Promise<ClientResult<z.infer<TResponseSchema>>> {
-      const { response, options } = await auth.retry(async () => {
+      const { response, url, options } = await auth.retry(async () => {
         const options = await formatFetchOptions(
           auth,
           isFunction(formatRequestOptions)
@@ -85,7 +85,7 @@ export const makeRequestFactory = (
                 Accept: 'application/json',
               },
         });
-        return { response, options };
+        return { response, options, url: options.url };
       });
 
       const text = await response.text();
@@ -98,6 +98,7 @@ export const makeRequestFactory = (
         throw new IntegrationError('HTTP error in client', {
           type: 'http',
           body,
+          url,
           status: response.status,
           headers: response.headers,
           cause: response,
@@ -117,25 +118,31 @@ export const makeRequestFactory = (
         });
 
         return {
+          // TODO: Deprecate "data" field
           data: body as z.infer<TResponseSchema>,
           $native: {
             headers: [...response.headers].reduce(
               (obj, [key, value]) => ({ ...obj, [key]: value }),
               {},
             ),
-            body: body,
+            body,
+            url,
           },
         };
       }
 
+      const headers = [...response.headers].reduce(
+        (obj, [key, value]) => ({ ...obj, [key]: value }),
+        {},
+      );
+
       return {
+        // TODO: Deprecate "data" field
         data: zodResult.data,
         $native: {
-          headers: [...response.headers].reduce(
-            (obj, [key, value]) => ({ ...obj, [key]: value }),
-            {},
-          ),
-          body: body,
+          headers,
+          body,
+          url,
         },
       };
     };

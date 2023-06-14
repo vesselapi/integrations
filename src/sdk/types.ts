@@ -19,14 +19,17 @@ export type StandardMetadata = {
 
 type BaseAuth = {
   getToken: () => Promise<string>;
+  getAuthHeader: () => Promise<string>;
   retry: (
     func: () => Promise<{
       response: Response;
       options: FetchOptions;
+      url: string;
     }>,
   ) => Promise<{
     response: Response;
     options: FetchOptions;
+    url: string;
   }>;
 };
 
@@ -225,6 +228,7 @@ export type Unification<TVertical extends string = string> = {
 type RawResponse = {
   headers: Record<string, string>;
   body: Json;
+  url: string;
 };
 
 export type ClientResult<TValidated> = {

@@ -16,6 +16,7 @@ describe('action function', () => {
           $native: {
             headers: {},
             body: {},
+            url: '',
           },
         };
       },
