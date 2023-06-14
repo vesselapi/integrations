@@ -12,11 +12,8 @@ import salesloft from '@/platforms/salesloft';
 import slack from '@/platforms/slack';
 import teams from '@/platforms/teams';
 import { Platform } from '@/sdk';
-<<<<<<< HEAD
-import freshsales from './freshsales';
-=======
 import freshdesk from './freshdesk';
->>>>>>> add_freshworks
+import freshsales from './freshsales';
 
 export {
   default as activeCampaign,
