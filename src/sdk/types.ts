@@ -19,7 +19,6 @@ export type StandardMetadata = {
 
 type BaseAuth = {
   getToken: () => Promise<string>;
-  getAuthHeader: () => Promise<string>;
   retry: (
     func: () => Promise<{
       response: Response;
