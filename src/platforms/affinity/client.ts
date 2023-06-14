@@ -1,8 +1,4 @@
-import {
-  formatBasicAuthHeader,
-  formatUrl,
-  makeRequestFactory,
-} from '@/sdk/client';
+import { formatUrl, makeRequestFactory } from '@/sdk/client';
 
 const request = makeRequestFactory(async (auth, options) => {
   return {
@@ -10,7 +6,7 @@ const request = makeRequestFactory(async (auth, options) => {
     url: formatUrl(`https://api.affinity.co`, options.url),
     headers: {
       ...options.headers,
-      Authorization: formatBasicAuthHeader('', await auth.getToken()),
+      Authorization: `Basic ${await auth.getToken()}`,
     },
   };
 });

@@ -1,9 +1,5 @@
 import { HttpsUrl } from '@/sdk';
-import {
-  formatBasicAuthHeader,
-  formatUrl,
-  makeRequestFactory,
-} from '@/sdk/client';
+import { formatUrl, makeRequestFactory } from '@/sdk/client';
 import { API_VERSION } from './constants';
 
 const request = makeRequestFactory(async (auth, options) => {
@@ -17,10 +13,7 @@ const request = makeRequestFactory(async (auth, options) => {
     url: formatUrl(`${url}/wp-json/wc/${API_VERSION}`, options.url),
     headers: {
       ...options.headers,
-      Authorization: formatBasicAuthHeader(
-        answers.consumerKey,
-        answers.consumerSecret,
-      ),
+      Authorization: `Basic ${creds}`,
     },
   };
 });
