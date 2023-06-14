@@ -21,11 +21,13 @@ export const HUBSPOT_TASK_STATUS_COMPLETED = 'COMPLETED';
 export type FindObjectInput = {
   id: string;
   associations?: HubspotCommonAssociations[];
+  properties?: string[];
 };
 export type ListObjectInput = {
   after?: string;
   limit?: number;
   associations?: HubspotCommonAssociations[];
+  properties?: string[];
 };
 export type BatchReadObjectInput = {
   ids: string[];
