@@ -111,6 +111,7 @@ export const auth = {
   basic: <TAnswers extends Record<string, string> = Record<string, string>>(
     options: {
       questions?:
+        | [{ type: 'text'; id: 'username'; label: string }, ...AuthQuestion[]]
         | [{ type: 'text'; id: 'password'; label: string }, ...AuthQuestion[]]
         | [
             { type: 'text'; id: 'username'; label: string },
