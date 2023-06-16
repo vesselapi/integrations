@@ -447,9 +447,9 @@ export const client = {
       method: 'DELETE',
       schema: z.undefined(),
     })),
-    search: query.search<typeof salesforceContact>({
-      objectType: 'Contact',
-      schema: salesforceContact,
+    search: query.search<typeof salesforceLead>({
+      objectType: 'Lead',
+      schema: salesforceLead,
     }),
   },
   notes: {
