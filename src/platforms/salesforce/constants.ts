@@ -9,6 +9,7 @@ export const SALESFORCE_SUPPORTED_OBJECT_TYPE = [
   'Lead',
   'Note',
   'ContentNote',
+  'ContentDocumentLink',
   'Task',
   'Event',
   'EventRelation',
@@ -42,4 +43,11 @@ export const SALESFORCE_FIELD_TYPES = [
   'base64',
   'location',
   'encryptedstring',
+] as const;
+export const SALESFORCE_JOB_STATES = [
+  'UploadComplete',
+  'InProgress',
+  'Aborted',
+  'JobComplete',
+  'Failed',
 ] as const;
