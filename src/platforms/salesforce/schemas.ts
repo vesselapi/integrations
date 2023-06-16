@@ -24,7 +24,7 @@ export const salesforceSObject = validators.object({
 // -
 // SObject Describe
 //  -
-export type SalesforceFieldType = (typeof SALESFORCE_FIELD_TYPES)[number];
+export type SalesforceFieldType = typeof SALESFORCE_FIELD_TYPES[number];
 export const salesforceField = validators.object({
   name: z.string(),
   label: z.string(),
@@ -66,7 +66,7 @@ export const salesforceQueryResponse = validators.object({
 // -
 // Jobs
 // -
-export type SalesforceJobState = (typeof SALESFORCE_JOB_STATES)[number];
+export type SalesforceJobState = typeof SALESFORCE_JOB_STATES[number];
 export const salesforceJob = validators.object({
   id: z.string(),
   operation: z.string(),
@@ -470,7 +470,7 @@ export const salesforceContentNoteUpdate = validators.object({
 // -
 // Task
 // -
-export type SalesforceCallType = (typeof SALESFORCE_CALL_TYPES)[number];
+export type SalesforceCallType = typeof SALESFORCE_CALL_TYPES[number];
 export const salesforceTask = validators
   .object({
     Id: z.string(),
@@ -856,7 +856,7 @@ export const salesforceOAuthUrlsByAccountType: Record<
 };
 
 export type SalesforceSupportedObjectType =
-  (typeof SALESFORCE_SUPPORTED_OBJECT_TYPE)[number];
+  typeof SALESFORCE_SUPPORTED_OBJECT_TYPE[number];
 export type SalesforceSObject = z.infer<typeof salesforceSObject>;
 export type SalesforceField = z.infer<typeof salesforceField>;
 export type SalesforceUser = z.infer<typeof salesforceUser>;
