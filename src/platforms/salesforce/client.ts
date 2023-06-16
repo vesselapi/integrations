@@ -147,35 +147,6 @@ const query = {
         }),
       }),
     ),
-  findByEmail: <T extends z.ZodType>({
-    schema,
-    objectType,
-    relationalSelect,
-  }: {
-    schema: T;
-    objectType: SalesforceSupportedObjectType;
-    relationalSelect?: Partial<Record<SalesforceSupportedObjectType, string>>;
-  }) =>
-    request(
-      ({
-        email,
-        associations,
-      }: {
-        email: string;
-        associations?: SalesforceSupportedObjectType[];
-      }) => ({
-        url: `/query/?q=${salesforceQueryBuilder.search({
-          where: { Email: email },
-          objectType,
-          relationalSelect,
-          associations,
-        })}`,
-        method: 'GET',
-        schema: z.object({
-          records: z.array(schema),
-        }),
-      }),
-    ),
   batchRead: <T extends z.ZodType>({
     schema,
     objectType,
@@ -299,10 +270,6 @@ export const client = {
   },
   contacts: {
     find: query.find<typeof salesforceContact>({
-      objectType: 'Contact',
-      schema: salesforceContact,
-    }),
-    findByEmail: query.findByEmail<typeof salesforceContact>({
       objectType: 'Contact',
       schema: salesforceContact,
     }),
@@ -455,10 +422,6 @@ export const client = {
       objectType: 'Lead',
       schema: salesforceLead,
     }),
-    findByEmail: query.findByEmail<typeof salesforceLead>({
-      objectType: 'Lead',
-      schema: salesforceLead,
-    }),
     list: query.list<typeof salesforceLead>({
       objectType: 'Lead',
       schema: salesforceLead,
@@ -484,6 +447,10 @@ export const client = {
       method: 'DELETE',
       schema: z.undefined(),
     })),
+    search: query.search<typeof salesforceContact>({
+      objectType: 'Contact',
+      schema: salesforceContact,
+    }),
   },
   notes: {
     find: query.find<typeof salesforceNote>({
