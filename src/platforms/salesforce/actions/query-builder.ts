@@ -11,8 +11,7 @@ type Brand<T, TBrand extends string> = T & {
 type SalesforceQuery = Brand<string, 'SalesforceQuery'>;
 
 const formatQuery = (query: string): SalesforceQuery => {
-  const cleanedQuery = trim(query.replace(/\n/g, ' '));
-  return cleanedQuery.replace(/ +/g, '+') as SalesforceQuery;
+  return trim(query.replace(/[\s\n]+/g, ' ')) as SalesforceQuery;
 };
 
 const buildRelationalSelectClause = (
@@ -137,11 +136,15 @@ export const salesforceQueryBuilder: Record<
     objectType,
     relationalSelect,
     associations,
+    cursor,
+    limit = MAX_QUERY_PAGE_SIZE,
   }: {
     where: Record<string, string | string[]>;
     objectType: SalesforceSupportedObjectType;
     relationalSelect?: Partial<Record<SalesforceSupportedObjectType, string>>;
     associations?: SalesforceSupportedObjectType[];
+    cursor?: string;
+    limit?: number;
   }) => {
     const selectClauses = sift([
       'SELECT FIELDS(ALL)',
@@ -156,7 +159,9 @@ export const salesforceQueryBuilder: Record<
     return formatQuery(`
       ${selectClauses.join(', ')}
       FROM ${objectType}
-      WHERE ${whereClause}')
+      WHERE ${whereClause} ${cursor ? `AND Id < '${cursor}'` : ''}
+      ORDER BY Id DESC
+      LIMIT ${limit}
     `);
   },
 };
