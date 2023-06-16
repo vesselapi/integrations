@@ -32,6 +32,7 @@ export type RequestFetchOptions<TResponseSchema extends z.ZodType> =
   HttpOptions & {
     url: `${HttpsUrl}/${string}` | `/${string}`;
     schema: TResponseSchema;
+    validateResponse?: boolean;
   };
 
 export const formatUrl = (
@@ -57,11 +58,8 @@ export const makeRequestFactory = (
       | RequestFetchOptions<TResponseSchema>
       | ((args: TArgs) => RequestFetchOptions<TResponseSchema>),
   ) {
-    return async function makeRequest(
-      auth: Auth,
-      args: TArgs,
-    ): Promise<ClientResult<z.infer<TResponseSchema>>> {
-      const { response, url, options } = await auth.retry(async () => {
+    const fetchRawResponse = async (auth: Auth, args: TArgs) =>
+      await auth.retry(async () => {
         const options = await formatFetchOptions(
           auth,
           isFunction(formatRequestOptions)
@@ -87,7 +85,11 @@ export const makeRequestFactory = (
         });
         return { response, options, url: options.url };
       });
-
+    const makeValidatedRequest = async (
+      auth: Auth,
+      args: TArgs,
+    ): Promise<ClientResult<z.infer<TResponseSchema>>> => {
+      const { response, options, url } = await fetchRawResponse(auth, args);
       const text = await response.text();
       const body = guard(
         () => JSON.parse(text),
@@ -146,6 +148,9 @@ export const makeRequestFactory = (
         },
       };
     };
+
+    makeValidatedRequest.fetchRawResponse = () => fetchRawResponse;
+    return makeValidatedRequest;
   }
 
   createRequest.passthrough = () =>
@@ -153,6 +158,12 @@ export const makeRequestFactory = (
       ...args,
       schema: z.any(),
     }));
+
+  createRequest.fetch = () =>
+    createRequest((args: HttpOptions) => ({
+      ...args,
+      schema: z.any(),
+    })).fetchRawResponse();
 
   return createRequest;
 };

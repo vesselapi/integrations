@@ -13,6 +13,7 @@ import slack from '@/platforms/slack';
 import teams from '@/platforms/teams';
 import { Platform } from '@/sdk';
 import affinity from './affinity';
+import customerIo from './customer.io';
 
 export {
   default as activeCampaign,
@@ -54,6 +55,7 @@ export const integrationsList: Platform<any, any, any, any, any>[] = [
   affinity,
   aircall,
   apollo,
+  customerIo,
   dialpad,
   hubspot,
   mailchimp,

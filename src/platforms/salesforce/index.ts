@@ -3,7 +3,7 @@ import * as constants from '@/platforms/salesforce/constants';
 import { icon } from '@/platforms/salesforce/icon';
 import { auth, platform } from '@/sdk';
 import {
-  SalesforceAuthAnswers,
+  SalesforceAccountType,
   salesforceOAuthUrlsByAccountType,
 } from './schemas';
 
@@ -25,11 +25,19 @@ export * as constants from './constants';
 export * as types from './schemas';
 
 export default platform('salesforce', {
-  auth: auth.oauth2<SalesforceAuthAnswers>({
+  auth: auth.oauth2({
     authUrl: ({ answers }) =>
-      `${salesforceOAuthUrlsByAccountType[answers.accountType]}/authorize`,
+      `${
+        salesforceOAuthUrlsByAccountType[
+          answers.accountType as SalesforceAccountType
+        ]
+      }/authorize`,
     tokenUrl: ({ answers }) =>
-      `${salesforceOAuthUrlsByAccountType[answers.accountType]}/token`,
+      `${
+        salesforceOAuthUrlsByAccountType[
+          answers.accountType as SalesforceAccountType
+        ]
+      }/token`,
     questions: [
       {
         type: 'select',
