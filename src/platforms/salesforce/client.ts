@@ -1,6 +1,6 @@
 import { Auth, HttpsUrl } from '@/sdk';
 import { formatUpsertInputWithNative, makeRequestFactory } from '@/sdk/client';
-import { shake } from 'radash';
+import { shake, trim } from 'radash';
 import { z } from 'zod';
 import { salesforceQueryBuilder } from './actions/query-builder';
 import { SALESFORCE_API_VERSION } from './constants';
@@ -14,13 +14,12 @@ import {
   SalesforceContactCreate,
   salesforceContactCreateResponse,
   SalesforceContactUpdate,
+  salesforceContentDocumentLink,
   SalesforceContentDocumentLinkCreate,
   salesforceContentDocumentLinkCreateResponse,
   salesforceContentNote,
-  salesforceContentNoteContent,
   SalesforceContentNoteCreate,
   salesforceContentNoteCreateResponse,
-  salesforceContentNoteRelationalSelect,
   SalesforceContentNoteUpdate,
   salesforceDescribeResponse,
   salesforceEmailMessage,
@@ -189,15 +188,21 @@ const query = {
       ({
         where,
         associations,
+        limit,
+        cursor,
       }: {
         where: Record<string, string | string[]>;
         associations?: SalesforceSupportedObjectType[];
+        limit?: number;
+        cursor?: string;
       }) => ({
         url: `/query/?q=${salesforceQueryBuilder.search({
           where,
           objectType,
           relationalSelect,
           associations,
+          limit,
+          cursor,
         })}`,
         method: 'GET',
         schema: z.object({
@@ -225,14 +230,14 @@ export const client = {
   query: request(({ query }: { query: string }) => ({
     url: `/query/`,
     method: 'GET',
-    query: { q: query.replace(/ /g, '+') },
+    query: { q: trim(query.replace(/[\s\n]+/g, ' ')) },
     schema: salesforceQueryResponse,
   })),
   jobs: {
     create: request(({ query }: { query: string }) => ({
       url: `/jobs/query`,
       method: 'POST',
-      body: {
+      json: {
         operation: 'query',
         query,
       },
@@ -490,17 +495,14 @@ export const client = {
     find: query.find<typeof salesforceContentNote>({
       objectType: 'ContentNote',
       schema: salesforceContentNote,
-      relationalSelect: salesforceContentNoteRelationalSelect,
     }),
     list: query.list<typeof salesforceContentNote>({
       objectType: 'ContentNote',
       schema: salesforceContentNote,
-      relationalSelect: salesforceContentNoteRelationalSelect,
     }),
     batchRead: query.batchRead<typeof salesforceContentNote>({
       objectType: 'ContentNote',
       schema: salesforceContentNote,
-      relationalSelect: salesforceContentNoteRelationalSelect,
     }),
     create: request(({ ContentNote }: SalesforceContentNoteCreate) => ({
       url: `/sobjects/ContentNote`,
@@ -519,13 +521,22 @@ export const client = {
       method: 'DELETE',
       schema: z.undefined(),
     })),
-    contentBody: request(({ Content }: { Content: string }) => ({
-      url: Content as `/${string}`,
-      method: 'GET',
-      schema: salesforceContentNoteContent,
-    })),
+    contentBody: {
+      fetch: async (auth: Auth, { Content }: { Content: string }) =>
+        await request.fetch()(auth, {
+          method: 'GET',
+          url: `/${Content.split('/').slice(4).join('/')}`,
+          headers: {
+            'Content-Type': 'text/plain',
+          },
+        }),
+    },
   },
   contentDocumentLinks: {
+    search: query.search<typeof salesforceContentDocumentLink>({
+      objectType: 'ContentDocumentLink',
+      schema: salesforceContentDocumentLink,
+    }),
     create: request(
       ({ ContentDocumentLink }: SalesforceContentDocumentLinkCreate) => ({
         url: `/sobjects/ContentDocumentLink`,
