@@ -108,4 +108,29 @@ export const auth = {
 - Copy and paste the API Key above.`,
     },
   }),
+  basic: <TAnswers extends Record<string, string> = Record<string, string>>(
+    options: {
+      questions?:
+        | [{ type: 'text'; id: 'username'; label: string }, ...AuthQuestion[]]
+        | [{ type: 'text'; id: 'password'; label: string }, ...AuthQuestion[]]
+        | [
+            { type: 'text'; id: 'username'; label: string },
+            { type: 'text'; id: 'password'; label: string },
+            ...AuthQuestion[],
+          ];
+      default?: boolean;
+      display?: OAuth2AuthConfig['display'];
+    } = {},
+  ): StandardAuthConfig<TAnswers> => ({
+    type: 'standard',
+    default: options.default ?? false,
+    questions: options.questions ?? [],
+    toTokenString: (answers) =>
+      Buffer.from(
+        `${answers.username ?? ''}:${answers.password ?? ''}`,
+      ).toString('base64'),
+    display: options.display ?? {
+      markdown: () => ``,
+    },
+  }),
 };
