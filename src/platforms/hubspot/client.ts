@@ -15,7 +15,6 @@ import {
   contactProperties,
   dealProperties,
   emailProperties,
-  FindContactByEmailInput,
   FindObjectInput,
   HubspotAssociationCreate,
   HubspotAssociationDelete,
@@ -274,27 +273,11 @@ const makeClient = () => {
         listResponseSchema(hubspotOwnerSchema),
       ),
     },
-    contacts: {
-      ...crud<HubspotContactCreate, HubspotContactUpdate, HubspotContact>(
-        'objects/contacts',
-        hubspotContactSchema,
-        contactProperties,
-      ),
-      findByEmail: request(
-        ({
-          email,
-          associations,
-          properties: requestedProperties,
-        }: FindContactByEmailInput) => ({
-          url: `/contacts/v1/contact/email/${email}/profile`,
-          method: 'GET',
-          query: shake({
-            associations: associations?.join(','),
-          }),
-          schema: hubspotContactSchema,
-        }),
-      ),
-    },
+    contacts: crud<HubspotContactCreate, HubspotContactUpdate, HubspotContact>(
+      'objects/contacts',
+      hubspotContactSchema,
+      contactProperties,
+    ),
     companies: crud<HubspotCompanyCreate, HubspotCompanyUpdate, HubspotCompany>(
       'objects/companies',
       hubspotCompanySchema,
