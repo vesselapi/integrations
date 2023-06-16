@@ -18,6 +18,9 @@ export const HUBSPOT_TASK_STATUS_COMPLETED = 'COMPLETED';
 // -
 // Client Definitions
 // -
+export type FindContactByEmailInput = {
+  email: string;
+};
 export type FindObjectInput = {
   id: string;
   associations?: HubspotCommonAssociations[];

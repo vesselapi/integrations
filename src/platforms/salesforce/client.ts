@@ -452,6 +452,10 @@ export const client = {
       method: 'DELETE',
       schema: z.undefined(),
     })),
+    search: query.search<typeof salesforceLead>({
+      objectType: 'Lead',
+      schema: salesforceLead,
+    }),
   },
   notes: {
     find: query.find<typeof salesforceNote>({
