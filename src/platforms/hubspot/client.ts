@@ -34,6 +34,7 @@ import {
   HubspotContactCreate,
   hubspotContactListSchema,
   hubspotContactSchema,
+  hubspotContactSchemaV1,
   HubspotContactUpdate,
   HubspotCustomPropertyCreate,
   HubspotDeal,
@@ -283,7 +284,7 @@ const makeClient = () => {
       findByEmail: request(({ email }: FindContactByEmailInput) => ({
         url: `/contacts/v1/contact/email/${email}/profile`,
         method: 'GET',
-        schema: hubspotContactSchema,
+        schema: hubspotContactSchemaV1,
       })),
     },
     companies: crud<HubspotCompanyCreate, HubspotCompanyUpdate, HubspotCompany>(

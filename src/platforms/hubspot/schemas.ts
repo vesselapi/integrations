@@ -1,4 +1,5 @@
 import * as custom from '@/sdk/validators';
+import { mapValues } from 'radash';
 import { z } from 'zod';
 import {
   HUBSPOT_COMMON_ASSOCIATIONS,
@@ -104,7 +105,9 @@ const hubspotBooleanSchema = z
     return val;
   });
 
-export const baseHubspotObjectSchema = <T extends z.ZodSchema>(properties: T) =>
+export const baseHubspotObjectSchemaV3 = <T extends z.ZodSchema>(
+  properties: T,
+) =>
   z.object({
     id: hubspotIdSchema,
     createdAt: z.string().transform((val) => new Date(val)),
@@ -119,6 +122,17 @@ export const baseHubspotObjectSchema = <T extends z.ZodSchema>(properties: T) =>
       .partial()
       .optional(),
   });
+export const baseHubspotObjectSchemaV1 = <T extends z.ZodObject<any>>(
+  properties: T,
+) => {
+  const v1Format = mapValues(properties.shape, (schema: z.ZodTypeAny) => {
+    return z.object({ value: schema });
+  });
+  return z.object({
+    vid: hubspotIdSchema,
+    properties: z.object(v1Format),
+  });
+};
 
 export const upsertResponseSchema = z.object({
   id: hubspotIdSchema,
@@ -154,9 +168,25 @@ const contactPropertiesSchema = z.object({
 });
 export const contactProperties = Object.keys(contactPropertiesSchema.shape);
 
-export const hubspotContactSchema = baseHubspotObjectSchema<
+export const hubspotContactSchema = baseHubspotObjectSchemaV3<
   typeof contactPropertiesSchema
 >(contactPropertiesSchema);
+
+export const hubspotContactSchemaV1 = baseHubspotObjectSchemaV1<
+  typeof contactPropertiesSchema
+>(contactPropertiesSchema);
+export const hubspotContactV1Schema = z.object({
+  firstname: z.string().nullable(),
+  lastname: z.string().nullable(),
+  email: z.string().nullable(),
+  jobtitle: z.string().nullable(),
+  phone: z.string().nullable(),
+  mobilephone: z.string().nullable(),
+  hs_lead_status: z.string().nullable(),
+  company: z.string().nullable(),
+  hubspot_owner_id: z.string().nullable(),
+  hs_all_contact_vids: z.string().nullable(),
+});
 export type HubspotContact = z.infer<typeof hubspotContactSchema>;
 
 export const hubspotContactUpsertSchema = z
@@ -198,7 +228,7 @@ const dealPropertiesSchema = z.object({
 export const dealProperties = Object.keys(dealPropertiesSchema.shape);
 
 export const hubspotDealSchema =
-  baseHubspotObjectSchema<typeof dealPropertiesSchema>(dealPropertiesSchema);
+  baseHubspotObjectSchemaV3<typeof dealPropertiesSchema>(dealPropertiesSchema);
 export type HubspotDeal = z.infer<typeof hubspotDealSchema>;
 
 export const hubspotDealUpsertSchema = z
@@ -237,7 +267,7 @@ const companyPropertiesSchema = z.object({
 });
 export const companyProperties = Object.keys(companyPropertiesSchema.shape);
 
-export const hubspotCompanySchema = baseHubspotObjectSchema<
+export const hubspotCompanySchema = baseHubspotObjectSchemaV3<
   typeof companyPropertiesSchema
 >(companyPropertiesSchema);
 export type HubspotCompany = z.infer<typeof hubspotCompanySchema>;
@@ -276,7 +306,7 @@ const notePropertiesSchema = z.object({
 export const noteProperties = Object.keys(notePropertiesSchema.shape);
 
 export const hubspotNoteSchema =
-  baseHubspotObjectSchema<typeof notePropertiesSchema>(notePropertiesSchema);
+  baseHubspotObjectSchemaV3<typeof notePropertiesSchema>(notePropertiesSchema);
 export type HubspotNote = z.infer<typeof hubspotNoteSchema>;
 
 export const hubspotNoteUpsertSchema = z
@@ -310,7 +340,7 @@ const taskPropertiesSchema = z.object({
 export const taskProperties = Object.keys(taskPropertiesSchema.shape);
 
 export const hubspotTaskSchema =
-  baseHubspotObjectSchema<typeof taskPropertiesSchema>(taskPropertiesSchema);
+  baseHubspotObjectSchemaV3<typeof taskPropertiesSchema>(taskPropertiesSchema);
 export type HubspotTask = z.infer<typeof hubspotTaskSchema>;
 
 export const hubspotTaskUpsertSchema = z
@@ -343,7 +373,7 @@ const meetingPropertiesSchema = z.object({
 });
 export const meetingProperties = Object.keys(meetingPropertiesSchema.shape);
 
-export const hubspotMeetingSchema = baseHubspotObjectSchema<
+export const hubspotMeetingSchema = baseHubspotObjectSchemaV3<
   typeof meetingPropertiesSchema
 >(meetingPropertiesSchema);
 export type HubspotMeeting = z.infer<typeof hubspotMeetingSchema>;
@@ -394,7 +424,7 @@ const emailPropertiesSchema = z.object({
 });
 export const emailProperties = Object.keys(emailPropertiesSchema.shape);
 
-export const hubspotEmailSchema = baseHubspotObjectSchema<
+export const hubspotEmailSchema = baseHubspotObjectSchemaV3<
   typeof emailPropertiesSchema
 >(emailPropertiesSchema);
 export type HubspotEmail = z.infer<typeof hubspotEmailSchema>;
@@ -457,7 +487,7 @@ const callPropertiesSchema = z.object({
 export const callProperties = Object.keys(callPropertiesSchema.shape);
 
 export const hubspotCallSchema =
-  baseHubspotObjectSchema<typeof callPropertiesSchema>(callPropertiesSchema);
+  baseHubspotObjectSchemaV3<typeof callPropertiesSchema>(callPropertiesSchema);
 export type HubspotCall = z.infer<typeof hubspotCallSchema>;
 
 export const hubspotCallCreateSchema = callPropertiesSchema
