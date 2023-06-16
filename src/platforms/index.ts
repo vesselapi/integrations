@@ -13,6 +13,7 @@ import slack from '@/platforms/slack';
 import teams from '@/platforms/teams';
 import { Platform } from '@/sdk';
 import freshdesk from './freshdesk';
+import customerIo from './customer.io';
 
 export {
   default as activeCampaign,
@@ -53,6 +54,7 @@ export const integrationsList: Platform<any, any, any, any, any>[] = [
   activeCampaign,
   aircall,
   apollo,
+  customerIo,
   dialpad,
   freshdesk,
   hubspot,
