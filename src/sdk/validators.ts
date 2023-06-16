@@ -3,8 +3,10 @@ import { z } from 'zod';
 
 export const date = () =>
   z
-    .string()
-    .datetime({ offset: true })
+    .union([
+      z.string().datetime({ offset: true }),
+      z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    ])
     .transform((value) => new Date(value));
 
 export const timestamp = (isSeconds = false) =>
