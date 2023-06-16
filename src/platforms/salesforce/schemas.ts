@@ -689,7 +689,7 @@ export const salesforceEmailMessage = validators
     Incoming: z.boolean().nullable(),
     IsBounced: z.boolean().nullable(),
     HasAttachment: z.boolean().nullable(),
-    Status: z.number().nullable(),
+    Status: z.string().nullable(),
     CreatedDate: validators.date(),
     LastModifiedDate: validators.date(),
     CreatedById: z.string().nullable(),
