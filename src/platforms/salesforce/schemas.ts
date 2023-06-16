@@ -4,6 +4,7 @@ import { z } from 'zod';
 import {
   SALESFORCE_CALL_TYPES,
   SALESFORCE_FIELD_TYPES,
+  SALESFORCE_JOB_STATES,
   SALESFORCE_SUPPORTED_OBJECT_TYPE,
 } from './constants';
 
@@ -23,7 +24,7 @@ export const salesforceSObject = validators.object({
 // -
 // SObject Describe
 //  -
-export type SalesforceFieldType = (typeof SALESFORCE_FIELD_TYPES)[number];
+export type SalesforceFieldType = typeof SALESFORCE_FIELD_TYPES[number];
 export const salesforceField = validators.object({
   name: z.string(),
   label: z.string(),
@@ -53,11 +54,32 @@ export const salesforceDescribeResponse = validators.object({
 // -
 export const salesforceQueryResponse = validators.object({
   records: z.array(
-    z.object({
-      Id: z.string(),
-    }),
+    z
+      .object({
+        Id: z.string(),
+      })
+      .passthrough(),
   ),
   totalSize: z.number(),
+});
+
+// -
+// Jobs
+// -
+export type SalesforceJobState = typeof SALESFORCE_JOB_STATES[number];
+export const salesforceJob = validators.object({
+  id: z.string(),
+  operation: z.string(),
+  object: z.string().transform((v) => v as SalesforceSupportedObjectType),
+  createdById: z.string(),
+  createdDate: validators.date(),
+  systemModstamp: validators.date(),
+  state: z.string().transform((v) => v as SalesforceJobState),
+  concurrencyMode: z.string(),
+  contentType: z.string().transform((v) => v as 'CSV'), // Currently only CSV is supported.
+  apiVersion: z.number(),
+  lineEnding: z.string(),
+  columnDelimiter: z.string(),
 });
 
 // -
@@ -66,9 +88,9 @@ export const salesforceQueryResponse = validators.object({
 export const salesforceUser = validators
   .object({
     Id: z.string(),
-    FirstName: z.string(),
-    LastName: z.string(),
-    Email: z.string(),
+    FirstName: z.string().nullable(),
+    LastName: z.string().nullable(),
+    Email: z.string().nullable(),
     CreatedDate: validators.date(),
     LastModifiedDate: validators.date(),
   })
@@ -81,16 +103,16 @@ export const salesforceUser = validators
 export const salesforceContact = validators
   .object({
     Id: z.string(),
-    FirstName: z.string(),
-    LastName: z.string(),
-    Title: z.string(),
-    Email: z.string(),
-    Phone: z.string(),
-    MobilePhone: z.string(),
+    FirstName: z.string().nullable(),
+    LastName: z.string().nullable(),
+    Title: z.string().nullable(),
+    Email: z.string().nullable(),
+    Phone: z.string().nullable(),
+    MobilePhone: z.string().nullable(),
     CreatedDate: validators.date(),
     LastModifiedDate: validators.date(),
-    AccountId: z.string(),
-    OwnerId: z.string(),
+    AccountId: z.string().nullable(),
+    OwnerId: z.string().nullable(),
   })
   .partial()
   .required(requiredFields);
@@ -134,23 +156,25 @@ export const salesforceContactUpdate = validators.object({
 export const salesforceAccount = validators
   .object({
     Id: z.string(),
-    Name: z.string(),
-    Description: z.string(),
-    Industry: z.string(),
-    AnnualRevenue: z.string(),
-    NumberOfEmployees: z.string(),
-    Website: z.string(),
-    BillingAddress: z.object({
-      street: z.string(),
-      city: z.string(),
-      state: z.string(),
-      postalCode: z.string(),
-      country: z.string(),
-    }),
-    Phone: z.string(),
+    Name: z.string().nullable(),
+    Description: z.string().nullable(),
+    Industry: z.string().nullable(),
+    AnnualRevenue: z.string().nullable(),
+    NumberOfEmployees: z.string().nullable(),
+    Website: z.string().nullable(),
+    BillingAddress: z
+      .object({
+        street: z.string().nullable(),
+        city: z.string().nullable(),
+        state: z.string().nullable(),
+        postalCode: z.string().nullable(),
+        country: z.string().nullable(),
+      })
+      .nullable(),
+    Phone: z.string().nullable(),
     CreatedDate: validators.date(),
     LastModifiedDate: validators.date(),
-    OwnerId: z.string(),
+    OwnerId: z.string().nullable(),
     Contacts: z.object({ records: z.array(z.object({ Id: z.string() })) }),
     Opportunities: z.object({ records: z.array(z.object({ Id: z.string() })) }),
   })
@@ -214,18 +238,18 @@ export const salesforceAccountUpdate = validators.object({
 export const salesforceOpportunity = validators
   .object({
     Id: z.string(),
-    Name: z.string(),
-    StageName: z.string(),
-    Amount: z.string(),
-    CloseDate: validators.date(),
-    Probability: z.string(),
-    ExpectedRevenue: z.string(),
-    IsWon: z.boolean(),
-    IsClosed: z.boolean(),
-    ContactId: z.string(),
-    AccountId: z.string(),
+    Name: z.string().nullable(),
+    StageName: z.string().nullable(),
+    Amount: z.string().nullable(),
+    CloseDate: validators.date().nullable(),
+    Probability: z.string().nullable(),
+    ExpectedRevenue: z.string().nullable(),
+    IsWon: z.boolean().nullable(),
+    IsClosed: z.boolean().nullable(),
+    ContactId: z.string().nullable(),
+    AccountId: z.string().nullable(),
     CreatedDate: validators.date(),
-    OwnerId: z.string(),
+    OwnerId: z.string().nullable(),
     LastModifiedDate: validators.date(),
   })
   .partial()
@@ -270,14 +294,14 @@ export const salesforceOpportunityUpdate = validators.object({
 export const salesforceLead = validators
   .object({
     Id: z.string(),
-    FirstName: z.string(),
-    LastName: z.string(),
-    Title: z.string(),
-    Email: z.string(),
-    Company: z.string(),
-    Phone: z.string(),
-    MobilePhone: z.string(),
-    OwnerId: z.string(),
+    FirstName: z.string().nullable(),
+    LastName: z.string().nullable(),
+    Title: z.string().nullable(),
+    Email: z.string().nullable(),
+    Company: z.string().nullable(),
+    Phone: z.string().nullable(),
+    MobilePhone: z.string().nullable(),
+    OwnerId: z.string().nullable(),
     CreatedDate: validators.date(),
     LastModifiedDate: validators.date(),
   })
@@ -327,10 +351,10 @@ export const salesforceNote = validators
     Id: z.string(),
     CreatedDate: validators.date(),
     LastModifiedDate: validators.date(),
-    Body: z.string(),
-    OwnerId: z.string(),
-    ParentId: z.string(),
-    Parent: z.object({ Type: z.string() }),
+    Body: z.string().nullable(),
+    OwnerId: z.string().nullable(),
+    ParentId: z.string().nullable(),
+    Parent: z.object({ Type: z.string() }).nullable(),
   })
   .partial()
   .required(requiredFields);
@@ -378,7 +402,8 @@ export const salesforceContentDocumentLink = z
     LinkedEntityId: z.string(),
     IsDeleted: z.boolean(),
   })
-  .partial();
+  .partial()
+  .required({ Id: true, ContentDocumentId: true, LinkedEntityId: true });
 
 export const salesforceContentDocumentLinkCreate = validators.object({
   ContentDocumentLink: z.object({
@@ -408,24 +433,15 @@ export const salesforceContentNote = validators
     Id: z.string(),
     CreatedDate: validators.date(),
     LastModifiedDate: validators.date(),
-    TextPreview: z.string(),
-    Content: z.string(), // url to fetch the Content Body.
-    OwnerId: z.string(),
+    TextPreview: z.string().nullable(),
+    Content: z.string().nullable(), // url to fetch the Content Body.
+    OwnerId: z.string().nullable(),
     ContentDocumentLinks: z.object({
       records: z.array(salesforceContentDocumentLink),
     }),
   })
   .partial()
   .required(requiredFields);
-export const salesforceContentNoteRelationalSelect = {
-  Account:
-    '(SELECT Id, ContentDocumentId, LinkedEntityId, IsDeleted FROM ContentDocumentLinks)',
-  Contact:
-    '(SELECT Id, ContentDocumentId, LinkedEntityId, IsDeleted FROM ContentDocumentLinks)',
-  Opportunity:
-    '(SELECT Id, ContentDocumentId, LinkedEntityId, IsDeleted FROM ContentDocumentLinks)',
-  Lead: '(SELECT Id, ContentDocumentId, LinkedEntityId, IsDeleted FROM ContentDocumentLinks)',
-};
 
 export const salesforceContentNoteCreate = validators.object({
   ContentNote: z
@@ -454,24 +470,27 @@ export const salesforceContentNoteUpdate = validators.object({
 // -
 // Task
 // -
-export type SalesforceCallType = (typeof SALESFORCE_CALL_TYPES)[number];
+export type SalesforceCallType = typeof SALESFORCE_CALL_TYPES[number];
 export const salesforceTask = validators
   .object({
     Id: z.string(),
     CreatedDate: validators.date(),
     LastModifiedDate: validators.date(),
-    ActivityDate: validators.date(),
-    Description: z.string(),
-    IsClosed: z.boolean(),
-    OwnerId: z.string(),
-    Priority: z.string(),
-    Status: z.string(),
-    Subject: z.string(),
-    CallDisposition: z.string(),
-    CallType: z.string().transform((v) => v as SalesforceCallType),
-    TaskSubtype: z.string(),
-    Who: z.object({ Id: z.string(), Type: z.string() }),
-    What: z.object({ Id: z.string(), Type: z.string() }),
+    ActivityDate: validators.date().nullable(),
+    Description: z.string().nullable(),
+    IsClosed: z.boolean().nullable(),
+    OwnerId: z.string().nullable(),
+    Priority: z.string().nullable(),
+    Status: z.string().nullable(),
+    Subject: z.string().nullable(),
+    CallDisposition: z.string().nullable(),
+    CallType: z
+      .string()
+      .transform((v) => v as SalesforceCallType)
+      .nullable(),
+    TaskSubtype: z.string().nullable(),
+    Who: z.object({ Id: z.string(), Type: z.string() }).nullable(),
+    What: z.object({ Id: z.string(), Type: z.string() }).nullable(),
   })
   .partial()
   .required(requiredFields);
@@ -533,26 +552,30 @@ export const salesforceEvent = validators
     OwnerId: z.string(),
     CreatedDate: validators.date(),
     LastModifiedDate: validators.date(),
-    Subject: z.string(),
-    Type: z.string(),
-    Description: z.string(),
-    StartDateTime: validators.date(),
-    EndDateTime: validators.date(),
-    Location: z.string(),
-    IsAllDayEvent: z.boolean(),
-    ActivityDate: validators.date(),
-    ActivityDateTime: validators.date(),
-    AcceptedEventInviteeIds: z.array(z.string()),
-    DeclinedEventInviteeIds: z.array(z.string()),
-    UndecidedEventInviteeIds: z.array(z.string()),
-    Who: z.object({
-      Id: z.string(),
-      Type: z.string(),
-    }),
-    What: z.object({
-      Id: z.string(),
-      Type: z.string(),
-    }),
+    Subject: z.string().nullable(),
+    Type: z.string().nullable(),
+    Description: z.string().nullable(),
+    StartDateTime: validators.date().nullable(),
+    EndDateTime: validators.date().nullable(),
+    Location: z.string().nullable(),
+    IsAllDayEvent: z.boolean().nullable(),
+    ActivityDate: validators.date().nullable(),
+    ActivityDateTime: validators.date().nullable(),
+    AcceptedEventInviteeIds: z.array(z.string()).nullable(),
+    DeclinedEventInviteeIds: z.array(z.string()).nullable(),
+    UndecidedEventInviteeIds: z.array(z.string()).nullable(),
+    Who: z
+      .object({
+        Id: z.string(),
+        Type: z.string(),
+      })
+      .nullable(),
+    What: z
+      .object({
+        Id: z.string(),
+        Type: z.string(),
+      })
+      .nullable(),
     EventRelations: z.object({
       records: z.array(
         z.object({
@@ -616,10 +639,10 @@ export const salesforceEventRelation = validators
     Id: z.string(),
     CreatedDate: validators.date(),
     LastModifiedDate: validators.date(),
-    EventId: z.string(),
-    RelationId: z.string(),
-    Status: z.string(),
-    IsInvitee: z.boolean(),
+    EventId: z.string().nullable(),
+    RelationId: z.string().nullable(),
+    Status: z.string().nullable(),
+    IsInvitee: z.boolean().nullable(),
   })
   .partial()
   .required(requiredFields);
@@ -657,21 +680,21 @@ export const salesforceEmailMessage = validators
     Id: z.string(),
     FromAddress: z.string(),
     ToAddress: z.string(),
-    CcAddress: z.string(),
-    BccAddress: z.string(),
-    Subject: z.string(),
-    TextBody: z.string(),
-    HtmlBody: z.string(),
-    MessageDate: validators.date(),
-    Incoming: z.boolean(),
-    IsBounced: z.boolean(),
-    HasAttachment: z.boolean(),
-    Status: z.number(),
+    CcAddress: z.string().nullable(),
+    BccAddress: z.string().nullable(),
+    Subject: z.string().nullable(),
+    TextBody: z.string().nullable(),
+    HtmlBody: z.string().nullable(),
+    MessageDate: validators.date().nullable(),
+    Incoming: z.boolean().nullable(),
+    IsBounced: z.boolean().nullable(),
+    HasAttachment: z.boolean().nullable(),
+    Status: z.string().nullable(),
     CreatedDate: validators.date(),
     LastModifiedDate: validators.date(),
-    CreatedById: z.string(),
-    IsArchived: z.boolean(),
-    IsDeleted: z.boolean(),
+    CreatedById: z.string().nullable(),
+    IsArchived: z.boolean().nullable(),
+    IsDeleted: z.boolean().nullable(),
     RelatedTo: z.object({
       Id: z.string(),
       Type: z.string(),
@@ -728,17 +751,21 @@ export const salesforceEmailMessageUpdate = validators.object({
 // -
 export const salesforceEmailMessageRelation = validators
   .object({
+    Id: z.string(),
     EmailMessageId: z.string(),
-    RelationId: z.string(),
-    RelationAddress: z.string(),
-    RelationObjectType: z.string(),
-    RelationType: z.string(),
-    IsDeleted: z.boolean(),
+    RelationId: z.string().nullable(),
+    RelationAddress: z.string().nullable(),
+    RelationObjectType: z.string().nullable(),
+    RelationType: z.string().nullable(),
+    IsDeleted: z.boolean().nullable(),
     CreatedDate: validators.date(),
     SystemModstamp: validators.date(),
   })
   .partial()
-  .required({ EmailMessageId: true });
+  .required({
+    ...requiredFields,
+    EmailMessageId: true,
+  });
 
 export const salesforceEmailMessageRelationCreate = validators.object({
   EmailMessageRelation: z
@@ -811,6 +838,7 @@ export const SalesforceSchemaByObjectType: Record<
   Lead: salesforceLead,
   Note: salesforceNote,
   ContentNote: salesforceContentNote,
+  ContentDocumentLink: salesforceContentDocumentLink,
   Task: salesforceTask,
   Event: salesforceEvent,
   EventRelation: salesforceEventRelation,
@@ -819,9 +847,6 @@ export const SalesforceSchemaByObjectType: Record<
 };
 
 export type SalesforceAccountType = 'Production' | 'Sandbox';
-export interface SalesforceAuthAnswers extends Record<string, string> {
-  accountType: SalesforceAccountType;
-}
 export const salesforceOAuthUrlsByAccountType: Record<
   SalesforceAccountType,
   HttpsUrl
@@ -831,7 +856,7 @@ export const salesforceOAuthUrlsByAccountType: Record<
 };
 
 export type SalesforceSupportedObjectType =
-  (typeof SALESFORCE_SUPPORTED_OBJECT_TYPE)[number];
+  typeof SALESFORCE_SUPPORTED_OBJECT_TYPE[number];
 export type SalesforceSObject = z.infer<typeof salesforceSObject>;
 export type SalesforceField = z.infer<typeof salesforceField>;
 export type SalesforceUser = z.infer<typeof salesforceUser>;
