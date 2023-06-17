@@ -159,8 +159,8 @@ export const salesforceAccount = validators
     Name: z.string().nullable(),
     Description: z.string().nullable(),
     Industry: z.string().nullable(),
-    AnnualRevenue: z.string().nullable(),
-    NumberOfEmployees: z.string().nullable(),
+    AnnualRevenue: z.union([z.number(), z.string()]).nullable(),
+    NumberOfEmployees: z.union([z.number(), z.string()]).nullable(),
     Website: z.string().nullable(),
     BillingAddress: z
       .object({
@@ -246,8 +246,8 @@ export const salesforceOpportunity = validators
     StageName: z.string().nullable(),
     Amount: z.union([z.number(), z.string()]).nullable(),
     CloseDate: validators.date().nullable(),
-    Probability: z.string().nullable(),
-    ExpectedRevenue: z.string().nullable(),
+    Probability: z.union([z.number(), z.string()]).nullable(),
+    ExpectedRevenue: z.union([z.number(), z.string()]).nullable(),
     IsWon: z.boolean().nullable(),
     IsClosed: z.boolean().nullable(),
     ContactId: z.string().nullable(),
