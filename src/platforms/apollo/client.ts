@@ -99,10 +99,25 @@ export const client = {
   },
   contacts: {
     search: request(
-      ({ q_keywords, page }: { q_keywords?: string; page?: number }) => ({
+      ({
+        q_keywords,
+        page,
+        contact_label_ids,
+        emailer_campaign_ids,
+      }: {
+        q_keywords?: string;
+        page?: number;
+        contact_label_ids?: string[];
+        emailer_campaign_ids?: string[];
+      }) => ({
         url: `/contacts/search`,
         method: 'POST',
-        json: shake({ page, q_keywords }),
+        json: shake({
+          page,
+          q_keywords,
+          contact_label_ids,
+          emailer_campaign_ids,
+        }),
         schema: z.object({
           contacts: z.array(apolloContact),
           pagination: apolloPaginatedResponse,
