@@ -141,6 +141,45 @@ export const client = {
       }),
     ),
   },
+  tags: {
+    list: request(
+      ({
+        search,
+        ids,
+        per_page = DEFAULT_PAGE_SIZE,
+        page,
+        sort_by,
+        sort_direction,
+        include_paging_counts,
+        limit_paging_counts,
+      }: {
+        search?: string;
+        ids?: string[];
+        per_page?: number;
+        page?: number;
+        sort_by?: string;
+        sort_direction?: string;
+        include_paging_counts?: boolean;
+        limit_paging_counts?: boolean;
+      }) => ({
+        url: `/tags`,
+        method: 'GET',
+        query: shake({
+          search,
+          ids,
+          per_page,
+          page,
+          sort_by,
+          sort_direction,
+          include_paging_counts,
+          limit_paging_counts,
+        }),
+        schema: z.object({
+          data: salesloftUser,
+        }),
+      }),
+    ),
+  },
   users: {
     find: request(({ id }: { id: string }) => ({
       url: `/users/${id}.json`,
