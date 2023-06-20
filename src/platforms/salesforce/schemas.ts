@@ -17,6 +17,9 @@ const requiredFields = {
 // -
 // SObjects
 // -
+export const salesforceSupportedObjectType = z.enum(
+  SALESFORCE_SUPPORTED_OBJECT_TYPE,
+);
 export const salesforceSObject = validators.object({
   sobjects: z.array(z.object({ name: z.string() })),
 });

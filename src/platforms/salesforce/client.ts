@@ -159,15 +159,18 @@ const query = {
       ({
         Ids,
         associations,
+        limit,
       }: {
         Ids: string[];
         associations?: SalesforceSupportedObjectType[];
+        limit: number;
       }) => ({
         url: `/query/?q=${salesforceQueryBuilder.batchRead({
           ids: Ids,
           objectType,
           relationalSelect,
           associations,
+          limit,
         })}`,
         method: 'GET',
         schema: z.object({
@@ -320,7 +323,7 @@ export const client = {
         cursor,
         limit,
       }: {
-        objectType?: string;
+        objectType?: SalesforceSupportedObjectType;
         cursor?: string;
         limit: number;
       }) => ({
@@ -346,7 +349,7 @@ export const client = {
         offset,
       }: {
         Id: string;
-        objectType: string;
+        objectType: SalesforceSupportedObjectType;
         limit?: number;
         offset?: number;
       }) => ({

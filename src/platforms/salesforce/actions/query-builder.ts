@@ -26,10 +26,7 @@ const buildRelationalSelectClause = (
   return clauses.join(', ');
 };
 
-export const salesforceQueryBuilder: Record<
-  string,
-  (...args: any[]) => SalesforceQuery
-> = {
+export const salesforceQueryBuilder = {
   find: ({
     id,
     objectType,
@@ -59,7 +56,7 @@ export const salesforceQueryBuilder: Record<
     associations,
   }: {
     objectType: SalesforceSupportedObjectType;
-    cursor?: number;
+    cursor?: string;
     limit?: number;
     relationalSelect?: Partial<Record<SalesforceSupportedObjectType, string>>;
     associations?: SalesforceSupportedObjectType[];
@@ -88,11 +85,13 @@ export const salesforceQueryBuilder: Record<
     objectType,
     relationalSelect,
     associations,
+    limit,
   }: {
     ids: string[];
     objectType: SalesforceSupportedObjectType;
     relationalSelect?: Partial<Record<SalesforceSupportedObjectType, string>>;
     associations?: SalesforceSupportedObjectType[];
+    limit: number;
   }) => {
     const selectClauses = sift([
       'SELECT FIELDS(ALL)',
@@ -102,6 +101,8 @@ export const salesforceQueryBuilder: Record<
       ${selectClauses.join(', ')}
       FROM ${objectType}
       WHERE Id IN ('${ids.join("','")}')
+      ORDER BY Id DESC
+      LIMIT ${limit}
     `);
   },
   listListView: ({
@@ -109,8 +110,8 @@ export const salesforceQueryBuilder: Record<
     cursor,
     limit = MAX_QUERY_PAGE_SIZE,
   }: {
-    objectType?: string;
-    cursor?: number;
+    objectType?: SalesforceSupportedObjectType;
+    cursor?: string;
     limit?: number;
   }) => {
     const getWhere = () => {
@@ -119,7 +120,7 @@ export const salesforceQueryBuilder: Record<
       }
       return (
         `WHERE Id < '${cursor}'` +
-        (objectType ? `AND SobjectType = '${objectType.toUpperCase()}'` : '')
+        (objectType ? `AND SobjectType = '${objectType}'` : '')
       );
     };
     const where = getWhere();
