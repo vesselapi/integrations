@@ -104,11 +104,15 @@ export const client = {
         page,
         contact_label_ids,
         emailer_campaign_ids,
+        sort_by_field,
+        sort_ascending,
       }: {
         q_keywords?: string;
         page?: number;
         contact_label_ids?: string[];
         emailer_campaign_ids?: string[];
+        sort_by_field?: string;
+        sort_ascending?: boolean;
       }) => ({
         url: `/contacts/search`,
         method: 'POST',
@@ -117,6 +121,8 @@ export const client = {
           q_keywords,
           contact_label_ids,
           emailer_campaign_ids,
+          sort_by_field,
+          sort_ascending,
         }),
         schema: z.object({
           contacts: z.array(apolloContact),
