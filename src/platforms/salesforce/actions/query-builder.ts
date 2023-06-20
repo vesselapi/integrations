@@ -85,13 +85,13 @@ export const salesforceQueryBuilder = {
     objectType,
     relationalSelect,
     associations,
-    limit,
+    limit = MAX_QUERY_PAGE_SIZE,
   }: {
     ids: string[];
     objectType: SalesforceSupportedObjectType;
     relationalSelect?: Partial<Record<SalesforceSupportedObjectType, string>>;
     associations?: SalesforceSupportedObjectType[];
-    limit: number;
+    limit?: number;
   }) => {
     const selectClauses = sift([
       'SELECT FIELDS(ALL)',
