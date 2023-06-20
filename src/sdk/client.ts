@@ -1,7 +1,7 @@
 import { IntegrationError } from '@/sdk/error';
 import { Auth, ClientResult, HttpsUrl } from '@/sdk/types';
 import { guard, isFunction, omit, trim } from 'radash';
-import * as undici from 'undici';
+import { request as undiciRequest } from 'undici';
 import { z } from 'zod';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
@@ -54,7 +54,7 @@ const _requestWithUndici = async ({
     headers: Record<string, string>;
   };
 }) => {
-  const response = await undici.request(options.url, {
+  const response = await undiciRequest(options.url, {
     body: options.json ? JSON.stringify(options.json) : undefined,
     method: options.method,
     headers: options.headers,
