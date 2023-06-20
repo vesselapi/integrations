@@ -1,6 +1,6 @@
 {
   "name": "@vesselapi/integrations",
-  "version": "0.0.122",
+  "version": "0.0.123",
   "description": "Vessel integrations",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -44,6 +44,7 @@
     "libphonenumber-js": "^1.10.24",
     "radash": "^10.8.1",
     "type-fest": "^3.8.0",
+    "undici": "^5.22.1",
     "zod": "^3.21.4"
   }
 }
