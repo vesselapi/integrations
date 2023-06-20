@@ -112,7 +112,7 @@ export const client = {
         contact_label_ids?: string[];
         emailer_campaign_ids?: string[];
         sort_by_field?: string;
-        sort_ascending: boolean;
+        sort_ascending?: boolean;
       }) => ({
         url: `/contacts/search`,
         method: 'POST',
