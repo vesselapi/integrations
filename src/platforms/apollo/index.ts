@@ -20,6 +20,12 @@ import searchEmails from './actions/emails/search';
 
 import listEmailAccounts from './actions/email-accounts/list';
 
+import searchTasks from './actions/tasks/search';
+import markTasksComplete from './actions/tasks/mark-complete';
+
+import createCall from './actions/calls/create';
+import listCallDispositions from './actions/calls/dispositions-list';
+
 import createSequence from './actions/sequences/create';
 import searchSequences from './actions/sequences/search';
 import startSequence from './actions/sequences/start';
@@ -69,6 +75,12 @@ export default platform('apollo', {
     searchEmails,
 
     listEmailAccounts,
+
+    searchTasks,
+    markTasksComplete,
+
+    createCall,
+    listCallDispositions,
 
     createSequence,
     searchSequences,
