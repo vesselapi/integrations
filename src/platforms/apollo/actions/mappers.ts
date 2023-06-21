@@ -122,6 +122,8 @@ export const transformTask = (task: ApolloTask) => {
     starredByUserIds: task.starred_by_user_ids,
     salesforceId: task.salesforce_id,
     hubspotId: task.hubspot_id,
+    contact: task.contact ? transformContact(task.contact) : null,
+    account: task.account ? transformAccount(task.account) : null,
   };
 };
 
