@@ -59,9 +59,11 @@ const _requestWithUndici = async ({
     method: options.method,
     headers: options.headers,
   });
+  const text = await response.body.text();
   return {
     ok: response.statusCode <= 399,
-    text: await response.body.text(),
+    text: () => text,
+    json: () => guard(() => JSON.parse(text)),
     status: response.statusCode,
     headers: response.headers as Record<string, string>,
     response,
@@ -87,9 +89,11 @@ const _requestWithFetch = async ({
   });
   const responseHeaders: Record<string, string> = {};
   response.headers.forEach((k, v) => (responseHeaders[k] = v));
+  const text = await response.text();
   return {
-    ok: response.ok,
-    text: await response.text(),
+    ok: response.status <= 399,
+    text: () => text,
+    json: () => guard(() => JSON.parse(text)),
     status: response.status,
     headers: responseHeaders,
     response,
@@ -155,7 +159,7 @@ export const makeRequestFactory = (
       const response = await fetchRawResponse(auth, args);
 
       const body = guard(
-        () => JSON.parse(response.text),
+        () => JSON.parse(response.text()),
         (err) => err instanceof SyntaxError,
       ) ?? { body: response.text };
 
