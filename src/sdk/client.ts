@@ -1,7 +1,7 @@
 import { IntegrationError } from '@/sdk/error';
 import { Auth, ClientResult, HttpsUrl } from '@/sdk/types';
-import { guard, isFunction, isObject, omit, trim } from 'radash';
 import axios from 'axios';
+import { guard, isFunction, isObject, omit, trim } from 'radash';
 import { z } from 'zod';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
