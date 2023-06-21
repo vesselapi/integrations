@@ -11,10 +11,9 @@ export default action(
     resource: 'calls',
     mutation: true,
     schema: z.object({
-      phoneCallOutcomeId: z.string(),
+      dispositionId: z.string(),
       contactId: z.string(),
       note: z.string().nullish(),
-      phoneCallPurposeId: z.string().nullish(),
     }),
     scopes: [],
   },
@@ -23,8 +22,7 @@ export default action(
       contact_id: input.contactId,
       note: input.note,
       mark_all_sequences_as_finished: true,
-      phone_call_outcome_id: input.phoneCallOutcomeId,
-      phone_call_purpose_id: input.phoneCallPurposeId,
+      phone_call_outcome_id: input.dispositionId,
       // Generate a new cache key to force a cache miss.
       cacheKey: random(0, 1e12),
     });

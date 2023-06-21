@@ -264,7 +264,6 @@ export const apolloCall = z.object({
   contact_id: z.string(),
   account_id: z.string().nullish(),
   phone_call_outcome_id: z.string().nullish(),
-  phone_call_purpose_id: z.string().nullish(),
   recording_url: z.string().nullish(),
   inbound: z.boolean().nullish(),
   from_number: z.string().nullish(),
@@ -281,7 +280,6 @@ export const apolloCallCreate = z.object({
   phone_call_outcome_id: z.string(),
   note: z.string().nullish(),
   mark_all_sequences_as_finished: z.boolean(),
-  phone_call_purpose_id: z.string().nullish(),
   cacheKey: z.number(),
 });
 export type ApolloCallCreate = z.infer<typeof apolloCallCreate>;
