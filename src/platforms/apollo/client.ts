@@ -10,6 +10,9 @@ import {
   apolloAccount,
   ApolloAccountCreate,
   ApolloAccountUpdate,
+  apolloBootstrappedDataSchema,
+  apolloCall,
+  ApolloCallCreate,
   apolloContact,
   ApolloContactCreate,
   ApolloContactUpdate,
@@ -25,6 +28,9 @@ import {
   apolloPerson,
   apolloSequence,
   apolloSequenceStep,
+  apolloTask,
+  ApolloTaskBulkCompleteInput,
+  apolloTaskBulkCompleteResponse,
   ApolloUpdateSequenceTemplate,
   apolloUser,
 } from './schemas';
@@ -310,6 +316,43 @@ export const client = {
           people: z.array(apolloPerson),
           pagination: apolloPaginatedResponse,
         }),
+      }),
+    ),
+  },
+  tasks: {
+    search: request(
+      ({ user_id, page }: { user_id?: string; page?: number }) => ({
+        url: `/tasks/search`,
+        method: 'POST',
+        json: shake({ page, user_id }),
+        schema: z.object({
+          tasks: z.array(apolloTask),
+          pagination: apolloPaginatedResponse,
+        }),
+      }),
+    ),
+    markComplete: request((bulkComplete: ApolloTaskBulkCompleteInput) => ({
+      url: `/tasks/bulk_complete`,
+      method: 'POST',
+      json: shake(bulkComplete),
+      schema: apolloTaskBulkCompleteResponse,
+    })),
+  },
+  calls: {
+    create: request((call: ApolloCallCreate) => ({
+      url: `/phone_calls`,
+      method: 'POST',
+      json: shake(formatUpsertInputWithNative(call)),
+      schema: z.object({
+        phone_call: apolloCall,
+      }),
+    })),
+    additionalBootstrappedData: request(
+      ({ cacheKey }: { cacheKey: number }) => ({
+        url: `/auth/additional_bootstrapped_data`,
+        method: 'GET',
+        query: shake({ cacheKey }),
+        schema: apolloBootstrappedDataSchema,
       }),
     ),
   },
