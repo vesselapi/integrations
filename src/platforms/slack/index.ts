@@ -17,8 +17,8 @@ export default platform('slack', {
     oauthBodyFormat: 'form',
     scopeSeparator: ',',
     default: true,
-    isRetryable: async ({ response }) => {
-      const zodResult = slackExpiredAuth.safeParse(await response.json());
+    isRetryable: async ({ json }) => {
+      const zodResult = slackExpiredAuth.safeParse(json());
       return zodResult.success;
     },
   }),

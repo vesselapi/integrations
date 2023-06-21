@@ -9,7 +9,7 @@ export default platform('pipedrive', {
     authUrl: `https://oauth.pipedrive.com/oauth/authorize`,
     tokenUrl: `https://oauth.pipedrive.com/oauth/token`,
     tokenAuth: 'body',
-    isRetryable: async ({ response }) => response.status === 401,
+    isRetryable: async ({ status }) => status === 401,
     default: true,
   }),
   display: { name: 'Pipedrive', iconURI: icon, categories: ['crm'] },

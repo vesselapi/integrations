@@ -3,8 +3,6 @@ import * as constants from '@/platforms/shopify/constants';
 import { icon } from '@/platforms/shopify/icon';
 import { auth, platform } from '@/sdk';
 
-export * as types from '@/platforms/slack/schemas';
-
 export default platform('shopify', {
   auth: auth.oauth2({
     authUrl: ({ answers }) =>

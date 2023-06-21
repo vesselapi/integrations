@@ -122,6 +122,8 @@ export const transformTask = (task: ApolloTask) => {
     starredByUserIds: task.starred_by_user_ids,
     salesforceId: task.salesforce_id,
     hubspotId: task.hubspot_id,
+    contact: task.contact ? transformContact(task.contact) : null,
+    account: task.account ? transformAccount(task.account) : null,
   };
 };
 
@@ -211,9 +213,12 @@ export const transformPerson = (person: ApolloPerson) => {
   };
 };
 
-export const transformPagination = (pagination: ApolloPaginatedResponse) => {
+export const transformPagination = (
+  pagination: ApolloPaginatedResponse,
+  page: number = 1,
+) => {
   return {
-    page: pagination.page,
+    page: pagination.page ?? page,
     perPage: pagination.per_page,
     totalEntries: pagination.total_entries,
     totalPages: pagination.total_pages,

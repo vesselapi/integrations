@@ -28,7 +28,7 @@ export default action(
     });
 
     return {
-      people: result.data.people.map(transformPerson),
+      people: result.data.people.map(transformPerson, input.page),
       contacts: result.data.contacts.map(transformContact),
       pagination: transformPagination(result.data.pagination),
       $native: result.$native,
