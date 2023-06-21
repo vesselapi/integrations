@@ -348,12 +348,14 @@ export const client = {
         phone_call: apolloCall,
       }),
     })),
-    dispositions: request(({ cacheKey }: { cacheKey: number }) => ({
-      url: `/auth/additional_bootstrapped_data`,
-      method: 'GET',
-      query: shake({ cacheKey }),
-      schema: apolloBootstrappedDataSchema,
-    })),
+    additionalBootstrappedData: request(
+      ({ cacheKey }: { cacheKey: number }) => ({
+        url: `/auth/additional_bootstrapped_data`,
+        method: 'GET',
+        query: shake({ cacheKey }),
+        schema: apolloBootstrappedDataSchema,
+      }),
+    ),
   },
   sequenceSteps: {
     create: request((step: ApolloCreateSequenceStep) => ({

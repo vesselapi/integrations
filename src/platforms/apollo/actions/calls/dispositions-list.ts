@@ -7,14 +7,14 @@ import { z } from 'zod';
 export default action(
   'calls-dispositions',
   {
-    operation: 'dispositions',
+    operation: 'dispositions-list',
     resource: 'calls',
     mutation: false,
     schema: z.object({}),
     scopes: [],
   },
   async ({ auth }) => {
-    const result = await client.calls.dispositions(auth, {
+    const result = await client.calls.additionalBootstrappedData(auth, {
       // Generate a new cache key to force a cache miss.
       cacheKey: random(0, 1e12),
     });
