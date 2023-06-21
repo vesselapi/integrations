@@ -65,7 +65,10 @@ export default platform('hubspot', {
     tokenAuth: 'body',
     isRetryable: async ({ status, json }) => {
       if (status === 204) return false;
-      const { category } = json();
+      const { category } = json() as { category?: string };
+      if (!category) {
+        return false;
+      }
       const checkExpiredAuth = async () =>
         ['EXPIRED_AUTHENTICATION', 'INVALID_AUTHENTICATION'].includes(category);
       return (await guard(checkExpiredAuth)) ?? false;
