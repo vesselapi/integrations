@@ -5,6 +5,7 @@ import {
 import { client } from '@/platforms/apollo/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
+import { DEFAULT_PAGE_SIZE } from '../../constants';
 
 export default action(
   'search-tasks',
@@ -22,6 +23,7 @@ export default action(
     const result = await client.tasks.search(auth, {
       user_ids: input.userIds,
       page: input.page,
+      per_page: DEFAULT_PAGE_SIZE,
     });
 
     return {
