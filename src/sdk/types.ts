@@ -1,7 +1,7 @@
 import { CamelCasedPropertiesDeep } from 'type-fest';
+import { Dispatcher } from 'undici';
 import { z } from 'zod';
 import { HttpOptions } from './client';
-import { Dispatcher } from 'undici';
 
 export type Fetch = typeof fetch;
 
