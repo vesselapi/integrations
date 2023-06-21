@@ -211,9 +211,12 @@ export const transformPerson = (person: ApolloPerson) => {
   };
 };
 
-export const transformPagination = (pagination: ApolloPaginatedResponse) => {
+export const transformPagination = (
+  pagination: ApolloPaginatedResponse,
+  page: number = 1,
+) => {
   return {
-    page: pagination.page,
+    page: pagination.page ?? page,
     perPage: pagination.per_page,
     totalEntries: pagination.total_entries,
     totalPages: pagination.total_pages,

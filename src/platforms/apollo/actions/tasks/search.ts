@@ -25,7 +25,7 @@ export default action(
     });
 
     return {
-      pagination: transformPagination(result.data.pagination),
+      pagination: transformPagination(result.data.pagination, input.page),
       tasks: result.data.tasks.map(transformTask),
       $native: result.$native,
     };
