@@ -63,14 +63,12 @@ export default platform('hubspot', {
     authUrl: `https://app.hubspot.com/oauth/authorize`,
     tokenUrl: `https://api.hubapi.com/oauth/v1/token`,
     tokenAuth: 'body',
-    isRetryable: async ({ status, json }) => {
-      if (status === 204) return false;
-      const { category } = json() as { category?: string };
-      if (!category) {
-        return false;
-      }
+    isRetryable: async ({ response }) => {
+      if (response.status === 204) return false;
       const checkExpiredAuth = async () =>
-        ['EXPIRED_AUTHENTICATION', 'INVALID_AUTHENTICATION'].includes(category);
+        ['EXPIRED_AUTHENTICATION', 'INVALID_AUTHENTICATION'].includes(
+          (await response.json()).category,
+        );
       return (await guard(checkExpiredAuth)) ?? false;
     },
     default: true,
