@@ -1,5 +1,4 @@
 import { CamelCasedPropertiesDeep } from 'type-fest';
-import type { Dispatcher } from 'undici';
 import { z } from 'zod';
 import { HttpOptions } from './client';
 
@@ -22,7 +21,7 @@ type BaseFetchResult = {
   status: number;
   text: () => string;
   json: () => Json;
-  response: Response | Dispatcher.ResponseData;
+  response: Response | unknown;
 };
 
 type BaseAuth = {
