@@ -9,7 +9,7 @@ export type HttpErrorMeta = {
   url: string;
   body: string | object | object[];
   cause?: unknown;
-  headers: Headers;
+  headers: Record<string, string | string[]>;
 };
 
 export type ClientErrorMeta = {
