@@ -379,7 +379,7 @@ export const apolloBootstrappedDataSchema = z.object({
   bootstrapped_data: z.object({
     current_user_id: z.string().nullish(),
     current_team_id: z.string().nullish(),
-    phone_call_dispositions: z.array(apolloCallDisposition).nullish(),
+    phone_call_outcomes: z.array(apolloCallDisposition).nullish(),
   }),
 });
 

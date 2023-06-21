@@ -13,14 +13,14 @@ export default action(
     resource: 'tasks',
     mutation: false,
     schema: z.object({
-      userId: z.string().optional(),
+      userIds: z.array(z.string()).optional(),
       page: z.number().optional(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
     const result = await client.tasks.search(auth, {
-      user_id: input.userId,
+      user_ids: input.userIds,
       page: input.page,
     });
 
