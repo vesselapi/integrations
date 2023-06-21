@@ -10,6 +10,9 @@ import {
   apolloAccount,
   ApolloAccountCreate,
   ApolloAccountUpdate,
+  apolloBootstrappedDataSchema,
+  apolloCall,
+  ApolloCallCreate,
   apolloContact,
   ApolloContactCreate,
   ApolloContactUpdate,
@@ -25,6 +28,9 @@ import {
   apolloPerson,
   apolloSequence,
   apolloSequenceStep,
+  apolloTask,
+  ApolloTaskBulkCompleteInput,
+  apolloTaskBulkCompleteResponse,
   ApolloUpdateSequenceTemplate,
   apolloUser,
 } from './schemas';
@@ -99,10 +105,31 @@ export const client = {
   },
   contacts: {
     search: request(
-      ({ q_keywords, page }: { q_keywords?: string; page?: number }) => ({
+      ({
+        q_keywords,
+        page,
+        contact_label_ids,
+        emailer_campaign_ids,
+        sort_by_field,
+        sort_ascending,
+      }: {
+        q_keywords?: string;
+        page?: number;
+        contact_label_ids?: string[];
+        emailer_campaign_ids?: string[];
+        sort_by_field?: string;
+        sort_ascending?: boolean;
+      }) => ({
         url: `/contacts/search`,
         method: 'POST',
-        json: shake({ page, q_keywords }),
+        json: shake({
+          page,
+          q_keywords,
+          contact_label_ids,
+          emailer_campaign_ids,
+          sort_by_field,
+          sort_ascending,
+        }),
         schema: z.object({
           contacts: z.array(apolloContact),
           pagination: apolloPaginatedResponse,
@@ -289,6 +316,49 @@ export const client = {
           people: z.array(apolloPerson),
           pagination: apolloPaginatedResponse,
         }),
+      }),
+    ),
+  },
+  tasks: {
+    search: request(
+      ({ user_ids, page }: { user_ids?: string[]; page?: number }) => ({
+        url: `/tasks/search`,
+        method: 'POST',
+        json: shake({
+          page,
+          user_ids,
+          sort_ascending: true,
+          open_factor_names: ['task_types'],
+          show_suggestions: false,
+        }),
+        schema: z.object({
+          tasks: z.array(apolloTask),
+          pagination: apolloPaginatedResponse,
+        }),
+      }),
+    ),
+    markComplete: request((bulkComplete: ApolloTaskBulkCompleteInput) => ({
+      url: `/tasks/bulk_complete`,
+      method: 'POST',
+      json: shake(bulkComplete),
+      schema: apolloTaskBulkCompleteResponse,
+    })),
+  },
+  calls: {
+    create: request((call: ApolloCallCreate) => ({
+      url: `/phone_calls`,
+      method: 'POST',
+      json: shake(formatUpsertInputWithNative(call)),
+      schema: z.object({
+        phone_call: apolloCall,
+      }),
+    })),
+    additionalBootstrappedData: request(
+      ({ cacheKey }: { cacheKey: number }) => ({
+        url: `/auth/additional_bootstrapped_data`,
+        method: 'GET',
+        query: shake({ cacheKey }),
+        schema: apolloBootstrappedDataSchema,
       }),
     ),
   },

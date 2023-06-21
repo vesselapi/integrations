@@ -17,6 +17,9 @@ const requiredFields = {
 // -
 // SObjects
 // -
+export const salesforceSupportedObjectType = z.enum(
+  SALESFORCE_SUPPORTED_OBJECT_TYPE,
+);
 export const salesforceSObject = validators.object({
   sobjects: z.array(z.object({ name: z.string() })),
 });
@@ -159,8 +162,8 @@ export const salesforceAccount = validators
     Name: z.string().nullable(),
     Description: z.string().nullable(),
     Industry: z.string().nullable(),
-    AnnualRevenue: z.string().nullable(),
-    NumberOfEmployees: z.string().nullable(),
+    AnnualRevenue: z.union([z.number(), z.string()]).nullable(),
+    NumberOfEmployees: z.union([z.number(), z.string()]).nullable(),
     Website: z.string().nullable(),
     BillingAddress: z
       .object({
@@ -175,8 +178,12 @@ export const salesforceAccount = validators
     CreatedDate: validators.date(),
     LastModifiedDate: validators.date(),
     OwnerId: z.string().nullable(),
-    Contacts: z.object({ records: z.array(z.object({ Id: z.string() })) }),
-    Opportunities: z.object({ records: z.array(z.object({ Id: z.string() })) }),
+    Contacts: z
+      .object({ records: z.array(z.object({ Id: z.string() })) })
+      .nullable(),
+    Opportunities: z
+      .object({ records: z.array(z.object({ Id: z.string() })) })
+      .nullable(),
   })
   .partial()
   .required(requiredFields);
@@ -240,10 +247,10 @@ export const salesforceOpportunity = validators
     Id: z.string(),
     Name: z.string().nullable(),
     StageName: z.string().nullable(),
-    Amount: z.string().nullable(),
+    Amount: z.union([z.number(), z.string()]).nullable(),
     CloseDate: validators.date().nullable(),
-    Probability: z.string().nullable(),
-    ExpectedRevenue: z.string().nullable(),
+    Probability: z.union([z.number(), z.string()]).nullable(),
+    ExpectedRevenue: z.union([z.number(), z.string()]).nullable(),
     IsWon: z.boolean().nullable(),
     IsClosed: z.boolean().nullable(),
     ContactId: z.string().nullable(),
@@ -436,9 +443,11 @@ export const salesforceContentNote = validators
     TextPreview: z.string().nullable(),
     Content: z.string().nullable(), // url to fetch the Content Body.
     OwnerId: z.string().nullable(),
-    ContentDocumentLinks: z.object({
-      records: z.array(salesforceContentDocumentLink),
-    }),
+    ContentDocumentLinks: z
+      .object({
+        records: z.array(salesforceContentDocumentLink),
+      })
+      .nullable(),
   })
   .partial()
   .required(requiredFields);
@@ -489,8 +498,8 @@ export const salesforceTask = validators
       .transform((v) => v as SalesforceCallType)
       .nullable(),
     TaskSubtype: z.string().nullable(),
-    Who: z.object({ Id: z.string(), Type: z.string() }).nullable(),
-    What: z.object({ Id: z.string(), Type: z.string() }).nullable(),
+    Who: z.object({ Id: z.string(), Type: z.string().optional() }).nullable(),
+    What: z.object({ Id: z.string(), Type: z.string().optional() }).nullable(),
   })
   .partial()
   .required(requiredFields);
@@ -567,22 +576,24 @@ export const salesforceEvent = validators
     Who: z
       .object({
         Id: z.string(),
-        Type: z.string(),
+        Type: z.string().optional(),
       })
       .nullable(),
     What: z
       .object({
         Id: z.string(),
-        Type: z.string(),
+        Type: z.string().optional(),
       })
       .nullable(),
-    EventRelations: z.object({
-      records: z.array(
-        z.object({
-          Id: z.string(),
-        }),
-      ),
-    }),
+    EventRelations: z
+      .object({
+        records: z.array(
+          z.object({
+            Id: z.string(),
+          }),
+        ),
+      })
+      .nullable(),
   })
   .partial()
   .required(requiredFields);
@@ -695,10 +706,12 @@ export const salesforceEmailMessage = validators
     CreatedById: z.string().nullable(),
     IsArchived: z.boolean().nullable(),
     IsDeleted: z.boolean().nullable(),
-    RelatedTo: z.object({
-      Id: z.string(),
-      Type: z.string(),
-    }),
+    RelatedTo: z
+      .object({
+        Id: z.string(),
+        Type: z.string().optional(),
+      })
+      .nullable(),
   })
   .partial()
   .required({

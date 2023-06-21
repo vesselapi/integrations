@@ -15,7 +15,9 @@ export default action(
     scopes: [],
   },
   async ({ input, auth }) => {
-    const result = await client.listViews.find(auth, { Id: input.id });
+    const result = await client.listViews.find(auth, {
+      Id: input.id,
+    });
 
     return {
       ...transformListView(result.data),
