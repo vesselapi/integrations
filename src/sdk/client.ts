@@ -166,7 +166,7 @@ export const makeRequestFactory = (
     ): Promise<ClientResult<z.infer<TResponseSchema>>> => {
       const response = await fetchRawResponse(auth, args);
 
-      const body = response.json ?? { body: response.text };
+      const body = response.json() ?? { body: response.text };
 
       if (!response.ok) {
         throw new IntegrationError('HTTP error in client', {

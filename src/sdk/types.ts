@@ -1,6 +1,7 @@
 import { CamelCasedPropertiesDeep } from 'type-fest';
 import { z } from 'zod';
 import { HttpOptions } from './client';
+import { Dispatcher } from 'undici';
 
 export type Fetch = typeof fetch;
 
@@ -20,7 +21,8 @@ export type StandardMetadata = {
 type BaseFetchResult = {
   status: number;
   text: () => string;
-  json: () => any;
+  json: () => Json;
+  response: Response | Dispatcher.ResponseData;
 };
 
 type BaseAuth = {
