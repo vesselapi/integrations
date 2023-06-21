@@ -62,9 +62,9 @@ const _requestWithAxios = async ({
   });
   return {
     ok: response.status <= 399,
-    text: isObject(response.data)
-      ? JSON.stringify(response.data)
-      : response.data,
+    text: () =>
+      isObject(response.data) ? JSON.stringify(response.data) : response.data,
+    json: () => (isObject(response.data) ? response.data : null),
     status: response.status,
     headers: response.headers as Record<string, string>,
     response,
@@ -90,9 +90,15 @@ const _requestWithFetch = async ({
   });
   const responseHeaders: Record<string, string> = {};
   response.headers.forEach((k, v) => (responseHeaders[k] = v));
+  const text = await response.text();
   return {
-    ok: response.ok,
-    text: await response.text(),
+    ok: response.status <= 399,
+    text: () => text,
+    json: () =>
+      guard(
+        () => JSON.parse(text),
+        (err) => err instanceof SyntaxError,
+      ),
     status: response.status,
     headers: responseHeaders,
     response,
@@ -156,11 +162,7 @@ export const makeRequestFactory = (
       args: TArgs,
     ): Promise<ClientResult<z.infer<TResponseSchema>>> => {
       const response = await fetchRawResponse(auth, args);
-
-      const body = guard(
-        () => JSON.parse(response.text),
-        (err) => err instanceof SyntaxError,
-      ) ?? { body: response.text };
+      const body = response.json() ?? { body: response.text };
 
       if (!response.ok) {
         throw new IntegrationError('HTTP error in client', {
