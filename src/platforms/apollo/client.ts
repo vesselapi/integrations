@@ -321,10 +321,16 @@ export const client = {
   },
   tasks: {
     search: request(
-      ({ user_id, page }: { user_id?: string; page?: number }) => ({
+      ({ user_ids, page }: { user_ids?: string[]; page?: number }) => ({
         url: `/tasks/search`,
         method: 'POST',
-        json: shake({ page, user_id }),
+        json: shake({
+          page,
+          user_ids,
+          sort_ascending: true,
+          open_factor_names: ['task_types'],
+          show_suggestions: false,
+        }),
         schema: z.object({
           tasks: z.array(apolloTask),
           pagination: apolloPaginatedResponse,

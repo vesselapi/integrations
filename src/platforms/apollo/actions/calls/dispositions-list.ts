@@ -21,7 +21,7 @@ export default action(
 
     return {
       dispositions:
-        result.data.bootstrapped_data.phone_call_dispositions.map(
+        result.data.bootstrapped_data.phone_call_outcomes?.map(
           transformDisposition,
         ) ?? [],
       $native: result.$native,
