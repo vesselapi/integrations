@@ -25,7 +25,7 @@ export default action(
     });
 
     return {
-      pagination: transformPagination(result.data.pagination),
+      pagination: transformPagination(result.data.pagination, input.page),
       emailerCampaigns: result.data.emailer_campaigns.map(transformSequence),
       $native: result.$native,
     };

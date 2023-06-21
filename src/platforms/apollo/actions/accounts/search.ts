@@ -26,7 +26,7 @@ export default action(
 
     return {
       accounts: result.data.accounts.map(transformAccount),
-      pagination: transformPagination(result.data.pagination),
+      pagination: transformPagination(result.data.pagination, input.page),
       $native: result.$native,
     };
   },

@@ -26,7 +26,7 @@ export default action(
 
     return {
       contacts: result.data.contacts.map(transformContact),
-      pagination: transformPagination(result.data.pagination),
+      pagination: transformPagination(result.data.pagination, input.page),
       $native: result.$native,
     };
   },

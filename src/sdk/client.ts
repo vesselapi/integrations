@@ -1,7 +1,7 @@
 import { IntegrationError } from '@/sdk/error';
 import { Auth, ClientResult, HttpsUrl } from '@/sdk/types';
-import axios from 'axios';
-import { guard, isFunction, isObject, omit, trim } from 'radash';
+import axios, { AxiosError } from 'axios';
+import { guard, isFunction, isObject, omit, trim, tryit } from 'radash';
 import { z } from 'zod';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
@@ -54,12 +54,24 @@ const _requestWithAxios = async ({
     headers: Record<string, string>;
   };
 }) => {
-  const response = await axios.request({
-    url: options.url,
-    data: options.json,
-    method: options.method,
-    headers: options.headers,
-  });
+  const [err, axiosResp] = await tryit(() =>
+    axios.request({
+      url: options.url,
+      data: options.json,
+      method: options.method,
+      headers: options.headers,
+    }),
+  )();
+
+  const getResponse = () => {
+    if (axiosResp) {
+      return axiosResp;
+    } else if (err && err instanceof AxiosError && err.response) {
+      return err.response;
+    }
+    throw err;
+  };
+  const response = getResponse();
   return {
     ok: response.status <= 399,
     text: () =>
