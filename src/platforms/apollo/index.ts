@@ -20,8 +20,8 @@ import searchEmails from './actions/emails/search';
 
 import listEmailAccounts from './actions/email-accounts/list';
 
-import searchTasks from './actions/tasks/search';
 import markTasksComplete from './actions/tasks/mark-complete';
+import searchTasks from './actions/tasks/search';
 
 import createCall from './actions/calls/create';
 import listCallDispositions from './actions/calls/dispositions-list';

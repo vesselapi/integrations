@@ -8,7 +8,7 @@ export default action(
   {
     operation: 'mark-complete',
     resource: 'tasks',
-    mutation: false,
+    mutation: true,
     schema: z.object({
       ids: z.array(z.string()),
     }),

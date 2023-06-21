@@ -10,8 +10,9 @@ import {
   apolloAccount,
   ApolloAccountCreate,
   ApolloAccountUpdate,
+  apolloBootstrappedDataSchema,
+  apolloCall,
   ApolloCallCreate,
-  apolloCallDisposition,
   apolloContact,
   ApolloContactCreate,
   ApolloContactUpdate,
@@ -29,11 +30,9 @@ import {
   apolloSequenceStep,
   apolloTask,
   ApolloTaskBulkCompleteInput,
+  apolloTaskBulkCompleteResponse,
   ApolloUpdateSequenceTemplate,
   apolloUser,
-  apolloBootstrappedDataSchema,
-  apolloCall,
-  apolloTaskBulkCompleteResponse,
 } from './schemas';
 
 const request = makeRequestFactory(async (auth, options) => {
