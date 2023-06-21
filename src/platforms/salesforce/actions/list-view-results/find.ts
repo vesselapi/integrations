@@ -1,6 +1,7 @@
 import { client } from '@/platforms/salesforce/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
+import { salesforceSupportedObjectType } from '../../schemas';
 
 export default action(
   'find-list-view-results',
@@ -10,7 +11,7 @@ export default action(
     mutation: false,
     schema: z.object({
       id: z.string(),
-      objectType: z.string(),
+      objectType: salesforceSupportedObjectType,
     }),
     scopes: [],
   },

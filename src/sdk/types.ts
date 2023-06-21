@@ -1,6 +1,6 @@
 import { CamelCasedPropertiesDeep } from 'type-fest';
 import { z } from 'zod';
-import { FetchOptions, HttpOptions } from './client';
+import { HttpOptions } from './client';
 
 export type Fetch = typeof fetch;
 
@@ -17,20 +17,18 @@ export type StandardMetadata = {
   answers: Record<string, string>;
 };
 
+type BaseFetchResult = {
+  status: number;
+  text: () => string;
+  json: () => Json;
+  response: Response | unknown;
+};
+
 type BaseAuth = {
   getToken: () => Promise<string>;
-  getAuthHeader: () => Promise<string>;
-  retry: (
-    func: () => Promise<{
-      response: Response;
-      options: FetchOptions;
-      url: string;
-    }>,
-  ) => Promise<{
-    response: Response;
-    options: FetchOptions;
-    url: string;
-  }>;
+  retry: <TResult extends BaseFetchResult>(
+    func: () => Promise<TResult>,
+  ) => Promise<TResult>;
 };
 
 export type OAuth2Auth = BaseAuth & {
@@ -70,10 +68,9 @@ export type StringAuthQuestion = BaseAuthQuestion & {
 export type AuthQuestion = SelectAuthQuestion | StringAuthQuestion;
 
 export type RetryableCheckFunction = ({
-  response,
-}: {
-  response: Response;
-}) => Promise<boolean>;
+  status,
+  text,
+}: BaseFetchResult) => Promise<boolean>;
 
 export type StandardAuthConfig<
   TAnswers extends Record<string, string> = Record<string, string>,

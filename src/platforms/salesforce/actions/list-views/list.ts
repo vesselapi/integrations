@@ -3,6 +3,7 @@ import { client } from '@/platforms/salesforce/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
 import { MAX_QUERY_PAGE_SIZE } from '../../constants';
+import { salesforceSupportedObjectType } from '../../schemas';
 import { getNextCursor } from '../pagination';
 
 export default action(
@@ -13,7 +14,7 @@ export default action(
     mutation: false,
     schema: z.object({
       cursor: z.string().optional(),
-      objectType: z.string().optional(),
+      objectType: salesforceSupportedObjectType,
     }),
     scopes: [],
   },
