@@ -63,7 +63,11 @@ const _requestWithUndici = async ({
   return {
     ok: response.statusCode <= 399,
     text: () => text,
-    json: () => guard(() => JSON.parse(text)),
+    json: () =>
+      guard(
+        () => JSON.parse(text),
+        (err) => err instanceof SyntaxError,
+      ),
     status: response.statusCode,
     headers: response.headers as Record<string, string>,
     response,
@@ -93,7 +97,11 @@ const _requestWithFetch = async ({
   return {
     ok: response.status <= 399,
     text: () => text,
-    json: () => guard(() => JSON.parse(text)),
+    json: () =>
+      guard(
+        () => JSON.parse(text),
+        (err) => err instanceof SyntaxError,
+      ),
     status: response.status,
     headers: responseHeaders,
     response,
@@ -158,10 +166,7 @@ export const makeRequestFactory = (
     ): Promise<ClientResult<z.infer<TResponseSchema>>> => {
       const response = await fetchRawResponse(auth, args);
 
-      const body = guard(
-        () => JSON.parse(response.text()),
-        (err) => err instanceof SyntaxError,
-      ) ?? { body: response.text };
+      const body = response.json ?? { body: response.text };
 
       if (!response.ok) {
         throw new IntegrationError('HTTP error in client', {
