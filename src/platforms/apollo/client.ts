@@ -328,6 +328,8 @@ export const client = {
           page,
           user_ids,
           sort_ascending: true,
+          open_factor_names: ['task_types'],
+          show_suggestions: false,
         }),
         schema: z.object({
           tasks: z.array(apolloTask),
