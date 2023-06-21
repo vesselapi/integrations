@@ -1,5 +1,4 @@
 import { CamelCasedPropertiesDeep } from 'type-fest';
-import { Dispatcher } from 'undici';
 import { z } from 'zod';
 import { HttpOptions } from './client';
 
@@ -18,18 +17,9 @@ export type StandardMetadata = {
   answers: Record<string, string>;
 };
 
-type BaseFetchResult = {
-  status: number;
-  text: () => string;
-  json: () => Json;
-  response: Response | Dispatcher.ResponseData;
-};
-
 type BaseAuth = {
   getToken: () => Promise<string>;
-  retry: <TResult extends BaseFetchResult>(
-    func: () => Promise<TResult>,
-  ) => Promise<TResult>;
+  retry: <TResult>(func: () => Promise<TResult>) => Promise<TResult>;
 };
 
 export type OAuth2Auth = BaseAuth & {
@@ -69,9 +59,10 @@ export type StringAuthQuestion = BaseAuthQuestion & {
 export type AuthQuestion = SelectAuthQuestion | StringAuthQuestion;
 
 export type RetryableCheckFunction = ({
-  status,
-  text,
-}: BaseFetchResult) => Promise<boolean>;
+  response,
+}: {
+  response: Response;
+}) => Promise<boolean>;
 
 export type StandardAuthConfig<
   TAnswers extends Record<string, string> = Record<string, string>,

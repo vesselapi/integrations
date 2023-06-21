@@ -77,7 +77,8 @@ export const auth = {
             : options.authUrl
         }?${toQueryString(query)}`;
       }),
-    isRetryable: options.isRetryable ?? (async ({ status }) => status === 401),
+    isRetryable:
+      options.isRetryable ?? (async ({ response }) => response.status === 401),
     appMetadataSchema: options.appMetadataSchema ?? z.any(),
     refreshTokenExpiresAt: options.refreshTokenExpiresAt ?? (() => null),
     accessTokenExpiresAt: options.accessTokenExpiresAt ?? (() => null),
