@@ -1,7 +1,6 @@
 import { IntegrationError } from '@/sdk/error';
 import { Auth, ClientResult, HttpsUrl } from '@/sdk/types';
-import axios from 'axios';
-import { AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosError } from 'axios';
 import { guard, isFunction, isObject, omit, trim, tryit } from 'radash';
 import { z } from 'zod';
 
