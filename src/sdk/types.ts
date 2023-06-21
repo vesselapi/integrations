@@ -1,6 +1,7 @@
 import { CamelCasedPropertiesDeep } from 'type-fest';
 import { z } from 'zod';
 import { HttpOptions } from './client';
+import { Dispatcher } from 'undici';
 
 export type Fetch = typeof fetch;
 
@@ -59,9 +60,12 @@ export type StringAuthQuestion = BaseAuthQuestion & {
 export type AuthQuestion = SelectAuthQuestion | StringAuthQuestion;
 
 export type RetryableCheckFunction = ({
-  response,
+  status,
+  text,
 }: {
-  response: Response;
+  status: number;
+  text: () => string;
+  json: () => any;
 }) => Promise<boolean>;
 
 export type StandardAuthConfig<
