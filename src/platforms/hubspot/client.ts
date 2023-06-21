@@ -17,6 +17,7 @@ import {
   emailProperties,
   FindContactByEmailInput,
   FindObjectInput,
+  hubspotAccessTokenOutputSchema,
   HubspotAssociationCreate,
   HubspotAssociationDelete,
   HubspotAssociationLabelInput,
@@ -425,6 +426,11 @@ const makeClient = () => {
         HubspotAssociationLabelInput,
         ListOutput<HubspotAssociationLabelOutput>
       >,
+      accessToken: request(async (_args, auth) => ({
+        url: `/oauth/v1/access-tokens/${await auth.getToken()}`,
+        method: 'GET',
+        schema: hubspotAccessTokenOutputSchema,
+      })),
     },
     passthrough: request.passthrough(),
   };

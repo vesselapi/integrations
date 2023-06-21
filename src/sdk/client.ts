@@ -132,14 +132,19 @@ export const makeRequestFactory = (
   >(
     formatRequestOptions:
       | RequestFetchOptions<TResponseSchema>
-      | ((args: TArgs) => RequestFetchOptions<TResponseSchema>),
+      | ((
+          args: TArgs,
+          auth: Auth,
+        ) =>
+          | Promise<RequestFetchOptions<TResponseSchema>>
+          | RequestFetchOptions<TResponseSchema>),
   ) {
     const fetchRawResponse = async (auth: Auth, args: TArgs) =>
       await auth.retry(async () => {
         const options = await formatFetchOptions(
           auth,
           isFunction(formatRequestOptions)
-            ? formatRequestOptions(args)
+            ? await formatRequestOptions(args, auth)
             : formatRequestOptions,
         );
         const url = options.query
