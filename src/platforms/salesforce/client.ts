@@ -160,10 +160,12 @@ const query = {
         Ids,
         associations,
         limit,
+        cursor,
       }: {
         Ids: string[];
         associations?: SalesforceSupportedObjectType[];
         limit: number;
+        cursor?: string;
       }) => ({
         url: `/query/?q=${salesforceQueryBuilder.batchRead({
           ids: Ids,
@@ -171,6 +173,7 @@ const query = {
           relationalSelect,
           associations,
           limit,
+          cursor,
         })}`,
         method: 'GET',
         schema: z.object({

@@ -85,12 +85,14 @@ export const salesforceQueryBuilder = {
     objectType,
     relationalSelect,
     associations,
+    cursor,
     limit = MAX_QUERY_PAGE_SIZE,
   }: {
     ids: string[];
     objectType: SalesforceSupportedObjectType;
     relationalSelect?: Partial<Record<SalesforceSupportedObjectType, string>>;
     associations?: SalesforceSupportedObjectType[];
+    cursor?: string;
     limit?: number;
   }) => {
     const selectClauses = sift([
@@ -100,7 +102,7 @@ export const salesforceQueryBuilder = {
     return formatQuery(`
       ${selectClauses.join(', ')}
       FROM ${objectType}
-      WHERE Id IN ('${ids.join("','")}')
+      WHERE Id IN ('${ids.join("','")}') ${cursor ? `AND Id < '${cursor}'` : ''}
       ORDER BY Id DESC
       LIMIT ${limit}
     `);
