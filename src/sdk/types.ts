@@ -1,6 +1,6 @@
 import { CamelCasedPropertiesDeep } from 'type-fest';
 import { z } from 'zod';
-import { HttpOptions } from './client';
+import { FetchOptions, HttpOptions } from './client';
 
 export type Fetch = typeof fetch;
 
@@ -19,7 +19,17 @@ export type StandardMetadata = {
 
 type BaseAuth = {
   getToken: () => Promise<string>;
-  retry: <TResult>(func: () => Promise<TResult>) => Promise<TResult>;
+  retry: (
+    func: () => Promise<{
+      response: Response;
+      options: FetchOptions;
+      url: string;
+    }>,
+  ) => Promise<{
+    response: Response;
+    options: FetchOptions;
+    url: string;
+  }>;
 };
 
 export type OAuth2Auth = BaseAuth & {
