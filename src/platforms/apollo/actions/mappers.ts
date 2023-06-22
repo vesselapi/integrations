@@ -2,6 +2,7 @@ import {
   ApolloAccount,
   ApolloCall,
   ApolloCallDisposition,
+  ApolloCallPurpose,
   ApolloContact,
   ApolloEmailActivity,
   ApolloEmailMessage,
@@ -154,6 +155,15 @@ export const transformDisposition = (disposition: ApolloCallDisposition) => {
     order: disposition.order,
     triggerContactStageId: disposition.trigger_contact_stage_id,
     sentiment: disposition.sentiment,
+  };
+};
+
+export const transformPurpose = (purpose: ApolloCallPurpose) => {
+  return {
+    id: purpose.id,
+    teamId: purpose.team_id,
+    name: purpose.name,
+    settingsListPosition: purpose.settings_list_position,
   };
 };
 

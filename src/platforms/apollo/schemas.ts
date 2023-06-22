@@ -278,9 +278,14 @@ export type ApolloCall = z.infer<typeof apolloCall>;
 export const apolloCallCreate = z.object({
   contact_id: z.string(),
   phone_call_outcome_id: z.string(),
+  phone_call_purpose_id: z.string().nullish(),
   note: z.string().nullish(),
-  mark_all_sequences_as_finished: z.boolean(),
+  mark_all_sequences_as_finished: z.boolean().nullish(),
   cacheKey: z.number(),
+  from_number: z.string().nullish(),
+  to_number: z.string().nullish(),
+  inbound: z.boolean().nullish(),
+  duration: z.number().nullish(),
 });
 export type ApolloCallCreate = z.infer<typeof apolloCallCreate>;
 
@@ -294,6 +299,14 @@ export const apolloCallDisposition = z.object({
   sentiment: z.string().nullish(),
 });
 export type ApolloCallDisposition = z.infer<typeof apolloCallDisposition>;
+
+export const apolloCallPurpose = z.object({
+  id: z.string(),
+  team_id: z.string().nullish(),
+  name: z.string().nullish(),
+  settings_list_position: z.number().nullish(),
+});
+export type ApolloCallPurpose = z.infer<typeof apolloCallPurpose>;
 
 export const apolloCreateSequence = z.object({
   creation_type: z.string().optional(),
@@ -380,6 +393,7 @@ export const apolloBootstrappedDataSchema = z.object({
     current_user_id: z.string().nullish(),
     current_team_id: z.string().nullish(),
     phone_call_outcomes: z.array(apolloCallDisposition).nullish(),
+    phone_call_purposes: z.array(apolloCallPurpose).nullish(),
   }),
 });
 
