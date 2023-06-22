@@ -21,7 +21,7 @@ export default action(
     const result = await client.users.search(auth, input);
 
     return {
-      pagination: transformPagination(result.data.pagination),
+      pagination: transformPagination(result.data.pagination, input.page),
       users: result.data.users.map(transformUser),
       $native: result.$native,
     };

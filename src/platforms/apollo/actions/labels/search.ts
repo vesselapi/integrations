@@ -28,7 +28,7 @@ export default action(
 
     return {
       labels: result.data.labels.map(transformLabel),
-      pagination: transformPagination(result.data.pagination),
+      pagination: transformPagination(result.data.pagination, input.page),
       $native: result.$native,
     };
   },

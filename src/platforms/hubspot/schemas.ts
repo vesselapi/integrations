@@ -627,3 +627,19 @@ export const hubspotAssociationLabelOutputSchema = z.object({
 export type HubspotAssociationLabelOutput = z.infer<
   typeof hubspotAssociationLabelOutputSchema
 >;
+
+export const hubspotAccessTokenOutputSchema = z.object({
+  token: z.string(),
+  user: z.string(),
+  hub_domain: z.string(),
+  scopes: z.array(z.string()),
+  trial_scopes: z.array(z.string()),
+  hub_id: z.number(),
+  app_id: z.number(),
+  expires_in: z.number(),
+  user_id: z.number(),
+  token_type: z.string(),
+});
+export type HubspotAccessTokenOutputSchema = z.infer<
+  typeof hubspotAccessTokenOutputSchema
+>;
