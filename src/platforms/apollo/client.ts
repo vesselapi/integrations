@@ -353,7 +353,7 @@ export const client = {
       ({
         user_ids,
         page,
-        perPage,
+        perPage = DEFAULT_PAGE_SIZE,
       }: {
         user_ids?: string[];
         page?: number;
