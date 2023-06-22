@@ -24,6 +24,7 @@ import markTasksComplete from './actions/tasks/mark-complete';
 import searchTasks from './actions/tasks/search';
 
 import createCall from './actions/calls/create';
+import callDetails from './actions/calls/details';
 import listCallDispositions from './actions/calls/dispositions-list';
 
 import createSequence from './actions/sequences/create';
@@ -81,6 +82,7 @@ export default platform('apollo', {
 
     createCall,
     listCallDispositions,
+    callDetails,
 
     createSequence,
     searchSequences,
