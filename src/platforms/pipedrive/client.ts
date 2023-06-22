@@ -26,6 +26,7 @@ import {
   PipedrivePersonCreate,
   PipedrivePersonUpdate,
   PipedriveUser,
+  pipedriveUserMeSchema,
   pipedriveUserSchema,
   SearchObjectInput,
   SearchOutput,
@@ -172,6 +173,11 @@ const makeClient = () => {
       find: findObject<PipedriveUser>('users', pipedriveUserSchema),
       list: listObject<PipedriveUser>('users', pipedriveUserSchema),
       batchRead: batchReadObject<PipedriveUser>('users', pipedriveUserSchema),
+      me: request(() => ({
+        url: '/users/me',
+        method: 'GET',
+        schema: pipedriveUserMeSchema,
+      })),
     },
     persons: crud<
       PipedrivePersonCreate,

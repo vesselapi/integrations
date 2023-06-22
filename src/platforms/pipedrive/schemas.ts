@@ -111,6 +111,12 @@ export const pipedriveAssociationId = z.object({
 // -
 // Users
 // -
+export const pipedriveUserMeSchema = z.object({
+  id: z.number(),
+  company_domain: z.string(),
+  company_id: z.number(),
+});
+export type PipedriveUserMe = z.infer<typeof pipedriveUserMeSchema>;
 export const pipedriveUserSchema = z.object({
   id: z.number(),
   name: z.string(),
