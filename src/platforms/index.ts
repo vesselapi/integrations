@@ -14,6 +14,8 @@ import teams from '@/platforms/teams';
 import { Platform } from '@/sdk';
 import affinity from './affinity';
 import customerIo from './customer.io';
+import freshdesk from './freshdesk';
+import freshsales from './freshsales';
 
 export {
   default as activeCampaign,
@@ -57,6 +59,8 @@ export const integrationsList: Platform<any, any, any, any, any>[] = [
   apollo,
   customerIo,
   dialpad,
+  freshdesk,
+  freshsales,
   hubspot,
   mailchimp,
   outreach,
