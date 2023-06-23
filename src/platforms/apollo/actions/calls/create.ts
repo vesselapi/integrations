@@ -11,8 +11,9 @@ export default action(
     resource: 'calls',
     mutation: true,
     schema: z.object({
-      dispositionId: z.string(),
       contactId: z.string(),
+      dispositionId: z.string(),
+      userId: z.string().optional(),
       purposeId: z.string().nullish(),
       note: z.string().nullish(),
       markComplete: z.boolean().nullish(),
@@ -25,6 +26,7 @@ export default action(
   },
   async ({ input, auth }) => {
     const result = await client.calls.create(auth, {
+      user_id: input.userId,
       contact_id: input.contactId,
       note: input.note,
       mark_all_sequences_as_finished: input.markComplete,
