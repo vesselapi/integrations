@@ -1,5 +1,5 @@
 import { auth, platform } from '@/sdk';
-import { guard } from 'radash';
+import { isArray, isObject } from 'radash';
 
 import client from './client';
 import * as constants from './constants';
@@ -65,13 +65,17 @@ export default platform('hubspot', {
     tokenAuth: 'body',
     isRetryable: async ({ status, json }) => {
       if (status === 204) return false;
-      const { category } = json() as { category?: string };
+      const body = json();
+      if (!isObject(body) || isArray(body)) {
+        return false;
+      }
+      const category = body?.category as string | undefined;
       if (!category) {
         return false;
       }
-      const checkExpiredAuth = async () =>
-        ['EXPIRED_AUTHENTICATION', 'INVALID_AUTHENTICATION'].includes(category);
-      return (await guard(checkExpiredAuth)) ?? false;
+      return ['EXPIRED_AUTHENTICATION', 'INVALID_AUTHENTICATION'].includes(
+        category,
+      );
     },
     default: true,
   }),

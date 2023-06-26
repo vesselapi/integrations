@@ -108,7 +108,7 @@ const _requestWithFetch = async ({
     text: () => text,
     json: () =>
       guard(
-        () => JSON.parse(text),
+        () => JSON.parse(text) ?? null,
         (err) => err instanceof SyntaxError,
       ),
     status: response.status,
