@@ -1,5 +1,5 @@
 import { auth, platform } from '@/sdk';
-import { guard, isArray, isObject } from 'radash';
+import { isArray, isObject } from 'radash';
 
 import client from './client';
 import * as constants from './constants';
