@@ -1,5 +1,5 @@
 import { auth, platform } from '@/sdk';
-import { guard } from 'radash';
+import { guard, isArray, isObject } from 'radash';
 
 import client from './client';
 import * as constants from './constants';
@@ -65,7 +65,11 @@ export default platform('hubspot', {
     tokenAuth: 'body',
     isRetryable: async ({ status, json }) => {
       if (status === 204) return false;
-      const { category } = (json() ?? {}) as { category?: string };
+      const body = json();
+      if (!isObject(body) || isArray(body)) {
+        return false;
+      }
+      const category = body?.category as string | undefined;
       if (!category) {
         return false;
       }
