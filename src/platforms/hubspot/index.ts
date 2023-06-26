@@ -65,7 +65,7 @@ export default platform('hubspot', {
     tokenAuth: 'body',
     isRetryable: async ({ status, json }) => {
       if (status === 204) return false;
-      const { category } = json() as { category?: string };
+      const { category } = (json() ?? {}) as { category?: string };
       if (!category) {
         return false;
       }
