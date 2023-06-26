@@ -73,9 +73,9 @@ export default platform('hubspot', {
       if (!category) {
         return false;
       }
-      const checkExpiredAuth = async () =>
-        ['EXPIRED_AUTHENTICATION', 'INVALID_AUTHENTICATION'].includes(category);
-      return (await guard(checkExpiredAuth)) ?? false;
+      return ['EXPIRED_AUTHENTICATION', 'INVALID_AUTHENTICATION'].includes(
+        category,
+      );
     },
     default: true,
   }),
