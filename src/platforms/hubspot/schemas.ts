@@ -33,8 +33,11 @@ export type ListObjectInput = {
   properties?: string[];
 };
 export type BatchReadObjectInput = {
+  after?: string;
+  limit?: number;
   ids: string[];
-} & ListObjectInput;
+  properties?: string[];
+};
 export type SearchOperator =
   | 'LT'
   | 'LTE'
@@ -59,7 +62,10 @@ export type SearchObjectInput = {
       highValue?: string;
     }[];
   }[];
-} & ListObjectInput;
+  after?: string;
+  limit?: number;
+  properties?: string[];
+};
 export type ListOutput<T> = {
   results?: T[];
   paging?: {
