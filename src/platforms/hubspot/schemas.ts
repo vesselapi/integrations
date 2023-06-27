@@ -62,6 +62,10 @@ export type SearchObjectInput = {
       highValue?: string;
     }[];
   }[];
+  sorts: {
+    propertyName: string;
+    direction: 'ASCENDING' | 'DESCENDING';
+  }[];
   after?: string;
   limit?: number;
   properties?: string[];

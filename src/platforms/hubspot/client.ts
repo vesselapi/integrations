@@ -213,6 +213,7 @@ const makeClient = () => {
       ({
         filterGroups,
         after,
+        sorts,
         limit = HUBSPOT_MAX_PAGE_SIZE,
         properties: requestedProperties,
       }: SearchObjectInput) => ({
@@ -220,7 +221,7 @@ const makeClient = () => {
         method: 'POST',
         json: {
           filterGroups,
-          sorts: [],
+          sorts,
           properties: requestedProperties ?? properties ?? null,
           propertiesWithHistory: null,
           limit,
