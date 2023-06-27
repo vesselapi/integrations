@@ -544,7 +544,7 @@ export type HubspotPropertyFieldType =
 export const hubspotPropertyOptionSchema = z.object({
   label: z.string(),
   value: z.any(),
-  description: z.string().nullable(),
+  description: z.string().nullish(),
   displayOrder: z.number().nullable(),
   hidden: z.boolean(),
 });
