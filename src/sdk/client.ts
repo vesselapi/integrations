@@ -177,6 +177,7 @@ export const makeRequestFactory = (
     const makeValidatedRequest = async (
       auth: Auth,
       args: TArgs,
+      options: { strict?: boolean } = {},
     ): Promise<ClientResult<z.infer<TResponseSchema>>> => {
       const response = await fetchRawResponse(auth, args);
       const body = response.json() ?? { body: response.text };
@@ -194,6 +195,12 @@ export const makeRequestFactory = (
 
       const zodResult = await response.options.schema.safeParseAsync(body);
       if (!zodResult.success) {
+        if (options.strict) {
+          throw new IntegrationError('Validation failed on client response', {
+            type: 'validation',
+            cause: zodResult.error,
+          });
+        }
         // For now, we log an error when validation fails on responses.
         // In the future, we may stop doing this once our schemas are robust
         // enough.
