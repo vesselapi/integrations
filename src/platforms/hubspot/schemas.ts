@@ -389,7 +389,10 @@ const emailPropertiesSchema = z.object({
   hs_email_text: z.string().nullable(),
   hs_email_direction: hubspotEmailDirectionSchema.nullable(),
   hs_email_subject: z.string().nullable(),
-  hs_email_bounce_error_detail_status_code: z.number().nullable(),
+  hs_email_bounce_error_detail_status_code: z
+    .number()
+    .or(z.string())
+    .nullable(),
   hs_attachment_ids: z.array(hubspotIdSchema).nullable(),
   hs_timestamp: z
     .string()
@@ -571,7 +574,7 @@ export const hubspotPropertySchema = z.object({
   label: z.string(),
   type: z.string().transform((v) => v as HubspotPropertyType),
   fieldType: z.string().transform((v) => v as HubspotPropertyFieldType),
-  hubspotDefined: z.boolean(),
+  hubspotDefined: z.boolean().optional(),
   options: z.array(hubspotPropertyOptionSchema).optional(),
   modificationMetadata: z.object({
     readOnlyValue: z.boolean(),

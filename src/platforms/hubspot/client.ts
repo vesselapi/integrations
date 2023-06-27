@@ -87,6 +87,7 @@ const request = makeRequestFactory(async (auth, options) => {
 type requestFunctionType<I, O> = (
   auth: Auth,
   input: I,
+  options?: Parameters<ReturnType<typeof request>>[2],
 ) => Promise<ClientResult<O>>;
 
 const makeClient = () => {
