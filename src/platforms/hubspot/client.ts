@@ -18,6 +18,7 @@ import {
   FindContactByEmailInput,
   FindObjectInput,
   hubspotAccessTokenOutputSchema,
+  HubspotAssociationBatchRead,
   HubspotAssociationCreate,
   HubspotAssociationDelete,
   HubspotAssociationLabelInput,
@@ -393,6 +394,18 @@ const makeClient = () => {
       ),
     },
     associations: {
+      batchRead: request(
+        ({ fromType, toType, inputs }: HubspotAssociationBatchRead) => ({
+          url: `/crm/v4/associations/${fromType}/${toType}/batch/read`,
+          method: 'POST',
+          schema: listResponseSchema(hubspotPropertySchema),
+          json: [
+            shake({
+              inputs,
+            }),
+          ],
+        }),
+      ),
       create: request(
         ({
           fromId,

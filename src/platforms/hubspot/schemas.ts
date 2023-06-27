@@ -57,8 +57,8 @@ export type SearchObjectInput = {
     filters: {
       propertyName: string;
       operator: SearchOperator;
-      value?: string;
-      values?: string[];
+      value?: string | number;
+      values?: string[] | number[];
       highValue?: string;
     }[];
   }[];
@@ -639,6 +639,20 @@ export const hubspotAssociationLabelOutputSchema = z.object({
 });
 export type HubspotAssociationLabelOutput = z.infer<
   typeof hubspotAssociationLabelOutputSchema
+>;
+
+const hubspotAssociationBatchReadInputSchema = z.object({
+  fromType: hubspotModuleSchema,
+  toType: hubspotModuleSchema,
+  inputs: z.array(
+    z.object({
+      id: z.string(),
+      after: z.string().optional(),
+    }),
+  ),
+});
+export type HubspotAssociationBatchRead = z.infer<
+  typeof hubspotAssociationBatchReadInputSchema
 >;
 
 export const hubspotAccessTokenOutputSchema = z.object({
