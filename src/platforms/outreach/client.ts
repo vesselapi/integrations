@@ -11,7 +11,9 @@ import {
   outreachSequenceTemplate,
   outreachTemplate,
   outreachUser,
+  outreachUserProfile,
 } from '@/platforms/outreach/schemas';
+import { HttpsUrl } from '@/sdk';
 import {
   formatUpsertInputWithNative,
   formatUrl,
@@ -31,8 +33,22 @@ const request = makeRequestFactory(async (auth, options) => ({
   },
 }));
 
+const _graphQl = makeRequestFactory(async (auth, options) => ({
+  ...options,
+  url: options.url as `https://${HttpsUrl}/${string}`,
+  headers: {
+    ...options.headers,
+    Authorization: `Bearer ${await auth.getToken()}`,
+  },
+}));
+
 export const client = {
   users: {
+    profile: request(() => ({
+      url: `/userprofile`,
+      method: 'GET',
+      schema: outreachUserProfile,
+    })),
     find: request(({ id }: { id: number }) => ({
       url: `/users/${id}`,
       method: 'GET',
@@ -467,6 +483,34 @@ export const client = {
         }),
       }),
     ),
+  },
+  tags: {
+    list: _graphQl(({ url }: { url: `https://${string}/${string}` }) => ({
+      url,
+      method: 'POST',
+      json: {
+        query:
+          'query GetTagCollection {\n  tagCollection {\n    count\n    collection {\n      id\n      name\n    }\n  }\n}',
+        variables: {
+          query: '',
+          limit: 50,
+          offset: 0,
+        },
+      },
+      schema: z.object({
+        data: z.object({
+          tagCollection: z.object({
+            count: z.number(),
+            collection: z.array(
+              z.object({
+                id: z.number(),
+                name: z.string(),
+              }),
+            ),
+          }),
+        }),
+      }),
+    })),
   },
   passthrough: request.passthrough(),
 };
