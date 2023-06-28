@@ -341,18 +341,15 @@ export const salesloftTag = z.object({
       unique_locations: z.number().nullish(),
       attachments: z.number().nullish(),
     })
-
     .nullish(),
   user: z
     .object({
       id: z.number(),
     })
-
     .nullish(),
   cadence: z
     .object({
       id: z.number(),
     })
-
     .nullish(),
 });
