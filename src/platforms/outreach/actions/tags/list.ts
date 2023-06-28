@@ -24,12 +24,9 @@ export default action(
   },
   async ({ input, auth }) => {
     // Fetch the datacenter
-    console.log('Fetching datacenter');
     const user = await client.users.profile(auth, {});
-    console.log(user);
 
     const dcUrl = user.data.urls.app_endpoint as `https://${string}`;
-    console.log('fetch tags');
     const tags = await client.tags.list(auth, {
       url: `${dcUrl}/graphql/ContentManagers_ProspectAutocomplete`,
     });
