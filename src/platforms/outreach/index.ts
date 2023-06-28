@@ -14,7 +14,6 @@ import createSequenceTemplate from '@/platforms/outreach/actions/sequence-templa
 import createSequence from '@/platforms/outreach/actions/sequences/create';
 import findSequence from '@/platforms/outreach/actions/sequences/find';
 import listSequences from '@/platforms/outreach/actions/sequences/list';
-import listTags from '@/platforms/outreach/actions/tags/list';
 import createTemplate from '@/platforms/outreach/actions/templates/create';
 import findUser from '@/platforms/outreach/actions/users/find';
 import listUsers from '@/platforms/outreach/actions/users/list';
@@ -56,6 +55,5 @@ export default platform('outreach', {
     createSequence,
     createTemplate,
     createSequenceTemplate,
-    listTags,
   },
 });
