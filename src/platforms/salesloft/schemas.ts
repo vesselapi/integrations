@@ -321,35 +321,7 @@ export type SalesloftCustomFieldCreate = {
 
 export const salesloftTag = z.object({
   id: z.number(),
-  created_at: custom.date(),
-  updated_at: custom.date(),
-  recipient_email_address: z.string().nullish(),
-  status: z.string().nullish(),
-  bounced: z.boolean(),
-  send_after: custom.date(),
-  sent_at: custom.date(),
-  view_tracking: z.boolean(),
-  click_tracking: z.boolean(),
-  subject: z.string().nullish(),
-  error_message: z.string().nullish(),
-  counts: z
-    .object({
-      clicks: z.number().nullish(),
-      views: z.number().nullish(),
-      replies: z.number().nullish(),
-      unique_devices: z.number().nullish(),
-      unique_locations: z.number().nullish(),
-      attachments: z.number().nullish(),
-    })
-    .nullish(),
-  user: z
-    .object({
-      id: z.number(),
-    })
-    .nullish(),
-  cadence: z
-    .object({
-      id: z.number(),
-    })
-    .nullish(),
+  name: z.string(),
 });
+
+export type SalesloftTag = z.infer<typeof salesloftTag>;

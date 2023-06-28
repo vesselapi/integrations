@@ -1,6 +1,6 @@
 import {
   transformMetadata,
-  transformPerson,
+  transformTag,
 } from '@/platforms/salesloft/actions/mappers';
 import { client } from '@/platforms/salesloft/client';
 import { action } from '@/sdk';
@@ -38,7 +38,7 @@ export default action(
 
     return {
       data: {
-        data: result.data.data.map(transformPerson),
+        data: result.data.data?.map(transformTag),
         metadata: transformMetadata(result.data.metadata),
       },
       $native: result.$native,

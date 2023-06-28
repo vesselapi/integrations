@@ -19,6 +19,7 @@ import {
   SalesloftPersonCreate,
   SalesloftPersonUpdate,
   salesloftResponseMetadata,
+  salesloftTag,
   salesloftUser,
 } from './schemas';
 
@@ -175,7 +176,8 @@ export const client = {
           limit_paging_counts,
         }),
         schema: z.object({
-          data: salesloftUser,
+          data: z.array(salesloftTag),
+          metadata: salesloftResponseMetadata,
         }),
       }),
     ),
