@@ -45,7 +45,7 @@ const _graphQl = makeRequestFactory(async (auth, options) => ({
 export const client = {
   users: {
     profile: request(() => ({
-      url: `/userprofile`,
+      url: `/api/userprofile`,
       method: 'GET',
       schema: outreachUserProfile,
     })),
