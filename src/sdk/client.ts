@@ -3,14 +3,15 @@ import { Auth, ClientResult, HttpsUrl } from '@/sdk/types';
 import axios, { AxiosError } from 'axios';
 import { guard, isFunction, isObject, omit, trim, tryit } from 'radash';
 import { z } from 'zod';
+import * as qs from './query-string';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
-export type HttpOptions = {
+export type HttpOptions<TQueryString extends qs.Any = qs.Any> = {
   url: `${HttpsUrl}/${string}` | `/${string}`;
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   headers?: Record<string, string>;
   json?: Record<string, unknown> | Record<string, unknown>[];
-  query?: Record<string, string | number>;
+  query?: TQueryString;
 };
 
 export const formatUpsertInputWithNative = <
@@ -24,17 +25,20 @@ export const formatUpsertInputWithNative = <
   };
 };
 
-export type FetchOptions = HttpOptions & {
-  schema: z.ZodType;
-  url: `${HttpsUrl}/${string}`;
-};
-
-export type RequestFetchOptions<TResponseSchema extends z.ZodType> =
-  HttpOptions & {
-    url: `${HttpsUrl}/${string}` | `/${string}`;
-    schema: TResponseSchema;
-    validateResponse?: boolean;
+export type FetchOptions<TQueryString extends qs.Any = qs.Any> =
+  HttpOptions<TQueryString> & {
+    schema: z.ZodType;
+    url: `${HttpsUrl}/${string}`;
   };
+
+export type RequestFetchOptions<
+  TResponseSchema extends z.ZodType,
+  TQueryString extends qs.Any = qs.Any,
+> = HttpOptions<TQueryString> & {
+  url: `${HttpsUrl}/${string}` | `/${string}`;
+  schema: TResponseSchema;
+  validateResponse?: boolean;
+};
 
 export const formatUrl = (
   baseUrl: `${HttpsUrl}`,
@@ -123,33 +127,41 @@ const _requestWithFetch = async ({
 export const makeRequestFactory = (
   formatFetchOptions: (
     auth: Auth,
-    options: RequestFetchOptions<z.ZodType>,
-  ) => Promise<FetchOptions>,
+    options: Omit<RequestFetchOptions<z.ZodType>, 'query'> & {
+      query: qs.List;
+    },
+  ) => Promise<
+    Omit<FetchOptions, 'query'> & {
+      query: qs.List;
+    }
+  >,
 ) => {
   function createRequest<
     TArgs extends {},
     TResponseSchema extends z.ZodType<unknown>,
   >(
     formatRequestOptions:
-      | RequestFetchOptions<TResponseSchema>
+      | RequestFetchOptions<TResponseSchema, qs.Map>
       | ((
           args: TArgs,
           auth: Auth,
         ) =>
-          | Promise<RequestFetchOptions<TResponseSchema>>
-          | RequestFetchOptions<TResponseSchema>),
+          | Promise<RequestFetchOptions<TResponseSchema, qs.Map>>
+          | RequestFetchOptions<TResponseSchema, qs.Map>),
   ) {
     const fetchRawResponse = async (auth: Auth, args: TArgs) =>
       await auth.retry(async () => {
-        const options = await formatFetchOptions(
-          auth,
-          isFunction(formatRequestOptions)
-            ? await formatRequestOptions(args, auth)
-            : formatRequestOptions,
-        );
-        const url = options.query
-          ? `${trim(options.url, '/')}?${toQueryString(options.query)}`
-          : options.url;
+        const reqOptions = isFunction(formatRequestOptions)
+          ? await formatRequestOptions(args, auth)
+          : formatRequestOptions;
+        const options = await formatFetchOptions(auth, {
+          ...reqOptions,
+          query: reqOptions.query ? qs.toArray(reqOptions.query) : [],
+        });
+        const url =
+          options.query.length > 0
+            ? `${trim(options.url, '/')}?${qs.toString(options.query)}`
+            : options.url;
 
         const headers = options.json
           ? {
@@ -241,21 +253,15 @@ export const makeRequestFactory = (
     createRequest((args: HttpOptions) => ({
       ...args,
       schema: z.any(),
+      query: {},
     }));
 
   createRequest.fetch = () =>
     createRequest((args: HttpOptions) => ({
       ...args,
       schema: z.any(),
+      query: {},
     })).fetchRawResponse();
 
   return createRequest;
-};
-
-const toQueryString = (query: Record<string, string | number>): string => {
-  const params = new URLSearchParams();
-  for (const [key, value] of Object.entries(query)) {
-    params.set(key, `${value}`);
-  }
-  return params.toString();
 };

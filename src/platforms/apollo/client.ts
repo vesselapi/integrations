@@ -42,10 +42,7 @@ const request = makeRequestFactory(async (auth, options) => {
     url: formatUrl(BASE_URL, options.url),
     query:
       options.method === 'GET'
-        ? {
-            ...options.query,
-            api_key,
-          }
+        ? [...(options.query ?? []), ['api_key', api_key]]
         : options.query,
     json: options.json
       ? {
