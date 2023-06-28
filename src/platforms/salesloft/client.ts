@@ -19,6 +19,7 @@ import {
   SalesloftPersonCreate,
   SalesloftPersonUpdate,
   salesloftResponseMetadata,
+  salesloftTag,
   salesloftUser,
 } from './schemas';
 
@@ -137,6 +138,46 @@ export const client = {
         }),
         schema: z.object({
           data: salesloftCadenceMembership,
+        }),
+      }),
+    ),
+  },
+  tags: {
+    list: request(
+      ({
+        search,
+        ids,
+        per_page = DEFAULT_PAGE_SIZE,
+        page,
+        sort_by,
+        sort_direction,
+        include_paging_counts,
+        limit_paging_counts,
+      }: {
+        search?: string;
+        ids?: string[];
+        per_page?: number;
+        page?: number;
+        sort_by?: string;
+        sort_direction?: string;
+        include_paging_counts?: boolean;
+        limit_paging_counts?: boolean;
+      }) => ({
+        url: `/tags`,
+        method: 'GET',
+        query: shake({
+          search,
+          ids,
+          per_page,
+          page,
+          sort_by,
+          sort_direction,
+          include_paging_counts,
+          limit_paging_counts,
+        }),
+        schema: z.object({
+          data: z.array(salesloftTag),
+          metadata: salesloftResponseMetadata,
         }),
       }),
     ),
