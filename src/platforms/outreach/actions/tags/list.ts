@@ -16,7 +16,7 @@ import { z } from 'zod';
 export default action(
   'list-tags',
   {
-    operation: 'list',
+    operation: 'list_experimental',
     resource: 'tags',
     mutation: false,
     schema: z.object({}),
