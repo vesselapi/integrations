@@ -1,5 +1,8 @@
 import {
   ApolloAccount,
+  ApolloCall,
+  ApolloCallDisposition,
+  ApolloCallPurpose,
   ApolloContact,
   ApolloEmailActivity,
   ApolloEmailMessage,
@@ -7,6 +10,7 @@ import {
   ApolloPaginatedResponse,
   ApolloPerson,
   ApolloSequence,
+  ApolloTask,
   ApolloUser,
 } from '@/platforms/apollo/schemas';
 
@@ -91,6 +95,78 @@ export const transformEmailActivity = (activity: ApolloEmailActivity) => {
   };
 };
 
+export const transformTask = (task: ApolloTask) => {
+  return {
+    id: task.id,
+    userId: task.user_id,
+    createdAt: task.created_at,
+    completedAt: task.completed_at,
+    note: task.note,
+    skippedAt: task.skipped_at,
+    dueAt: task.due_at,
+    type: task.type,
+    priority: task.priority,
+    status: task.status,
+    answered: task.answered,
+    emailerCampaignId: task.emailer_campaign_id,
+    contactId: task.contact_id,
+    personId: task.person_id,
+    accountId: task.account_id,
+    organizationId: task.organization_id,
+    personaIds: task.persona_ids,
+    subject: task.subject,
+    createdFrom: task.created_from,
+    salesforceType: task.salesforce_type,
+    playbookStepIds: task.playbook_step_ids,
+    playbookId: task.playbook_id,
+    needsPlaybookAutoprospecting: task.needs_playbook_autoprospecting,
+    starredByUserIds: task.starred_by_user_ids,
+    salesforceId: task.salesforce_id,
+    hubspotId: task.hubspot_id,
+    contact: task.contact ? transformContact(task.contact) : null,
+    account: task.account ? transformAccount(task.account) : null,
+  };
+};
+
+export const transformCall = (call: ApolloCall) => {
+  return {
+    id: call.id,
+    userId: call.user_id,
+    contactId: call.contact_id,
+    accountId: call.account_id,
+    dispositionId: call.phone_call_outcome_id,
+    recordingUrl: call.recording_url,
+    inbound: call.inbound,
+    fromNumber: call.from_number,
+    toNumber: call.to_number,
+    startTime: call.start_time,
+    endTime: call.end_time,
+    noteText: call.note_text,
+    duration: call.duration,
+  };
+};
+
+export const transformDisposition = (disposition: ApolloCallDisposition) => {
+  return {
+    id: disposition.id,
+    teamId: disposition.team_id,
+    name: disposition.name,
+    answered: disposition.answered,
+    order: disposition.order,
+    triggerContactStageId: disposition.trigger_contact_stage_id,
+    sentiment: disposition.sentiment,
+  };
+};
+
+export const transformPurpose = (purpose: ApolloCallPurpose) => {
+  return {
+    id: purpose.id,
+    teamId: purpose.team_id,
+    name: purpose.name,
+    settingsListPosition: purpose.settings_list_position,
+  };
+};
+
 export const transformSequence = (sequence: ApolloSequence) => {
   return {
     id: sequence.id,
@@ -147,9 +223,12 @@ export const transformPerson = (person: ApolloPerson) => {
   };
 };
 
-export const transformPagination = (pagination: ApolloPaginatedResponse) => {
+export const transformPagination = (
+  pagination: ApolloPaginatedResponse,
+  page: number = 1,
+) => {
   return {
-    page: pagination.page,
+    page: pagination.page ?? page,
     perPage: pagination.per_page,
     totalEntries: pagination.total_entries,
     totalPages: pagination.total_pages,

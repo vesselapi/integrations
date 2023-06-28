@@ -1,6 +1,11 @@
 import * as custom from '@/sdk/validators';
 import { z } from 'zod';
-import { HUBSPOT_COMMON_ASSOCIATIONS, HUBSPOT_MODULES } from './constants';
+import {
+  HUBSPOT_COMMON_ASSOCIATIONS,
+  HUBSPOT_MODULES,
+  HUBSPOT_PROPERTY_FIELD_TYPES,
+  HUBSPOT_PROPERTY_TYPES,
+} from './constants';
 
 export const hubspotCommonAssociationsSchema = z.enum(
   HUBSPOT_COMMON_ASSOCIATIONS,
@@ -13,18 +18,26 @@ export const HUBSPOT_TASK_STATUS_COMPLETED = 'COMPLETED';
 // -
 // Client Definitions
 // -
+export type FindContactByEmailInput = {
+  email: string;
+};
 export type FindObjectInput = {
   id: string;
   associations?: HubspotCommonAssociations[];
+  properties?: string[];
 };
 export type ListObjectInput = {
   after?: string;
   limit?: number;
   associations?: HubspotCommonAssociations[];
+  properties?: string[];
 };
 export type BatchReadObjectInput = {
+  after?: string;
+  limit?: number;
   ids: string[];
-} & ListObjectInput;
+  properties?: string[];
+};
 export type SearchOperator =
   | 'LT'
   | 'LTE'
@@ -44,12 +57,19 @@ export type SearchObjectInput = {
     filters: {
       propertyName: string;
       operator: SearchOperator;
-      value?: string;
-      values?: string[];
+      value?: string | number;
+      values?: string[] | number[];
       highValue?: string;
     }[];
   }[];
-} & ListObjectInput;
+  sorts: {
+    propertyName: string;
+    direction: 'ASCENDING' | 'DESCENDING';
+  }[];
+  after?: string;
+  limit?: number;
+  properties?: string[];
+};
 export type ListOutput<T> = {
   results?: T[];
   paging?: {
@@ -373,7 +393,10 @@ const emailPropertiesSchema = z.object({
   hs_email_text: z.string().nullable(),
   hs_email_direction: hubspotEmailDirectionSchema.nullable(),
   hs_email_subject: z.string().nullable(),
-  hs_email_bounce_error_detail_status_code: z.number().nullable(),
+  hs_email_bounce_error_detail_status_code: z
+    .number()
+    .or(z.string())
+    .nullable(),
   hs_attachment_ids: z.array(hubspotIdSchema).nullable(),
   hs_timestamp: z
     .string()
@@ -516,36 +539,19 @@ export type ListResponseHubspotContactListContacts = z.infer<
 // -
 // Properties
 // -
-export const hubspotPropertyTypeSchema = z.enum([
-  'bool',
-  'string',
-  'number',
-  'date',
-  'datetime',
-  'enumeration',
-  'json',
-  'phone_number',
-  'object_coordinates',
-]);
-export type HubspotPropertyType = z.infer<typeof hubspotPropertyTypeSchema>;
+export const hubspotPropertyTypeSchema = z.enum(HUBSPOT_PROPERTY_TYPES);
+export type HubspotPropertyType = (typeof HUBSPOT_PROPERTY_TYPES)[number];
 
-export const hubspotPropertyFieldTypeSchema = z.enum([
-  'textarea',
-  'text',
-  'date',
-  'file',
-  'number',
-  'select',
-  'radio',
-  'checkbox',
-  'datetime',
-  'booleancheckbox',
-]);
+export const hubspotPropertyFieldTypeSchema = z.enum(
+  HUBSPOT_PROPERTY_FIELD_TYPES,
+);
+export type HubspotPropertyFieldType =
+  (typeof HUBSPOT_PROPERTY_FIELD_TYPES)[number];
 
 export const hubspotPropertyOptionSchema = z.object({
   label: z.string(),
   value: z.any(),
-  description: z.string().nullable(),
+  description: z.string().nullish(),
   displayOrder: z.number().nullable(),
   hidden: z.boolean(),
 });
@@ -570,9 +576,9 @@ export type HubspotCustomPropertyCreate = z.infer<
 export const hubspotPropertySchema = z.object({
   name: z.string(),
   label: z.string(),
-  type: hubspotPropertyTypeSchema,
-  fieldType: hubspotPropertyFieldTypeSchema,
-  hubspotDefined: z.boolean(),
+  type: z.string().transform((v) => v as HubspotPropertyType),
+  fieldType: z.string().transform((v) => v as HubspotPropertyFieldType),
+  hubspotDefined: z.boolean().optional(),
   options: z.array(hubspotPropertyOptionSchema).optional(),
   modificationMetadata: z.object({
     readOnlyValue: z.boolean(),
@@ -633,4 +639,34 @@ export const hubspotAssociationLabelOutputSchema = z.object({
 });
 export type HubspotAssociationLabelOutput = z.infer<
   typeof hubspotAssociationLabelOutputSchema
+>;
+
+const hubspotAssociationBatchReadInputSchema = z.object({
+  fromType: hubspotModuleSchema,
+  toType: hubspotModuleSchema,
+  inputs: z.array(
+    z.object({
+      id: z.string(),
+      after: z.string().optional(),
+    }),
+  ),
+});
+export type HubspotAssociationBatchRead = z.infer<
+  typeof hubspotAssociationBatchReadInputSchema
+>;
+
+export const hubspotAccessTokenOutputSchema = z.object({
+  token: z.string(),
+  user: z.string(),
+  hub_domain: z.string(),
+  scopes: z.array(z.string()),
+  trial_scopes: z.array(z.string()),
+  hub_id: z.number(),
+  app_id: z.number(),
+  expires_in: z.number(),
+  user_id: z.number(),
+  token_type: z.string(),
+});
+export type HubspotAccessTokenOutputSchema = z.infer<
+  typeof hubspotAccessTokenOutputSchema
 >;

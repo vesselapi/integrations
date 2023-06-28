@@ -1,6 +1,7 @@
 import { IntegrationError } from '@/sdk/error';
 import { Auth, ClientResult, HttpsUrl } from '@/sdk/types';
-import { guard, isFunction, omit, trim } from 'radash';
+import axios, { AxiosError } from 'axios';
+import { guard, isFunction, isObject, omit, trim, tryit } from 'radash';
 import { z } from 'zod';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
@@ -9,7 +10,7 @@ export type HttpOptions = {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   headers?: Record<string, string>;
   json?: Record<string, unknown> | Record<string, unknown>[];
-  query?: Record<string, string>;
+  query?: Record<string, string | number>;
 };
 
 export const formatUpsertInputWithNative = <
@@ -32,6 +33,7 @@ export type RequestFetchOptions<TResponseSchema extends z.ZodType> =
   HttpOptions & {
     url: `${HttpsUrl}/${string}` | `/${string}`;
     schema: TResponseSchema;
+    validateResponse?: boolean;
   };
 
 export const formatUrl = (
@@ -41,6 +43,81 @@ export const formatUrl = (
   return !url.startsWith(baseUrl)
     ? `${baseUrl}${url}`
     : (url as `${HttpsUrl}/${string}`);
+};
+
+const _requestWithAxios = async ({
+  url,
+  options,
+}: {
+  url: string;
+  options: FetchOptions & {
+    headers: Record<string, string>;
+  };
+}) => {
+  const [err, axiosResp] = await tryit(() =>
+    axios.request({
+      url: options.url,
+      data: options.json,
+      method: options.method,
+      headers: options.headers,
+    }),
+  )();
+
+  const getResponse = () => {
+    if (axiosResp) {
+      return axiosResp;
+    } else if (err && err instanceof AxiosError && err.response) {
+      return err.response;
+    }
+    throw err;
+  };
+  const response = getResponse();
+  return {
+    ok: response.status <= 399,
+    text: () =>
+      isObject(response.data) ? JSON.stringify(response.data) : response.data,
+    json: () => (isObject(response.data) ? response.data : null),
+    status: response.status,
+    headers: response.headers as Record<string, string>,
+    response,
+    url,
+    raw: response,
+    options,
+  };
+};
+
+const _requestWithFetch = async ({
+  url,
+  options,
+}: {
+  url: string;
+  options: FetchOptions & {
+    headers: Record<string, string>;
+  };
+}) => {
+  const response = await fetch(url, {
+    body: options.json ? JSON.stringify(options.json) : undefined,
+    method: options.method,
+    headers: options.headers,
+  });
+  const responseHeaders: Record<string, string> = {};
+  response.headers.forEach((k, v) => (responseHeaders[k] = v));
+  const text = await response.text();
+  return {
+    ok: response.status <= 399,
+    text: () => text,
+    json: () =>
+      guard(
+        () => JSON.parse(text) ?? null,
+        (err) => err instanceof SyntaxError,
+      ),
+    status: response.status,
+    headers: responseHeaders,
+    response,
+    url,
+    raw: response,
+    options,
+  };
 };
 
 export const makeRequestFactory = (
@@ -55,57 +132,75 @@ export const makeRequestFactory = (
   >(
     formatRequestOptions:
       | RequestFetchOptions<TResponseSchema>
-      | ((args: TArgs) => RequestFetchOptions<TResponseSchema>),
+      | ((
+          args: TArgs,
+          auth: Auth,
+        ) =>
+          | Promise<RequestFetchOptions<TResponseSchema>>
+          | RequestFetchOptions<TResponseSchema>),
   ) {
-    return async function makeRequest(
-      auth: Auth,
-      args: TArgs,
-    ): Promise<ClientResult<z.infer<TResponseSchema>>> {
-      const { response, options } = await auth.retry(async () => {
+    const fetchRawResponse = async (auth: Auth, args: TArgs) =>
+      await auth.retry(async () => {
         const options = await formatFetchOptions(
           auth,
           isFunction(formatRequestOptions)
-            ? formatRequestOptions(args)
+            ? await formatRequestOptions(args, auth)
             : formatRequestOptions,
         );
         const url = options.query
           ? `${trim(options.url, '/')}?${toQueryString(options.query)}`
           : options.url;
-        const response = await fetch(url, {
-          body: options.json ? JSON.stringify(options.json) : undefined,
-          method: options.method,
-          headers: options.json
-            ? {
-                ...options.headers,
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-              }
-            : {
-                ...options.headers,
-                Accept: 'application/json',
-              },
-        });
-        return { response, options };
-      });
 
-      const text = await response.text();
-      const body = guard(
-        () => JSON.parse(text),
-        (err) => err instanceof SyntaxError,
-      ) ?? { body: text };
+        const headers = options.json
+          ? {
+              ...options.headers,
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            }
+          : {
+              ...options.headers,
+              Accept: 'application/json',
+            };
+
+        return (
+          options.method === 'GET' && options.json
+            ? _requestWithAxios
+            : _requestWithFetch
+        )({
+          options: {
+            ...options,
+            headers,
+          },
+          url,
+        });
+      });
+    const makeValidatedRequest = async (
+      auth: Auth,
+      args: TArgs,
+      options: { strict?: boolean } = {},
+    ): Promise<ClientResult<z.infer<TResponseSchema>>> => {
+      const response = await fetchRawResponse(auth, args);
+      const body = response.json() ?? { body: response.text };
 
       if (!response.ok) {
         throw new IntegrationError('HTTP error in client', {
           type: 'http',
           body,
+          url: response.url,
           status: response.status,
           headers: response.headers,
-          cause: response,
+          cause: response.raw,
         });
       }
 
-      const zodResult = await options.schema.safeParseAsync(body);
+      const zodResult = await response.options.schema.safeParseAsync(body);
       if (!zodResult.success) {
+        if (options.strict) {
+          throw new IntegrationError('Validation failed on client response', {
+            type: 'validation',
+            cause: zodResult.error,
+          });
+        }
         // For now, we log an error when validation fails on responses.
         // In the future, we may stop doing this once our schemas are robust
         // enough.
@@ -117,28 +212,29 @@ export const makeRequestFactory = (
         });
 
         return {
+          // TODO: Deprecate "data" field
           data: body as z.infer<TResponseSchema>,
           $native: {
-            headers: [...response.headers].reduce(
-              (obj, [key, value]) => ({ ...obj, [key]: value }),
-              {},
-            ),
-            body: body,
+            headers: response.headers,
+            body,
+            url: response.url,
           },
         };
       }
 
       return {
+        // TODO: Deprecate "data" field
         data: zodResult.data,
         $native: {
-          headers: [...response.headers].reduce(
-            (obj, [key, value]) => ({ ...obj, [key]: value }),
-            {},
-          ),
-          body: body,
+          headers: response.headers,
+          body,
+          url: response.url,
         },
       };
     };
+
+    makeValidatedRequest.fetchRawResponse = () => fetchRawResponse;
+    return makeValidatedRequest;
   }
 
   createRequest.passthrough = () =>
@@ -147,13 +243,19 @@ export const makeRequestFactory = (
       schema: z.any(),
     }));
 
+  createRequest.fetch = () =>
+    createRequest((args: HttpOptions) => ({
+      ...args,
+      schema: z.any(),
+    })).fetchRawResponse();
+
   return createRequest;
 };
 
-const toQueryString = (query: Record<string, string>): string => {
+const toQueryString = (query: Record<string, string | number>): string => {
   const params = new URLSearchParams();
   for (const [key, value] of Object.entries(query)) {
-    params.set(key, value);
+    params.set(key, `${value}`);
   }
   return params.toString();
 };

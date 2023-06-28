@@ -5,11 +5,14 @@ import {
 } from '@/sdk/client';
 import { objectify, shake } from 'radash';
 import { z } from 'zod';
-import { BASE_URL } from './constants';
+import { BASE_URL, DEFAULT_PAGE_SIZE } from './constants';
 import {
   apolloAccount,
   ApolloAccountCreate,
   ApolloAccountUpdate,
+  apolloBootstrappedDataSchema,
+  apolloCall,
+  ApolloCallCreate,
   apolloContact,
   ApolloContactCreate,
   ApolloContactUpdate,
@@ -25,6 +28,9 @@ import {
   apolloPerson,
   apolloSequence,
   apolloSequenceStep,
+  apolloTask,
+  ApolloTaskBulkCompleteInput,
+  apolloTaskBulkCompleteResponse,
   ApolloUpdateSequenceTemplate,
   apolloUser,
 } from './schemas';
@@ -52,28 +58,38 @@ const request = makeRequestFactory(async (auth, options) => {
 
 export const client = {
   users: {
-    search: request(({ page }: { page?: number }) => ({
-      url: `/users/search`,
-      method: 'GET',
-      query: shake({ page }),
-      schema: z.object({
-        users: z.array(apolloUser),
-        pagination: apolloPaginatedResponse,
+    search: request(
+      ({
+        page,
+        perPage = DEFAULT_PAGE_SIZE,
+      }: {
+        page?: number;
+        perPage?: number;
+      }) => ({
+        url: `/users/search`,
+        method: 'GET',
+        query: shake({ page, per_page: perPage }),
+        schema: z.object({
+          users: z.array(apolloUser),
+          pagination: apolloPaginatedResponse,
+        }),
       }),
-    })),
+    ),
   },
   accounts: {
     search: request(
       ({
         q_organization_name,
         page,
+        perPage = DEFAULT_PAGE_SIZE,
       }: {
         q_organization_name?: string;
         page?: number;
+        perPage?: number;
       }) => ({
         url: `/accounts/search`,
         method: 'POST',
-        json: shake({ page, q_organization_name }),
+        json: shake({ page, q_organization_name, per_page: perPage }),
         schema: z.object({
           accounts: z.array(apolloAccount),
           pagination: apolloPaginatedResponse,
@@ -99,10 +115,34 @@ export const client = {
   },
   contacts: {
     search: request(
-      ({ q_keywords, page }: { q_keywords?: string; page?: number }) => ({
+      ({
+        q_keywords,
+        page,
+        perPage = DEFAULT_PAGE_SIZE,
+        contact_label_ids,
+        emailer_campaign_ids,
+        sort_by_field,
+        sort_ascending,
+      }: {
+        q_keywords?: string;
+        page?: number;
+        perPage?: number;
+        contact_label_ids?: string[];
+        emailer_campaign_ids?: string[];
+        sort_by_field?: string;
+        sort_ascending?: boolean;
+      }) => ({
         url: `/contacts/search`,
         method: 'POST',
-        json: shake({ page, q_keywords }),
+        json: shake({
+          page,
+          q_keywords,
+          contact_label_ids,
+          emailer_campaign_ids,
+          sort_by_field,
+          sort_ascending,
+          per_page: perPage,
+        }),
         schema: z.object({
           contacts: z.array(apolloContact),
           pagination: apolloPaginatedResponse,
@@ -131,13 +171,15 @@ export const client = {
       ({
         emailer_campaign_id,
         page,
+        perPage = DEFAULT_PAGE_SIZE,
       }: {
         emailer_campaign_id?: string;
         page?: number;
+        perPage?: number;
       }) => ({
         url: `/emailer_messages/search`,
         method: 'POST',
-        json: shake({ page, emailer_campaign_id }),
+        json: shake({ page, emailer_campaign_id, per_page: perPage }),
         schema: z.object({
           emailer_messages: z.array(apolloEmailMessage),
         }),
@@ -167,10 +209,18 @@ export const client = {
   },
   sequences: {
     search: request(
-      ({ q_keywords, page }: { q_keywords?: string; page?: number }) => ({
+      ({
+        q_keywords,
+        page,
+        perPage = DEFAULT_PAGE_SIZE,
+      }: {
+        q_keywords?: string;
+        page?: number;
+        perPage?: number;
+      }) => ({
         url: `/emailer_campaigns/search`,
         method: 'POST',
-        json: shake({ page, q_keywords }),
+        json: shake({ page, q_keywords, per_page: perPage }),
         schema: z.object({
           emailer_campaigns: z.array(apolloSequence),
           pagination: apolloPaginatedResponse,
@@ -245,16 +295,19 @@ export const client = {
         team_lists_only,
         q_keywords,
         page,
+        perPage,
       }: {
         team_lists_only: boolean;
         q_keywords?: string;
         page?: number;
+        perPage?: number;
       }) => ({
         url: `/labels/search`,
         method: 'POST',
         json: {
           ...shake({ q_keywords, page }),
           team_lists_only: team_lists_only ? ['yes'] : ['no'],
+          per_page: perPage,
         },
         schema: z.object({
           labels: z.array(apolloLabel),
@@ -270,11 +323,13 @@ export const client = {
         contact_label_ids,
         emailer_campaign_ids,
         page,
+        perPage = DEFAULT_PAGE_SIZE,
       }: {
         q_keywords?: string;
         contact_label_ids?: string[];
         emailer_campaign_ids?: string[];
         page?: number;
+        perPage?: number;
       }) => ({
         url: `/mixed_people/search`,
         method: 'POST',
@@ -283,12 +338,65 @@ export const client = {
           contact_label_ids,
           q_keywords,
           emailer_campaign_ids,
+          per_page: perPage,
         }),
         schema: z.object({
           contacts: z.array(apolloContact),
           people: z.array(apolloPerson),
           pagination: apolloPaginatedResponse,
         }),
+      }),
+    ),
+  },
+  tasks: {
+    search: request(
+      ({
+        user_ids,
+        page,
+        perPage = DEFAULT_PAGE_SIZE,
+      }: {
+        user_ids?: string[];
+        page?: number;
+        perPage?: number;
+      }) => ({
+        url: `/tasks/search`,
+        method: 'POST',
+        json: shake({
+          page,
+          user_ids,
+          sort_ascending: true,
+          open_factor_names: ['task_types'],
+          show_suggestions: false,
+          per_page: perPage,
+        }),
+        schema: z.object({
+          tasks: z.array(apolloTask),
+          pagination: apolloPaginatedResponse,
+        }),
+      }),
+    ),
+    markComplete: request((bulkComplete: ApolloTaskBulkCompleteInput) => ({
+      url: `/tasks/bulk_complete`,
+      method: 'POST',
+      json: shake(bulkComplete),
+      schema: apolloTaskBulkCompleteResponse,
+    })),
+  },
+  calls: {
+    create: request((call: ApolloCallCreate) => ({
+      url: `/phone_calls`,
+      method: 'POST',
+      json: shake(formatUpsertInputWithNative(call)),
+      schema: z.object({
+        phone_call: apolloCall,
+      }),
+    })),
+    additionalBootstrappedData: request(
+      ({ cacheKey }: { cacheKey: number }) => ({
+        url: `/auth/additional_bootstrapped_data`,
+        method: 'GET',
+        query: shake({ cacheKey }),
+        schema: apolloBootstrappedDataSchema,
       }),
     ),
   },

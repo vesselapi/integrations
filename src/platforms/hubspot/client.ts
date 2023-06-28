@@ -15,7 +15,10 @@ import {
   contactProperties,
   dealProperties,
   emailProperties,
+  FindContactByEmailInput,
   FindObjectInput,
+  hubspotAccessTokenOutputSchema,
+  HubspotAssociationBatchRead,
   HubspotAssociationCreate,
   HubspotAssociationDelete,
   HubspotAssociationLabelInput,
@@ -85,6 +88,7 @@ const request = makeRequestFactory(async (auth, options) => {
 type requestFunctionType<I, O> = (
   auth: Auth,
   input: I,
+  options?: Parameters<ReturnType<typeof request>>[2],
 ) => Promise<ClientResult<O>>;
 
 const makeClient = () => {
@@ -93,15 +97,21 @@ const makeClient = () => {
     schema: z.ZodSchema,
     properties?: string[],
   ): requestFunctionType<FindObjectInput, TOutput> =>
-    request(({ id, associations }: FindObjectInput) => ({
-      url: `/crm/${API_VERSION}/${module}/${id}`,
-      method: 'GET',
-      query: shake({
-        properties: properties?.join(','),
-        associations: associations?.join(','),
+    request(
+      ({
+        id,
+        associations,
+        properties: requestedProperties,
+      }: FindObjectInput) => ({
+        url: `/crm/${API_VERSION}/${module}/${id}`,
+        method: 'GET',
+        query: shake({
+          properties: (requestedProperties ?? properties)?.join(','),
+          associations: associations?.join(','),
+        }),
+        schema,
       }),
-      schema,
-    }));
+    );
 
   const listObject = <TOutput>(
     module: HubspotModule | `objects/${HubspotModule}`,
@@ -113,13 +123,14 @@ const makeClient = () => {
         after,
         limit = HUBSPOT_MAX_PAGE_SIZE,
         associations,
+        properties: requestedProperties,
       }: ListObjectInput) => ({
         url: `/crm/${API_VERSION}/${module}`,
         method: 'GET',
         query: shake({
           after,
           limit,
-          properties: properties?.join(','),
+          properties: (requestedProperties ?? properties)?.join(','),
           associations: associations?.join(','),
         }),
         schema,
@@ -179,11 +190,12 @@ const makeClient = () => {
         ids,
         after,
         limit = HUBSPOT_MAX_PAGE_SIZE,
+        properties: requestedProperties,
       }: BatchReadObjectInput) => ({
         url: `/crm/${API_VERSION}/${module}/batch/read`,
         method: 'POST',
         json: {
-          properties: properties ?? null,
+          properties: requestedProperties ?? properties ?? null,
           inputs: ids.map((id) => ({ id })),
           propertiesWithHistory: null,
           limit,
@@ -202,14 +214,16 @@ const makeClient = () => {
       ({
         filterGroups,
         after,
+        sorts,
         limit = HUBSPOT_MAX_PAGE_SIZE,
+        properties: requestedProperties,
       }: SearchObjectInput) => ({
         url: `/crm/${API_VERSION}/${module}/search`,
         method: 'POST',
         json: {
           filterGroups,
-          sorts: [],
-          properties: properties ?? null,
+          sorts,
+          properties: requestedProperties ?? properties ?? null,
           propertiesWithHistory: null,
           limit,
           after: after ?? 0,
@@ -264,11 +278,18 @@ const makeClient = () => {
         listResponseSchema(hubspotOwnerSchema),
       ),
     },
-    contacts: crud<HubspotContactCreate, HubspotContactUpdate, HubspotContact>(
-      'objects/contacts',
-      hubspotContactSchema,
-      contactProperties,
-    ),
+    contacts: {
+      ...crud<HubspotContactCreate, HubspotContactUpdate, HubspotContact>(
+        'objects/contacts',
+        hubspotContactSchema,
+        contactProperties,
+      ),
+      findByEmail: request(({ email }: FindContactByEmailInput) => ({
+        url: `/contacts/v1/contact/email/${email}/profile`,
+        method: 'GET',
+        schema: hubspotContactSchema,
+      })),
+    },
     companies: crud<HubspotCompanyCreate, HubspotCompanyUpdate, HubspotCompany>(
       'objects/companies',
       hubspotCompanySchema,
@@ -373,6 +394,18 @@ const makeClient = () => {
       ),
     },
     associations: {
+      batchRead: request(
+        ({ fromType, toType, inputs }: HubspotAssociationBatchRead) => ({
+          url: `/crm/v4/associations/${fromType}/${toType}/batch/read`,
+          method: 'POST',
+          schema: listResponseSchema(hubspotPropertySchema),
+          json: [
+            shake({
+              inputs,
+            }),
+          ],
+        }),
+      ),
       create: request(
         ({
           fromId,
@@ -409,6 +442,11 @@ const makeClient = () => {
         ListOutput<HubspotAssociationLabelOutput>
       >,
     },
+    accessToken: request(async (_args, auth) => ({
+      url: `/oauth/v1/access-tokens/${await auth.getToken()}`,
+      method: 'GET',
+      schema: hubspotAccessTokenOutputSchema,
+    })),
     passthrough: request.passthrough(),
   };
 };

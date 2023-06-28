@@ -77,8 +77,7 @@ export const auth = {
             : options.authUrl
         }?${toQueryString(query)}`;
       }),
-    isRetryable:
-      options.isRetryable ?? (async ({ response }) => response.status === 401),
+    isRetryable: options.isRetryable ?? (async ({ status }) => status === 401),
     appMetadataSchema: options.appMetadataSchema ?? z.any(),
     refreshTokenExpiresAt: options.refreshTokenExpiresAt ?? (() => null),
     accessTokenExpiresAt: options.accessTokenExpiresAt ?? (() => null),
@@ -106,6 +105,31 @@ export const auth = {
         platform,
       ) => `- You will find an API Key under Settings in your ${platform.display.name} account.
 - Copy and paste the API Key above.`,
+    },
+  }),
+  basic: <TAnswers extends Record<string, string> = Record<string, string>>(
+    options: {
+      questions?:
+        | [{ type: 'text'; id: 'username'; label: string }, ...AuthQuestion[]]
+        | [{ type: 'text'; id: 'password'; label: string }, ...AuthQuestion[]]
+        | [
+            { type: 'text'; id: 'username'; label: string },
+            { type: 'text'; id: 'password'; label: string },
+            ...AuthQuestion[],
+          ];
+      default?: boolean;
+      display?: OAuth2AuthConfig['display'];
+    } = {},
+  ): StandardAuthConfig<TAnswers> => ({
+    type: 'standard',
+    default: options.default ?? false,
+    questions: options.questions ?? [],
+    toTokenString: (answers) =>
+      Buffer.from(
+        `${answers.username ?? ''}:${answers.password ?? ''}`,
+      ).toString('base64'),
+    display: options.display ?? {
+      markdown: () => ``,
     },
   }),
 };

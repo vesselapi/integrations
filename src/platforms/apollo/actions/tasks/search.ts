@@ -1,32 +1,32 @@
 import {
   transformPagination,
-  transformSequence,
+  transformTask,
 } from '@/platforms/apollo/actions/mappers';
 import { client } from '@/platforms/apollo/client';
 import { action } from '@/sdk';
 import { z } from 'zod';
 
 export default action(
-  'search-sequences',
+  'search-tasks',
   {
     operation: 'search',
-    resource: 'sequences',
+    resource: 'tasks',
     mutation: false,
     schema: z.object({
-      qKeywords: z.string().optional(),
+      userIds: z.array(z.string()).optional(),
       page: z.number().optional(),
     }),
     scopes: [],
   },
   async ({ input, auth }) => {
-    const result = await client.sequences.search(auth, {
-      q_keywords: input.qKeywords,
+    const result = await client.tasks.search(auth, {
+      user_ids: input.userIds,
       page: input.page,
     });
 
     return {
       pagination: transformPagination(result.data.pagination, input.page),
-      emailerCampaigns: result.data.emailer_campaigns.map(transformSequence),
+      tasks: result.data.tasks.map(transformTask),
       $native: result.$native,
     };
   },

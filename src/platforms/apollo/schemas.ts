@@ -212,6 +212,103 @@ export const apolloEmailActivity = z.object({
 
 export type ApolloEmailActivity = z.infer<typeof apolloEmailActivity>;
 
+export const apolloTask = z.object({
+  id: z.string(),
+  user_id: z.string(),
+  created_at: custom.date(),
+  completed_at: custom.date().nullish(),
+  note: z.string().nullish(),
+  skipped_at: custom.date().nullish(),
+  due_at: custom.date().nullish(),
+  type: z.string().nullish(),
+  priority: z.string().nullish(),
+  status: z.string().nullish(),
+  answered: z.boolean().nullish(),
+  emailer_campaign_id: z.string().nullish(),
+  contact_id: z.string().nullish(),
+  person_id: z.string().nullish(),
+  account_id: z.string().nullish(),
+  organization_id: z.string().nullish(),
+  persona_ids: z.array(z.string()).nullish(),
+  subject: z.string().nullish(),
+  created_from: z.string().nullish(),
+  salesforce_type: z.string().nullish(),
+  playbook_step_ids: z.array(z.string()).nullish(),
+  playbook_id: z.string().nullish(),
+  needs_playbook_autoprospecting: z.boolean().nullish(),
+  starred_by_user_ids: z.array(z.string()).nullish(),
+  salesforce_id: z.string().nullish(),
+  hubspot_id: z.string().nullish(),
+  account: apolloAccount,
+  contact: apolloContact,
+});
+export type ApolloTask = z.infer<typeof apolloTask>;
+
+export const apolloTaskBulkCompleteInput = z.object({
+  ids: z.array(z.string()),
+  async: z.boolean(),
+  sync_index_tasks: z.boolean(),
+  cacheKey: z.number(),
+});
+export type ApolloTaskBulkCompleteInput = z.infer<
+  typeof apolloTaskBulkCompleteInput
+>;
+
+export const apolloTaskBulkCompleteResponse = z.object({
+  tasks: z.array(z.object({ id: z.string() })),
+});
+
+export const apolloCall = z.object({
+  id: z.string(),
+  user_id: z.string(),
+  contact_id: z.string(),
+  account_id: z.string().nullish(),
+  phone_call_outcome_id: z.string().nullish(),
+  recording_url: z.string().nullish(),
+  inbound: z.boolean().nullish(),
+  from_number: z.string().nullish(),
+  to_number: z.string().nullish(),
+  start_time: custom.date().nullish(),
+  end_time: custom.date().nullish(),
+  note_text: z.string().nullish(),
+  duration: z.number().nullish(),
+});
+export type ApolloCall = z.infer<typeof apolloCall>;
+
+export const apolloCallCreate = z.object({
+  contact_id: z.string(),
+  phone_call_outcome_id: z.string(),
+  user_id: z.string().nullish(),
+  phone_call_purpose_id: z.string().nullish(),
+  note: z.string().nullish(),
+  mark_all_sequences_as_finished: z.boolean().nullish(),
+  cacheKey: z.number(),
+  from_number: z.string().nullish(),
+  to_number: z.string().nullish(),
+  inbound: z.boolean().nullish(),
+  duration: z.number().nullish(),
+});
+export type ApolloCallCreate = z.infer<typeof apolloCallCreate>;
+
+export const apolloCallDisposition = z.object({
+  id: z.string(),
+  team_id: z.string().nullish(),
+  name: z.string().nullish(),
+  answered: z.boolean().nullish(),
+  order: z.number().nullish(),
+  trigger_contact_stage_id: z.string().nullish(),
+  sentiment: z.string().nullish(),
+});
+export type ApolloCallDisposition = z.infer<typeof apolloCallDisposition>;
+
+export const apolloCallPurpose = z.object({
+  id: z.string(),
+  team_id: z.string().nullish(),
+  name: z.string().nullish(),
+  settings_list_position: z.number().nullish(),
+});
+export type ApolloCallPurpose = z.infer<typeof apolloCallPurpose>;
+
 export const apolloCreateSequence = z.object({
   creation_type: z.string().optional(),
   name: z.string().optional(),
@@ -290,6 +387,15 @@ export const apolloCustomField = z.object({
   modality: z.string(),
   name: z.string(),
   type: z.string(),
+});
+
+export const apolloBootstrappedDataSchema = z.object({
+  bootstrapped_data: z.object({
+    current_user_id: z.string().nullish(),
+    current_team_id: z.string().nullish(),
+    phone_call_outcomes: z.array(apolloCallDisposition).nullish(),
+    phone_call_purposes: z.array(apolloCallPurpose).nullish(),
+  }),
 });
 
 export type ApolloCustomField = z.infer<typeof apolloCustomField>;
