@@ -11,7 +11,6 @@ import {
   outreachSequenceTemplate,
   outreachTemplate,
   outreachUser,
-  outreachUserProfile,
 } from '@/platforms/outreach/schemas';
 import {
   formatUpsertInputWithNative,
@@ -34,11 +33,6 @@ const request = makeRequestFactory(async (auth, options) => ({
 
 export const client = {
   users: {
-    profile: request(() => ({
-      url: `/userprofile`,
-      method: 'GET',
-      schema: outreachUserProfile,
-    })),
     find: request(({ id }: { id: number }) => ({
       url: `/users/${id}`,
       method: 'GET',

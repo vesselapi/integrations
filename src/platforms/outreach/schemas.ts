@@ -69,22 +69,6 @@ export const outreachEmailAddress = z.object({
   relationships: z.object({}),
 });
 
-export const outreachUserProfile = z.object({
-  sub: z.string(),
-  bento: z.string(),
-  user_id: z.string(),
-  org_guid: z.string(),
-  org_name: z.string(),
-  org_shortname: z.string(),
-  email: z.string(),
-  given_name: z.string(),
-  family_name: z.string(),
-  pendo_user_id: z.number(),
-  urls: z.object({
-    app_endpoint: z.string(),
-  }),
-});
-
 export const outreachUser = z.object({
   id: z.number(),
   attributes: z.object({
