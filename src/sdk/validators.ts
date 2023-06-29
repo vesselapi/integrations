@@ -4,6 +4,7 @@ import { z } from 'zod';
 export const date = () =>
   z
     .union([
+      z.number(),
       z.string().datetime({ offset: true }),
       z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
     ])
@@ -27,6 +28,18 @@ export const formattedPhoneNumber = (format?: NumberFormat) =>
 
 // TODO: remove this since we no longer use passthrough
 export const object = z.object;
+
+type WithNative<T> = T & { $native?: Record<string, unknown> };
+export function addNativeToZodSchema<T extends Record<string, unknown>>(
+  schema: z.ZodType<T, any, any>,
+): z.ZodType<WithNative<T>, any, any> {
+  return z.preprocess((data) => {
+    return {
+      ...(data as T),
+      $native: data,
+    };
+  }, z.intersection(schema, z.object({ $native: z.record(z.any()).optional() })));
+}
 
 // Create a shorthand for zod object passthrough since we need to use it everywhere.
 // export const object = ((shape: any, params: any) =>

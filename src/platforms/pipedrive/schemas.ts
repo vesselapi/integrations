@@ -111,38 +111,44 @@ export const pipedriveAssociationId = z.object({
 // -
 // Users
 // -
-export const pipedriveUserMeSchema = z.object({
-  id: z.number(),
-  company_domain: z.string(),
-  company_id: z.number(),
-});
+export const pipedriveUserMeSchema = custom.addNativeToZodSchema(
+  z.object({
+    id: z.number(),
+    company_domain: z.string(),
+    company_id: z.number(),
+  }),
+);
 export type PipedriveUserMe = z.infer<typeof pipedriveUserMeSchema>;
-export const pipedriveUserSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  email: z.string(),
-  created: custom.date(),
-  modified: custom.date().optional(),
-  active_flag: z.boolean(),
-});
+export const pipedriveUserSchema = custom.addNativeToZodSchema(
+  z.object({
+    id: z.number(),
+    name: z.string(),
+    email: z.string(),
+    created: custom.date(),
+    modified: custom.date().optional(),
+    active_flag: z.boolean(),
+  }),
+);
 export type PipedriveUser = z.infer<typeof pipedriveUserSchema>;
 
 // -
 // Person
 // -
-const pipedrivePersonSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  first_name: z.string(),
-  last_name: z.string(),
-  email: z.array(pipedriveEmailAddressSchema),
-  phone: z.array(pipedrivePhoneNumberSchema),
-  add_time: custom.date(),
-  update_time: custom.date(),
-  active_flag: z.boolean(),
-  org_id: pipedriveAssociationId.optional(),
-  owner_id: pipedriveAssociationId.optional(),
-});
+const pipedrivePersonSchema = custom.addNativeToZodSchema(
+  z.object({
+    id: z.string(),
+    name: z.string(),
+    first_name: z.string(),
+    last_name: z.string(),
+    email: z.array(pipedriveEmailAddressSchema),
+    phone: z.array(pipedrivePhoneNumberSchema),
+    add_time: custom.date(),
+    update_time: custom.date(),
+    active_flag: z.boolean(),
+    org_id: pipedriveAssociationId.optional(),
+    owner_id: pipedriveAssociationId.optional(),
+  }),
+);
 export type PipedrivePerson = z.infer<typeof pipedrivePersonSchema>;
 
 export const pipedrivePersonUpsertSchema = z
@@ -165,23 +171,25 @@ export type PipedrivePersonUpdate = z.infer<
 // -
 // Deals
 // -
-export const pipedriveDealSchema = z.object({
-  id: z.number(),
-  title: z.string(),
-  stage_id: z.number(),
-  value: z.string(),
-  expected_close_date: custom.date(),
-  weighted_value: z.string(),
-  status: z.string(),
-  active: z.boolean(),
-  probability: z.string(),
-  update_time: custom.date(),
-  add_time: custom.date(),
-  deleted: z.boolean(),
-  person_id: z.object({ value: z.number() }),
-  org_id: z.object({ value: z.number() }),
-  user_id: z.object({ value: z.number() }),
-});
+export const pipedriveDealSchema = custom.addNativeToZodSchema(
+  z.object({
+    id: z.number(),
+    title: z.string(),
+    stage_id: z.number(),
+    value: z.string(),
+    expected_close_date: custom.date(),
+    weighted_value: z.string(),
+    status: z.string(),
+    active: z.boolean(),
+    probability: z.string(),
+    update_time: custom.date(),
+    add_time: custom.date(),
+    deleted: z.boolean(),
+    person_id: z.object({ value: z.number() }),
+    org_id: z.object({ value: z.number() }),
+    user_id: z.object({ value: z.number() }),
+  }),
+);
 export type PipedriveDeal = z.infer<typeof pipedriveDealSchema>;
 export const pipedriveDealUpsertSchema = z
   .object({
@@ -202,18 +210,20 @@ export type PipedriveDealUpdate = z.infer<typeof pipedriveDealUpsertSchema> & {
 // -
 // Notes
 // -
-export const pipedriveNoteSchema = z.object({
-  id: z.number(),
-  add_time: custom.date(),
-  update_time: custom.date(),
-  content: z.string(),
-  user_id: z.number(),
-  active_flag: z.boolean(),
-  deal_id: z.number().optional(),
-  person_id: z.number().optional(),
-  org_id: z.number().optional(),
-  lead_id: z.string().optional(),
-});
+export const pipedriveNoteSchema = custom.addNativeToZodSchema(
+  z.object({
+    id: z.number(),
+    add_time: custom.date(),
+    update_time: custom.date(),
+    content: z.string(),
+    user_id: z.number(),
+    active_flag: z.boolean(),
+    deal_id: z.number().optional(),
+    person_id: z.number().optional(),
+    org_id: z.number().optional(),
+    lead_id: z.string().optional(),
+  }),
+);
 export type PipedriveNote = z.infer<typeof pipedriveNoteSchema>;
 
 export const pipedriveNoteCreateSchema = z
