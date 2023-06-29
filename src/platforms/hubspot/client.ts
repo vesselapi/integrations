@@ -121,6 +121,7 @@ const makeClient = () => {
     request(
       ({
         after,
+        archived,
         limit = HUBSPOT_MAX_PAGE_SIZE,
         associations,
         properties: requestedProperties,
@@ -130,6 +131,7 @@ const makeClient = () => {
         query: shake({
           after,
           limit,
+          archived,
           properties: (requestedProperties ?? properties)?.join(','),
           associations: associations?.join(','),
         }),
