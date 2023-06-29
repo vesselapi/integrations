@@ -1,5 +1,5 @@
 import { HttpsUrl } from '@/sdk';
-import * as validators from '@/sdk/validators';
+import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 import {
   SALESFORCE_CALL_TYPES,
@@ -20,7 +20,7 @@ const requiredFields = {
 export const salesforceSupportedObjectType = z.enum(
   SALESFORCE_SUPPORTED_OBJECT_TYPE,
 );
-export const salesforceSObject = validators.object({
+export const salesforceSObject = z.object({
   sobjects: z.array(z.object({ name: z.string() })),
 });
 
@@ -28,7 +28,7 @@ export const salesforceSObject = validators.object({
 // SObject Describe
 //  -
 export type SalesforceFieldType = (typeof SALESFORCE_FIELD_TYPES)[number];
-export const salesforceField = validators.object({
+export const salesforceField = z.object({
   name: z.string(),
   label: z.string(),
   type: z.string().transform((v) => v as SalesforceFieldType),
@@ -48,20 +48,22 @@ export const salesforceField = validators.object({
   nillable: z.boolean(), // field can be null
 });
 
-export const salesforceDescribeResponse = validators.object({
+export const salesforceDescribeResponse = z.object({
   fields: z.array(salesforceField),
 });
 
 // -
 // Query
 // -
-export const salesforceQueryResponse = validators.object({
+export const salesforceQueryResponse = z.object({
   records: z.array(
-    z
-      .object({
-        Id: z.string(),
-      })
-      .passthrough(),
+    custom.addNativeToZodSchema(
+      z
+        .object({
+          Id: z.string(),
+        })
+        .passthrough(),
+    ),
   ),
   totalSize: z.number(),
 });
@@ -70,13 +72,13 @@ export const salesforceQueryResponse = validators.object({
 // Jobs
 // -
 export type SalesforceJobState = (typeof SALESFORCE_JOB_STATES)[number];
-export const salesforceJob = validators.object({
+export const salesforceJob = z.object({
   id: z.string(),
   operation: z.string(),
   object: z.string().transform((v) => v as SalesforceSupportedObjectType),
   createdById: z.string(),
-  createdDate: validators.date(),
-  systemModstamp: validators.date(),
+  createdDate: custom.date(),
+  systemModstamp: custom.date(),
   state: z.string().transform((v) => v as SalesforceJobState),
   concurrencyMode: z.string(),
   contentType: z.string().transform((v) => v as 'CSV'), // Currently only CSV is supported.
@@ -88,39 +90,43 @@ export const salesforceJob = validators.object({
 // -
 // User
 // -
-export const salesforceUser = validators
-  .object({
-    Id: z.string(),
-    FirstName: z.string().nullable(),
-    LastName: z.string().nullable(),
-    Email: z.string().nullable(),
-    CreatedDate: validators.date(),
-    LastModifiedDate: validators.date(),
-  })
-  .partial()
-  .required(requiredFields);
+export const salesforceUser = custom.addNativeToZodSchema(
+  z
+    .object({
+      Id: z.string(),
+      FirstName: z.string().nullable(),
+      LastName: z.string().nullable(),
+      Email: z.string().nullable(),
+      CreatedDate: custom.date(),
+      LastModifiedDate: custom.date(),
+    })
+    .partial()
+    .required(requiredFields),
+);
 
 // -
 // Contact
 // -
-export const salesforceContact = validators
-  .object({
-    Id: z.string(),
-    FirstName: z.string().nullable(),
-    LastName: z.string().nullable(),
-    Title: z.string().nullable(),
-    Email: z.string().nullable(),
-    Phone: z.string().nullable(),
-    MobilePhone: z.string().nullable(),
-    CreatedDate: validators.date(),
-    LastModifiedDate: validators.date(),
-    AccountId: z.string().nullable(),
-    OwnerId: z.string().nullable(),
-  })
-  .partial()
-  .required(requiredFields);
+export const salesforceContact = custom.addNativeToZodSchema(
+  z
+    .object({
+      Id: z.string(),
+      FirstName: z.string().nullable(),
+      LastName: z.string().nullable(),
+      Title: z.string().nullable(),
+      Email: z.string().nullable(),
+      Phone: z.string().nullable(),
+      MobilePhone: z.string().nullable(),
+      CreatedDate: custom.date(),
+      LastModifiedDate: custom.date(),
+      AccountId: z.string().nullable(),
+      OwnerId: z.string().nullable(),
+    })
+    .partial()
+    .required(requiredFields),
+);
 
-export const salesforceContactCreate = validators.object({
+export const salesforceContactCreate = z.object({
   Contact: z.object({
     Email: z.string().optional(),
     FirstName: z.string().optional(),
@@ -134,11 +140,11 @@ export const salesforceContactCreate = validators.object({
   }),
 });
 
-export const salesforceContactCreateResponse = validators.object({
+export const salesforceContactCreateResponse = z.object({
   id: z.string(),
 });
 
-export const salesforceContactUpdate = validators.object({
+export const salesforceContactUpdate = z.object({
   Id: z.string(),
   Contact: z.object({
     Email: z.string().optional(),
@@ -156,43 +162,45 @@ export const salesforceContactUpdate = validators.object({
 // -
 // Account
 // -
-export const salesforceAccount = validators
-  .object({
-    Id: z.string(),
-    Name: z.string().nullable(),
-    Description: z.string().nullable(),
-    Industry: z.string().nullable(),
-    AnnualRevenue: z.union([z.number(), z.string()]).nullable(),
-    NumberOfEmployees: z.union([z.number(), z.string()]).nullable(),
-    Website: z.string().nullable(),
-    BillingAddress: z
-      .object({
-        street: z.string().nullable(),
-        city: z.string().nullable(),
-        state: z.string().nullable(),
-        postalCode: z.string().nullable(),
-        country: z.string().nullable(),
-      })
-      .nullable(),
-    Phone: z.string().nullable(),
-    CreatedDate: validators.date(),
-    LastModifiedDate: validators.date(),
-    OwnerId: z.string().nullable(),
-    Contacts: z
-      .object({ records: z.array(z.object({ Id: z.string() })) })
-      .nullable(),
-    Opportunities: z
-      .object({ records: z.array(z.object({ Id: z.string() })) })
-      .nullable(),
-  })
-  .partial()
-  .required(requiredFields);
+export const salesforceAccount = custom.addNativeToZodSchema(
+  z
+    .object({
+      Id: z.string(),
+      Name: z.string().nullable(),
+      Description: z.string().nullable(),
+      Industry: z.string().nullable(),
+      AnnualRevenue: z.union([z.number(), z.string()]).nullable(),
+      NumberOfEmployees: z.union([z.number(), z.string()]).nullable(),
+      Website: z.string().nullable(),
+      BillingAddress: z
+        .object({
+          street: z.string().nullable(),
+          city: z.string().nullable(),
+          state: z.string().nullable(),
+          postalCode: z.string().nullable(),
+          country: z.string().nullable(),
+        })
+        .nullable(),
+      Phone: z.string().nullable(),
+      CreatedDate: custom.date(),
+      LastModifiedDate: custom.date(),
+      OwnerId: z.string().nullable(),
+      Contacts: z
+        .object({ records: z.array(z.object({ Id: z.string() })) })
+        .nullable(),
+      Opportunities: z
+        .object({ records: z.array(z.object({ Id: z.string() })) })
+        .nullable(),
+    })
+    .partial()
+    .required(requiredFields),
+);
 export const salesforceAccountRelationalSelect = {
   Contact: '(SELECT Id FROM Contacts)',
   Opportunity: '(SELECT Id FROM Opportunities)',
 };
 
-export const salesforceAccountCreate = validators.object({
+export const salesforceAccountCreate = z.object({
   Account: z
     .object({
       Name: z.string(),
@@ -213,11 +221,11 @@ export const salesforceAccountCreate = validators.object({
     .partial(),
 });
 
-export const salesforceAccountCreateResponse = validators.object({
+export const salesforceAccountCreateResponse = z.object({
   id: z.string(),
 });
 
-export const salesforceAccountUpdate = validators.object({
+export const salesforceAccountUpdate = z.object({
   Id: z.string(),
   Account: z
     .object({
@@ -242,32 +250,34 @@ export const salesforceAccountUpdate = validators.object({
 // -
 // Opportunity
 // -
-export const salesforceOpportunity = validators
-  .object({
-    Id: z.string(),
-    Name: z.string().nullable(),
-    StageName: z.string().nullable(),
-    Amount: z.union([z.number(), z.string()]).nullable(),
-    CloseDate: validators.date().nullable(),
-    Probability: z.union([z.number(), z.string()]).nullable(),
-    ExpectedRevenue: z.union([z.number(), z.string()]).nullable(),
-    IsWon: z.boolean().nullable(),
-    IsClosed: z.boolean().nullable(),
-    ContactId: z.string().nullable(),
-    AccountId: z.string().nullable(),
-    CreatedDate: validators.date(),
-    OwnerId: z.string().nullable(),
-    LastModifiedDate: validators.date(),
-  })
-  .partial()
-  .required(requiredFields);
+export const salesforceOpportunity = custom.addNativeToZodSchema(
+  z
+    .object({
+      Id: z.string(),
+      Name: z.string().nullable(),
+      StageName: z.string().nullable(),
+      Amount: z.union([z.number(), z.string()]).nullable(),
+      CloseDate: custom.date().nullable(),
+      Probability: z.union([z.number(), z.string()]).nullable(),
+      ExpectedRevenue: z.union([z.number(), z.string()]).nullable(),
+      IsWon: z.boolean().nullable(),
+      IsClosed: z.boolean().nullable(),
+      ContactId: z.string().nullable(),
+      AccountId: z.string().nullable(),
+      CreatedDate: custom.date(),
+      OwnerId: z.string().nullable(),
+      LastModifiedDate: custom.date(),
+    })
+    .partial()
+    .required(requiredFields),
+);
 
-export const salesforceOpportunityCreate = validators.object({
+export const salesforceOpportunityCreate = z.object({
   Opportunity: z
     .object({
       Name: z.string(),
       Amount: z.number(),
-      CloseDate: validators.date(),
+      CloseDate: custom.date(),
       Probability: z.string(),
       AccountId: z.string(),
       ContactId: z.string(),
@@ -277,17 +287,17 @@ export const salesforceOpportunityCreate = validators.object({
     .partial(),
 });
 
-export const salesforceOpportunityCreateResponse = validators.object({
+export const salesforceOpportunityCreateResponse = z.object({
   id: z.string(),
 });
 
-export const salesforceOpportunityUpdate = validators.object({
+export const salesforceOpportunityUpdate = z.object({
   Id: z.string(),
   Opportunity: z
     .object({
       Name: z.string(),
       Amount: z.number(),
-      CloseDate: validators.date(),
+      CloseDate: custom.date(),
       Probability: z.string(),
       AccountId: z.string(),
       $native: z.record(z.any()),
@@ -298,24 +308,26 @@ export const salesforceOpportunityUpdate = validators.object({
 // -
 // Lead
 // -
-export const salesforceLead = validators
-  .object({
-    Id: z.string(),
-    FirstName: z.string().nullable(),
-    LastName: z.string().nullable(),
-    Title: z.string().nullable(),
-    Email: z.string().nullable(),
-    Company: z.string().nullable(),
-    Phone: z.string().nullable(),
-    MobilePhone: z.string().nullable(),
-    OwnerId: z.string().nullable(),
-    CreatedDate: validators.date(),
-    LastModifiedDate: validators.date(),
-  })
-  .partial()
-  .required(requiredFields);
+export const salesforceLead = custom.addNativeToZodSchema(
+  z
+    .object({
+      Id: z.string(),
+      FirstName: z.string().nullable(),
+      LastName: z.string().nullable(),
+      Title: z.string().nullable(),
+      Email: z.string().nullable(),
+      Company: z.string().nullable(),
+      Phone: z.string().nullable(),
+      MobilePhone: z.string().nullable(),
+      OwnerId: z.string().nullable(),
+      CreatedDate: custom.date(),
+      LastModifiedDate: custom.date(),
+    })
+    .partial()
+    .required(requiredFields),
+);
 
-export const salesforceLeadCreate = validators.object({
+export const salesforceLeadCreate = z.object({
   Lead: z
     .object({
       Email: z.string(),
@@ -330,11 +342,11 @@ export const salesforceLeadCreate = validators.object({
     .partial(),
 });
 
-export const salesforceLeadCreateResponse = validators.object({
+export const salesforceLeadCreateResponse = z.object({
   id: z.string(),
 });
 
-export const salesforceLeadUpdate = validators.object({
+export const salesforceLeadUpdate = z.object({
   Id: z.string(),
   Lead: z
     .object({
@@ -353,18 +365,20 @@ export const salesforceLeadUpdate = validators.object({
 // -
 // Note
 // -
-export const salesforceNote = validators
-  .object({
-    Id: z.string(),
-    CreatedDate: validators.date(),
-    LastModifiedDate: validators.date(),
-    Body: z.string().nullable(),
-    OwnerId: z.string().nullable(),
-    ParentId: z.string().nullable(),
-    Parent: z.object({ Type: z.string() }).nullable(),
-  })
-  .partial()
-  .required(requiredFields);
+export const salesforceNote = custom.addNativeToZodSchema(
+  z
+    .object({
+      Id: z.string(),
+      CreatedDate: custom.date(),
+      LastModifiedDate: custom.date(),
+      Body: z.string().nullable(),
+      OwnerId: z.string().nullable(),
+      ParentId: z.string().nullable(),
+      Parent: z.object({ Type: z.string() }).nullable(),
+    })
+    .partial()
+    .required(requiredFields),
+);
 export const salesforceNoteRelationalSelect = {
   Account: 'Parent.Type',
   Contact: 'Parent.Type',
@@ -372,7 +386,7 @@ export const salesforceNoteRelationalSelect = {
   Lead: 'Parent.Type',
 };
 
-export const salesforceNoteCreate = validators.object({
+export const salesforceNoteCreate = z.object({
   Note: z
     .object({
       ParentId: z.string(),
@@ -384,11 +398,11 @@ export const salesforceNoteCreate = validators.object({
     .partial(),
 });
 
-export const salesforceNoteCreateResponse = validators.object({
+export const salesforceNoteCreateResponse = z.object({
   id: z.string(),
 });
 
-export const salesforceNoteUpdate = validators.object({
+export const salesforceNoteUpdate = z.object({
   Id: z.string(),
   Note: z
     .object({
@@ -402,31 +416,33 @@ export const salesforceNoteUpdate = validators.object({
 // -
 // ContentDocumentLink (used for ContentNote)
 // -
-export const salesforceContentDocumentLink = z
-  .object({
-    Id: z.string(),
-    ContentDocumentId: z.string(),
-    LinkedEntityId: z.string(),
-    IsDeleted: z.boolean(),
-  })
-  .partial()
-  .required({ Id: true, ContentDocumentId: true, LinkedEntityId: true });
+export const salesforceContentDocumentLink = custom.addNativeToZodSchema(
+  z
+    .object({
+      Id: z.string(),
+      ContentDocumentId: z.string(),
+      LinkedEntityId: z.string(),
+      IsDeleted: z.boolean(),
+    })
+    .partial()
+    .required({ Id: true, ContentDocumentId: true, LinkedEntityId: true }),
+);
 
-export const salesforceContentDocumentLinkCreate = validators.object({
+export const salesforceContentDocumentLinkCreate = z.object({
   ContentDocumentLink: z.object({
     ContentDocumentId: z.string(),
     LinkedEntityId: z.string(),
   }),
 });
 
-export const salesforceContentDocumentLinkCreateResponse = validators.object({
+export const salesforceContentDocumentLinkCreateResponse = z.object({
   id: z.string(),
 });
 
 // -
 // ContentNoteContent
 // -
-export const salesforceContentNoteContent = validators.object({
+export const salesforceContentNoteContent = z.object({
   body: z.object({
     _readableState: z.any(),
   }),
@@ -435,24 +451,26 @@ export const salesforceContentNoteContent = validators.object({
 // -
 // ContentNote
 // -
-export const salesforceContentNote = validators
-  .object({
-    Id: z.string(),
-    CreatedDate: validators.date(),
-    LastModifiedDate: validators.date(),
-    TextPreview: z.string().nullable(),
-    Content: z.string().nullable(), // url to fetch the Content Body.
-    OwnerId: z.string().nullable(),
-    ContentDocumentLinks: z
-      .object({
-        records: z.array(salesforceContentDocumentLink),
-      })
-      .nullable(),
-  })
-  .partial()
-  .required(requiredFields);
+export const salesforceContentNote = custom.addNativeToZodSchema(
+  z
+    .object({
+      Id: z.string(),
+      CreatedDate: custom.date(),
+      LastModifiedDate: custom.date(),
+      TextPreview: z.string().nullable(),
+      Content: z.string().nullable(), // url to fetch the Content Body.
+      OwnerId: z.string().nullable(),
+      ContentDocumentLinks: z
+        .object({
+          records: z.array(salesforceContentDocumentLink),
+        })
+        .nullable(),
+    })
+    .partial()
+    .required(requiredFields),
+);
 
-export const salesforceContentNoteCreate = validators.object({
+export const salesforceContentNoteCreate = z.object({
   ContentNote: z
     .object({
       Content: z.string(),
@@ -462,11 +480,11 @@ export const salesforceContentNoteCreate = validators.object({
     .partial(),
 });
 
-export const salesforceContentNoteCreateResponse = validators.object({
+export const salesforceContentNoteCreateResponse = z.object({
   id: z.string(),
 });
 
-export const salesforceContentNoteUpdate = validators.object({
+export const salesforceContentNoteUpdate = z.object({
   Id: z.string(),
   ContentNote: z
     .object({
@@ -480,29 +498,33 @@ export const salesforceContentNoteUpdate = validators.object({
 // Task
 // -
 export type SalesforceCallType = (typeof SALESFORCE_CALL_TYPES)[number];
-export const salesforceTask = validators
-  .object({
-    Id: z.string(),
-    CreatedDate: validators.date(),
-    LastModifiedDate: validators.date(),
-    ActivityDate: validators.date().nullable(),
-    Description: z.string().nullable(),
-    IsClosed: z.boolean().nullable(),
-    OwnerId: z.string().nullable(),
-    Priority: z.string().nullable(),
-    Status: z.string().nullable(),
-    Subject: z.string().nullable(),
-    CallDisposition: z.string().nullable(),
-    CallType: z
-      .string()
-      .transform((v) => v as SalesforceCallType)
-      .nullable(),
-    TaskSubtype: z.string().nullable(),
-    Who: z.object({ Id: z.string(), Type: z.string().optional() }).nullable(),
-    What: z.object({ Id: z.string(), Type: z.string().optional() }).nullable(),
-  })
-  .partial()
-  .required(requiredFields);
+export const salesforceTask = custom.addNativeToZodSchema(
+  z
+    .object({
+      Id: z.string(),
+      CreatedDate: custom.date(),
+      LastModifiedDate: custom.date(),
+      ActivityDate: custom.date().nullable(),
+      Description: z.string().nullable(),
+      IsClosed: z.boolean().nullable(),
+      OwnerId: z.string().nullable(),
+      Priority: z.string().nullable(),
+      Status: z.string().nullable(),
+      Subject: z.string().nullable(),
+      CallDisposition: z.string().nullable(),
+      CallType: z
+        .string()
+        .transform((v) => v as SalesforceCallType)
+        .nullable(),
+      TaskSubtype: z.string().nullable(),
+      Who: z.object({ Id: z.string(), Type: z.string().optional() }).nullable(),
+      What: z
+        .object({ Id: z.string(), Type: z.string().optional() })
+        .nullable(),
+    })
+    .partial()
+    .required(requiredFields),
+);
 export const salesforceTaskRelationalSelect = {
   Account: 'What.Id',
   Opportunity: 'What.Id',
@@ -510,10 +532,10 @@ export const salesforceTaskRelationalSelect = {
   Lead: 'Who.Id',
 };
 
-export const salesforceTaskCreate = validators.object({
+export const salesforceTaskCreate = z.object({
   Task: z
     .object({
-      ActivityDate: validators.date(),
+      ActivityDate: custom.date(),
       Description: z.string(),
       OwnerId: z.string(),
       Priority: z.string(),
@@ -530,15 +552,15 @@ export const salesforceTaskCreate = validators.object({
     .partial(),
 });
 
-export const salesforceTaskCreateResponse = validators.object({
+export const salesforceTaskCreateResponse = z.object({
   id: z.string(),
 });
 
-export const salesforceTaskUpdate = validators.object({
+export const salesforceTaskUpdate = z.object({
   Id: z.string(),
   Task: z
     .object({
-      ActivityDate: validators.date(),
+      ActivityDate: custom.date(),
       Description: z.string(),
       OwnerId: z.string(),
       Priority: z.string(),
@@ -555,48 +577,50 @@ export const salesforceTaskUpdate = validators.object({
 // -
 // Event
 // -
-export const salesforceEvent = validators
-  .object({
-    Id: z.string(),
-    OwnerId: z.string(),
-    CreatedDate: validators.date(),
-    LastModifiedDate: validators.date(),
-    Subject: z.string().nullable(),
-    Type: z.string().nullable(),
-    Description: z.string().nullable(),
-    StartDateTime: validators.date().nullable(),
-    EndDateTime: validators.date().nullable(),
-    Location: z.string().nullable(),
-    IsAllDayEvent: z.boolean().nullable(),
-    ActivityDate: validators.date().nullable(),
-    ActivityDateTime: validators.date().nullable(),
-    AcceptedEventInviteeIds: z.array(z.string()).nullable(),
-    DeclinedEventInviteeIds: z.array(z.string()).nullable(),
-    UndecidedEventInviteeIds: z.array(z.string()).nullable(),
-    Who: z
-      .object({
-        Id: z.string(),
-        Type: z.string().optional(),
-      })
-      .nullable(),
-    What: z
-      .object({
-        Id: z.string(),
-        Type: z.string().optional(),
-      })
-      .nullable(),
-    EventRelations: z
-      .object({
-        records: z.array(
-          z.object({
-            Id: z.string(),
-          }),
-        ),
-      })
-      .nullable(),
-  })
-  .partial()
-  .required(requiredFields);
+export const salesforceEvent = custom.addNativeToZodSchema(
+  z
+    .object({
+      Id: z.string(),
+      OwnerId: z.string(),
+      CreatedDate: custom.date(),
+      LastModifiedDate: custom.date(),
+      Subject: z.string().nullable(),
+      Type: z.string().nullable(),
+      Description: z.string().nullable(),
+      StartDateTime: custom.date().nullable(),
+      EndDateTime: custom.date().nullable(),
+      Location: z.string().nullable(),
+      IsAllDayEvent: z.boolean().nullable(),
+      ActivityDate: custom.date().nullable(),
+      ActivityDateTime: custom.date().nullable(),
+      AcceptedEventInviteeIds: z.array(z.string()).nullable(),
+      DeclinedEventInviteeIds: z.array(z.string()).nullable(),
+      UndecidedEventInviteeIds: z.array(z.string()).nullable(),
+      Who: z
+        .object({
+          Id: z.string(),
+          Type: z.string().optional(),
+        })
+        .nullable(),
+      What: z
+        .object({
+          Id: z.string(),
+          Type: z.string().optional(),
+        })
+        .nullable(),
+      EventRelations: z
+        .object({
+          records: z.array(
+            z.object({
+              Id: z.string(),
+            }),
+          ),
+        })
+        .nullable(),
+    })
+    .partial()
+    .required(requiredFields),
+);
 export const salesforceEventRelationalSelect = {
   Account: 'What.Id',
   Opportunity: 'What.Id',
@@ -605,14 +629,14 @@ export const salesforceEventRelationalSelect = {
   EventRelation: '(SELECT Id, RelationId FROM EventRelations)',
 };
 
-export const salesforceEventCreate = validators.object({
+export const salesforceEventCreate = z.object({
   Event: z
     .object({
       Subject: z.string(),
       Type: z.string(),
       Description: z.string(),
-      StartDateTime: validators.date(),
-      EndDateTime: validators.date(),
+      StartDateTime: custom.date(),
+      EndDateTime: custom.date(),
       Location: z.string(),
       IsAllDayEvent: z.boolean(),
       WhoId: z.string(),
@@ -622,19 +646,19 @@ export const salesforceEventCreate = validators.object({
     .partial(),
 });
 
-export const salesforceEventCreateResponse = validators.object({
+export const salesforceEventCreateResponse = z.object({
   id: z.string(),
 });
 
-export const salesforceEventUpdate = validators.object({
+export const salesforceEventUpdate = z.object({
   Id: z.string(),
   Event: z
     .object({
       Subject: z.string(),
       Type: z.string(),
       Description: z.string(),
-      StartDateTime: validators.date(),
-      EndDateTime: validators.date(),
+      StartDateTime: custom.date(),
+      EndDateTime: custom.date(),
       Location: z.string(),
       IsAllDayEvent: z.boolean(),
       $native: z.record(z.any()),
@@ -645,20 +669,22 @@ export const salesforceEventUpdate = validators.object({
 // -
 // EventRelation
 // -
-export const salesforceEventRelation = validators
-  .object({
-    Id: z.string(),
-    CreatedDate: validators.date(),
-    LastModifiedDate: validators.date(),
-    EventId: z.string().nullable(),
-    RelationId: z.string().nullable(),
-    Status: z.string().nullable(),
-    IsInvitee: z.boolean().nullable(),
-  })
-  .partial()
-  .required(requiredFields);
+export const salesforceEventRelation = custom.addNativeToZodSchema(
+  z
+    .object({
+      Id: z.string(),
+      CreatedDate: custom.date(),
+      LastModifiedDate: custom.date(),
+      EventId: z.string().nullable(),
+      RelationId: z.string().nullable(),
+      Status: z.string().nullable(),
+      IsInvitee: z.boolean().nullable(),
+    })
+    .partial()
+    .required(requiredFields),
+);
 
-export const salesforceEventRelationCreate = validators.object({
+export const salesforceEventRelationCreate = z.object({
   EventRelation: z
     .object({
       EventId: z.string(),
@@ -669,11 +695,11 @@ export const salesforceEventRelationCreate = validators.object({
     .partial(),
 });
 
-export const salesforceEventRelationCreateResponse = validators.object({
+export const salesforceEventRelationCreateResponse = z.object({
   id: z.string(),
 });
 
-export const salesforceEventRelationUpdate = validators.object({
+export const salesforceEventRelationUpdate = z.object({
   Id: z.string(),
   EventRelation: z
     .object({
@@ -686,38 +712,40 @@ export const salesforceEventRelationUpdate = validators.object({
 // -
 // EmailMessage
 // -
-export const salesforceEmailMessage = validators
-  .object({
-    Id: z.string(),
-    FromAddress: z.string(),
-    ToAddress: z.string(),
-    CcAddress: z.string().nullable(),
-    BccAddress: z.string().nullable(),
-    Subject: z.string().nullable(),
-    TextBody: z.string().nullable(),
-    HtmlBody: z.string().nullable(),
-    MessageDate: validators.date().nullable(),
-    Incoming: z.boolean().nullable(),
-    IsBounced: z.boolean().nullable(),
-    HasAttachment: z.boolean().nullable(),
-    Status: z.string().nullable(),
-    CreatedDate: validators.date(),
-    LastModifiedDate: validators.date(),
-    CreatedById: z.string().nullable(),
-    IsArchived: z.boolean().nullable(),
-    IsDeleted: z.boolean().nullable(),
-    RelatedTo: z
-      .object({
-        Id: z.string(),
-        Type: z.string().optional(),
-      })
-      .nullable(),
-  })
-  .partial()
-  .required({
-    ...requiredFields,
-    FromAddress: true,
-  });
+export const salesforceEmailMessage = custom.addNativeToZodSchema(
+  z
+    .object({
+      Id: z.string(),
+      FromAddress: z.string(),
+      ToAddress: z.string(),
+      CcAddress: z.string().nullable(),
+      BccAddress: z.string().nullable(),
+      Subject: z.string().nullable(),
+      TextBody: z.string().nullable(),
+      HtmlBody: z.string().nullable(),
+      MessageDate: custom.date().nullable(),
+      Incoming: z.boolean().nullable(),
+      IsBounced: z.boolean().nullable(),
+      HasAttachment: z.boolean().nullable(),
+      Status: z.string().nullable(),
+      CreatedDate: custom.date(),
+      LastModifiedDate: custom.date(),
+      CreatedById: z.string().nullable(),
+      IsArchived: z.boolean().nullable(),
+      IsDeleted: z.boolean().nullable(),
+      RelatedTo: z
+        .object({
+          Id: z.string(),
+          Type: z.string().optional(),
+        })
+        .nullable(),
+    })
+    .partial()
+    .required({
+      ...requiredFields,
+      FromAddress: true,
+    }),
+);
 export const salesforceEmailMessageRelationalSelect = {
   Account: 'RelatedTo.Type, RelatedTo.Id',
   Opportunity: 'RelatedTo.Type, RelatedTo.Id',
@@ -725,7 +753,7 @@ export const salesforceEmailMessageRelationalSelect = {
   Lead: 'RelatedTo.Type, RelatedTo.Id',
 };
 
-export const salesforceEmailMessageCreate = validators.object({
+export const salesforceEmailMessageCreate = z.object({
   EmailMessage: z
     .object({
       FromAddress: z.string(),
@@ -735,7 +763,7 @@ export const salesforceEmailMessageCreate = validators.object({
       Subject: z.string(),
       TextBody: z.string(),
       HtmlBody: z.string(),
-      MessageDate: validators.date(),
+      MessageDate: custom.date(),
       Incoming: z.boolean(),
       Status: z.number(),
       CreatedById: z.string(),
@@ -745,11 +773,11 @@ export const salesforceEmailMessageCreate = validators.object({
     .partial(),
 });
 
-export const salesforceEmailMessageCreateResponse = validators.object({
+export const salesforceEmailMessageCreateResponse = z.object({
   id: z.string(),
 });
 
-export const salesforceEmailMessageUpdate = validators.object({
+export const salesforceEmailMessageUpdate = z.object({
   Id: z.string(),
   EmailMessage: z
     .object({
@@ -762,25 +790,27 @@ export const salesforceEmailMessageUpdate = validators.object({
 // -
 // EmailMessageRelation
 // -
-export const salesforceEmailMessageRelation = validators
-  .object({
-    Id: z.string(),
-    EmailMessageId: z.string(),
-    RelationId: z.string().nullable(),
-    RelationAddress: z.string().nullable(),
-    RelationObjectType: z.string().nullable(),
-    RelationType: z.string().nullable(),
-    IsDeleted: z.boolean().nullable(),
-    CreatedDate: validators.date(),
-    SystemModstamp: validators.date(),
-  })
-  .partial()
-  .required({
-    ...requiredFields,
-    EmailMessageId: true,
-  });
+export const salesforceEmailMessageRelation = custom.addNativeToZodSchema(
+  z
+    .object({
+      Id: z.string(),
+      EmailMessageId: z.string(),
+      RelationId: z.string().nullable(),
+      RelationAddress: z.string().nullable(),
+      RelationObjectType: z.string().nullable(),
+      RelationType: z.string().nullable(),
+      IsDeleted: z.boolean().nullable(),
+      CreatedDate: custom.date(),
+      SystemModstamp: custom.date(),
+    })
+    .partial()
+    .required({
+      ...requiredFields,
+      EmailMessageId: true,
+    }),
+);
 
-export const salesforceEmailMessageRelationCreate = validators.object({
+export const salesforceEmailMessageRelationCreate = z.object({
   EmailMessageRelation: z
     .object({
       EmailMessageId: z.string(),
@@ -797,36 +827,38 @@ export const salesforceEmailMessageRelationCreate = validators.object({
     .partial(),
 });
 
-export const salesforceEmailMessageRelationCreateResponse = validators.object({
+export const salesforceEmailMessageRelationCreateResponse = z.object({
   id: z.string(),
 });
 
 // -
 // ListView
 // -
-export const salesforceListView = validators
-  .object({
-    Id: z.string(),
-    Name: z.string(),
-    CreatedDate: validators.date(),
-    LastModifiedDate: validators.date(),
-    CreatedById: z.string(),
-  })
-  .partial()
-  .required({
-    ...requiredFields,
-    Name: true,
-  });
+export const salesforceListView = custom.addNativeToZodSchema(
+  z
+    .object({
+      Id: z.string(),
+      Name: z.string(),
+      CreatedDate: custom.date(),
+      LastModifiedDate: custom.date(),
+      CreatedById: z.string(),
+    })
+    .partial()
+    .required({
+      ...requiredFields,
+      Name: true,
+    }),
+);
 
-export const salesforceListViewResult = validators.object({
+export const salesforceListViewResult = z.object({
   developerName: z.string(),
   done: z.boolean(),
   id: z.string(),
   label: z.string(),
   records: z.array(
-    validators.object({
+    z.object({
       columns: z.array(
-        validators.object({
+        z.object({
           fieldNameOrPath: z.string(),
           value: z.string(),
         }),
