@@ -29,6 +29,7 @@ export type FindObjectInput = {
 export type ListObjectInput = {
   after?: string;
   limit?: number;
+  archived?: boolean;
   associations?: HubspotCommonAssociations[];
   properties?: string[];
 };
