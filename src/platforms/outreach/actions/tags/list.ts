@@ -52,7 +52,6 @@ export default action(
       $native: any;
     };
 
-    console.log(tags);
     return { data: tags.data?.data?.tagCollection, $native: tags.$native };
   },
 );
