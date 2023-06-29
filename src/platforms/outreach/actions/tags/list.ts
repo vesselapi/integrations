@@ -39,18 +39,17 @@ export default action(
       },
     })) as unknown as {
       data: {
-        data: {
-          tagCollection: {
-            count: number;
-            collection: {
-              id: string;
-              name: string;
-            }[];
-          };
+        tagCollection: {
+          count: number;
+          collection: {
+            id: string;
+            name: string;
+          }[];
         };
       };
     };
 
-    return tags;
+    console.log(tags);
+    return tags.data?.tagCollection;
   },
 );

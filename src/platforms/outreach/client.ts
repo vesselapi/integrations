@@ -504,9 +504,7 @@ export const client = {
         variables,
       },
       schema: z.object({
-        data: z.object({
-          data: z.unknown(),
-        }),
+        data: z.any(),
       }),
     }),
   ),
