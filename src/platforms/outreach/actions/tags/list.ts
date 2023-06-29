@@ -51,6 +51,6 @@ export default action(
       };
     };
 
-    return tags.data?.data?.tagCollection;
+    return tags;
   },
 );
