@@ -12,6 +12,7 @@ import {
   outreachTemplate,
   outreachUser,
 } from '@/platforms/outreach/schemas';
+import { HttpsUrl } from '@/sdk';
 import {
   formatUpsertInputWithNative,
   formatUrl,
@@ -25,6 +26,16 @@ import { BASE_URL, DEFAULT_PAGE_SIZE } from './constants';
 const request = makeRequestFactory(async (auth, options) => ({
   ...options,
   url: formatUrl(BASE_URL, options.url),
+  headers: {
+    ...options.headers,
+    Authorization: `Bearer ${await auth.getToken()}`,
+  },
+}));
+
+// Used exclusively for GraphQL requests.
+const _graphQl = makeRequestFactory(async (auth, options) => ({
+  ...options,
+  url: options.url as `https://${HttpsUrl}/graphql/${string}`,
   headers: {
     ...options.headers,
     Authorization: `Bearer ${await auth.getToken()}`,
@@ -469,5 +480,31 @@ export const client = {
     ),
   },
   passthrough: request.passthrough(),
+  // @deprecated
+  graphQl: _graphQl(
+    ({
+      prefix,
+      resource,
+      query,
+      variables,
+    }: {
+      prefix?: string;
+      resource: string;
+      query: string;
+      variables: Record<string, any>;
+    }) => ({
+      url: `https://${prefix ?? 'app2c'}.outreach.io/graphql/${resource}`,
+      method: 'POST',
+      json: {
+        query,
+        variables,
+      },
+      schema: z.object({
+        data: z.object({
+          data: z.unknown(),
+        }),
+      }),
+    }),
+  ),
 };
 export { BASE_URL };
