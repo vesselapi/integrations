@@ -294,7 +294,11 @@ export const client = {
       ({
         team_lists_only,
         q_keywords,
-        page,
+        // @NOTE: This is a bug in the apollo API. The API
+        // defaults to page 1 so if you pass page=0 you'll get
+        // "1" as the next page cursor which results in 2 pages
+        // of the first page.
+        page = 1,
         perPage,
       }: {
         team_lists_only: boolean;
