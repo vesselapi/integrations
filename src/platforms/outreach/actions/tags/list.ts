@@ -39,17 +39,20 @@ export default action(
       },
     })) as unknown as {
       data: {
-        tagCollection: {
-          count: number;
-          collection: {
-            id: string;
-            name: string;
-          }[];
+        data: {
+          tagCollection: {
+            count: number;
+            collection: {
+              id: string;
+              name: string;
+            }[];
+          };
         };
       };
+      $native: any;
     };
 
     console.log(tags);
-    return tags.data?.tagCollection;
+    return { data: tags.data?.data?.tagCollection, $native: tags.$native };
   },
 );
