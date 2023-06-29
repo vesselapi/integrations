@@ -120,20 +120,22 @@ export const baseHubspotObjectSchema = <
 >(
   properties: T,
 ) =>
-  z.object({
-    id: hubspotIdSchema,
-    createdAt: custom.date(),
-    updatedAt: custom.date(),
-    properties: custom.addNativeToZodSchema(properties),
-    associations: z
-      .object({
-        companies: hubspotAssociationSchema,
-        contacts: hubspotAssociationSchema,
-        deals: hubspotAssociationSchema,
-      })
-      .partial()
-      .optional(),
-  });
+  custom.addNativeToZodSchema(
+    z.object({
+      id: hubspotIdSchema,
+      createdAt: custom.date(),
+      updatedAt: custom.date(),
+      properties: properties,
+      associations: z
+        .object({
+          companies: hubspotAssociationSchema,
+          contacts: hubspotAssociationSchema,
+          deals: hubspotAssociationSchema,
+        })
+        .partial()
+        .optional(),
+    }),
+  );
 
 export const upsertResponseSchema = z.object({
   id: hubspotIdSchema,
