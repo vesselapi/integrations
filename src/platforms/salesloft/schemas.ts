@@ -318,3 +318,10 @@ export type SalesloftCustomFieldCreate = {
   field_type: string;
   $native?: Record<string, unknown>;
 };
+
+export const salesloftTag = z.object({
+  id: z.number(),
+  name: z.string(),
+});
+
+export type SalesloftTag = z.infer<typeof salesloftTag>;

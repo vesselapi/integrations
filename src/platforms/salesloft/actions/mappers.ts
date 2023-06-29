@@ -6,6 +6,7 @@ import {
   SalesloftEmailBody,
   SalesloftMetadata,
   SalesloftPerson,
+  SalesloftTag,
   SalesloftUser,
 } from '@/platforms/salesloft/schemas';
 
@@ -176,6 +177,13 @@ export const transformUser = (user: SalesloftUser) => {
     clickToCallEnabled: user.click_to_call_enabled,
     emailClientConfigured: user.email_client_configured,
     crmConnected: user.crm_connected,
+  };
+};
+
+export const transformTag = (tag: SalesloftTag) => {
+  return {
+    id: tag.id,
+    name: tag.name,
   };
 };
 

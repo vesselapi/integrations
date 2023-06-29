@@ -24,6 +24,8 @@ import updatePerson from './actions/people/update';
 import findUsers from './actions/users/find';
 import listUsers from './actions/users/list';
 
+import listTags from './actions/tags/list';
+
 export * as types from './schemas';
 export default platform('salesloft', {
   auth: [
@@ -61,5 +63,7 @@ export default platform('salesloft', {
 
     findUsers,
     listUsers,
+
+    listTags,
   },
 });

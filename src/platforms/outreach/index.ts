@@ -20,6 +20,7 @@ import listUsers from '@/platforms/outreach/actions/users/list';
 import { client } from '@/platforms/outreach/client';
 import * as constants from '@/platforms/outreach/constants';
 import { icon } from '@/platforms/outreach/icon';
+import listTags from './actions/tags/list';
 
 export * as types from './schemas';
 export default platform('outreach', {
@@ -55,5 +56,6 @@ export default platform('outreach', {
     createSequence,
     createTemplate,
     createSequenceTemplate,
+    listTags,
   },
 });
