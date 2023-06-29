@@ -1,7 +1,15 @@
 import { IntegrationError } from '@/sdk/error';
 import { Auth, ClientResult, HttpsUrl } from '@/sdk/types';
 import axios, { AxiosError } from 'axios';
-import { guard, isFunction, isObject, omit, trim, tryit } from 'radash';
+import {
+  guard,
+  isArray,
+  isFunction,
+  isObject,
+  omit,
+  trim,
+  tryit,
+} from 'radash';
 import { z } from 'zod';
 import * as qs from './query-string';
 
@@ -141,13 +149,13 @@ export const makeRequestFactory = (
     TResponseSchema extends z.ZodType<unknown>,
   >(
     formatRequestOptions:
-      | RequestFetchOptions<TResponseSchema, qs.Map>
+      | RequestFetchOptions<TResponseSchema, qs.List | qs.Map>
       | ((
           args: TArgs,
           auth: Auth,
         ) =>
-          | Promise<RequestFetchOptions<TResponseSchema, qs.Map>>
-          | RequestFetchOptions<TResponseSchema, qs.Map>),
+          | Promise<RequestFetchOptions<TResponseSchema, qs.List | qs.Map>>
+          | RequestFetchOptions<TResponseSchema, qs.List | qs.Map>),
   ) {
     const fetchRawResponse = async (auth: Auth, args: TArgs) =>
       await auth.retry(async () => {
@@ -156,7 +164,11 @@ export const makeRequestFactory = (
           : formatRequestOptions;
         const options = await formatFetchOptions(auth, {
           ...reqOptions,
-          query: reqOptions.query ? qs.toArray(reqOptions.query) : [],
+          query: reqOptions.query
+            ? isArray(reqOptions.query)
+              ? reqOptions.query
+              : qs.toArray(reqOptions.query)
+            : [],
         });
         const url =
           options.query.length > 0
@@ -253,14 +265,12 @@ export const makeRequestFactory = (
     createRequest((args: HttpOptions) => ({
       ...args,
       schema: z.any(),
-      query: {},
     }));
 
   createRequest.fetch = () =>
     createRequest((args: HttpOptions) => ({
       ...args,
       schema: z.any(),
-      query: {},
     })).fetchRawResponse();
 
   return createRequest;
