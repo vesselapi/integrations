@@ -1,8 +1,17 @@
 import {
   SalesforceContact,
   SalesforceListView,
+  SalesforceQueryRecord,
   SalesforceUser,
 } from '@/platforms/salesforce/schemas';
+import { camel, mapKeys, omit } from 'radash';
+
+export const transformRecord = (record: SalesforceQueryRecord) => {
+  return {
+    id: record.Id,
+    ...mapKeys(omit(record, ['$native']), camel),
+  };
+};
 
 export const transformContact = (contact: SalesforceContact) => {
   return {

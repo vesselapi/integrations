@@ -1,8 +1,8 @@
 import { Auth, HttpsUrl } from '@/sdk';
 import { formatUpsertInputWithNative, makeRequestFactory } from '@/sdk/client';
-import { shake, trim } from 'radash';
+import { shake } from 'radash';
 import { z } from 'zod';
-import { salesforceQueryBuilder } from './actions/query-builder';
+import { formatQuery, salesforceQueryBuilder } from './actions/query-builder';
 import { SALESFORCE_API_VERSION } from './constants';
 import {
   salesforceAccount,
@@ -236,7 +236,7 @@ export const client = {
   query: request(({ query }: { query: string }) => ({
     url: `/query/`,
     method: 'GET',
-    query: { q: trim(query.replace(/[\s\n]+/g, ' ')) },
+    query: { q: formatQuery(query) },
     schema: salesforceQueryResponse,
   })),
   jobs: {

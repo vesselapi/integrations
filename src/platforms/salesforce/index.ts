@@ -7,6 +7,8 @@ import {
   salesforceOAuthUrlsByAccountType,
 } from './schemas';
 
+import query from '@/platforms/salesforce/actions/soql/query';
+
 import createContact from '@/platforms/salesforce/actions/contacts/create';
 import findContact from '@/platforms/salesforce/actions/contacts/find';
 import listContacts from '@/platforms/salesforce/actions/contacts/list';
@@ -59,6 +61,7 @@ export default platform('salesforce', {
   client,
   constants,
   actions: {
+    query,
     createContact,
     findContact,
     listContacts,

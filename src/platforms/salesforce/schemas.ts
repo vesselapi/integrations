@@ -55,16 +55,15 @@ export const salesforceDescribeResponse = z.object({
 // -
 // Query
 // -
+export const salesforceQueryRecord = custom.addNativeToZodSchema(
+  z
+    .object({
+      Id: z.string(),
+    })
+    .passthrough(),
+);
 export const salesforceQueryResponse = z.object({
-  records: z.array(
-    custom.addNativeToZodSchema(
-      z
-        .object({
-          Id: z.string(),
-        })
-        .passthrough(),
-    ),
-  ),
+  records: z.array(salesforceQueryRecord),
   totalSize: z.number(),
 });
 
@@ -904,6 +903,7 @@ export type SalesforceSupportedObjectType =
   (typeof SALESFORCE_SUPPORTED_OBJECT_TYPE)[number];
 export type SalesforceSObject = z.infer<typeof salesforceSObject>;
 export type SalesforceField = z.infer<typeof salesforceField>;
+export type SalesforceQueryRecord = z.infer<typeof salesforceQueryRecord>;
 export type SalesforceUser = z.infer<typeof salesforceUser>;
 export type SalesforceContact = z.infer<typeof salesforceContact>;
 export type SalesforceContactCreate = z.infer<typeof salesforceContactCreate>;
