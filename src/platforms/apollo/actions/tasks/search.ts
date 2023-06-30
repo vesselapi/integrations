@@ -25,6 +25,8 @@ export default action(
     const result = await client.tasks.search(auth, {
       user_ids: input.userIds,
       emailer_campaign_ids: input.emailerCampaignIds,
+      sort_ascending: input.sortAscending,
+      sort_by_field: input.sortByField,
       page: input.page,
     });
 
