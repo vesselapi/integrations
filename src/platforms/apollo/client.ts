@@ -355,10 +355,14 @@ export const client = {
         user_ids,
         emailer_campaign_ids,
         page,
+        sort_ascending,
+        sort_by_field,
         perPage = DEFAULT_PAGE_SIZE,
       }: {
         user_ids?: string[];
         emailer_campaign_ids?: string[];
+        sort_ascending?: boolean;
+        sort_by_field?: string;
         page?: number;
         perPage?: number;
       }) => ({
@@ -367,7 +371,8 @@ export const client = {
         json: shake({
           page,
           user_ids,
-          sort_ascending: true,
+          sort_ascending,
+          sort_by_field,
           open_factor_names: ['task_types'],
           show_suggestions: false,
           per_page: perPage,
