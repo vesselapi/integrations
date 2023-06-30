@@ -104,7 +104,7 @@ const makeClient = () => {
     request((body: FindObjectInput) => ({
       url: `/${API_VERSION}/${module}/${body.id}`,
       method: 'DELETE',
-      schema: z.undefined(),
+      schema: z.any(),
     }));
 
   const batchReadObject = <TOutput>(
