@@ -14,12 +14,12 @@ export default action(
     scopes: [],
   },
   async ({ auth, input }) => {
-    const result = await client.query(auth, {
+    const { data, $native } = await client.query(auth, {
       query: input.query,
     });
     return {
-      data: result.data,
-      $native: result.$native,
+      data: data.data,
+      $native,
     };
   },
 );
