@@ -14,6 +14,7 @@ export default action(
     mutation: false,
     schema: z.object({
       userIds: z.array(z.string()).optional(),
+      emailerCampaignId: z.string().optional(),
       page: z.number().optional(),
     }),
     scopes: [],
@@ -21,6 +22,7 @@ export default action(
   async ({ input, auth }) => {
     const result = await client.tasks.search(auth, {
       user_ids: input.userIds,
+      emailer_campaign_id: input.emailerCampaignId,
       page: input.page,
     });
 
