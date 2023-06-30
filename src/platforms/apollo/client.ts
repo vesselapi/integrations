@@ -353,12 +353,12 @@ export const client = {
     search: request(
       ({
         user_ids,
-        emailer_campaign_id,
+        emailer_campaign_ids,
         page,
         perPage = DEFAULT_PAGE_SIZE,
       }: {
         user_ids?: string[];
-        emailer_campaign_id?: string;
+        emailer_campaign_ids?: string[];
         page?: number;
         perPage?: number;
       }) => ({
@@ -371,7 +371,7 @@ export const client = {
           open_factor_names: ['task_types'],
           show_suggestions: false,
           per_page: perPage,
-          emailer_campaign_id,
+          emailer_campaign_ids,
         }),
         schema: z.object({
           tasks: z.array(apolloTask),
