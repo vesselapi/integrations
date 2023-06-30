@@ -15,8 +15,8 @@ export default action(
     schema: z.object({
       userIds: z.array(z.string()).optional(),
       emailerCampaignIds: z.array(z.string()).optional(),
-      sortAscending: z.boolean().optional().default(false),
-      sortByField: z.string().optional().default('task_due_at'),
+      sortAscending: z.boolean().optional(),
+      sortByField: z.string().optional(),
       page: z.number().optional(),
     }),
     scopes: [],
