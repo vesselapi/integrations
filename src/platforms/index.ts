@@ -4,6 +4,7 @@ import apollo from '@/platforms/apollo';
 import dialpad from '@/platforms/dialpad';
 import hubspot from '@/platforms/hubspot';
 import mailchimp from '@/platforms/mailchimp';
+import monday from '@/platforms/monday';
 import outreach from '@/platforms/outreach';
 import pipedrive from '@/platforms/pipedrive';
 import ringcentral from '@/platforms/ringcentral';
@@ -29,6 +30,7 @@ export {
   default as mailchimp,
   types as mailchimpTypes,
 } from '@/platforms/mailchimp';
+export { default as monday, types as mondayTypes } from '@/platforms/monday';
 export {
   default as outreach,
   types as outreachTypes,
@@ -63,6 +65,7 @@ export const integrationsList: Platform<any, any, any, any, any>[] = [
   freshsales,
   hubspot,
   mailchimp,
+  monday,
   outreach,
   pipedrive,
   ringcentral,
