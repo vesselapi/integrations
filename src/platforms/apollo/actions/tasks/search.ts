@@ -14,7 +14,7 @@ export default action(
     mutation: false,
     schema: z.object({
       userIds: z.array(z.string()).optional(),
-      emailerCampaignIds: z.array(z.string()).optional(),
+      sequenceIds: z.array(z.string()).optional(),
       sortAscending: z.boolean().optional(),
       sortByField: z.string().optional(),
       page: z.number().optional(),
@@ -24,12 +24,9 @@ export default action(
   async ({ input, auth }) => {
     const result = await client.tasks.search(auth, {
       user_ids: input.userIds,
-      emailer_campaign_ids: input.emailerCampaignIds,
-<<<<<<< HEAD
+      emailer_campaign_ids: input.sequenceIds,
       sort_ascending: input.sortAscending,
       sort_by_field: input.sortByField,
-=======
->>>>>>> main
       page: input.page,
     });
 
