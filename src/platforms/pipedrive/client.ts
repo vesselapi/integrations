@@ -10,6 +10,8 @@ import { API_VERSION, BASE_URL, PIPEDRIVE_MAX_PAGE_SIZE } from './constants';
 import {
   BatchReadObjectInput,
   FindObjectInput,
+  FindOutput,
+  findResponseSchema,
   ListObjectInput,
   ListOutput,
   listResponseSchema,
@@ -54,13 +56,12 @@ type requestFunctionType<I, O> = (
 const makeClient = () => {
   const findObject = <TOutput>(
     module: PipedriveModule,
-    schema: z.ZodSchema,
-    properties?: string[],
-  ): requestFunctionType<FindObjectInput, TOutput> =>
+    schema: z.ZodType<TOutput>,
+  ): requestFunctionType<FindObjectInput, FindOutput<TOutput>> =>
     request(({ id }: FindObjectInput) => ({
       url: `/${API_VERSION}/${module}/${id}`,
       method: 'GET',
-      schema,
+      schema: findResponseSchema(schema),
     }));
 
   const listObject = <TOutput>(

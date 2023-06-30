@@ -7,6 +7,7 @@ export const date = () =>
       z.number(),
       z.string().datetime({ offset: true }),
       z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+      z.string().regex(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/),
     ])
     .transform((value) => new Date(value));
 

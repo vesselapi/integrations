@@ -19,13 +19,24 @@ export type SearchObjectInput = {
   term: string;
   exact_match: 0 | 1;
 } & ListObjectInput;
+export type FindOutput<T> = {
+  data: T;
+};
 export type ListOutput<T> = {
   data?: T[];
   additional_data?: {
     pagination?: { more_items_in_collection?: boolean; start?: number };
   };
 };
-export const listResponseSchema = (itemSchema: z.ZodSchema) =>
+export const findResponseSchema = <TOutput>(
+  schema: z.ZodType<TOutput, any, any>,
+) =>
+  z.object({
+    data: schema,
+  }) as z.ZodType<FindOutput<TOutput>, any, any>;
+export const listResponseSchema = <TOutput>(
+  itemSchema: z.ZodType<TOutput, any, any>,
+) =>
   z.object({
     data: z.array(itemSchema).optional(),
     additional_data: z
@@ -78,12 +89,11 @@ export const searchResponseSchema = (itemSchema: z.ZodSchema) =>
 
 export const pipedriveModuleSchema = z.enum(PIPEDRIVE_MODULES);
 export type PipedriveModule = (typeof PIPEDRIVE_MODULES)[number];
-
 export const upsertResponseSchema = z.object({
-  id: z.string(),
+  data: z.object({ id: z.number() }),
 });
 export type UpsertResponse = {
-  id: string;
+  data: { id: number };
 };
 
 // -
@@ -136,7 +146,7 @@ export type PipedriveUser = z.infer<typeof pipedriveUserSchema>;
 // -
 const pipedrivePersonSchema = custom.addNativeToZodSchema(
   z.object({
-    id: z.string(),
+    id: z.number(),
     name: z.string(),
     first_name: z.string(),
     last_name: z.string(),
@@ -221,7 +231,7 @@ export const pipedriveNoteSchema = custom.addNativeToZodSchema(
     deal_id: z.number().optional(),
     person_id: z.number().optional(),
     org_id: z.number().optional(),
-    lead_id: z.string().optional(),
+    lead_id: z.number().optional(),
   }),
 );
 export type PipedriveNote = z.infer<typeof pipedriveNoteSchema>;
@@ -229,11 +239,11 @@ export type PipedriveNote = z.infer<typeof pipedriveNoteSchema>;
 export const pipedriveNoteCreateSchema = z
   .object({
     content: z.string(),
-    user_id: z.string(),
+    user_id: z.number(),
     person_id: z.number().optional(),
     deal_id: z.number().optional(),
     org_id: z.number().optional(),
-    lead_id: z.string().optional(),
+    lead_id: z.number().optional(),
     $native: z.record(z.any()),
   })
   .partial();
@@ -241,7 +251,7 @@ export type PipedriveNoteCreate = z.infer<typeof pipedriveNoteCreateSchema>;
 export const pipedriveNoteUpdateSchema = z
   .object({
     content: z.string(),
-    user_id: z.string(),
+    user_id: z.number(),
     $native: z.record(z.any()),
   })
   .partial();
