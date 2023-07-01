@@ -5,6 +5,11 @@ import * as constants from './constants';
 import { icon } from './icon';
 
 import query from '@/platforms/monday/actions/graphql/query';
+
+import listBoards from '@/platforms/monday/actions/boards/list';
+
+import createItems from '@/platforms/monday/actions/items/create';
+
 export * as types from './schemas';
 
 export default platform('monday', {
@@ -15,10 +20,14 @@ export default platform('monday', {
     isRetryable: async ({ status }) => status === 401,
     default: true,
   }),
-  display: { name: 'monday.com', iconURI: icon, categories: [] },
+  display: { name: 'monday.com', iconURI: icon, categories: ['crm'] },
   constants,
   client,
   actions: {
     query,
+
+    listBoards,
+
+    createItems,
   },
 });
