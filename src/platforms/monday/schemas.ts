@@ -36,7 +36,7 @@ export const mondayBoardsRelationalFieldsSchema = {
 };
 export const mondayBoardsRelationalFields = mapValues(
   mondayBoardsRelationalFieldsSchema,
-  (value) => Object.keys(value),
+  (value) => Object.keys(value.shape),
 );
 export const mondayBoardsSchema = mondayBoardsFieldsSchema.extend(
   mapValues(mondayBoardsRelationalFieldsSchema, (value) => z.array(value)),
