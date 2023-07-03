@@ -13,13 +13,17 @@ import createItems from '@/platforms/monday/actions/items/create';
 export * as types from './schemas';
 
 export default platform('monday', {
-  auth: auth.oauth2({
-    authUrl: `https://auth.monday.com/oauth2/authorize`,
-    tokenUrl: `https://auth.monday.com/oauth2/token`,
-    tokenAuth: 'body',
-    isRetryable: async ({ status }) => status === 401,
-    default: true,
-  }),
+  auth: [
+    auth.apiToken({
+      default: true,
+    }),
+    auth.oauth2({
+      authUrl: `https://auth.monday.com/oauth2/authorize`,
+      tokenUrl: `https://auth.monday.com/oauth2/token`,
+      tokenAuth: 'body',
+      isRetryable: async ({ status }) => status === 401,
+    }),
+  ],
   display: { name: 'monday.com', iconURI: icon, categories: ['crm'] },
   constants,
   client,
