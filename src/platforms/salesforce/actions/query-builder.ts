@@ -10,7 +10,7 @@ type Brand<T, TBrand extends string> = T & {
 
 type SalesforceQuery = Brand<string, 'SalesforceQuery'>;
 
-const formatQuery = (query: string): SalesforceQuery => {
+export const formatQuery = (query: string): SalesforceQuery => {
   return trim(query.replace(/[\s\n]+/g, ' ')) as SalesforceQuery;
 };
 
