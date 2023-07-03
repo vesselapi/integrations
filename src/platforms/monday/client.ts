@@ -18,7 +18,10 @@ const request = makeRequestFactory(async (auth, options) => {
     url: formatUrl(BASE_URL, options.url),
     headers: {
       ...options.headers,
-      Authorization: `Bearer ${await auth.getToken()}`,
+      Authorization:
+        auth.type === 'oauth2'
+          ? `Bearer ${await auth.getToken()}`
+          : await auth.getToken(),
     },
   };
 });
