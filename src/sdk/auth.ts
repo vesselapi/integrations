@@ -69,7 +69,7 @@ export const auth = {
           redirect_uri: redirectUrl,
           scope: scopes.join(options.scopeSeparator ?? ' '),
           state,
-          response_type: 'code',
+          response_type: 'install',
         };
         return `${
           isFunction(options.authUrl)
