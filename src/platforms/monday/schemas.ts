@@ -33,6 +33,10 @@ export const mondayBoardsRelationalFieldsSchema = {
     title: z.string(),
     type: z.string(),
   }),
+  groups: z.object({
+    id: z.string(),
+    title: z.string(),
+  }),
 };
 export const mondayBoardsRelationalFields = mapValues(
   mondayBoardsRelationalFieldsSchema,
@@ -55,7 +59,7 @@ export const mondayBoardsListResponseSchema = z.object({
 // -
 export const mondayItemsCreateSchema = z.object({
   board_id: z.number(),
-  group_id: z.number().optional(),
+  group_id: z.string().optional(),
   item_name: z.string(),
   column_values: z.record(z.union([z.string(), z.number()])),
 });
