@@ -28,7 +28,7 @@ export const mondayBoardsFieldsSchema = z.object({
 export const mondayBoardsFields = Object.keys(mondayBoardsFieldsSchema.shape);
 export const mondayBoardsRelationalFieldsSchema = {
   columns: z.object({
-    id: z.number(),
+    id: z.string(),
     description: z.string().optional(),
     title: z.string(),
     type: z.string(),
