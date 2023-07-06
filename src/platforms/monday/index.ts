@@ -14,11 +14,11 @@ export * as types from './schemas';
 
 export default platform('monday', {
   auth: [
-    auth.apiToken({
-      default: true,
-    }),
+    auth.apiToken({}),
     auth.oauth2({
+      default: true,
       authUrl: `https://auth.monday.com/oauth2/authorize`,
+      authUrlQuery: { response_type: 'install' },
       tokenUrl: `https://auth.monday.com/oauth2/token`,
       tokenAuth: 'body',
       isRetryable: async ({ status }) => status === 401,
