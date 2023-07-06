@@ -10,7 +10,7 @@ export default action(
     mutation: true,
     schema: z.object({
       boardId: z.number(),
-      groupId: z.number().optional(),
+      groupId: z.string().optional(),
       itemName: z.string(),
       columnValues: z.record(z.union([z.string(), z.number()])),
     }),
