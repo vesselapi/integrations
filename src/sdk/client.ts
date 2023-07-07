@@ -207,7 +207,7 @@ export const makeRequestFactory = (
       const body = response.json() ?? { body: response.text() };
 
       if (!response.ok) {
-        throw new IntegrationError('HTTP error in client', {
+        throw new IntegrationError('HTTP error from the downstream platform', {
           type: 'http',
           body,
           url: response.url,
