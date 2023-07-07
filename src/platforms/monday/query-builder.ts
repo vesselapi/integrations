@@ -34,24 +34,26 @@ export function buildCreateQuery({
 }: {
   module: MondayModule;
   metaFields: Record<string, string | number>;
-  fields: Record<string, string | number>;
+  fields?: Record<string, string | number>;
 }) {
   const queryMetaFields = Object.entries(metaFields)
     .map(([key, value]) => {
       return isNumber(value) ? `${key}: ${value}` : `${key}: "${value}"`;
     })
     .join(', ');
-  const queryColumnValues = Object.entries(fields)
-    .map(([key, value]) => {
-      return isNumber(value)
-        ? `\\\"${key}\\\": ${value}`
-        : `\\\"${key}\\\": \\\"${value}\\\"`;
-    })
-    .join(', ');
+  const queryColumnValues =
+    fields &&
+    Object.entries(fields)
+      .map(([key, value]) => {
+        return isNumber(value)
+          ? `\\\"${key}\\\": ${value}`
+          : `\\\"${key}\\\": \\\"${value}\\\"`;
+      })
+      .join(', ');
   return `mutation {
     create_${module.replace(/s$/, '')} (
       ${queryMetaFields},
-      column_values: "{${queryColumnValues}}"
+      ${fields === undefined ? '' : `column_values: "{${queryColumnValues}}"`}
     ) {
         id
     }

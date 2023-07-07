@@ -25,6 +25,7 @@ export default action(
     });
     return {
       id: data.data?.create_item.id ?? null,
+      errors: data.errors ?? null,
       $native,
     };
   },
