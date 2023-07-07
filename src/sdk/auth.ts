@@ -25,7 +25,6 @@ export const auth = {
     authUrl:
       | HttpsUrl
       | OAuth2AuthConfig<TAnswers, z.infer<TOAuthAppConfigSchema>>['authUrl'];
-    authUrlQuery?: Record<string, string | number>;
     tokenUrl:
       | HttpsUrl
       | OAuth2AuthConfig<TAnswers, z.infer<TOAuthAppConfigSchema>>['tokenUrl'];
@@ -71,7 +70,6 @@ export const auth = {
           scope: scopes.join(options.scopeSeparator ?? ' '),
           state,
           response_type: 'code',
-          ...(options.authUrlQuery ?? {}),
         };
         return `${
           isFunction(options.authUrl)
