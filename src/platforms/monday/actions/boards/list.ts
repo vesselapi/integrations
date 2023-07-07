@@ -16,12 +16,13 @@ export default action(
     const limit = input.limit ?? MONDAY_MAX_PAGE_SIZE;
     const page = input.page ?? 1;
     const {
-      data: { data },
+      data: { data, errors },
       $native,
     } = await client.boards.list(auth, { limit, page });
     const nextPageCursor = (data?.boards.length ?? 0) < limit ? null : page + 1;
     return {
       boards: data?.boards ?? null,
+      errors: errors ?? null,
       nextPageCursor,
       $native,
     };

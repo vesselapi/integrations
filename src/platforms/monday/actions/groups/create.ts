@@ -3,22 +3,24 @@ import { z } from 'zod';
 import client from '../../client';
 
 export default action(
-  'graphql-query',
+  'groups-create',
   {
-    operation: 'query',
-    resource: 'graphql',
+    operation: 'create',
+    resource: 'groups',
     mutation: true,
     schema: z.object({
-      query: z.string(),
+      boardId: z.number(),
+      groupName: z.string(),
     }),
     scopes: [],
   },
   async ({ auth, input }) => {
-    const { data, $native } = await client.query(auth, {
-      query: input.query,
+    const { data, $native } = await client.groups.create(auth, {
+      board_id: input.boardId,
+      group_name: input.groupName,
     });
     return {
-      data: data.data ?? null,
+      id: data.data?.create_group.id ?? null,
       errors: data.errors ?? null,
       $native,
     };
