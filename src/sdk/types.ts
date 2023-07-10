@@ -186,7 +186,12 @@ export type Platform<
 export type ActionFunction<
   TInput extends {},
   TOutput extends {} | null | void,
-> = (props: { input: TInput; auth: Auth }) => Promise<ActionResult<TOutput>>;
+> = (props: {
+  input: TInput;
+  auth: Auth;
+  // For synced actions, this is the passthrough result from the platform
+  passthroughResult?: Record<string, unknown>;
+}) => Promise<ActionResult<TOutput>>;
 
 export type Action<
   TName extends string,
