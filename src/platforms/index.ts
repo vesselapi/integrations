@@ -53,6 +53,11 @@ export {
 } from '@/platforms/salesloft';
 export { default as slack, types as slackTypes } from '@/platforms/slack';
 export { default as teams, types as teamsTypes } from '@/platforms/teams';
+export { default as affinity } from './affinity';
+export { default as customerIo } from './customer.io';
+export { default as freshdesk } from './freshdesk';
+export { default as freshsales } from './freshsales';
+export { default as intercom } from './intercom';
 
 export const integrationsList: Platform<any, any, any, any, any>[] = [
   activeCampaign,
@@ -73,4 +78,5 @@ export const integrationsList: Platform<any, any, any, any, any>[] = [
   salesloft,
   slack,
   teams,
+  intercom,
 ];
