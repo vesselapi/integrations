@@ -17,6 +17,7 @@ import affinity from './affinity';
 import customerIo from './customer.io';
 import freshdesk from './freshdesk';
 import freshsales from './freshsales';
+import intercom from './intercom';
 
 export {
   default as activeCampaign,
