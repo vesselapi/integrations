@@ -243,7 +243,7 @@ export const client = {
     create: request(
       ({
         query,
-        operation = 'queryAll',
+        operation = 'query',
       }: {
         query: string;
         operation?: 'query' | 'queryAll';
