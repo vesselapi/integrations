@@ -697,6 +697,7 @@ export const salesforceEventRelation = custom.addNativeToZodSchema(
       RelationId: z.string().nullable(),
       Status: z.string().nullable(),
       IsInvitee: z.boolean().nullable(),
+      IsArchived: z.boolean().nullable(),
     })
     .partial()
     .required(requiredFields),
