@@ -22,11 +22,6 @@ export type BasicMetadata = {
   answers: Record<string, string>;
 };
 
-export type StandardMetadata = {
-  type: 'standard';
-  answers: Record<string, string>;
-};
-
 type BaseFetchResult = {
   status: number;
   text: () => string;
@@ -39,11 +34,6 @@ type BaseAuth = {
   retry: <TResult extends BaseFetchResult>(
     func: () => Promise<TResult>,
   ) => Promise<TResult>;
-};
-
-export type StandardAuth = BaseAuth & {
-  type: 'standard';
-  getMetadata: () => Promise<StandardMetadata>;
 };
 
 export type OAuth2Auth = BaseAuth & {
@@ -61,7 +51,7 @@ export type BasicAuth = BaseAuth & {
   getMetadata: () => Promise<BasicMetadata>;
 };
 
-export type Auth = OAuth2Auth | ApiKeyAuth | BasicAuth | StandardAuth;
+export type Auth = OAuth2Auth | ApiKeyAuth | BasicAuth;
 
 export type HttpsUrl = `https://${string}`;
 export type AuthQuestionType = 'text' | 'select';
