@@ -18,6 +18,7 @@ import customerIo from './customer.io';
 import freshdesk from './freshdesk';
 import freshsales from './freshsales';
 import intercom from './intercom';
+import zendesk from './zendesk';
 
 export {
   default as activeCampaign,
@@ -59,8 +60,9 @@ export { default as customerIo } from './customer.io';
 export { default as freshdesk } from './freshdesk';
 export { default as freshsales } from './freshsales';
 export { default as intercom } from './intercom';
+export { default as zendesk } from './zendesk';
 
-export const integrationsList: Platform<any, any, any, any, any>[] = [
+export const integrationsList: Platform<any, any, any, any, any, any>[] = [
   activeCampaign,
   affinity,
   aircall,
@@ -80,4 +82,5 @@ export const integrationsList: Platform<any, any, any, any, any>[] = [
   slack,
   teams,
   intercom,
+  zendesk,
 ];
