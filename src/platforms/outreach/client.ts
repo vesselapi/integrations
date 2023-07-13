@@ -34,8 +34,6 @@ const request = makeRequestFactory(async (auth, options) => ({
 
 // Used exclusively for GraphQL requests.
 const _graphQl = makeRequestFactory(async (auth, options) => {
-  console.log(options);
-
   return {
     ...options,
     url: options.url as `https://${HttpsUrl}/graphql/${string}`,
