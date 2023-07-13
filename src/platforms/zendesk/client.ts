@@ -7,7 +7,7 @@ const request = makeRequestFactory(async (auth, options) => {
   const url =
     `https://${answers.subdomain}.zendesk.com/api/${API_VERSION}` as HttpsUrl;
 
-  console.log(auth)
+  console.log(auth);
   const token =
     auth.type === 'apiKey'
       ? Buffer.from(`${answers.email}/token:${await auth.getToken()}`).toString(
