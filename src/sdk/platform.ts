@@ -1,12 +1,13 @@
 import { isArray, unique } from 'radash';
 import {
   Action,
+  ApiKeyAuthConfig,
+  BasicAuthConfig,
   OAuth2AuthConfig,
   Platform,
   PlatformClient,
   PlatformConstants,
   PlatformDisplayConfig,
-  StandardAuthConfig,
 } from './types';
 
 export type PlatformOptions<
@@ -20,16 +21,19 @@ export type PlatformOptions<
       : never;
   },
   TClient extends PlatformClient,
-  TAnswers extends Record<string, string>,
+  TBasicAnswers extends Record<string, string>,
+  TApiKeyAnswers extends Record<string, string>,
   TOAuth2Answers extends Record<string, string>,
   TOAuth2AppMeta extends Record<string, unknown>,
   TConstants extends PlatformConstants,
 > = {
   auth:
-    | StandardAuthConfig<TAnswers>
+    | BasicAuthConfig<TBasicAnswers>
+    | ApiKeyAuthConfig<TApiKeyAnswers>
     | OAuth2AuthConfig<TOAuth2Answers, TOAuth2AppMeta>
     | (
-        | StandardAuthConfig<TAnswers>
+        | BasicAuthConfig<TBasicAnswers>
+        | ApiKeyAuthConfig<TApiKeyAnswers>
         | OAuth2AuthConfig<TOAuth2Answers, TOAuth2AppMeta>
       )[];
   constants: TConstants;
@@ -50,7 +54,8 @@ export const platform = <
   },
   TClient extends PlatformClient,
   TId extends string,
-  TStandardAnswers extends Record<string, string>,
+  TBasicAnswers extends Record<string, string>,
+  TApiKeyAnswers extends Record<string, string>,
   TOAuth2Answers extends Record<string, string>,
   TOAuth2AppMeta extends Record<string, unknown>,
   TConstants extends PlatformConstants,
@@ -59,7 +64,8 @@ export const platform = <
   options: PlatformOptions<
     TActions,
     TClient,
-    TStandardAnswers,
+    TBasicAnswers,
+    TApiKeyAnswers,
     TOAuth2Answers,
     TOAuth2AppMeta,
     TConstants
@@ -68,7 +74,8 @@ export const platform = <
   TActions,
   TClient,
   string,
-  TStandardAnswers,
+  TBasicAnswers,
+  TApiKeyAnswers,
   TOAuth2Answers,
   TOAuth2AppMeta,
   TConstants

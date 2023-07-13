@@ -12,8 +12,13 @@ export type OAuth2Metadata = {
   oauthResponse: Record<string, unknown>;
 };
 
-export type StandardMetadata = {
-  type: 'standard';
+export type ApiKeyMetadata = {
+  type: 'apiKey';
+  answers: Record<string, string>;
+};
+
+export type BasicMetadata = {
+  type: 'basic';
   answers: Record<string, string>;
 };
 
@@ -36,12 +41,17 @@ export type OAuth2Auth = BaseAuth & {
   getMetadata: () => Promise<OAuth2Metadata>;
 };
 
-export type StandardAuth = BaseAuth & {
-  type: 'standard';
-  getMetadata: () => Promise<StandardMetadata>;
+export type ApiKeyAuth = BaseAuth & {
+  type: 'apiKey';
+  getMetadata: () => Promise<ApiKeyMetadata>;
 };
 
-export type Auth = OAuth2Auth | StandardAuth;
+export type BasicAuth = BaseAuth & {
+  type: 'basic';
+  getMetadata: () => Promise<BasicMetadata>;
+};
+
+export type Auth = OAuth2Auth | ApiKeyAuth | BasicAuth;
 
 export type HttpsUrl = `https://${string}`;
 export type AuthQuestionType = 'text' | 'select';
@@ -72,14 +82,30 @@ export type RetryableCheckFunction = ({
   text,
 }: BaseFetchResult) => Promise<boolean>;
 
-export type StandardAuthConfig<
+export type ApiKeyAuthConfig<
   TAnswers extends Record<string, string> = Record<string, string>,
 > = {
-  type: 'standard';
+  type: 'apiKey';
   default: boolean;
   /**
    * Used by the FE to render form fields.
    * E.g. Asking for Api token
+   */
+  questions: AuthQuestion[];
+  display: {
+    markdown: string | ((platform: Platform<{}, any, string>) => string);
+  };
+  toTokenString: (answers: TAnswers) => string;
+};
+
+export type BasicAuthConfig<
+  TAnswers extends Record<string, string> = Record<string, string>,
+> = {
+  type: 'basic';
+  default: boolean;
+  /**
+   * Used by the FE to render form fields.
+   * E.g. Asking for username/pass
    */
   questions: AuthQuestion[];
   display: {
@@ -167,14 +193,16 @@ export type Platform<
   TActions extends Record<string, Action<string, any, any>>,
   TClient extends PlatformClient,
   TId extends string,
-  TStandardAnswers extends Record<string, string> = Record<string, string>,
+  TBasicAnswers extends Record<string, string> = Record<string, string>,
+  TApiKeyAnswers extends Record<string, string> = Record<string, string>,
   TOAuth2Answers extends Record<string, string> = Record<string, string>,
   TOAuth2AppMeta extends Record<string, unknown> = Record<string, unknown>,
   TConstants extends PlatformConstants = PlatformConstants,
 > = {
   id: TId;
   auth: (
-    | StandardAuthConfig<TStandardAnswers>
+    | BasicAuthConfig<TBasicAnswers>
+    | ApiKeyAuthConfig<TApiKeyAnswers>
     | OAuth2AuthConfig<TOAuth2Answers, TOAuth2AppMeta>
   )[];
   rawActions: Action<string, any, any>[];

@@ -1,11 +1,12 @@
 import { isFunction, isString } from 'radash';
 import { z } from 'zod';
 import {
+  ApiKeyAuthConfig,
   AuthQuestion,
+  BasicAuthConfig,
   HttpsUrl,
   OAuth2AuthConfig,
   RetryableCheckFunction,
-  StandardAuthConfig,
 } from './types';
 
 const toQueryString = (query: Record<string, string>): string => {
@@ -88,8 +89,8 @@ export const auth = {
       default?: boolean;
       display?: OAuth2AuthConfig['display'];
     } = {},
-  ): StandardAuthConfig<TAnswers> => ({
-    type: 'standard',
+  ): ApiKeyAuthConfig<TAnswers> => ({
+    type: 'apiKey',
     default: options.default ?? false,
     questions: [
       {
@@ -120,8 +121,8 @@ export const auth = {
       default?: boolean;
       display?: OAuth2AuthConfig['display'];
     } = {},
-  ): StandardAuthConfig<TAnswers> => ({
-    type: 'standard',
+  ): BasicAuthConfig<TAnswers> => ({
+    type: 'basic',
     default: options.default ?? false,
     questions: options.questions ?? [],
     toTokenString: (answers) =>
