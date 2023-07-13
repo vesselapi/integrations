@@ -22,6 +22,11 @@ export type BasicMetadata = {
   answers: Record<string, string>;
 };
 
+export type StandardMetadata = {
+  type: 'standard';
+  answers: Record<string, string>;
+};
+
 type BaseFetchResult = {
   status: number;
   text: () => string;
@@ -34,6 +39,11 @@ type BaseAuth = {
   retry: <TResult extends BaseFetchResult>(
     func: () => Promise<TResult>,
   ) => Promise<TResult>;
+};
+
+export type StandardAuth = BaseAuth & {
+  type: 'standard';
+  getMetadata: () => Promise<StandardMetadata>;
 };
 
 export type OAuth2Auth = BaseAuth & {
@@ -51,7 +61,7 @@ export type BasicAuth = BaseAuth & {
   getMetadata: () => Promise<BasicMetadata>;
 };
 
-export type Auth = OAuth2Auth | ApiKeyAuth | BasicAuth;
+export type Auth = OAuth2Auth | ApiKeyAuth | BasicAuth | StandardAuth;
 
 export type HttpsUrl = `https://${string}`;
 export type AuthQuestionType = 'text' | 'select';
@@ -81,6 +91,23 @@ export type RetryableCheckFunction = ({
   status,
   text,
 }: BaseFetchResult) => Promise<boolean>;
+
+// @deprecated
+export type StandardAuthConfig<
+  TAnswers extends Record<string, string> = Record<string, string>,
+> = {
+  type: 'standard';
+  default: boolean;
+  /**
+   * Used by the FE to render form fields.
+   * E.g. Asking for Api token
+   */
+  questions: AuthQuestion[];
+  display: {
+    markdown: string | ((platform: Platform<{}, any, string>) => string);
+  };
+  toTokenString: (answers: TAnswers) => string;
+};
 
 export type ApiKeyAuthConfig<
   TAnswers extends Record<string, string> = Record<string, string>,
