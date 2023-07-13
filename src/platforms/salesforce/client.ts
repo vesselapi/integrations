@@ -240,15 +240,23 @@ export const client = {
     schema: salesforceQueryResponse,
   })),
   jobs: {
-    create: request(({ query }: { query: string }) => ({
-      url: `/jobs/query`,
-      method: 'POST',
-      json: {
-        operation: 'query',
+    create: request(
+      ({
         query,
-      },
-      schema: salesforceJob,
-    })),
+        operation = 'query',
+      }: {
+        query: string;
+        operation?: 'query' | 'queryAll';
+      }) => ({
+        url: `/jobs/query`,
+        method: 'POST',
+        json: {
+          query,
+          operation,
+        },
+        schema: salesforceJob,
+      }),
+    ),
     find: request(({ Id }: { Id: string }) => ({
       url: `/jobs/query/${Id}`,
       method: 'GET',
