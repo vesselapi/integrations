@@ -18,7 +18,7 @@ const request = makeRequestFactory(async (auth, options) => {
     url: formatUrl(url, options.url),
     headers: {
       ...options.headers,
-      Authorization: `Bearer ${token}`,
+      Authorization: `Basic ${token}`,
     },
   };
 });
