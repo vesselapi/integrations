@@ -185,12 +185,6 @@ export const makeRequestFactory = (
               ...options.headers,
               Accept: 'application/json',
             };
-        console.log('OPTIONS');
-        console.log(options);
-        console.log('URL');
-        console.log(url);
-        console.log('HEADERS');
-        console.log(headers);
 
         return (
           options.method === 'GET' && options.json
