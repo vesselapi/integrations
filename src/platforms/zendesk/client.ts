@@ -8,7 +8,7 @@ const request = makeRequestFactory(async (auth, options) => {
     `https://${answers.subdomain}.zendesk.com/api/${API_VERSION}` as HttpsUrl;
 
   const token =
-    // TODO: remove after migration.
+    // @ts-ignore
     auth.type === 'apiKey' || auth.type === 'standard'
       ? Buffer.from(`${answers.email}/token:${await auth.getToken()}`).toString(
           'base64',
