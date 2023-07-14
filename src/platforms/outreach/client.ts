@@ -456,12 +456,8 @@ export const client = {
         method: 'GET',
         schema: z.intersection(
           z.object({
-            data: z.array(
-              z.object({
-                data: outreachSequenceTemplate,
-                included: z.array(outreachTemplate).optional(),
-              }),
-            ),
+            data: z.array(outreachSequenceTemplate),
+            included: z.array(outreachTemplate).optional(),
           }),
           outreachPaginatedResponse,
         ),
