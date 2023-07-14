@@ -8,6 +8,8 @@ import query from '@/platforms/monday/actions/graphql/query';
 
 import listBoards from '@/platforms/monday/actions/boards/list';
 
+import createGroups from '@/platforms/monday/actions/groups/create';
+
 import createItems from '@/platforms/monday/actions/items/create';
 
 export * as types from './schemas';
@@ -31,6 +33,8 @@ export default platform('monday', {
     query,
 
     listBoards,
+
+    createGroups,
 
     createItems,
   },
