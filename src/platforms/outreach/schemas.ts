@@ -3,13 +3,13 @@ import { z } from 'zod';
 
 const outreachRelationship = z.object({
   data: z.object({
-    id: z.string(),
+    id: z.string().or(z.number()),
   }),
 });
 const outreachMultiRelationship = z.object({
   data: z.array(
     z.object({
-      id: z.string(),
+      id: z.string().or(z.number()),
     }),
   ),
 });
@@ -244,11 +244,6 @@ export const outreachSequenceTemplate = custom.object({
   relationships: z.object({
     template: outreachRelationship.nullable(),
   }),
-  includes: z
-    .object({
-      template: outreachTemplate.nullable(),
-    })
-    .optional(),
 });
 
 export type OutreachProspect = z.infer<typeof outreachProspect>;
