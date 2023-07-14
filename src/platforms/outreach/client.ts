@@ -340,6 +340,31 @@ export const client = {
     ),
   },
   sequenceSteps: {
+    list: request(
+      ({
+        cursor,
+        filters,
+        include,
+      }: {
+        cursor?: `${typeof BASE_URL}/${string}`;
+        filters?: { sequenceIds?: string };
+        include?: string;
+      }) => ({
+        url: cursor ?? `/sequenceSteps`,
+        query: shake({
+          'page[size]': `${DEFAULT_PAGE_SIZE}`,
+          'filter[sequence][id]': filters?.sequenceIds,
+          include,
+        }),
+        method: 'GET',
+        schema: z.intersection(
+          z.object({
+            data: z.array(outreachSequenceStep),
+          }),
+          outreachPaginatedResponse,
+        ),
+      }),
+    ),
     create: request(
       (sequenceStep: {
         attributes: {
@@ -412,6 +437,31 @@ export const client = {
     ),
   },
   sequenceTemplates: {
+    list: request(
+      ({
+        cursor,
+        filters,
+        include,
+      }: {
+        cursor?: `${typeof BASE_URL}/${string}`;
+        filters?: { ids?: string };
+        include?: string;
+      }) => ({
+        url: cursor ?? `/sequenceTemplates`,
+        query: shake({
+          'page[size]': `${DEFAULT_PAGE_SIZE}`,
+          'filter[id]': filters?.ids,
+          include,
+        }),
+        method: 'GET',
+        schema: z.intersection(
+          z.object({
+            data: z.array(outreachSequenceTemplate),
+          }),
+          outreachPaginatedResponse,
+        ),
+      }),
+    ),
     create: request(
       (sequenceTemplate: {
         attributes: {
