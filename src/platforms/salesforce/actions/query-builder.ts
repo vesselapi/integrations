@@ -53,29 +53,31 @@ export const salesforceQueryBuilder = {
     cursor,
     limit = MAX_QUERY_PAGE_SIZE,
     relationalSelect,
+    where,
     associations,
   }: {
     objectType: SalesforceSupportedObjectType;
     cursor?: string;
     limit?: number;
     relationalSelect?: Partial<Record<SalesforceSupportedObjectType, string>>;
+    where?: string;
     associations?: SalesforceSupportedObjectType[];
   }) => {
     const selectClauses = sift([
       'SELECT FIELDS(ALL)',
       buildRelationalSelectClause(relationalSelect, associations),
     ]);
-    const getWhere = () => {
-      if (!cursor) {
-        return '';
-      }
-      return `WHERE Id < '${cursor}'`;
+    const getWhereClause = () => {
+      const cursorClause = cursor && `Id < '${cursor}'`;
+      const clauses = sift([cursorClause, where]);
+      if (clauses.length === 0) return '';
+      return `WHERE ${clauses.join(' AND ')}`;
     };
-    const where = getWhere();
+    const whereClause = getWhereClause();
     return formatQuery(`
       ${selectClauses.join(', ')}
       FROM ${objectType}
-      ${where}
+      ${whereClause}
       ORDER BY Id DESC
       LIMIT ${limit}
     `);
