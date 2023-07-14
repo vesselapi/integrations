@@ -6,6 +6,13 @@ const outreachRelationship = z.object({
     id: z.string(),
   }),
 });
+const outreachMultiRelationship = z.object({
+  data: z.array(
+    z.object({
+      id: z.string(),
+    }),
+  ),
+});
 export const outreachPaginatedResponse = z.object({
   links: z
     .object({
@@ -235,6 +242,9 @@ export const outreachSequenceTemplate = custom.object({
     updatedAt: custom.date().nullable(),
   }),
   relationships: z.object({
+    template: outreachMultiRelationship.nullable(),
+  }),
+  includes: z.object({
     template: outreachTemplate.nullable(),
   }),
 });
