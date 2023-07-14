@@ -235,7 +235,7 @@ export const outreachSequenceTemplate = custom.object({
     updatedAt: custom.date().nullable(),
   }),
   relationships: z.object({
-    template: outreachTemplate.passthrough().nullable(),
+    template: outreachTemplate.nullable(),
   }),
 });
 
