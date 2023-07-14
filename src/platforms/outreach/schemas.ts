@@ -18,7 +18,6 @@ export const outreachPaginatedResponse = z.object({
     .object({
       next: z.string().nullish(),
     })
-
     .nullish(),
 });
 
@@ -177,7 +176,7 @@ export const outreachSequenceStep = custom.object({
     positiveReplyCount: z.number().nullable(),
     replyCount: z.number().nullable(),
     scheduleCount: z.number().nullable(),
-    stepType: z.string().nullable(),
+    stepType: z.string(),
     taskAutoskipDelay: z.number().nullable(),
     taskNote: z.string().nullable(),
     updatedAt: custom.date().nullable(),
