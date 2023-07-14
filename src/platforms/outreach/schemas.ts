@@ -184,7 +184,7 @@ export const outreachSequenceStep = custom.object({
   }),
   relationships: z.object({
     sequence: outreachRelationship.nullable(),
-    sequenceTemplates: outreachRelationship.nullable(),
+    sequenceTemplates: outreachMultiRelationship.nullable(),
   }),
 });
 
@@ -242,11 +242,13 @@ export const outreachSequenceTemplate = custom.object({
     updatedAt: custom.date().nullable(),
   }),
   relationships: z.object({
-    template: outreachMultiRelationship.nullable(),
+    template: outreachRelationship.nullable(),
   }),
-  includes: z.object({
-    template: outreachTemplate.nullable(),
-  }),
+  includes: z
+    .object({
+      template: outreachTemplate.nullable(),
+    })
+    .optional(),
 });
 
 export type OutreachProspect = z.infer<typeof outreachProspect>;
