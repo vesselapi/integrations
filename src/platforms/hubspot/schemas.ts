@@ -96,16 +96,17 @@ export const listResponseSchema = (itemSchema: z.ZodSchema) =>
 export const hubspotModuleSchema = z.enum(HUBSPOT_MODULES);
 export type HubspotModule = (typeof HUBSPOT_MODULES)[number];
 
+export const hubspotIdSchema = z.union([z.string(), z.number()]);
+
 export const hubspotAssociationSchema = z.object({
   results: z.array(
     z.object({
-      id: z.string(),
+      id: hubspotIdSchema,
       type: z.string(),
     }),
   ),
 });
 
-export const hubspotIdSchema = z.union([z.string(), z.number()]);
 const hubspotBooleanSchema = z
   .union([z.enum(['true', 'false', '']), z.boolean()])
   .transform((val) => {
@@ -169,7 +170,7 @@ const contactPropertiesSchema = z.object({
   mobilephone: z.string().nullable(),
   hs_lead_status: z.string().nullable(),
   company: z.string().nullable(),
-  hubspot_owner_id: z.string().nullable(),
+  hubspot_owner_id: hubspotIdSchema.nullable(),
   hs_all_contact_vids: z.string().nullable(),
 });
 export const contactProperties = Object.keys(contactPropertiesSchema.shape);
@@ -188,7 +189,7 @@ export const hubspotContactUpsertSchema = z
     jobtitle: z.string(),
     mobilephone: z.string(),
     company: z.string().optional(),
-    hubspot_owner_id: z.string().optional(),
+    hubspot_owner_id: hubspotIdSchema.optional(),
     $native: z.record(z.any()),
   })
   .partial();
@@ -209,7 +210,7 @@ const dealPropertiesSchema = z.object({
   hs_projected_amount: z.union([z.string(), z.number()]).nullable(),
   hs_is_closed_won: hubspotBooleanSchema.nullable(),
   hs_is_closed: hubspotBooleanSchema.nullable(),
-  hubspot_owner_id: z.string().nullable(),
+  hubspot_owner_id: hubspotIdSchema.nullable(),
   hs_merged_object_ids: z.string().nullable(),
 });
 export const dealProperties = Object.keys(dealPropertiesSchema.shape);
@@ -248,7 +249,7 @@ const companyPropertiesSchema = z.object({
   numberofemployees: z.union([z.string(), z.number()]).nullable(),
   annualrevenue: z.union([z.string(), z.number()]).nullable(),
   description: z.string().nullable(),
-  hubspot_owner_id: z.string().nullable(),
+  hubspot_owner_id: hubspotIdSchema.nullable(),
   hs_merged_object_ids: z.string().nullable(),
 });
 export const companyProperties = Object.keys(companyPropertiesSchema.shape);
@@ -448,7 +449,7 @@ export type HubspotEmailUpdate = z.infer<typeof hubspotEmailUpdateSchema> & {
 export const callDispositionsSchema = z.array(
   z.object({
     label: z.string(),
-    id: z.string(),
+    id: hubspotIdSchema,
   }),
 );
 
