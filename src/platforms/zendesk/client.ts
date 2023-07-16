@@ -9,6 +9,7 @@ const request = makeRequestFactory(async (auth, options) => {
 
   const token =
     // TODO: remove after migration.
+    // @ts-ignore
     auth.type === 'apiKey' || auth.type === 'standard'
       ? Buffer.from(`${answers.email}/token:${await auth.getToken()}`).toString(
           'base64',
