@@ -197,7 +197,8 @@ export type Category =
   | 'marketing-automation'
   | 'chat'
   | 'engagement'
-  | 'ticketing';
+  | 'ticketing'
+  | 'commerce';
 
 export type PlatformDisplayConfig = {
   name: string;

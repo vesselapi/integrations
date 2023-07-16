@@ -3,15 +3,21 @@ import { z } from 'zod';
 
 const outreachRelationship = z.object({
   data: z.object({
-    id: z.string(),
+    id: z.string().or(z.number()),
   }),
+});
+const outreachMultiRelationship = z.object({
+  data: z.array(
+    z.object({
+      id: z.string().or(z.number()),
+    }),
+  ),
 });
 export const outreachPaginatedResponse = z.object({
   links: z
     .object({
       next: z.string().nullish(),
     })
-
     .nullish(),
 });
 
@@ -153,14 +159,90 @@ export const outreachMailing = z.object({
 
 export const outreachSequenceStep = custom.object({
   id: z.number(),
+  attributes: z.object({
+    bounceCount: z.number().nullable(),
+    clickCount: z.number().nullable(),
+    createdAt: custom.date().nullable(),
+    date: custom.date().nullable(),
+    deliverCount: z.number().nullable(),
+    displayName: z.string().nullable(),
+    failureCount: z.number().nullable(),
+    interval: z.number().nullable(),
+    negativeReplyCount: z.number().nullable(),
+    neutralReplyCount: z.number().nullable(),
+    openCount: z.number().nullable(),
+    optOutCount: z.number().nullable(),
+    order: z.number().nullable(),
+    positiveReplyCount: z.number().nullable(),
+    replyCount: z.number().nullable(),
+    scheduleCount: z.number().nullable(),
+    stepType: z.string(),
+    taskAutoskipDelay: z.number().nullable(),
+    taskNote: z.string().nullable(),
+    updatedAt: custom.date().nullable(),
+  }),
+  relationships: z.object({
+    sequence: outreachRelationship.nullable(),
+    sequenceTemplates: outreachMultiRelationship.nullable(),
+  }),
 });
 
 export const outreachTemplate = custom.object({
   id: z.number(),
+  attributes: z.object({
+    archived: z.boolean().nullable(),
+    archivedAt: custom.date().nullable(),
+    bccRecipients: z.array(z.string()).nullable(),
+    bodyHtml: z.string().nullable(),
+    bodyText: z.string().nullable(),
+    bounceCount: z.number().nullable(),
+    ccRecipients: z.array(z.string()).nullable(),
+    clickCount: z.number().nullable(),
+    createdAt: custom.date().nullable(),
+    deliverCount: z.number().nullable(),
+    failureCount: z.number().nullable(),
+    lastUsedAt: custom.date().nullable(),
+    name: z.string().nullable(),
+    negativeReplyCount: z.number().nullable(),
+    neutralReplyCount: z.number().nullable(),
+    openCount: z.number().nullable(),
+    optOutCount: z.number().nullable(),
+    positiveReplyCount: z.number().nullable(),
+    replyCount: z.number().nullable(),
+    scheduleCount: z.number().nullable(),
+    shareType: z.string().nullable(),
+    subject: z.string().nullable(),
+    tags: z.array(z.string()).nullable(),
+    toRecipients: z.array(z.string()).nullable(),
+    trackLinks: z.boolean().nullable(),
+    trackOpens: z.boolean().nullable(),
+    updatedAt: custom.date().nullable(),
+  }),
 });
 
 export const outreachSequenceTemplate = custom.object({
   id: z.number(),
+  attributes: z.object({
+    bounceCount: z.number().nullable(),
+    clickCount: z.number().nullable(),
+    createdAt: custom.date().nullable(),
+    deliverCount: z.number().nullable(),
+    enabled: z.boolean().nullable(),
+    enabledAt: custom.date().nullable(),
+    failureCount: z.number().nullable(),
+    isReply: z.boolean().nullable(),
+    negativeReplyCount: z.number().nullable(),
+    neutralReplyCount: z.number().nullable(),
+    openCount: z.number().nullable(),
+    optOutCount: z.number().nullable(),
+    positiveReplyCount: z.number().nullable(),
+    replyCount: z.number().nullable(),
+    scheduleCount: z.number().nullable(),
+    updatedAt: custom.date().nullable(),
+  }),
+  relationships: z.object({
+    template: outreachRelationship.nullable(),
+  }),
 });
 
 export type OutreachProspect = z.infer<typeof outreachProspect>;

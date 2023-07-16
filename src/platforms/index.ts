@@ -18,6 +18,8 @@ import customerIo from './customer.io';
 import freshdesk from './freshdesk';
 import freshsales from './freshsales';
 import intercom from './intercom';
+import shopify from './shopify';
+import woocommerce from './woocommerce';
 import zendesk from './zendesk';
 
 export {
@@ -81,6 +83,11 @@ export const integrationsList: Platform<any, any, any, any, any, any>[] = [
   salesloft,
   slack,
   teams,
+  shopify,
+  woocommerce,
   intercom,
   zendesk,
+  // zoho
+  // close
+  // msoft dynamics
 ];

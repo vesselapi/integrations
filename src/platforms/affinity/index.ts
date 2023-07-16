@@ -9,7 +9,7 @@ export default platform('affinity', {
   display: {
     name: 'Affinity',
     iconURI: icon,
-    categories: [],
+    categories: ['crm'],
   },
   client,
   constants: {},
