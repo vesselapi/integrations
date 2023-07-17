@@ -21,17 +21,19 @@ export default platform('zendesk', {
       ],
       default: true,
     }),
-    auth.basic({
-      questions: [
-        { type: 'text', id: 'username', label: 'Username' },
-        { type: 'text', id: 'password', label: 'Password' },
-        {
-          id: 'subdomain',
-          type: 'text',
-          label: 'What is your account Subdomain?',
-        },
-      ],
-    }),
+    // TODO: Add Basic support. This will require changing the core sdk
+
+    // auth.basic({
+    //   questions: [
+    //     { type: 'text', id: 'username', label: 'Username' },
+    //     { type: 'text', id: 'password', label: 'Password' },
+    //     {
+    //       id: 'subdomain',
+    //       type: 'text',
+    //       label: 'What is your account Subdomain?',
+    //     },
+    //   ],
+    // }),
   ],
   display: {
     name: 'Zendesk',

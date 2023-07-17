@@ -9,7 +9,7 @@ import {
   RetryableCheckFunction,
 } from './types';
 
-const toQueryString = (query: Record<string, string>): string => {
+export const toQueryString = (query: Record<string, string>): string => {
   return Object.entries(query)
     .map(([key, value]) => [key, encodeURIComponent(value)])
     .map((x) => x.join('='))
