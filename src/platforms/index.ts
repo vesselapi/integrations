@@ -23,6 +23,7 @@ import intercom from './intercom';
 import shopify from './shopify';
 import woocommerce from './woocommerce';
 import zendesk from './zendesk';
+import zoho from './zoho';
 
 export {
   default as activeCampaign,
