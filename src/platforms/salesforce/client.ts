@@ -88,10 +88,12 @@ const query = {
     schema,
     objectType,
     relationalSelect,
+    where,
   }: {
     schema: T;
     objectType: SalesforceSupportedObjectType;
     relationalSelect?: Partial<Record<SalesforceSupportedObjectType, string>>;
+    where?: string;
   }) =>
     request(
       ({
@@ -108,6 +110,7 @@ const query = {
           cursor,
           limit,
           relationalSelect,
+          where,
           associations,
         })}`,
         method: 'GET',
@@ -593,6 +596,14 @@ export const client = {
       method: 'DELETE',
       schema: z.undefined(),
     })),
+  },
+  calls: {
+    list: query.list<typeof salesforceTask>({
+      objectType: 'Task',
+      schema: salesforceTask,
+      relationalSelect: salesforceTaskRelationalSelect,
+      where: `TaskSubtype='Call'`,
+    }),
   },
   events: {
     find: query.find<typeof salesforceEvent>({
