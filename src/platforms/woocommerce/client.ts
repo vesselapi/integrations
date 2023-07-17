@@ -1,13 +1,11 @@
 import { HttpsUrl } from '@/sdk';
-import { formatUrl, makeRequestFactory } from '@/sdk/client';
+import { formatUrl, makeRequestFactory, toBase64 } from '@/sdk/client';
 import { API_VERSION } from './constants';
 
 const request = makeRequestFactory(async (auth, options) => {
   const { answers } = await auth.getMetadata();
   const url = answers.wooCommerceUrl as HttpsUrl;
-  const creds = Buffer.from(
-    `${answers.consumerKey}:${answers.consumerSecret}`,
-  ).toString('base64');
+  const creds = toBase64(`${answers.consumerKey}:${answers.consumerSecret}`);
   return {
     ...options,
     url: formatUrl(`${url}/wp-json/wc/${API_VERSION}`, options.url),
