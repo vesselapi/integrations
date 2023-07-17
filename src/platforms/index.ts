@@ -14,7 +14,9 @@ import slack from '@/platforms/slack';
 import teams from '@/platforms/teams';
 import { Platform } from '@/sdk';
 import affinity from './affinity';
+import close from './close';
 import customerIo from './customer.io';
+import dynamicsSales from './dynamics-sales';
 import freshdesk from './freshdesk';
 import freshsales from './freshsales';
 import intercom from './intercom';
@@ -58,11 +60,14 @@ export {
 export { default as slack, types as slackTypes } from '@/platforms/slack';
 export { default as teams, types as teamsTypes } from '@/platforms/teams';
 export { default as affinity } from './affinity';
+export { default as close } from './close';
 export { default as customerIo } from './customer.io';
+export { default as dynamicsSales } from './dynamics-sales';
 export { default as freshdesk } from './freshdesk';
 export { default as freshsales } from './freshsales';
 export { default as intercom } from './intercom';
 export { default as zendesk } from './zendesk';
+export { default as zoho } from './zoho';
 
 export const integrationsList: Platform<any, any, any, any, any, any>[] = [
   activeCampaign,
@@ -87,7 +92,7 @@ export const integrationsList: Platform<any, any, any, any, any, any>[] = [
   woocommerce,
   intercom,
   zendesk,
-  // zoho
-  // close
-  // msoft dynamics
+  zoho,
+  close,
+  dynamicsSales,
 ];
