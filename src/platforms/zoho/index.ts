@@ -12,7 +12,7 @@ export default platform('zoho', {
       return `${appMetadata['accounts-server']}/oauth/v2/token` as HttpsUrl;
     },
     appMetadataSchema: z.object({
-      'accounts-server': z.string().url(),
+      'accounts-server': z.string().url().optional(),
     }),
   }),
   display: { name: 'Zoho', iconURI: icon, categories: ['crm'] },
