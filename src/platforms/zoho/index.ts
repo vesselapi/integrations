@@ -7,8 +7,7 @@ import { icon } from './icon';
 export default platform('zoho', {
   auth: auth.oauth2({
     authUrl: `https://accounts.zoho.com/oauth/v2/auth`,
-    tokenUrl: ({ appMetadata, ...all }) => {
-      console.log(appMetadata, all);
+    tokenUrl: ({ appMetadata }) => {
       return `${appMetadata['accounts-server']}/oauth/v2/token` as HttpsUrl;
     },
     appMetadataSchema: z.object({
