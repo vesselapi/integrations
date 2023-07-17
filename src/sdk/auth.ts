@@ -22,28 +22,37 @@ export const auth = {
     TOAuthAppConfigSchema extends z.ZodType = z.ZodType<
       Record<string, unknown>
     >,
+    TOAuthCallbackArgsSchema extends z.ZodType = z.ZodType<
+      Record<string, unknown>
+    >,
   >(options: {
     authUrl:
       | HttpsUrl
       | OAuth2AuthConfig<TAnswers, z.infer<TOAuthAppConfigSchema>>['authUrl'];
     tokenUrl:
       | HttpsUrl
-      | OAuth2AuthConfig<TAnswers, z.infer<TOAuthAppConfigSchema>>['tokenUrl'];
+      | OAuth2AuthConfig<
+          TAnswers,
+          z.infer<TOAuthAppConfigSchema>,
+          z.infer<TOAuthCallbackArgsSchema>
+        >['tokenUrl'];
     questions?: AuthQuestion[];
     default?: boolean;
-    scopeSeparator?: OAuth2AuthConfig<
-      TAnswers,
-      z.infer<TOAuthAppConfigSchema>
-    >['scopeSeparator'];
+    scopeSeparator?: OAuth2AuthConfig<TAnswers>['scopeSeparator'];
     tokenAuth?: OAuth2AuthConfig<TAnswers>['tokenAuth'];
     oauthBodyFormat?: OAuth2AuthConfig<TAnswers>['oauthBodyFormat'];
     url?: OAuth2AuthConfig<TAnswers>['url'];
     isRetryable?: RetryableCheckFunction;
     display?: OAuth2AuthConfig<TAnswers>['display'];
     appMetadataSchema?: TOAuthAppConfigSchema;
+    callbackArgsSchema?: TOAuthCallbackArgsSchema;
     refreshTokenExpiresAt?: () => Date | null;
     accessTokenExpiresAt?: () => Date | null;
-  }): OAuth2AuthConfig<TAnswers, z.infer<TOAuthAppConfigSchema>> => ({
+  }): OAuth2AuthConfig<
+    TAnswers,
+    z.infer<TOAuthAppConfigSchema>,
+    z.infer<TOAuthCallbackArgsSchema>
+  > => ({
     type: 'oauth2',
     authUrl: isString(options.authUrl)
       ? () => options.authUrl as HttpsUrl
@@ -80,6 +89,7 @@ export const auth = {
       }),
     isRetryable: options.isRetryable ?? (async ({ status }) => status === 401),
     appMetadataSchema: options.appMetadataSchema ?? z.any(),
+    callbackArgsSchema: options.callbackArgsSchema ?? z.any(),
     refreshTokenExpiresAt: options.refreshTokenExpiresAt ?? (() => null),
     accessTokenExpiresAt: options.accessTokenExpiresAt ?? (() => null),
   }),

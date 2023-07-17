@@ -138,6 +138,7 @@ export type BasicAuthConfig<
 export type OAuth2AuthConfig<
   TAnswers extends Record<string, string> = Record<string, string>,
   TOAuth2AppMeta extends Record<string, unknown> = Record<string, unknown>,
+  TOAuth2CallbackArgs extends Record<string, unknown> = Record<string, unknown>,
 > = {
   type: 'oauth2';
   default: boolean;
@@ -148,6 +149,7 @@ export type OAuth2AuthConfig<
   tokenUrl: (options: {
     answers: TAnswers;
     appMetadata: TOAuth2AppMeta;
+    callbackArgs: TOAuth2CallbackArgs;
   }) => HttpsUrl;
   /**
    * Depending on the end platform wrote their OAuth, the clientId and
@@ -175,6 +177,7 @@ export type OAuth2AuthConfig<
     markdown: string | ((platform: Platform<{}, any, string>) => string);
   };
   appMetadataSchema: z.ZodType<TOAuth2AppMeta>;
+  callbackArgsSchema: z.ZodType<TOAuth2CallbackArgs>;
   refreshTokenExpiresAt: () => Date | null;
   accessTokenExpiresAt: () => Date | null;
 };
