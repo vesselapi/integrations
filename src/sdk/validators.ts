@@ -30,7 +30,7 @@ export const formattedPhoneNumber = (format?: NumberFormat) =>
 // TODO: remove this since we no longer use passthrough
 export const object = z.object;
 
-type WithNative<T> = T & { $native?: Record<string, unknown> };
+type WithNative<T> = T & { $native?: Record<string, any> };
 export function addNativeToZodSchema<T extends Record<string, unknown>>(
   schema: z.ZodType<T, any, any>,
 ): z.ZodType<WithNative<T>, any, any> {
