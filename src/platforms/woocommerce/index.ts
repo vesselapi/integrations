@@ -14,7 +14,7 @@ export default platform('woocommerce', {
   display: {
     name: 'WooCommerce',
     iconURI: icon,
-    categories: [],
+    categories: ['commerce'],
   },
   client,
   constants,

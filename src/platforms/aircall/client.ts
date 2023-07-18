@@ -2,6 +2,7 @@ import {
   formatUpsertInputWithNative,
   formatUrl,
   makeRequestFactory,
+  toBase64,
 } from '@/sdk/client';
 import { shake } from 'radash';
 import { z } from 'zod';
@@ -16,10 +17,9 @@ import {
   aircallUser,
 } from './schemas';
 
-const base64 = (str: string) => Buffer.from(str).toString('base64');
-
 const request = makeRequestFactory(async (auth, options) => {
   const { answers } = await auth.getMetadata();
+  const token = `${answers['api-id']}:${await auth.getToken()}`;
   return {
     ...options,
     url: formatUrl(BASE_URL, options.url),
@@ -28,7 +28,7 @@ const request = makeRequestFactory(async (auth, options) => {
       Authorization:
         auth.type === 'oauth2'
           ? `Bearer ${await auth.getToken()}`
-          : `Basic ${base64(`${answers['api-id']}:${await auth.getToken()}`)}`,
+          : `Basic ${toBase64(token)}`,
     },
   };
 });

@@ -32,7 +32,7 @@ export default platform('teams', {
     refreshTokenExpiresAt: () => add(Date.now(), { days: 90 }),
   }),
   display: {
-    name: 'Teams',
+    name: 'Microsoft Teams',
     iconURI: icon,
     categories: ['chat'],
   },

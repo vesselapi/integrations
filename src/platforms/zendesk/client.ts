@@ -1,17 +1,19 @@
-import { HttpsUrl } from '@/sdk';
 import { formatUrl, makeRequestFactory, toBase64 } from '@/sdk/client';
+import { HttpsUrl } from '../../sdk';
 import { API_VERSION } from './constants';
 
 const request = makeRequestFactory(async (auth, options) => {
   const { answers } = await auth.getMetadata();
-  const url = answers.wooCommerceUrl as HttpsUrl;
-  const creds = toBase64(`${answers.consumerKey}:${answers.consumerSecret}`);
+  const url =
+    `https://${answers.subdomain}.zendesk.com/api/${API_VERSION}` as HttpsUrl;
+  const token = toBase64(`${answers.email}/token:${await auth.getToken()}`);
+
   return {
     ...options,
-    url: formatUrl(`${url}/wp-json/wc/${API_VERSION}`, options.url),
+    url: formatUrl(url, options.url),
     headers: {
       ...options.headers,
-      Authorization: `Basic ${creds}`,
+      Authorization: `Basic ${token}`,
     },
   };
 });

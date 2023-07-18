@@ -12,8 +12,13 @@ export type OAuth2Metadata = {
   oauthResponse: Record<string, unknown>;
 };
 
-export type StandardMetadata = {
-  type: 'standard';
+export type ApiKeyMetadata = {
+  type: 'apiKey';
+  answers: Record<string, string>;
+};
+
+export type BasicMetadata = {
+  type: 'basic';
   answers: Record<string, string>;
 };
 
@@ -36,12 +41,17 @@ export type OAuth2Auth = BaseAuth & {
   getMetadata: () => Promise<OAuth2Metadata>;
 };
 
-export type StandardAuth = BaseAuth & {
-  type: 'standard';
-  getMetadata: () => Promise<StandardMetadata>;
+export type ApiKeyAuth = BaseAuth & {
+  type: 'apiKey';
+  getMetadata: () => Promise<ApiKeyMetadata>;
 };
 
-export type Auth = OAuth2Auth | StandardAuth;
+export type BasicAuth = BaseAuth & {
+  type: 'basic';
+  getMetadata: () => Promise<BasicMetadata>;
+};
+
+export type Auth = OAuth2Auth | ApiKeyAuth | BasicAuth;
 
 export type HttpsUrl = `https://${string}`;
 export type AuthQuestionType = 'text' | 'select';
@@ -72,6 +82,7 @@ export type RetryableCheckFunction = ({
   text,
 }: BaseFetchResult) => Promise<boolean>;
 
+// @deprecated
 export type StandardAuthConfig<
   TAnswers extends Record<string, string> = Record<string, string>,
 > = {
@@ -88,6 +99,38 @@ export type StandardAuthConfig<
   toTokenString: (answers: TAnswers) => string;
 };
 
+export type ApiKeyAuthConfig<
+  TAnswers extends Record<string, string> = Record<string, string>,
+> = {
+  type: 'apiKey';
+  default: boolean;
+  /**
+   * Used by the FE to render form fields.
+   * E.g. Asking for Api token
+   */
+  questions: AuthQuestion[];
+  display: {
+    markdown: string | ((platform: Platform<{}, any, string>) => string);
+  };
+  toTokenString: (answers: TAnswers) => string;
+};
+
+export type BasicAuthConfig<
+  TAnswers extends Record<string, string> = Record<string, string>,
+> = {
+  type: 'basic';
+  default: boolean;
+  /**
+   * Used by the FE to render form fields.
+   * E.g. Asking for username/pass
+   */
+  questions: AuthQuestion[];
+  display: {
+    markdown: string | ((platform: Platform<{}, any, string>) => string);
+  };
+  toTokenString: (answers: TAnswers) => string;
+};
+
 /**
  * OAUTH2: Many of the options defined here follow the simple auth package
  * https://github.com/lelylan/simple-oauth2/blob/fbb295b1ae0ea998bcdf4ad22a6ef2fcf6930d12/API.md#new-authorizationcodeoptions
@@ -95,6 +138,7 @@ export type StandardAuthConfig<
 export type OAuth2AuthConfig<
   TAnswers extends Record<string, string> = Record<string, string>,
   TOAuth2AppMeta extends Record<string, unknown> = Record<string, unknown>,
+  TOAuth2CallbackArgs extends Record<string, unknown> = Record<string, unknown>,
 > = {
   type: 'oauth2';
   default: boolean;
@@ -105,6 +149,7 @@ export type OAuth2AuthConfig<
   tokenUrl: (options: {
     answers: TAnswers;
     appMetadata: TOAuth2AppMeta;
+    callbackArgs: TOAuth2CallbackArgs;
   }) => HttpsUrl;
   /**
    * Depending on the end platform wrote their OAuth, the clientId and
@@ -132,6 +177,7 @@ export type OAuth2AuthConfig<
     markdown: string | ((platform: Platform<{}, any, string>) => string);
   };
   appMetadataSchema: z.ZodType<TOAuth2AppMeta>;
+  callbackArgsSchema: z.ZodType<TOAuth2CallbackArgs>;
   refreshTokenExpiresAt: () => Date | null;
   accessTokenExpiresAt: () => Date | null;
 };
@@ -153,7 +199,9 @@ export type Category =
   | 'crm'
   | 'marketing-automation'
   | 'chat'
-  | 'engagement';
+  | 'engagement'
+  | 'ticketing'
+  | 'commerce';
 
 export type PlatformDisplayConfig = {
   name: string;
@@ -166,14 +214,16 @@ export type Platform<
   TActions extends Record<string, Action<string, any, any>>,
   TClient extends PlatformClient,
   TId extends string,
-  TStandardAnswers extends Record<string, string> = Record<string, string>,
+  TBasicAnswers extends Record<string, string> = Record<string, string>,
+  TApiKeyAnswers extends Record<string, string> = Record<string, string>,
   TOAuth2Answers extends Record<string, string> = Record<string, string>,
   TOAuth2AppMeta extends Record<string, unknown> = Record<string, unknown>,
   TConstants extends PlatformConstants = PlatformConstants,
 > = {
   id: TId;
   auth: (
-    | StandardAuthConfig<TStandardAnswers>
+    | BasicAuthConfig<TBasicAnswers>
+    | ApiKeyAuthConfig<TApiKeyAnswers>
     | OAuth2AuthConfig<TOAuth2Answers, TOAuth2AppMeta>
   )[];
   rawActions: Action<string, any, any>[];

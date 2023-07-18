@@ -57,6 +57,8 @@ export const formatUrl = (
     : (url as `${HttpsUrl}/${string}`);
 };
 
+export const toBase64 = (str: string) => Buffer.from(str).toString('base64');
+
 const _requestWithAxios = async ({
   url,
   options,
