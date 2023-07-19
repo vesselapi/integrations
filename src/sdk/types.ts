@@ -144,10 +144,12 @@ export type OAuth2AuthConfig<
   default: boolean;
   authUrl: (options: {
     answers: TAnswers;
+    /** @deprecated */
     appMetadata: TOAuth2AppMeta;
   }) => HttpsUrl;
   tokenUrl: (options: {
     answers: TAnswers;
+    /** @deprecated */
     appMetadata: TOAuth2AppMeta;
     callbackArgs: TOAuth2CallbackArgs;
   }) => HttpsUrl;
@@ -176,7 +178,19 @@ export type OAuth2AuthConfig<
   display: {
     markdown: string | ((platform: Platform<{}, any, string>) => string);
   };
+  /**
+   * Surfaces information we store about the
+   * OAuth2 app itself.
+   *
+   * This was used by msoft teams but is being deprecated in
+   * favor of a different auth method.
+   * @deprecated */
   appMetadataSchema: z.ZodType<TOAuth2AppMeta>;
+  /**
+   * Surfaces information that we got in the query string
+   * of the callback url that was called by the downstream
+   * system after the /authorization step.
+   */
   callbackArgsSchema: z.ZodType<TOAuth2CallbackArgs>;
   refreshTokenExpiresAt: () => Date | null;
   accessTokenExpiresAt: () => Date | null;
