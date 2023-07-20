@@ -367,7 +367,7 @@ export const client = {
       (sequenceStep: {
         attributes: {
           order?: number;
-          stepType: 'auto_email' | 'manual_email' | 'call' | 'task';
+          stepType: string;
           interval?: number;
           $native?: Record<string, unknown>;
         };
