@@ -22,6 +22,9 @@ export type BasicMetadata = {
   answers: Record<string, string>;
 };
 
+export type AuthMetadata = OAuth2Metadata | ApiKeyMetadata | BasicMetadata;
+export type AuthType = AuthMetadata['type'];
+
 type BaseFetchResult = {
   status: number;
   text: () => string;
@@ -29,27 +32,18 @@ type BaseFetchResult = {
   response: Response | unknown;
 };
 
-type BaseAuth = {
+type BaseAuth<T extends AuthMetadata> = {
+  type: T['type'];
+  getMetadata: () => Promise<T>;
   getToken: () => Promise<string>;
   retry: <TResult extends BaseFetchResult>(
     func: () => Promise<TResult>,
   ) => Promise<TResult>;
 };
 
-export type OAuth2Auth = BaseAuth & {
-  type: 'oauth2';
-  getMetadata: () => Promise<OAuth2Metadata>;
-};
-
-export type ApiKeyAuth = BaseAuth & {
-  type: 'apiKey';
-  getMetadata: () => Promise<ApiKeyMetadata>;
-};
-
-export type BasicAuth = BaseAuth & {
-  type: 'basic';
-  getMetadata: () => Promise<BasicMetadata>;
-};
+export type OAuth2Auth = BaseAuth<OAuth2Metadata>;
+export type ApiKeyAuth = BaseAuth<ApiKeyMetadata>;
+export type BasicAuth = BaseAuth<BasicMetadata>;
 
 export type Auth = OAuth2Auth | ApiKeyAuth | BasicAuth;
 
@@ -99,11 +93,14 @@ export type StandardAuthConfig<
   toTokenString: (answers: TAnswers) => string;
 };
 
+type BaseConfig<T extends AuthMetadata> = {
+  type: T['type'];
+  default: boolean;
+};
+
 export type ApiKeyAuthConfig<
   TAnswers extends Record<string, string> = Record<string, string>,
-> = {
-  type: 'apiKey';
-  default: boolean;
+> = BaseConfig<ApiKeyMetadata> & {
   /**
    * Used by the FE to render form fields.
    * E.g. Asking for Api token
@@ -117,9 +114,7 @@ export type ApiKeyAuthConfig<
 
 export type BasicAuthConfig<
   TAnswers extends Record<string, string> = Record<string, string>,
-> = {
-  type: 'basic';
-  default: boolean;
+> = BaseConfig<BasicMetadata> & {
   /**
    * Used by the FE to render form fields.
    * E.g. Asking for username/pass
@@ -139,9 +134,7 @@ export type OAuth2AuthConfig<
   TAnswers extends Record<string, string> = Record<string, string>,
   TOAuth2AppMeta extends Record<string, unknown> = Record<string, unknown>,
   TOAuth2CallbackArgs extends Record<string, unknown> = Record<string, unknown>,
-> = {
-  type: 'oauth2';
-  default: boolean;
+> = BaseConfig<OAuth2Metadata> & {
   authUrl: (options: {
     answers: TAnswers;
     /** @deprecated */
