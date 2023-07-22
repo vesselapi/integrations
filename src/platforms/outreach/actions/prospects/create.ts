@@ -43,7 +43,7 @@ export default action(
 
           const customFields = omit(input as any, Object.keys(attributes.data));
 
-          return { customFields, ...attributes };
+          return { customFields, ...attributes.data };
         }, attributesSchema.extend({ customFields: customFieldsSchema }))
         .transform((attr) => ({
           ...omit(attr, ['customFields']),

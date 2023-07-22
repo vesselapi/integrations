@@ -2,9 +2,11 @@ import * as custom from '@/sdk/validators';
 import { z } from 'zod';
 
 const outreachRelationship = z.object({
-  data: z.object({
-    id: z.string().or(z.number()),
-  }),
+  data: z
+    .object({
+      id: z.string().or(z.number()),
+    })
+    .nullable(),
 });
 const outreachMultiRelationship = z.object({
   data: z.array(
