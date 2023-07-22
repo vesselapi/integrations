@@ -35,10 +35,14 @@ export default action(
       id: z.number(),
       attributes: z
         .preprocess((input) => {
-          const attributes = attributesSchema.parse(input);
-          const customFields = customFieldsSchema.parse(
-            omit(input as any, Object.keys(attributes)),
-          );
+          const attributes = attributesSchema.safeParse(input);
+
+          if (!attributes.success) {
+            return input;
+          }
+
+          const customFields = omit(input as any, Object.keys(attributes.data));
+
           return { customFields, ...attributes };
         }, attributesSchema.extend({ customFields: customFieldsSchema }))
         .transform((attr) => ({
