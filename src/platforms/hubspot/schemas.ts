@@ -399,7 +399,7 @@ const emailPropertiesSchema = z.object({
     .number()
     .or(z.string())
     .nullable(),
-  hs_attachment_ids: z.array(hubspotIdSchema).nullable(),
+  hs_attachment_ids: z.string().nullable(),
   hs_timestamp: custom.date().nullable(),
   hs_email_status: z.string().nullable(),
   hubspot_owner_id: hubspotIdSchema.nullable(),
