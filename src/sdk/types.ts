@@ -1,4 +1,4 @@
-import { CamelCasedPropertiesDeep } from 'type-fest';
+import { CamelCasedPropertiesDeep, SetOptional } from 'type-fest';
 import { z } from 'zod';
 import { HttpOptions } from './client';
 
@@ -291,5 +291,7 @@ export type ClientResult<TValidated> = {
 };
 
 export type ActionResult<TOutput> = CamelCasedPropertiesDeep<TOutput> & {
-  $native?: RawResponse | RawResponse[];
+  $native?:
+    | SetOptional<RawResponse, 'body'>
+    | SetOptional<RawResponse, 'body'>[];
 };
