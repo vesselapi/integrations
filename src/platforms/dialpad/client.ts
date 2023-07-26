@@ -6,7 +6,6 @@ import {
   DialpadAuthAnswers,
   dialpadCallSchema,
   DialpadCallStart,
-  DialpadClient,
   DialpadContactCreate,
   dialpadContactSchema,
   DialpadContactUpdate,
@@ -17,9 +16,7 @@ import {
 } from './schemas';
 
 const baseUrl = (answers: DialpadAuthAnswers) =>
-  `${
-    dialpadUrlsByAccountType[answers.accountType]
-  }/api/${API_VERSION}` as HttpsUrl;
+  `${dialpadUrlsByAccountType[answers.accountType]}/api` as HttpsUrl;
 
 const request = makeRequestFactory(async (auth, options) => {
   const { answers } = await auth.getMetadata();
@@ -34,17 +31,17 @@ const request = makeRequestFactory(async (auth, options) => {
   };
 });
 
-const makeClient = (): DialpadClient => {
+const makeClient = () => {
   const findObject = (module: DialpadModules, schema: z.ZodSchema) =>
     request(({ id }: { id: string }) => ({
-      url: `/${module}/${id}`,
+      url: `/${API_VERSION}/${module}/${id}`,
       method: 'GET',
       schema,
     }));
 
   const listObject = (module: DialpadModules, schema: z.ZodSchema) =>
     request(({ cursor }: { cursor?: string }) => ({
-      url: `/${module}`,
+      url: `/${API_VERSION}/${module}`,
       method: 'GET',
       query: cursor ? { cursor } : undefined,
       schema,
@@ -55,7 +52,7 @@ const makeClient = (): DialpadClient => {
     schema: z.ZodSchema,
   ) =>
     request((body: T) => ({
-      url: `/${module}/`,
+      url: `/${API_VERSION}/${module}/`,
       method: 'POST',
       schema,
       json: formatUpsertInputWithNative(body),
@@ -66,7 +63,7 @@ const makeClient = (): DialpadClient => {
     schema: z.ZodSchema,
   ) =>
     request((body: T) => ({
-      url: `/${module}/`,
+      url: `/${API_VERSION}/${module}/`,
       method: 'PUT',
       schema,
       json: formatUpsertInputWithNative(body),
@@ -95,7 +92,6 @@ const makeClient = (): DialpadClient => {
     },
     calls: {
       find: findObject('calls', dialpadCallSchema),
-      list: listObject('calls', listResponseSchema(dialpadCallSchema)),
       start: request((body: DialpadCallStart) => ({
         url: `/call`,
         method: 'POST',
@@ -103,6 +99,12 @@ const makeClient = (): DialpadClient => {
           call_id: z.number(),
         }),
         json: formatUpsertInputWithNative(body),
+      })),
+      list: request(({ cursor }: { cursor?: string }) => ({
+        url: `/call/search`,
+        method: 'GET',
+        query: cursor ? { cursor } : undefined,
+        schema: listResponseSchema(dialpadCallSchema),
       })),
     },
     passthrough: request.passthrough(),
