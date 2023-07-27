@@ -612,6 +612,46 @@ export const hubspotAssociationResponseSchema = z.object({
 export type HubspotAssociationResponse = z.infer<
   typeof hubspotAssociationResponseSchema
 >;
+export const hubspotAssociationListResponseSchema = z.object({
+  results: z.array(
+    z.object({
+      from: z.object({
+        id: hubspotIdSchema,
+      }),
+      to: z.array(
+        z.object({
+          toObjectId: hubspotIdSchema,
+          associationSpec: z.object({
+            associationCategory: z.string(),
+            associationTypeId: hubspotIdSchema,
+          }),
+        }),
+      ),
+      paging: z
+        .object({
+          next: z
+            .object({
+              link: z.string().nullable(),
+              after: z.string().nullable(),
+            })
+            .partial()
+            .nullable(),
+          prev: z
+            .object({
+              before: z.string().nullable(),
+              link: z.string().nullable(),
+            })
+            .partial()
+            .nullable(),
+        })
+        .partial()
+        .nullable(),
+    }),
+  ),
+});
+export type HubspotAssociationListResponse = z.infer<
+  typeof hubspotAssociationListResponseSchema
+>;
 
 export const hubspotAssociationDeleteSchema = z.object({
   fromId: hubspotIdSchema,
