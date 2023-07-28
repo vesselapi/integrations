@@ -344,32 +344,65 @@ export type ApolloCreateSequence = z.infer<typeof apolloCreateSequence>;
 
 export const apolloSequenceStep = custom.addNativeToZodSchema(
   z.object({
-    emailer_step: z.object({
-      id: z.string(),
-    }),
-    emailer_touch: z.object({
-      id: z.string(),
-    }),
-    emailer_template: z.object({
-      id: z.string(),
+    id: z.string(),
+    emailer_campaign_id: z.string(),
+    position: z.number(),
+    wait_time: z.number(),
+    type: z.string(),
+    wait_mode: z.string(),
+    note: z.string().nullish(),
+    max_emails_per_day: z.number().nullish(),
+    exact_datetime: z.string().nullish(),
+    priority: z.string().nullish(),
+    auto_skip_in_x_days: z.number().nullish(),
+    counts: z.object({
+      active: z.number(),
+      paused: z.number(),
+      finished: z.number(),
+      bounced: z.number(),
+      spam_blocked: z.number(),
+      hard_bounced: z.number(),
+      not_sent: z.number(),
     }),
   }),
 );
 
 export type ApolloSequenceStep = z.infer<typeof apolloSequenceStep>;
 
-export const apolloCreateSequenceStep = z.object({
-  emailer_campaign_id: z.string(),
-  priority: z.string().optional(),
-  position: z.number().optional(),
-  type: z.string().optional(),
-  wait_mode: z.string().optional(),
-  wait_time: z.number().optional(),
-  exact_datetime: z.string().optional(),
-  $native: z.record(z.any()).optional(),
-});
+export const apolloCreateSequenceStep = custom.addNativeToZodSchema(
+  z.object({
+    emailer_campaign_id: z.string(),
+    priority: z.string().optional(),
+    position: z.number().optional(),
+    type: z.string().optional(),
+    wait_mode: z.string().optional(),
+    wait_time: z.number().optional(),
+    exact_datetime: z.string().optional(),
+    $native: z.record(z.any()).optional(),
+  }),
+);
 
 export type ApolloCreateSequenceStep = z.infer<typeof apolloCreateSequenceStep>;
+
+export const apolloSequenceTemplate = custom.addNativeToZodSchema(
+  z.object({
+    id: z.string(),
+    name: z.string().nullish(),
+    user_id: z.string(),
+    subject: z.string().nullish(),
+    archived: z.boolean(),
+    created_at: z.string(),
+    global: z.boolean().nullish(),
+    body_text: z.string().nullish(),
+    folder_id: z.string().nullish(),
+    body_html: z.string().nullish(),
+    creation_type: z.string().nullish(),
+    label_ids: z.array(z.string()).nullish(),
+    prompt_id: z.string().nullish(),
+  }),
+);
+
+export type ApolloSequenceTemplate = z.infer<typeof apolloSequenceTemplate>;
 
 export const apolloCreateTemplate = z.object({
   name: z.string().optional(),
