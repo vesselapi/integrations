@@ -24,6 +24,10 @@ import {
   PipedriveNoteCreate,
   pipedriveNoteSchema,
   PipedriveNoteUpdate,
+  PipedriveOrganization,
+  PipedriveOrganizationCreate,
+  pipedriveOrganizationSchema,
+  PipedriveOrganizationUpdate,
   PipedrivePerson,
   PipedrivePersonCreate,
   PipedrivePersonUpdate,
@@ -193,6 +197,11 @@ const makeClient = () => {
       'notes',
       pipedriveNoteSchema,
     ),
+    organizations: crud<
+      PipedriveOrganizationCreate,
+      PipedriveOrganizationUpdate,
+      PipedriveOrganization
+    >('organizations', pipedriveOrganizationSchema),
     passthrough: request.passthrough(),
   };
 };

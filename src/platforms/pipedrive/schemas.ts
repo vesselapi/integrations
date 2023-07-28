@@ -218,6 +218,40 @@ export type PipedriveDealUpdate = z.infer<typeof pipedriveDealUpsertSchema> & {
 };
 
 // -
+// Organizations
+// -
+export const pipedriveOrganizationSchema = custom.addNativeToZodSchema(
+  z.object({
+    id: z.number(),
+    name: z.string(),
+    address_route: z.string(),
+    address_locality: z.string(),
+    address_admin_area_level_1: z.string(),
+    address_postal_code: z.string(),
+    address_country: z.string(),
+    update_time: custom.date(),
+    add_time: custom.date(),
+    active_flag: z.boolean(), // isDeleted
+    owner_id: z.object({ value: z.number() }),
+  }),
+);
+export type PipedriveOrganization = z.infer<typeof pipedriveOrganizationSchema>;
+export const pipedriveOrganizationUpsertSchema = z
+  .object({
+    name: z.string(),
+    address: z.string().optional(),
+    owner_id: z.number().optional(),
+    $native: z.record(z.any()),
+  })
+  .partial();
+export type PipedriveOrganizationCreate = z.infer<
+  typeof pipedriveOrganizationUpsertSchema
+>;
+export type PipedriveOrganizationUpdate = z.infer<
+  typeof pipedriveOrganizationUpsertSchema
+> & { id: string };
+
+// -
 // Notes
 // -
 export const pipedriveNoteSchema = custom.addNativeToZodSchema(
