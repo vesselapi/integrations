@@ -345,25 +345,27 @@ export type ApolloCreateSequence = z.infer<typeof apolloCreateSequence>;
 export const apolloSequenceStep = custom.addNativeToZodSchema(
   z.object({
     id: z.string(),
-    emailer_campaign_id: z.string(),
-    position: z.number(),
-    wait_time: z.number(),
-    type: z.string(),
-    wait_mode: z.string(),
+    emailer_campaign_id: z.string().nullish(),
+    position: z.number().nullish(),
+    wait_time: z.number().nullish(),
+    type: z.string().nullish(),
+    wait_mode: z.string().nullish(),
     note: z.string().nullish(),
     max_emails_per_day: z.number().nullish(),
     exact_datetime: z.string().nullish(),
     priority: z.string().nullish(),
     auto_skip_in_x_days: z.number().nullish(),
-    counts: z.object({
-      active: z.number(),
-      paused: z.number(),
-      finished: z.number(),
-      bounced: z.number(),
-      spam_blocked: z.number(),
-      hard_bounced: z.number(),
-      not_sent: z.number(),
-    }),
+    counts: z
+      .object({
+        active: z.number().nullish(),
+        paused: z.number().nullish(),
+        finished: z.number().nullish(),
+        bounced: z.number().nullish(),
+        spam_blocked: z.number().nullish(),
+        hard_bounced: z.number().nullish(),
+        not_sent: z.number().nullish(),
+      })
+      .nullish(),
   }),
 );
 
@@ -388,10 +390,10 @@ export const apolloSequenceTemplate = custom.addNativeToZodSchema(
   z.object({
     id: z.string(),
     name: z.string().nullish(),
-    user_id: z.string(),
+    user_id: z.string().nullish(),
     subject: z.string().nullish(),
-    archived: z.boolean(),
-    created_at: z.string(),
+    archived: z.boolean().nullish(),
+    created_at: z.string().nullish(),
     global: z.boolean().nullish(),
     body_text: z.string().nullish(),
     folder_id: z.string().nullish(),
