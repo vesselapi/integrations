@@ -132,11 +132,11 @@ export type PipedriveUserMe = z.infer<typeof pipedriveUserMeSchema>;
 export const pipedriveUserSchema = custom.addNativeToZodSchema(
   z.object({
     id: z.number(),
-    name: z.string(),
-    email: z.string(),
+    name: z.string().nullable(),
+    email: z.string().nullable(),
     created: custom.date(),
-    modified: custom.date().optional(),
-    active_flag: z.boolean(),
+    modified: custom.date().optional().nullable(),
+    active_flag: z.boolean().nullable(),
   }),
 );
 export type PipedriveUser = z.infer<typeof pipedriveUserSchema>;
@@ -147,16 +147,16 @@ export type PipedriveUser = z.infer<typeof pipedriveUserSchema>;
 const pipedrivePersonSchema = custom.addNativeToZodSchema(
   z.object({
     id: z.number(),
-    name: z.string(),
-    first_name: z.string(),
-    last_name: z.string(),
-    email: z.array(pipedriveEmailAddressSchema),
-    phone: z.array(pipedrivePhoneNumberSchema),
+    name: z.string().nullable(),
+    first_name: z.string().nullable(),
+    last_name: z.string().nullable(),
+    email: z.array(pipedriveEmailAddressSchema).nullable(),
+    phone: z.array(pipedrivePhoneNumberSchema).nullable(),
     add_time: custom.date(),
     update_time: custom.date(),
-    active_flag: z.boolean(),
-    org_id: pipedriveAssociationId.optional(),
-    owner_id: pipedriveAssociationId.optional(),
+    active_flag: z.boolean().nullable(),
+    org_id: pipedriveAssociationId.optional().nullable(),
+    owner_id: pipedriveAssociationId.optional().nullable(),
   }),
 );
 export type PipedrivePerson = z.infer<typeof pipedrivePersonSchema>;
@@ -184,20 +184,20 @@ export type PipedrivePersonUpdate = z.infer<
 export const pipedriveDealSchema = custom.addNativeToZodSchema(
   z.object({
     id: z.number(),
-    title: z.string(),
-    stage_id: z.number(),
-    value: z.string(),
-    expected_close_date: custom.date(),
-    weighted_value: z.string(),
-    status: z.string(),
-    active: z.boolean(),
-    probability: z.string(),
+    title: z.string().nullable(),
+    stage_id: z.number().nullable(),
+    value: z.union([z.string(), z.number()]).nullable(),
+    expected_close_date: custom.date().nullable(),
+    weighted_value: z.union([z.string(), z.number()]).nullable(),
+    status: z.string().nullable(),
+    active: z.boolean().nullable(),
+    probability: z.union([z.string(), z.number()]).nullable(),
     update_time: custom.date(),
     add_time: custom.date(),
-    deleted: z.boolean(),
-    person_id: z.object({ value: z.number() }),
-    org_id: z.object({ value: z.number() }),
-    user_id: z.object({ value: z.number() }),
+    deleted: z.boolean().nullable(),
+    person_id: z.object({ value: z.number() }).nullable(),
+    org_id: z.object({ value: z.number() }).nullable(),
+    user_id: z.object({ value: z.number() }).nullable(),
   }),
 );
 export type PipedriveDeal = z.infer<typeof pipedriveDealSchema>;
@@ -218,6 +218,40 @@ export type PipedriveDealUpdate = z.infer<typeof pipedriveDealUpsertSchema> & {
 };
 
 // -
+// Organizations
+// -
+export const pipedriveOrganizationSchema = custom.addNativeToZodSchema(
+  z.object({
+    id: z.number(),
+    name: z.string().nullable(),
+    address_route: z.string().nullable(),
+    address_locality: z.string().nullable(),
+    address_admin_area_level_1: z.string().nullable(),
+    address_postal_code: z.string().nullable(),
+    address_country: z.string().nullable(),
+    update_time: custom.date(),
+    add_time: custom.date(),
+    active_flag: z.boolean().nullable(), // isDeleted
+    owner_id: z.object({ value: z.number() }).nullable(),
+  }),
+);
+export type PipedriveOrganization = z.infer<typeof pipedriveOrganizationSchema>;
+export const pipedriveOrganizationUpsertSchema = z
+  .object({
+    name: z.string(),
+    address: z.string().optional(),
+    owner_id: z.number().optional(),
+    $native: z.record(z.any()),
+  })
+  .partial();
+export type PipedriveOrganizationCreate = z.infer<
+  typeof pipedriveOrganizationUpsertSchema
+>;
+export type PipedriveOrganizationUpdate = z.infer<
+  typeof pipedriveOrganizationUpsertSchema
+> & { id: string };
+
+// -
 // Notes
 // -
 export const pipedriveNoteSchema = custom.addNativeToZodSchema(
@@ -225,13 +259,13 @@ export const pipedriveNoteSchema = custom.addNativeToZodSchema(
     id: z.number(),
     add_time: custom.date(),
     update_time: custom.date(),
-    content: z.string(),
-    user_id: z.number(),
-    active_flag: z.boolean(),
-    deal_id: z.number().optional(),
-    person_id: z.number().optional(),
-    org_id: z.number().optional(),
-    lead_id: z.number().optional(),
+    content: z.string().nullable(),
+    user_id: z.number().nullable(),
+    active_flag: z.boolean().nullable(),
+    deal_id: z.number().optional().nullable(),
+    person_id: z.number().optional().nullable(),
+    org_id: z.number().optional().nullable(),
+    lead_id: z.number().optional().nullable(),
   }),
 );
 export type PipedriveNote = z.infer<typeof pipedriveNoteSchema>;

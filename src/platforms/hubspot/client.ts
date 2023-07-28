@@ -24,6 +24,7 @@ import {
   HubspotAssociationLabelInput,
   HubspotAssociationLabelOutput,
   hubspotAssociationLabelOutputSchema,
+  hubspotAssociationListResponseSchema,
   HubspotCall,
   HubspotCallCreate,
   hubspotCallSchema,
@@ -400,12 +401,10 @@ const makeClient = () => {
         ({ fromType, toType, inputs }: HubspotAssociationBatchRead) => ({
           url: `/crm/v4/associations/${fromType}/${toType}/batch/read`,
           method: 'POST',
-          schema: listResponseSchema(hubspotPropertySchema),
-          json: [
-            shake({
-              inputs,
-            }),
-          ],
+          schema: hubspotAssociationListResponseSchema,
+          json: shake({
+            inputs,
+          }),
         }),
       ),
       create: request(
