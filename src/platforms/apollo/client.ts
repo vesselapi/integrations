@@ -23,6 +23,7 @@ import {
   apolloEmailAccount,
   apolloEmailActivity,
   apolloEmailMessage,
+  apolloEmailTemplate,
   apolloLabel,
   apolloPaginatedResponse,
   apolloPerson,
@@ -212,7 +213,8 @@ export const client = {
       schema: z.object({
         emailer_campaign: apolloSequence,
         emailer_steps: z.array(apolloSequenceStep),
-        emailer_templates: z.array(apolloSequenceTemplate),
+        emailer_templates: z.array(apolloEmailTemplate),
+        emailer_touches: z.array(apolloSequenceTemplate),
       }),
     })),
     search: request(
@@ -426,10 +428,8 @@ export const client = {
       json: shake(formatUpsertInputWithNative(step)),
       schema: z.object({
         emailer_step: apolloSequenceStep,
-        emailer_template: apolloSequenceTemplate,
-        emailer_touch: z.object({
-          id: z.string(),
-        }),
+        emailer_template: apolloEmailTemplate,
+        emailer_touch: apolloSequenceTemplate,
       }),
     })),
   },

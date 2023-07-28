@@ -386,7 +386,7 @@ export const apolloCreateSequenceStep = custom.addNativeToZodSchema(
 
 export type ApolloCreateSequenceStep = z.infer<typeof apolloCreateSequenceStep>;
 
-export const apolloSequenceTemplate = custom.addNativeToZodSchema(
+export const apolloEmailTemplate = custom.addNativeToZodSchema(
   z.object({
     id: z.string(),
     name: z.string().nullish(),
@@ -404,7 +404,7 @@ export const apolloSequenceTemplate = custom.addNativeToZodSchema(
   }),
 );
 
-export type ApolloSequenceTemplate = z.infer<typeof apolloSequenceTemplate>;
+export type ApolloEmailTemplate = z.infer<typeof apolloEmailTemplate>;
 
 export const apolloCreateTemplate = z.object({
   name: z.string().optional(),
@@ -419,6 +419,38 @@ export const apolloCreateTemplate = z.object({
 });
 
 export type ApolloCreateTemplate = z.infer<typeof apolloCreateTemplate>;
+
+export const apolloSequenceTemplate = z.object({
+  id: z.string(),
+  emailer_step_id: z.string(),
+  emailer_template_id: z.string(),
+  status: z.string().optional(),
+  type: z.string().optional(),
+  include_signature: z.boolean().optional(),
+  has_personalized_opener: z.boolean().optional(),
+  personalized_opener_fallback_option: z.string().optional(),
+  generic_personalized_opener: z.string().optional(),
+  unique_scheduled: z.number().optional(),
+  unique_delivered: z.number().optional(),
+  unique_bounced: z.number().optional(),
+  unique_opened: z.number().optional(),
+  unique_replied: z.number().optional(),
+  bounce_rate: z.number().optional(),
+  open_rate: z.number().optional(),
+  reply_rate: z.number().optional(),
+  demo_rate: z.number().optional(),
+  unique_demoed: z.number().optional(),
+  unique_clicked: z.number().optional(),
+  click_rate: z.number().optional(),
+  unique_unsubscribed: z.number().optional(),
+  opt_out_rate: z.number().optional(),
+  unique_hard_bounced: z.number().optional(),
+  unique_spam_blocked: z.number().optional(),
+  hard_bounce_rate: z.number().optional(),
+  spam_block_rate: z.number().optional(),
+});
+
+export type ApolloSequenceTemplate = z.infer<typeof apolloSequenceTemplate>;
 
 export const apolloUpdateSequenceTemplate = z.object({
   id: z.string(),
