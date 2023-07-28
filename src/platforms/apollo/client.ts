@@ -212,7 +212,7 @@ export const client = {
       schema: z.object({
         emailer_campaign: apolloSequence,
         emailer_steps: z.array(apolloSequenceStep),
-        email_templates: z.array(apolloSequenceTemplate),
+        emailer_templates: z.array(apolloSequenceTemplate),
       }),
     })),
     search: request(
