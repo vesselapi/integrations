@@ -393,7 +393,7 @@ export const apolloEmailTemplate = custom.addNativeToZodSchema(
     user_id: z.string().nullish(),
     subject: z.string().nullish(),
     archived: z.boolean().nullish(),
-    created_at: z.string().nullish(),
+    created_at: custom.date().nullish(),
     global: z.boolean().nullish(),
     body_text: z.string().nullish(),
     folder_id: z.string().nullish(),
