@@ -344,32 +344,67 @@ export type ApolloCreateSequence = z.infer<typeof apolloCreateSequence>;
 
 export const apolloSequenceStep = custom.addNativeToZodSchema(
   z.object({
-    emailer_step: z.object({
-      id: z.string(),
-    }),
-    emailer_touch: z.object({
-      id: z.string(),
-    }),
-    emailer_template: z.object({
-      id: z.string(),
-    }),
+    id: z.string(),
+    emailer_campaign_id: z.string().nullish(),
+    position: z.number().nullish(),
+    wait_time: z.number().nullish(),
+    type: z.string().nullish(),
+    wait_mode: z.string().nullish(),
+    note: z.string().nullish(),
+    max_emails_per_day: z.number().nullish(),
+    exact_datetime: z.string().nullish(),
+    priority: z.string().nullish(),
+    auto_skip_in_x_days: z.number().nullish(),
+    counts: z
+      .object({
+        active: z.number().nullish(),
+        paused: z.number().nullish(),
+        finished: z.number().nullish(),
+        bounced: z.number().nullish(),
+        spam_blocked: z.number().nullish(),
+        hard_bounced: z.number().nullish(),
+        not_sent: z.number().nullish(),
+      })
+      .nullish(),
   }),
 );
 
 export type ApolloSequenceStep = z.infer<typeof apolloSequenceStep>;
 
-export const apolloCreateSequenceStep = z.object({
-  emailer_campaign_id: z.string(),
-  priority: z.string().optional(),
-  position: z.number().optional(),
-  type: z.string().optional(),
-  wait_mode: z.string().optional(),
-  wait_time: z.number().optional(),
-  exact_datetime: z.string().optional(),
-  $native: z.record(z.any()).optional(),
-});
+export const apolloCreateSequenceStep = custom.addNativeToZodSchema(
+  z.object({
+    emailer_campaign_id: z.string(),
+    priority: z.string().optional(),
+    position: z.number().optional(),
+    type: z.string().optional(),
+    wait_mode: z.string().optional(),
+    wait_time: z.number().optional(),
+    exact_datetime: z.string().optional(),
+    $native: z.record(z.any()).optional(),
+  }),
+);
 
 export type ApolloCreateSequenceStep = z.infer<typeof apolloCreateSequenceStep>;
+
+export const apolloEmailTemplate = custom.addNativeToZodSchema(
+  z.object({
+    id: z.string(),
+    name: z.string().nullish(),
+    user_id: z.string().nullish(),
+    subject: z.string().nullish(),
+    archived: z.boolean().nullish(),
+    created_at: custom.date().nullish(),
+    global: z.boolean().nullish(),
+    body_text: z.string().nullish(),
+    folder_id: z.string().nullish(),
+    body_html: z.string().nullish(),
+    creation_type: z.string().nullish(),
+    label_ids: z.array(z.string()).nullish(),
+    prompt_id: z.string().nullish(),
+  }),
+);
+
+export type ApolloEmailTemplate = z.infer<typeof apolloEmailTemplate>;
 
 export const apolloCreateTemplate = z.object({
   name: z.string().optional(),
@@ -384,6 +419,38 @@ export const apolloCreateTemplate = z.object({
 });
 
 export type ApolloCreateTemplate = z.infer<typeof apolloCreateTemplate>;
+
+export const apolloSequenceTemplate = z.object({
+  id: z.string(),
+  emailer_step_id: z.string().nullish(),
+  emailer_template_id: z.string().nullish(),
+  status: z.string().nullish(),
+  type: z.string().nullish(),
+  include_signature: z.boolean().nullish(),
+  has_personalized_opener: z.boolean().nullish(),
+  personalized_opener_fallback_option: z.string().nullish(),
+  generic_personalized_opener: z.string().nullish(),
+  unique_scheduled: z.number().nullish(),
+  unique_delivered: z.number().nullish(),
+  unique_bounced: z.number().nullish(),
+  unique_opened: z.number().nullish(),
+  unique_replied: z.number().nullish(),
+  bounce_rate: z.number().nullish(),
+  open_rate: z.number().nullish(),
+  reply_rate: z.number().nullish(),
+  demo_rate: z.number().nullish(),
+  unique_demoed: z.number().nullish(),
+  unique_clicked: z.number().nullish(),
+  click_rate: z.number().nullish(),
+  unique_unsubscribed: z.number().nullish(),
+  opt_out_rate: z.number().nullish(),
+  unique_hard_bounced: z.number().nullish(),
+  unique_spam_blocked: z.number().nullish(),
+  hard_bounce_rate: z.number().nullish(),
+  spam_block_rate: z.number().nullish(),
+});
+
+export type ApolloSequenceTemplate = z.infer<typeof apolloSequenceTemplate>;
 
 export const apolloUpdateSequenceTemplate = z.object({
   id: z.string(),
