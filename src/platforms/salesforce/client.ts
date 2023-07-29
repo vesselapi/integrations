@@ -21,6 +21,7 @@ import {
   SalesforceContentNoteCreate,
   salesforceContentNoteCreateResponse,
   SalesforceContentNoteUpdate,
+  SalesforceCustomFieldCreate,
   salesforceDescribeResponse,
   salesforceEmailMessage,
   SalesforceEmailMessageCreate,
@@ -39,6 +40,7 @@ import {
   salesforceEventRelationCreateResponse,
   SalesforceEventRelationUpdate,
   SalesforceEventUpdate,
+  SalesforceFieldPermissions,
   salesforceJob,
   salesforceLead,
   SalesforceLeadCreate,
@@ -729,6 +731,25 @@ export const client = {
       url: `/sobjects/EmailMessageRelation/${Id}/`,
       method: 'DELETE',
       schema: z.undefined(),
+    })),
+  },
+  customFields: {
+    create: request(({ CustomField }: SalesforceCustomFieldCreate) => ({
+      url: `/tooling/sobjects/CustomField`,
+      method: 'POST',
+      json: {
+        ...CustomField,
+        Metadata: formatUpsertInputWithNative(CustomField.Metadata),
+      },
+      schema: z.any(),
+    })),
+  },
+  fieldPermissions: {
+    update: request((update: SalesforceFieldPermissions) => ({
+      url: `/sobjects/FieldPermissions`,
+      method: 'POST',
+      json: update,
+      schema: z.any(),
     })),
   },
   passthrough: request.passthrough(),
