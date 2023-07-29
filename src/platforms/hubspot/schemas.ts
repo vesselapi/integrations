@@ -204,7 +204,15 @@ export type HubspotContactUpdate = z.infer<
 const dealPropertiesSchema = z.object({
   amount: z.union([z.string(), z.number()]).nullable(),
   dealname: z.string().nullable(),
-  closedate: custom.date().nullable(),
+  closedate: custom
+    .date()
+    .or(
+      z
+        .string()
+        .max(0)
+        .transform(() => null),
+    )
+    .nullable(),
   dealstage: z.string().nullable(),
   hs_deal_stage_probability: z.union([z.string(), z.number()]).nullable(),
   hs_projected_amount: z.union([z.string(), z.number()]).nullable(),
