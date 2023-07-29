@@ -3,6 +3,7 @@ import {
   formatUrl,
   makeRequestFactory,
 } from '@/sdk/client';
+import * as custom from '@/sdk/validators';
 import { objectify, shake } from 'radash';
 import { z } from 'zod';
 import { BASE_URL, DEFAULT_PAGE_SIZE } from './constants';
@@ -210,12 +211,14 @@ export const client = {
     find: request(({ id }: { id: string }) => ({
       url: `/emailer_campaigns/${id}`,
       method: 'GET',
-      schema: z.object({
-        emailer_campaign: apolloSequence,
-        emailer_steps: z.array(apolloSequenceStep),
-        emailer_templates: z.array(apolloEmailTemplate),
-        emailer_touches: z.array(apolloSequenceTemplate),
-      }),
+      schema: custom.addNativeToZodSchema(
+        z.object({
+          emailer_campaign: apolloSequence,
+          emailer_steps: z.array(apolloSequenceStep),
+          emailer_templates: z.array(apolloEmailTemplate),
+          emailer_touches: z.array(apolloSequenceTemplate),
+        }),
+      ),
     })),
     search: request(
       ({
