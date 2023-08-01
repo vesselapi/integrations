@@ -56,6 +56,9 @@ export default platform('salesforce', {
   display: {
     name: 'Salesforce',
     iconURI: icon,
+    icons: {
+      defaultURI: icon,
+    },
     categories: ['crm'],
   },
   client,

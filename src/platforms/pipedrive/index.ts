@@ -12,7 +12,14 @@ export default platform('pipedrive', {
     isRetryable: async ({ status }) => status === 401,
     default: true,
   }),
-  display: { name: 'Pipedrive', iconURI: icon, categories: ['crm'] },
+  display: {
+    name: 'Pipedrive',
+    iconURI: icon,
+    icons: {
+      defaultURI: icon,
+    },
+    categories: ['crm'],
+  },
   constants,
   client,
   actions: {},

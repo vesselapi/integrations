@@ -42,6 +42,9 @@ export default platform('ringcentral', {
   display: {
     name: 'Ringcentral',
     iconURI: icon,
+    icons: {
+      defaultURI: icon,
+    },
     categories: ['dialer'],
   },
   constants,

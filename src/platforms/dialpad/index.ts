@@ -42,6 +42,9 @@ export default platform('dialpad', {
   display: {
     name: 'Dialpad',
     iconURI: icon,
+    icons: {
+      defaultURI: icon,
+    },
     categories: ['dialer'],
   },
   constants,

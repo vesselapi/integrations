@@ -5,7 +5,14 @@ import { icon } from './icon';
 
 export default platform('close', {
   auth: auth.apiToken(),
-  display: { name: 'Close', iconURI: icon, categories: ['crm'] },
+  display: {
+    name: 'Close',
+    iconURI: icon,
+    icons: {
+      defaultURI: icon,
+    },
+    categories: ['crm'],
+  },
   constants,
   client,
   actions: {},

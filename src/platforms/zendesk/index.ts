@@ -36,6 +36,9 @@ export default platform('zendesk', {
   display: {
     name: 'Zendesk',
     iconURI: icon,
+    icons: {
+      defaultURI: icon,
+    },
     categories: ['ticketing'],
   },
   client,

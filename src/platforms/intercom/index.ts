@@ -13,6 +13,9 @@ export default platform('intercom', {
   display: {
     name: 'Intercom',
     iconURI: icon,
+    icons: {
+      defaultURI: icon,
+    },
     categories: ['ticketing'],
   },
   client,
