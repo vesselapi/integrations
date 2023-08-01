@@ -889,6 +889,52 @@ export const salesforceListViewResult = z.object({
 });
 
 // -
+// Custom Fields
+// -
+const salesforceCustomFieldValueSetDefinition = z.object({
+  sorted: z.boolean().optional(),
+  value: z.array(
+    z.object({
+      fullName: z.string().optional(),
+      default: z.boolean().optional(),
+      label: z.string(),
+      valueName: z.string().optional(),
+    }),
+  ),
+});
+
+const salesforceCustomFieldMetadata = z.object({
+  label: z.string(),
+  type: z.string(),
+  writeRequiresMasterRead: z.boolean().optional(),
+  required: z.boolean(),
+  valueSet: z
+    .object({
+      valueSetDefinition: salesforceCustomFieldValueSetDefinition,
+    })
+    .optional(),
+  visibleLines: z.number().optional(),
+  length: z.number().optional(),
+  precision: z.number().optional(),
+  scale: z.number().optional(),
+});
+
+const salesforceCustomField = z.object({
+  FullName: z.string().optional(),
+  Metadata: salesforceCustomFieldMetadata,
+});
+
+const salesforceFieldPermissions = z.object({
+  ParentId: z.string(),
+  SobjectType: z.enum(SALESFORCE_SUPPORTED_OBJECT_TYPE),
+  Field: z
+    .string()
+    .transform((val) => val as `${SalesforceSupportedObjectType}.${string}`),
+  PermissionsEdit: z.boolean(),
+  PermissionsRead: z.boolean(),
+});
+
+// -
 // Schemas
 // -
 export const SalesforceSchemaByObjectType: Record<
@@ -989,3 +1035,17 @@ export type SalesforceEmailMessageRelationCreate = z.infer<
 >;
 export type SalesforceListView = z.infer<typeof salesforceListView>;
 export type SalesforceListViewResult = z.infer<typeof salesforceListViewResult>;
+export type SalesforceCustomField = z.infer<typeof salesforceCustomField>;
+export type SalesforceCustomFieldCreate = {
+  CustomField: {
+    FullName: string;
+    Metadata: z.infer<typeof salesforceCustomFieldMetadata> & {
+      type: Capitalize<SalesforceFieldType>;
+      $native: Record<string, any>;
+    };
+  };
+};
+
+export type SalesforceFieldPermissions = z.infer<
+  typeof salesforceFieldPermissions
+>;
