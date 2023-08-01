@@ -32,6 +32,7 @@ export const transformAccount = (account: ApolloAccount) => {
     lastActivityDate: account.last_activity_date,
     sanitizedPhone: account.sanitized_phone,
     createdAt: account.created_at,
+    typedCustomFields: account.typed_custom_fields,
   };
 };
 
@@ -40,6 +41,7 @@ export const transformContact = (contact: ApolloContact) => {
     id: contact.id,
     firstName: contact.first_name,
     lastName: contact.last_name,
+    linkedinUrl: contact.linkedin_url,
     name: contact.name,
     title: contact.title,
     ownerId: contact.owner_id,
