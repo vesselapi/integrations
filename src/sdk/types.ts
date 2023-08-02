@@ -159,6 +159,10 @@ export type OAuth2AuthConfig<
   scopeSeparator: ',' | ' ' | '+';
   questions: AuthQuestion[];
   oauthBodyFormat: 'json' | 'form';
+  /**
+   * Additional Auth Params to pass when the `authUrl` is called.
+   */
+  authParams: Record<string, string>;
   url: (arg: {
     answers: TAnswers;
     scopes: string[];
@@ -219,6 +223,10 @@ export type PlatformDisplayConfig = {
     fullURI?: string;
     boxURI?: string;
   };
+  colors?: {
+    primary: string;
+  };
+  domain?: string;
   categories: Category[];
 };
 

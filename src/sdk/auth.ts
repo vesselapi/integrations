@@ -41,6 +41,7 @@ export const auth = {
     scopeSeparator?: OAuth2AuthConfig<TAnswers>['scopeSeparator'];
     tokenAuth?: OAuth2AuthConfig<TAnswers>['tokenAuth'];
     oauthBodyFormat?: OAuth2AuthConfig<TAnswers>['oauthBodyFormat'];
+    authParams?: OAuth2AuthConfig<TAnswers>['authParams'];
     url?: OAuth2AuthConfig<TAnswers>['url'];
     isRetryable?: RetryableCheckFunction;
     display?: OAuth2AuthConfig<TAnswers>['display'];
@@ -65,6 +66,7 @@ export const auth = {
     scopeSeparator: options.scopeSeparator ?? ' ',
     questions: options.questions ?? [],
     oauthBodyFormat: options.oauthBodyFormat ?? 'form',
+    authParams: options.authParams ?? {},
     display: options.display ?? {
       markdown: (
         platform,
@@ -80,6 +82,7 @@ export const auth = {
           scope: scopes.join(options.scopeSeparator ?? ' '),
           state,
           response_type: 'code',
+          ...options.authParams,
         };
         return `${
           isFunction(options.authUrl)
