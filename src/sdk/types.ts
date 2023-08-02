@@ -176,9 +176,10 @@ export type OAuth2AuthConfig<
     markdown: string | ((platform: Platform<{}, any, string>) => string);
   };
   /**
-   * Scopes that will always be requested
+   * Scopes that will always be requested and are
+   * required to make an API call.
    */
-  defaultScopes: string[];
+  requiredScopes: string[];
   /**
    * Surfaces information we store about the
    * OAuth2 app itself.
