@@ -1,7 +1,7 @@
-import { client } from './client';
-import { icon } from './icon';
-import * as constants from './constants';
 import { auth, platform } from '@/sdk';
+import { client } from './client';
+import * as constants from './constants';
+import { icon } from './icon';
 
 export default platform('stripe', {
   auth: auth.oauth2({

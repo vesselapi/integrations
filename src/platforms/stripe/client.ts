@@ -1,5 +1,5 @@
-import { BASE_URL } from './constants';
 import { formatUrl, makeRequestFactory } from '@/sdk/client';
+import { BASE_URL } from './constants';
 
 const request = makeRequestFactory(async (auth, options) => {
   return {
