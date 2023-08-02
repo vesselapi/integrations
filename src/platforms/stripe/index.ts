@@ -11,6 +11,9 @@ export default platform('stripe', {
   display: {
     name: 'Stripe',
     iconURI: icon,
+    logos: {
+      defaultURI: icon,
+    },
     categories: [],
   },
   client,

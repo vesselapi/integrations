@@ -13,7 +13,14 @@ export default platform('zoho', {
       'accounts-server': z.string().url().optional(),
     }),
   }),
-  display: { name: 'Zoho', iconURI: icon, categories: ['crm'] },
+  display: {
+    name: 'Zoho',
+    iconURI: icon,
+    logos: {
+      defaultURI: icon,
+    },
+    categories: ['crm'],
+  },
   constants,
   client,
   actions: {},

@@ -34,6 +34,9 @@ export default platform('teams', {
   display: {
     name: 'Microsoft Teams',
     iconURI: icon,
+    logos: {
+      defaultURI: icon,
+    },
     categories: ['chat'],
   },
   client,

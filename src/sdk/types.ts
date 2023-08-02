@@ -159,6 +159,10 @@ export type OAuth2AuthConfig<
   scopeSeparator: ',' | ' ' | '+';
   questions: AuthQuestion[];
   oauthBodyFormat: 'json' | 'form';
+  /**
+   * Additional Auth Params to pass when the `authUrl` is called.
+   */
+  authParams: Record<string, string>;
   url: (arg: {
     answers: TAnswers;
     scopes: string[];
@@ -171,6 +175,11 @@ export type OAuth2AuthConfig<
   display: {
     markdown: string | ((platform: Platform<{}, any, string>) => string);
   };
+  /**
+   * Scopes that will always be requested and are
+   * required to make an API call.
+   */
+  requiredScopes: string[];
   /**
    * Surfaces information we store about the
    * OAuth2 app itself.
@@ -212,7 +221,30 @@ export type Category =
 
 export type PlatformDisplayConfig = {
   name: string;
-  iconURI: string;
+  /** @deprecated */
+  iconURI?: string;
+  logos: {
+    /**
+     * The logo that is used by default when neither the
+     * full or box logo is explicitly needed. This can and often
+     * is the same as either the full or the box logo.
+     */
+    defaultURI: string;
+    /**
+     * The full logo is the expanded version of the
+     * logo that includes the name of the company
+     */
+    fullURI?: string;
+    /**
+     * The box logo is the condensed version of the
+     * logo that only includes the icon itself
+     */
+    boxURI?: string;
+  };
+  colors?: {
+    primary: string;
+  };
+  domain?: string;
   categories: Category[];
 };
 

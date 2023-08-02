@@ -14,6 +14,9 @@ export default platform('shopify', {
   display: {
     name: 'Shopify',
     iconURI: icon,
+    logos: {
+      defaultURI: icon,
+    },
     categories: ['commerce'],
   },
   client,

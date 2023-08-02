@@ -16,6 +16,9 @@ export default platform('freshdesk', {
   display: {
     name: 'Freshdesk',
     iconURI: icon,
+    logos: {
+      defaultURI: icon,
+    },
     categories: ['crm'],
   },
   client,
