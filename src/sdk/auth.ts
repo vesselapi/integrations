@@ -1,4 +1,4 @@
-import { isFunction, isString } from 'radash';
+import { isFunction, isString, unique } from 'radash';
 import { z } from 'zod';
 import {
   ApiKeyAuthConfig,
@@ -81,7 +81,7 @@ export const auth = {
         const query: Record<string, string> = {
           client_id: clientId,
           redirect_uri: redirectUrl,
-          scope: [...scopes, ...(options.defaultScopes ?? [])].join(
+          scope: unique([...scopes, ...(options.defaultScopes ?? [])]).join(
             options.scopeSeparator ?? ' ',
           ),
           state,
