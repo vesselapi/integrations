@@ -221,7 +221,7 @@ export type Category =
 export type PlatformDisplayConfig = {
   name: string;
   /** @deprecated */
-  iconURI: string;
+  iconURI?: string;
   icons: {
     defaultURI: string;
     fullURI?: string;
