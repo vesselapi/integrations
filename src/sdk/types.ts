@@ -222,7 +222,7 @@ export type PlatformDisplayConfig = {
   name: string;
   /** @deprecated */
   iconURI?: string;
-  icons: {
+  logos: {
     defaultURI: string;
     /**
      * The full icon is the expanded version of the
