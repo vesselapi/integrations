@@ -1,4 +1,4 @@
-import { CamelCasedPropertiesDeep } from 'type-fest';
+import { CamelCasedPropertiesDeep, SetOptional } from 'type-fest';
 import { z } from 'zod';
 import { HttpOptions } from './client';
 
@@ -12,10 +12,18 @@ export type OAuth2Metadata = {
   oauthResponse: Record<string, unknown>;
 };
 
-export type StandardMetadata = {
-  type: 'standard';
+export type ApiKeyMetadata = {
+  type: 'apiKey';
   answers: Record<string, string>;
 };
+
+export type BasicMetadata = {
+  type: 'basic';
+  answers: Record<string, string>;
+};
+
+export type AuthMetadata = OAuth2Metadata | ApiKeyMetadata | BasicMetadata;
+export type AuthType = AuthMetadata['type'];
 
 type BaseFetchResult = {
   status: number;
@@ -24,24 +32,20 @@ type BaseFetchResult = {
   response: Response | unknown;
 };
 
-type BaseAuth = {
+type BaseAuth<T extends AuthMetadata> = {
+  type: T['type'];
+  getMetadata: () => Promise<T>;
   getToken: () => Promise<string>;
   retry: <TResult extends BaseFetchResult>(
     func: () => Promise<TResult>,
   ) => Promise<TResult>;
 };
 
-export type OAuth2Auth = BaseAuth & {
-  type: 'oauth2';
-  getMetadata: () => Promise<OAuth2Metadata>;
-};
+export type OAuth2Auth = BaseAuth<OAuth2Metadata>;
+export type ApiKeyAuth = BaseAuth<ApiKeyMetadata>;
+export type BasicAuth = BaseAuth<BasicMetadata>;
 
-export type StandardAuth = BaseAuth & {
-  type: 'standard';
-  getMetadata: () => Promise<StandardMetadata>;
-};
-
-export type Auth = OAuth2Auth | StandardAuth;
+export type Auth = OAuth2Auth | ApiKeyAuth | BasicAuth;
 
 export type HttpsUrl = `https://${string}`;
 export type AuthQuestionType = 'text' | 'select';
@@ -72,6 +76,7 @@ export type RetryableCheckFunction = ({
   text,
 }: BaseFetchResult) => Promise<boolean>;
 
+// @deprecated
 export type StandardAuthConfig<
   TAnswers extends Record<string, string> = Record<string, string>,
 > = {
@@ -88,6 +93,39 @@ export type StandardAuthConfig<
   toTokenString: (answers: TAnswers) => string;
 };
 
+type BaseConfig<T extends AuthMetadata> = {
+  type: T['type'];
+  default: boolean;
+};
+
+export type ApiKeyAuthConfig<
+  TAnswers extends Record<string, string> = Record<string, string>,
+> = BaseConfig<ApiKeyMetadata> & {
+  /**
+   * Used by the FE to render form fields.
+   * E.g. Asking for Api token
+   */
+  questions: AuthQuestion[];
+  display: {
+    markdown: string | ((platform: Platform<{}, any, string>) => string);
+  };
+  toTokenString: (answers: TAnswers) => string;
+};
+
+export type BasicAuthConfig<
+  TAnswers extends Record<string, string> = Record<string, string>,
+> = BaseConfig<BasicMetadata> & {
+  /**
+   * Used by the FE to render form fields.
+   * E.g. Asking for username/pass
+   */
+  questions: AuthQuestion[];
+  display: {
+    markdown: string | ((platform: Platform<{}, any, string>) => string);
+  };
+  toTokenString: (answers: TAnswers) => string;
+};
+
 /**
  * OAUTH2: Many of the options defined here follow the simple auth package
  * https://github.com/lelylan/simple-oauth2/blob/fbb295b1ae0ea998bcdf4ad22a6ef2fcf6930d12/API.md#new-authorizationcodeoptions
@@ -95,16 +133,18 @@ export type StandardAuthConfig<
 export type OAuth2AuthConfig<
   TAnswers extends Record<string, string> = Record<string, string>,
   TOAuth2AppMeta extends Record<string, unknown> = Record<string, unknown>,
-> = {
-  type: 'oauth2';
-  default: boolean;
+  TOAuth2CallbackArgs extends Record<string, unknown> = Record<string, unknown>,
+> = BaseConfig<OAuth2Metadata> & {
   authUrl: (options: {
     answers: TAnswers;
+    /** @deprecated */
     appMetadata: TOAuth2AppMeta;
   }) => HttpsUrl;
   tokenUrl: (options: {
     answers: TAnswers;
+    /** @deprecated */
     appMetadata: TOAuth2AppMeta;
+    callbackArgs: TOAuth2CallbackArgs;
   }) => HttpsUrl;
   /**
    * Depending on the end platform wrote their OAuth, the clientId and
@@ -131,7 +171,20 @@ export type OAuth2AuthConfig<
   display: {
     markdown: string | ((platform: Platform<{}, any, string>) => string);
   };
+  /**
+   * Surfaces information we store about the
+   * OAuth2 app itself.
+   *
+   * This was used by msoft teams but is being deprecated in
+   * favor of a different auth method.
+   * @deprecated */
   appMetadataSchema: z.ZodType<TOAuth2AppMeta>;
+  /**
+   * Surfaces information that we got in the query string
+   * of the callback url that was called by the downstream
+   * system after the /authorization step.
+   */
+  callbackArgsSchema: z.ZodType<TOAuth2CallbackArgs>;
   refreshTokenExpiresAt: () => Date | null;
   accessTokenExpiresAt: () => Date | null;
 };
@@ -153,7 +206,9 @@ export type Category =
   | 'crm'
   | 'marketing-automation'
   | 'chat'
-  | 'engagement';
+  | 'engagement'
+  | 'ticketing'
+  | 'commerce';
 
 export type PlatformDisplayConfig = {
   name: string;
@@ -166,14 +221,16 @@ export type Platform<
   TActions extends Record<string, Action<string, any, any>>,
   TClient extends PlatformClient,
   TId extends string,
-  TStandardAnswers extends Record<string, string> = Record<string, string>,
+  TBasicAnswers extends Record<string, string> = Record<string, string>,
+  TApiKeyAnswers extends Record<string, string> = Record<string, string>,
   TOAuth2Answers extends Record<string, string> = Record<string, string>,
   TOAuth2AppMeta extends Record<string, unknown> = Record<string, unknown>,
   TConstants extends PlatformConstants = PlatformConstants,
 > = {
   id: TId;
   auth: (
-    | StandardAuthConfig<TStandardAnswers>
+    | BasicAuthConfig<TBasicAnswers>
+    | ApiKeyAuthConfig<TApiKeyAnswers>
     | OAuth2AuthConfig<TOAuth2Answers, TOAuth2AppMeta>
   )[];
   rawActions: Action<string, any, any>[];
@@ -234,5 +291,7 @@ export type ClientResult<TValidated> = {
 };
 
 export type ActionResult<TOutput> = CamelCasedPropertiesDeep<TOutput> & {
-  $native?: RawResponse | RawResponse[];
+  $native?:
+    | SetOptional<RawResponse, 'body'>
+    | SetOptional<RawResponse, 'body'>[];
 };

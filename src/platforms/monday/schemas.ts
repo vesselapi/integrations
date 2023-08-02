@@ -2,7 +2,10 @@ import { mapValues } from 'radash';
 import { z } from 'zod';
 import { MONDAY_MODULES } from './constants';
 
-export const mondayQueryResponse = z.object({ data: z.any() });
+export const mondayQueryResponse = z.object({
+  data: z.any().optional(),
+  errors: z.any().optional(),
+});
 export type MondayQueryResponse = z.infer<typeof mondayQueryResponse>;
 
 export type MondayModule = (typeof MONDAY_MODULES)[number];
@@ -28,10 +31,14 @@ export const mondayBoardsFieldsSchema = z.object({
 export const mondayBoardsFields = Object.keys(mondayBoardsFieldsSchema.shape);
 export const mondayBoardsRelationalFieldsSchema = {
   columns: z.object({
-    id: z.number(),
+    id: z.string(),
     description: z.string().optional(),
     title: z.string(),
     type: z.string(),
+  }),
+  groups: z.object({
+    id: z.string(),
+    title: z.string(),
   }),
 };
 export const mondayBoardsRelationalFields = mapValues(
@@ -48,6 +55,20 @@ export const mondayBoardsListResponseSchema = z.object({
       boards: z.array(mondayBoardsSchema),
     })
     .optional(),
+  errors: z.any().optional(),
+});
+
+// -
+// Groups
+// -
+export const mondayGroupsCreateSchema = z.object({
+  board_id: z.number(),
+  group_name: z.string(),
+});
+export type MondayGroupCreate = z.infer<typeof mondayGroupsCreateSchema>;
+export const mondayGroupCreateResponseSchema = z.object({
+  data: z.object({ create_group: z.object({ id: z.number() }) }).optional(),
+  errors: z.any().optional(),
 });
 
 // -
@@ -55,11 +76,12 @@ export const mondayBoardsListResponseSchema = z.object({
 // -
 export const mondayItemsCreateSchema = z.object({
   board_id: z.number(),
-  group_id: z.number().optional(),
+  group_id: z.string().optional(),
   item_name: z.string(),
   column_values: z.record(z.union([z.string(), z.number()])),
 });
 export type MondayItemCreate = z.infer<typeof mondayItemsCreateSchema>;
 export const mondayItemCreateResponseSchema = z.object({
   data: z.object({ create_item: z.object({ id: z.number() }) }).optional(),
+  errors: z.any().optional(),
 });

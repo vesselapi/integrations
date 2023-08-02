@@ -18,7 +18,8 @@ export default action(
       query: input.query,
     });
     return {
-      data: data.data,
+      data: data.data ?? null,
+      errors: data.errors ?? null,
       $native,
     };
   },

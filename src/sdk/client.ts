@@ -57,6 +57,14 @@ export const formatUrl = (
     : (url as `${HttpsUrl}/${string}`);
 };
 
+const customErrorMap: z.ZodErrorMap = (_, ctx) => {
+  return {
+    message: `${ctx.defaultError}. Received value: ${ctx.data}`,
+  };
+};
+
+export const toBase64 = (str: string) => Buffer.from(str).toString('base64');
+
 const _requestWithAxios = async ({
   url,
   options,
@@ -207,7 +215,7 @@ export const makeRequestFactory = (
       const body = response.json() ?? { body: response.text() };
 
       if (!response.ok) {
-        throw new IntegrationError('HTTP error in client', {
+        throw new IntegrationError('HTTP error from the downstream platform', {
           type: 'http',
           body,
           url: response.url,
@@ -217,7 +225,9 @@ export const makeRequestFactory = (
         });
       }
 
-      const zodResult = await response.options.schema.safeParseAsync(body);
+      const zodResult = await response.options.schema.safeParseAsync(body, {
+        errorMap: customErrorMap,
+      });
       if (!zodResult.success) {
         if (options.strict) {
           throw new IntegrationError('Validation failed on client response', {

@@ -34,8 +34,6 @@ const request = makeRequestFactory(async (auth, options) => ({
 
 // Used exclusively for GraphQL requests.
 const _graphQl = makeRequestFactory(async (auth, options) => {
-  console.log(options);
-
   return {
     ...options,
     url: options.url as `https://${HttpsUrl}/graphql/${string}`,
@@ -340,11 +338,36 @@ export const client = {
     ),
   },
   sequenceSteps: {
+    list: request(
+      ({
+        cursor,
+        filters,
+        include,
+      }: {
+        cursor?: `${typeof BASE_URL}/${string}`;
+        filters?: { sequenceIds?: string };
+        include?: string;
+      }) => ({
+        url: cursor ?? `/sequenceSteps`,
+        query: shake({
+          'page[size]': `${DEFAULT_PAGE_SIZE}`,
+          'filter[sequence][id]': filters?.sequenceIds,
+          include,
+        }),
+        method: 'GET',
+        schema: z.intersection(
+          z.object({
+            data: z.array(outreachSequenceStep),
+          }),
+          outreachPaginatedResponse,
+        ),
+      }),
+    ),
     create: request(
       (sequenceStep: {
         attributes: {
           order?: number;
-          stepType: 'auto_email' | 'manual_email' | 'call' | 'task';
+          stepType: string;
           interval?: number;
           $native?: Record<string, unknown>;
         };
@@ -412,6 +435,32 @@ export const client = {
     ),
   },
   sequenceTemplates: {
+    list: request(
+      ({
+        cursor,
+        filters,
+        include,
+      }: {
+        cursor?: `${typeof BASE_URL}/${string}`;
+        filters?: { ids?: string };
+        include?: string;
+      }) => ({
+        url: cursor ?? `/sequenceTemplates`,
+        query: shake({
+          'page[size]': `${DEFAULT_PAGE_SIZE}`,
+          'filter[id]': filters?.ids,
+          include,
+        }),
+        method: 'GET',
+        schema: z.intersection(
+          z.object({
+            data: z.array(outreachSequenceTemplate),
+            included: z.array(outreachTemplate).optional(),
+          }),
+          outreachPaginatedResponse,
+        ),
+      }),
+    ),
     create: request(
       (sequenceTemplate: {
         attributes: {

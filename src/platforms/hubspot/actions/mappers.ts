@@ -135,7 +135,7 @@ export const transformEmail = (email: HubspotEmail) => {
     hsEmailSubject: email.properties.hs_email_subject,
     hsEmailBounceErrorDetailStatusCode:
       email.properties.hs_email_bounce_error_detail_status_code,
-    hsAttachmentIds: email.properties.hs_attachment_ids,
+    hsAttachmentIds: email.properties.hs_attachment_ids?.split(';'),
     hsTimestamp: email.properties.hs_timestamp,
     hsEmailStatus: email.properties.hs_email_status,
     hubspotOwnerId: email.properties.hubspot_owner_id,

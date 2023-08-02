@@ -98,6 +98,8 @@ export const salesforceUser = custom.addNativeToZodSchema(
       Email: z.string().nullable(),
       CreatedDate: custom.date(),
       LastModifiedDate: custom.date(),
+      IsDeleted: z.boolean().nullable(),
+      IsArchived: z.boolean().nullable(),
     })
     .partial()
     .required(requiredFields),
@@ -120,6 +122,8 @@ export const salesforceContact = custom.addNativeToZodSchema(
       LastModifiedDate: custom.date(),
       AccountId: z.string().nullable(),
       OwnerId: z.string().nullable(),
+      IsDeleted: z.boolean(),
+      IsArchived: z.boolean(),
     })
     .partial()
     .required(requiredFields),
@@ -190,6 +194,8 @@ export const salesforceAccount = custom.addNativeToZodSchema(
       Opportunities: z
         .object({ records: z.array(z.object({ Id: z.string() })) })
         .nullable(),
+      IsDeleted: z.boolean().nullable(),
+      IsArchived: z.boolean().nullable(),
     })
     .partial()
     .required(requiredFields),
@@ -266,6 +272,8 @@ export const salesforceOpportunity = custom.addNativeToZodSchema(
       CreatedDate: custom.date(),
       OwnerId: z.string().nullable(),
       LastModifiedDate: custom.date(),
+      IsDeleted: z.boolean().nullable(),
+      IsArchived: z.boolean().nullable(),
     })
     .partial()
     .required(requiredFields),
@@ -321,6 +329,9 @@ export const salesforceLead = custom.addNativeToZodSchema(
       OwnerId: z.string().nullable(),
       CreatedDate: custom.date(),
       LastModifiedDate: custom.date(),
+      IsDeleted: z.boolean().nullable(),
+      IsArchived: z.boolean().nullable(),
+      IsConverted: z.boolean().nullable(),
     })
     .partial()
     .required(requiredFields),
@@ -374,6 +385,8 @@ export const salesforceNote = custom.addNativeToZodSchema(
       OwnerId: z.string().nullable(),
       ParentId: z.string().nullable(),
       Parent: z.object({ Type: z.string() }).nullable(),
+      IsDeleted: z.boolean().nullable(),
+      IsArchived: z.boolean().nullable(),
     })
     .partial()
     .required(requiredFields),
@@ -464,6 +477,8 @@ export const salesforceContentNote = custom.addNativeToZodSchema(
           records: z.array(salesforceContentDocumentLink),
         })
         .nullable(),
+      IsDeleted: z.boolean().nullable(),
+      IsArchived: z.boolean().nullable(),
     })
     .partial()
     .required(requiredFields),
@@ -520,6 +535,8 @@ export const salesforceTask = custom.addNativeToZodSchema(
       What: z
         .object({ Id: z.string(), Type: z.string().optional() })
         .nullable(),
+      IsDeleted: z.boolean().nullable(),
+      IsArchived: z.boolean().nullable(),
     })
     .partial()
     .required(requiredFields),
@@ -616,6 +633,8 @@ export const salesforceEvent = custom.addNativeToZodSchema(
           ),
         })
         .nullable(),
+      IsDeleted: z.boolean().nullable(),
+      IsArchived: z.boolean().nullable(),
     })
     .partial()
     .required(requiredFields),
@@ -678,6 +697,8 @@ export const salesforceEventRelation = custom.addNativeToZodSchema(
       RelationId: z.string().nullable(),
       Status: z.string().nullable(),
       IsInvitee: z.boolean().nullable(),
+      IsArchived: z.boolean().nullable(),
+      IsDeleted: z.boolean().nullable(),
     })
     .partial()
     .required(requiredFields),
@@ -730,8 +751,8 @@ export const salesforceEmailMessage = custom.addNativeToZodSchema(
       CreatedDate: custom.date(),
       LastModifiedDate: custom.date(),
       CreatedById: z.string().nullable(),
-      IsArchived: z.boolean().nullable(),
       IsDeleted: z.boolean().nullable(),
+      IsArchived: z.boolean().nullable(),
       RelatedTo: z
         .object({
           Id: z.string(),
@@ -868,6 +889,52 @@ export const salesforceListViewResult = z.object({
 });
 
 // -
+// Custom Fields
+// -
+const salesforceCustomFieldValueSetDefinition = z.object({
+  sorted: z.boolean().optional(),
+  value: z.array(
+    z.object({
+      fullName: z.string().optional(),
+      default: z.boolean().optional(),
+      label: z.string(),
+      valueName: z.string().optional(),
+    }),
+  ),
+});
+
+const salesforceCustomFieldMetadata = z.object({
+  label: z.string(),
+  type: z.string(),
+  writeRequiresMasterRead: z.boolean().optional(),
+  required: z.boolean(),
+  valueSet: z
+    .object({
+      valueSetDefinition: salesforceCustomFieldValueSetDefinition,
+    })
+    .optional(),
+  visibleLines: z.number().optional(),
+  length: z.number().optional(),
+  precision: z.number().optional(),
+  scale: z.number().optional(),
+});
+
+const salesforceCustomField = z.object({
+  FullName: z.string().optional(),
+  Metadata: salesforceCustomFieldMetadata,
+});
+
+const salesforceFieldPermissions = z.object({
+  ParentId: z.string(),
+  SobjectType: z.enum(SALESFORCE_SUPPORTED_OBJECT_TYPE),
+  Field: z
+    .string()
+    .transform((val) => val as `${SalesforceSupportedObjectType}.${string}`),
+  PermissionsEdit: z.boolean(),
+  PermissionsRead: z.boolean(),
+});
+
+// -
 // Schemas
 // -
 export const SalesforceSchemaByObjectType: Record<
@@ -968,3 +1035,17 @@ export type SalesforceEmailMessageRelationCreate = z.infer<
 >;
 export type SalesforceListView = z.infer<typeof salesforceListView>;
 export type SalesforceListViewResult = z.infer<typeof salesforceListViewResult>;
+export type SalesforceCustomField = z.infer<typeof salesforceCustomField>;
+export type SalesforceCustomFieldCreate = {
+  CustomField: {
+    FullName: string;
+    Metadata: z.infer<typeof salesforceCustomFieldMetadata> & {
+      type: Capitalize<SalesforceFieldType>;
+      $native: Record<string, any>;
+    };
+  };
+};
+
+export type SalesforceFieldPermissions = z.infer<
+  typeof salesforceFieldPermissions
+>;

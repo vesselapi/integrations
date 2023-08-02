@@ -7,6 +7,8 @@ import {
   mondayBoardsFields,
   mondayBoardsListResponseSchema,
   mondayBoardsRelationalFields,
+  MondayGroupCreate,
+  mondayGroupCreateResponseSchema,
   MondayItemCreate,
   mondayItemCreateResponseSchema,
   mondayQueryResponse,
@@ -40,6 +42,19 @@ const makeClient = () => {
             relationalFields: mondayBoardsRelationalFields,
             limit,
             page,
+          }),
+        },
+      })),
+    },
+    groups: {
+      create: request(({ board_id, group_name }: MondayGroupCreate) => ({
+        url: `/${API_VERSION}`,
+        method: 'POST',
+        schema: mondayGroupCreateResponseSchema,
+        json: {
+          query: buildCreateQuery({
+            module: 'groups',
+            metaFields: shake({ board_id, group_name }),
           }),
         },
       })),

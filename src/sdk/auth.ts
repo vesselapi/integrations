@@ -1,14 +1,15 @@
 import { isFunction, isString } from 'radash';
 import { z } from 'zod';
 import {
+  ApiKeyAuthConfig,
   AuthQuestion,
+  BasicAuthConfig,
   HttpsUrl,
   OAuth2AuthConfig,
   RetryableCheckFunction,
-  StandardAuthConfig,
 } from './types';
 
-const toQueryString = (query: Record<string, string>): string => {
+export const toQueryString = (query: Record<string, string>): string => {
   return Object.entries(query)
     .map(([key, value]) => [key, encodeURIComponent(value)])
     .map((x) => x.join('='))
@@ -21,28 +22,37 @@ export const auth = {
     TOAuthAppConfigSchema extends z.ZodType = z.ZodType<
       Record<string, unknown>
     >,
+    TOAuthCallbackArgsSchema extends z.ZodType = z.ZodType<
+      Record<string, unknown>
+    >,
   >(options: {
     authUrl:
       | HttpsUrl
       | OAuth2AuthConfig<TAnswers, z.infer<TOAuthAppConfigSchema>>['authUrl'];
     tokenUrl:
       | HttpsUrl
-      | OAuth2AuthConfig<TAnswers, z.infer<TOAuthAppConfigSchema>>['tokenUrl'];
+      | OAuth2AuthConfig<
+          TAnswers,
+          z.infer<TOAuthAppConfigSchema>,
+          z.infer<TOAuthCallbackArgsSchema>
+        >['tokenUrl'];
     questions?: AuthQuestion[];
     default?: boolean;
-    scopeSeparator?: OAuth2AuthConfig<
-      TAnswers,
-      z.infer<TOAuthAppConfigSchema>
-    >['scopeSeparator'];
+    scopeSeparator?: OAuth2AuthConfig<TAnswers>['scopeSeparator'];
     tokenAuth?: OAuth2AuthConfig<TAnswers>['tokenAuth'];
     oauthBodyFormat?: OAuth2AuthConfig<TAnswers>['oauthBodyFormat'];
     url?: OAuth2AuthConfig<TAnswers>['url'];
     isRetryable?: RetryableCheckFunction;
     display?: OAuth2AuthConfig<TAnswers>['display'];
     appMetadataSchema?: TOAuthAppConfigSchema;
+    callbackArgsSchema?: TOAuthCallbackArgsSchema;
     refreshTokenExpiresAt?: () => Date | null;
     accessTokenExpiresAt?: () => Date | null;
-  }): OAuth2AuthConfig<TAnswers, z.infer<TOAuthAppConfigSchema>> => ({
+  }): OAuth2AuthConfig<
+    TAnswers,
+    z.infer<TOAuthAppConfigSchema>,
+    z.infer<TOAuthCallbackArgsSchema>
+  > => ({
     type: 'oauth2',
     authUrl: isString(options.authUrl)
       ? () => options.authUrl as HttpsUrl
@@ -79,6 +89,7 @@ export const auth = {
       }),
     isRetryable: options.isRetryable ?? (async ({ status }) => status === 401),
     appMetadataSchema: options.appMetadataSchema ?? z.any(),
+    callbackArgsSchema: options.callbackArgsSchema ?? z.any(),
     refreshTokenExpiresAt: options.refreshTokenExpiresAt ?? (() => null),
     accessTokenExpiresAt: options.accessTokenExpiresAt ?? (() => null),
   }),
@@ -88,8 +99,8 @@ export const auth = {
       default?: boolean;
       display?: OAuth2AuthConfig['display'];
     } = {},
-  ): StandardAuthConfig<TAnswers> => ({
-    type: 'standard',
+  ): ApiKeyAuthConfig<TAnswers> => ({
+    type: 'apiKey',
     default: options.default ?? false,
     questions: [
       {
@@ -120,8 +131,8 @@ export const auth = {
       default?: boolean;
       display?: OAuth2AuthConfig['display'];
     } = {},
-  ): StandardAuthConfig<TAnswers> => ({
-    type: 'standard',
+  ): BasicAuthConfig<TAnswers> => ({
+    type: 'basic',
     default: options.default ?? false,
     questions: options.questions ?? [],
     toTokenString: (answers) =>

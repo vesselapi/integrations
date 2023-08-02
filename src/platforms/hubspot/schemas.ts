@@ -96,16 +96,17 @@ export const listResponseSchema = (itemSchema: z.ZodSchema) =>
 export const hubspotModuleSchema = z.enum(HUBSPOT_MODULES);
 export type HubspotModule = (typeof HUBSPOT_MODULES)[number];
 
+export const hubspotIdSchema = z.union([z.string(), z.number()]);
+
 export const hubspotAssociationSchema = z.object({
   results: z.array(
     z.object({
-      id: z.string(),
+      id: hubspotIdSchema,
       type: z.string(),
     }),
   ),
 });
 
-export const hubspotIdSchema = z.union([z.string(), z.number()]);
 const hubspotBooleanSchema = z
   .union([z.enum(['true', 'false', '']), z.boolean()])
   .transform((val) => {
@@ -169,7 +170,7 @@ const contactPropertiesSchema = z.object({
   mobilephone: z.string().nullable(),
   hs_lead_status: z.string().nullable(),
   company: z.string().nullable(),
-  hubspot_owner_id: z.string().nullable(),
+  hubspot_owner_id: hubspotIdSchema.nullable(),
   hs_all_contact_vids: z.string().nullable(),
 });
 export const contactProperties = Object.keys(contactPropertiesSchema.shape);
@@ -188,7 +189,7 @@ export const hubspotContactUpsertSchema = z
     jobtitle: z.string(),
     mobilephone: z.string(),
     company: z.string().optional(),
-    hubspot_owner_id: z.string().optional(),
+    hubspot_owner_id: hubspotIdSchema.optional(),
     $native: z.record(z.any()),
   })
   .partial();
@@ -203,13 +204,21 @@ export type HubspotContactUpdate = z.infer<
 const dealPropertiesSchema = z.object({
   amount: z.union([z.string(), z.number()]).nullable(),
   dealname: z.string().nullable(),
-  closedate: custom.date().nullable(),
+  closedate: custom
+    .date()
+    .or(
+      z
+        .string()
+        .max(0)
+        .transform(() => null),
+    )
+    .nullable(),
   dealstage: z.string().nullable(),
   hs_deal_stage_probability: z.union([z.string(), z.number()]).nullable(),
   hs_projected_amount: z.union([z.string(), z.number()]).nullable(),
   hs_is_closed_won: hubspotBooleanSchema.nullable(),
   hs_is_closed: hubspotBooleanSchema.nullable(),
-  hubspot_owner_id: z.string().nullable(),
+  hubspot_owner_id: hubspotIdSchema.nullable(),
   hs_merged_object_ids: z.string().nullable(),
 });
 export const dealProperties = Object.keys(dealPropertiesSchema.shape);
@@ -248,7 +257,7 @@ const companyPropertiesSchema = z.object({
   numberofemployees: z.union([z.string(), z.number()]).nullable(),
   annualrevenue: z.union([z.string(), z.number()]).nullable(),
   description: z.string().nullable(),
-  hubspot_owner_id: z.string().nullable(),
+  hubspot_owner_id: hubspotIdSchema.nullable(),
   hs_merged_object_ids: z.string().nullable(),
 });
 export const companyProperties = Object.keys(companyPropertiesSchema.shape);
@@ -398,7 +407,7 @@ const emailPropertiesSchema = z.object({
     .number()
     .or(z.string())
     .nullable(),
-  hs_attachment_ids: z.array(hubspotIdSchema).nullable(),
+  hs_attachment_ids: z.string().nullable(),
   hs_timestamp: custom.date().nullable(),
   hs_email_status: z.string().nullable(),
   hubspot_owner_id: hubspotIdSchema.nullable(),
@@ -448,7 +457,7 @@ export type HubspotEmailUpdate = z.infer<typeof hubspotEmailUpdateSchema> & {
 export const callDispositionsSchema = z.array(
   z.object({
     label: z.string(),
-    id: z.string(),
+    id: hubspotIdSchema,
   }),
 );
 
@@ -610,6 +619,46 @@ export const hubspotAssociationResponseSchema = z.object({
 });
 export type HubspotAssociationResponse = z.infer<
   typeof hubspotAssociationResponseSchema
+>;
+export const hubspotAssociationListResponseSchema = z.object({
+  results: z.array(
+    z.object({
+      from: z.object({
+        id: hubspotIdSchema,
+      }),
+      to: z.array(
+        z.object({
+          toObjectId: hubspotIdSchema,
+          associationSpec: z.object({
+            associationCategory: z.string(),
+            associationTypeId: hubspotIdSchema,
+          }),
+        }),
+      ),
+      paging: z
+        .object({
+          next: z
+            .object({
+              link: z.string().nullable(),
+              after: z.string().nullable(),
+            })
+            .partial()
+            .nullable(),
+          prev: z
+            .object({
+              before: z.string().nullable(),
+              link: z.string().nullable(),
+            })
+            .partial()
+            .nullable(),
+        })
+        .partial()
+        .nullable(),
+    }),
+  ),
+});
+export type HubspotAssociationListResponse = z.infer<
+  typeof hubspotAssociationListResponseSchema
 >;
 
 export const hubspotAssociationDeleteSchema = z.object({

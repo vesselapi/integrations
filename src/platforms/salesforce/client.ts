@@ -21,6 +21,7 @@ import {
   SalesforceContentNoteCreate,
   salesforceContentNoteCreateResponse,
   SalesforceContentNoteUpdate,
+  SalesforceCustomFieldCreate,
   salesforceDescribeResponse,
   salesforceEmailMessage,
   SalesforceEmailMessageCreate,
@@ -39,6 +40,7 @@ import {
   salesforceEventRelationCreateResponse,
   SalesforceEventRelationUpdate,
   SalesforceEventUpdate,
+  SalesforceFieldPermissions,
   salesforceJob,
   salesforceLead,
   SalesforceLeadCreate,
@@ -88,10 +90,12 @@ const query = {
     schema,
     objectType,
     relationalSelect,
+    where,
   }: {
     schema: T;
     objectType: SalesforceSupportedObjectType;
     relationalSelect?: Partial<Record<SalesforceSupportedObjectType, string>>;
+    where?: string;
   }) =>
     request(
       ({
@@ -108,6 +112,7 @@ const query = {
           cursor,
           limit,
           relationalSelect,
+          where,
           associations,
         })}`,
         method: 'GET',
@@ -240,15 +245,23 @@ export const client = {
     schema: salesforceQueryResponse,
   })),
   jobs: {
-    create: request(({ query }: { query: string }) => ({
-      url: `/jobs/query`,
-      method: 'POST',
-      json: {
-        operation: 'query',
+    create: request(
+      ({
         query,
-      },
-      schema: salesforceJob,
-    })),
+        operation = 'query',
+      }: {
+        query: string;
+        operation?: 'query' | 'queryAll';
+      }) => ({
+        url: `/jobs/query`,
+        method: 'POST',
+        json: {
+          query,
+          operation,
+        },
+        schema: salesforceJob,
+      }),
+    ),
     find: request(({ Id }: { Id: string }) => ({
       url: `/jobs/query/${Id}`,
       method: 'GET',
@@ -586,6 +599,14 @@ export const client = {
       schema: z.undefined(),
     })),
   },
+  calls: {
+    list: query.list<typeof salesforceTask>({
+      objectType: 'Task',
+      schema: salesforceTask,
+      relationalSelect: salesforceTaskRelationalSelect,
+      where: `TaskSubtype='Call'`,
+    }),
+  },
   events: {
     find: query.find<typeof salesforceEvent>({
       objectType: 'Event',
@@ -710,6 +731,25 @@ export const client = {
       url: `/sobjects/EmailMessageRelation/${Id}/`,
       method: 'DELETE',
       schema: z.undefined(),
+    })),
+  },
+  customFields: {
+    create: request(({ CustomField }: SalesforceCustomFieldCreate) => ({
+      url: `/tooling/sobjects/CustomField`,
+      method: 'POST',
+      json: {
+        ...CustomField,
+        Metadata: formatUpsertInputWithNative(CustomField.Metadata),
+      },
+      schema: z.any(),
+    })),
+  },
+  fieldPermissions: {
+    update: request((update: SalesforceFieldPermissions) => ({
+      url: `/sobjects/FieldPermissions`,
+      method: 'POST',
+      json: update,
+      schema: z.any(),
     })),
   },
   passthrough: request.passthrough(),

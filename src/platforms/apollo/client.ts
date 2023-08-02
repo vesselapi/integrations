@@ -3,6 +3,7 @@ import {
   formatUrl,
   makeRequestFactory,
 } from '@/sdk/client';
+import * as custom from '@/sdk/validators';
 import { objectify, shake } from 'radash';
 import { z } from 'zod';
 import { BASE_URL, DEFAULT_PAGE_SIZE } from './constants';
@@ -23,11 +24,13 @@ import {
   apolloEmailAccount,
   apolloEmailActivity,
   apolloEmailMessage,
+  apolloEmailTemplate,
   apolloLabel,
   apolloPaginatedResponse,
   apolloPerson,
   apolloSequence,
   apolloSequenceStep,
+  apolloSequenceTemplate,
   apolloTask,
   ApolloTaskBulkCompleteInput,
   apolloTaskBulkCompleteResponse,
@@ -205,6 +208,18 @@ export const client = {
     ),
   },
   sequences: {
+    find: request(({ id }: { id: string }) => ({
+      url: `/emailer_campaigns/${id}`,
+      method: 'GET',
+      schema: custom.addNativeToZodSchema(
+        z.object({
+          emailer_campaign: apolloSequence,
+          emailer_steps: z.array(apolloSequenceStep),
+          emailer_templates: z.array(apolloEmailTemplate),
+          emailer_touches: z.array(apolloSequenceTemplate),
+        }),
+      ),
+    })),
     search: request(
       ({
         q_keywords,
@@ -414,7 +429,11 @@ export const client = {
       url: `/emailer_steps`,
       method: 'POST',
       json: shake(formatUpsertInputWithNative(step)),
-      schema: apolloSequenceStep,
+      schema: z.object({
+        emailer_step: apolloSequenceStep,
+        emailer_template: apolloEmailTemplate,
+        emailer_touch: apolloSequenceTemplate,
+      }),
     })),
   },
   sequenceTemplates: {
