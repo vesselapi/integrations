@@ -86,7 +86,7 @@ export const auth = {
           ),
           state,
           response_type: 'code',
-          ...options.authParams,
+          ...(options.authParams ?? {}),
         };
         return `${
           isFunction(options.authUrl)
