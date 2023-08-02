@@ -88,7 +88,7 @@ export const searchResponseSchema = (itemSchema: z.ZodSchema) =>
   });
 
 export const pipedriveModuleSchema = z.enum(PIPEDRIVE_MODULES);
-export type PipedriveModule = (typeof PIPEDRIVE_MODULES)[number];
+export type PipedriveModule = typeof PIPEDRIVE_MODULES[number];
 export const upsertResponseSchema = z.object({
   data: z.object({ id: z.number() }),
 });
@@ -99,14 +99,14 @@ export type UpsertResponse = {
 // -
 // Subtypes
 // -
-export type PipedriveEmailAddressType = (typeof EMAIL_TYPES)[number];
+export type PipedriveEmailAddressType = typeof EMAIL_TYPES[number];
 export const pipedriveEmailAddressSchema = z.object({
   primary: z.boolean(),
   label: z.string().transform((l) => l as PipedriveEmailAddressType),
   value: z.string(),
 });
 
-export type PipedrivePhoneNumberType = (typeof PHONE_TYPES)[number];
+export type PipedrivePhoneNumberType = typeof PHONE_TYPES[number];
 export const pipedrivePhoneNumberSchema = z.object({
   primary: z.boolean(),
   label: z.string().transform((l) => l as PipedrivePhoneNumberType),
