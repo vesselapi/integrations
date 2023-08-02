@@ -28,6 +28,7 @@ export const apolloContact = custom.addNativeToZodSchema(
     id: z.string(),
     first_name: z.string().nullish(),
     last_name: z.string().nullish(),
+    linkedin_url: z.string().nullish(),
     name: z.string().nullish(),
     title: z.string().nullish(),
     owner_id: z.string().nullish(),
@@ -171,6 +172,7 @@ export const apolloAccount = custom.addNativeToZodSchema(
     last_activity_date: custom.date().nullish(),
     sanitized_phone: z.string().nullish(),
     created_at: custom.date(),
+    typed_custom_fields: z.record(z.any()),
   }),
 );
 
