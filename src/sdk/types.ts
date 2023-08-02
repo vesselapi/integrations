@@ -224,7 +224,15 @@ export type PlatformDisplayConfig = {
   iconURI?: string;
   icons: {
     defaultURI: string;
+    /**
+     * The full icon is the expanded version of the
+     * logo that includes the name of the company
+     */
     fullURI?: string;
+    /**
+     * The box icon is the condensed version of the
+     * logo that only includes the icon itself
+     */
     boxURI?: string;
   };
   colors?: {
