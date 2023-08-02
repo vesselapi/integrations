@@ -39,7 +39,7 @@ export default platform('salesloft', {
   display: {
     name: 'Salesloft',
     iconURI: icon,
-    icons: {
+    logos: {
       defaultURI: icon,
     },
     categories: ['engagement'],

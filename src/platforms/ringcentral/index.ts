@@ -42,7 +42,7 @@ export default platform('ringcentral', {
   display: {
     name: 'Ringcentral',
     iconURI: icon,
-    icons: {
+    logos: {
       defaultURI: icon,
     },
     categories: ['dialer'],

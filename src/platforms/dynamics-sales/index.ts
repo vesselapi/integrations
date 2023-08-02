@@ -33,7 +33,7 @@ export default platform('dynamics-sales', {
   display: {
     name: 'Microsoft Dynamics Sales',
     iconURI: icon,
-    icons: {
+    logos: {
       defaultURI: icon,
     },
     categories: ['crm'],

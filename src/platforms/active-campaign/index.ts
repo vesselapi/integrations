@@ -27,7 +27,7 @@ export default platform('activecampaign', {
   display: {
     name: 'Active Campaign',
     iconURI: icon,
-    icons: {
+    logos: {
       defaultURI: icon,
     },
     categories: ['marketing-automation'],

@@ -29,7 +29,7 @@ export default platform('monday', {
   display: {
     name: 'monday.com',
     iconURI: icon,
-    icons: {
+    logos: {
       defaultURI: icon,
     },
     categories: ['crm'],

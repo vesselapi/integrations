@@ -7,7 +7,7 @@ export default platform('customer.io', {
   display: {
     name: 'Customer.io',
     iconURI: icon,
-    icons: {
+    logos: {
       defaultURI: icon,
     },
     categories: ['marketing-automation'],

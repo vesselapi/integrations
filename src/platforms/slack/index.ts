@@ -25,7 +25,7 @@ export default platform('slack', {
   display: {
     name: 'Slack',
     iconURI: icon,
-    icons: {
+    logos: {
       defaultURI: icon,
     },
     categories: ['chat'],

@@ -82,7 +82,7 @@ export default platform('hubspot', {
   display: {
     name: 'HubSpot',
     iconURI: icon,
-    icons: {
+    logos: {
       defaultURI: icon,
     },
     categories: ['crm'],

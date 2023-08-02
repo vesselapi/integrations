@@ -13,7 +13,7 @@ export default platform('intercom', {
   display: {
     name: 'Intercom',
     iconURI: icon,
-    icons: {
+    logos: {
       defaultURI: icon,
     },
     categories: ['ticketing'],

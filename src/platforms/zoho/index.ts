@@ -16,7 +16,7 @@ export default platform('zoho', {
   display: {
     name: 'Zoho',
     iconURI: icon,
-    icons: {
+    logos: {
       defaultURI: icon,
     },
     categories: ['crm'],

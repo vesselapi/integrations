@@ -20,7 +20,7 @@ export default platform('mailchimp', {
   display: {
     name: 'Mailchimp',
     iconURI: icon,
-    icons: {
+    logos: {
       defaultURI: icon,
     },
     categories: ['marketing-automation'],

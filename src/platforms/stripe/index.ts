@@ -11,7 +11,7 @@ export default platform('stripe', {
   display: {
     name: 'Stripe',
     iconURI: icon,
-    icons: {
+    logos: {
       defaultURI: icon,
     },
     categories: [],

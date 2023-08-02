@@ -42,7 +42,7 @@ export default platform('dialpad', {
   display: {
     name: 'Dialpad',
     iconURI: icon,
-    icons: {
+    logos: {
       defaultURI: icon,
     },
     categories: ['dialer'],

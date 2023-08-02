@@ -34,7 +34,7 @@ export default platform('outreach', {
   display: {
     name: 'Outreach',
     iconURI: icon,
-    icons: {
+    logos: {
       defaultURI: icon,
     },
     categories: ['engagement'],

@@ -15,7 +15,7 @@ export default platform('pipedrive', {
   display: {
     name: 'Pipedrive',
     iconURI: icon,
-    icons: {
+    logos: {
       defaultURI: icon,
     },
     categories: ['crm'],

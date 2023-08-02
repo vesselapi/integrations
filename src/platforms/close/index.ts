@@ -8,7 +8,7 @@ export default platform('close', {
   display: {
     name: 'Close',
     iconURI: icon,
-    icons: {
+    logos: {
       defaultURI: icon,
     },
     categories: ['crm'],
