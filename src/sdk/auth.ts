@@ -42,6 +42,7 @@ export const auth = {
     tokenAuth?: OAuth2AuthConfig<TAnswers>['tokenAuth'];
     oauthBodyFormat?: OAuth2AuthConfig<TAnswers>['oauthBodyFormat'];
     authParams?: OAuth2AuthConfig<TAnswers>['authParams'];
+    defaultScopes?: OAuth2AuthConfig<TAnswers>['defaultScopes'];
     url?: OAuth2AuthConfig<TAnswers>['url'];
     isRetryable?: RetryableCheckFunction;
     display?: OAuth2AuthConfig<TAnswers>['display'];
@@ -64,6 +65,7 @@ export const auth = {
     tokenAuth: options.tokenAuth ?? 'body',
     default: options.default ?? false,
     scopeSeparator: options.scopeSeparator ?? ' ',
+    defaultScopes: options.defaultScopes ?? [],
     questions: options.questions ?? [],
     oauthBodyFormat: options.oauthBodyFormat ?? 'form',
     authParams: options.authParams ?? {},
@@ -79,7 +81,9 @@ export const auth = {
         const query: Record<string, string> = {
           client_id: clientId,
           redirect_uri: redirectUrl,
-          scope: scopes.join(options.scopeSeparator ?? ' '),
+          scope: [...scopes, ...options.defaultScopes].join(
+            options.scopeSeparator ?? ' ',
+          ),
           state,
           response_type: 'code',
           ...options.authParams,
