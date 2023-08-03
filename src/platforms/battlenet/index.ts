@@ -8,6 +8,13 @@ export default platform('battlenet', {
       `https://oauth.battle.${answers.extension}/authorize`,
     tokenUrl: ({ answers }) =>
       `https://oauth.battle.${answers.extension}/token`,
+    questions: [
+      {
+        type: 'text',
+        id: 'extension',
+        label: 'What is the extension for your region?',
+      },
+    ],
   }),
   display: {
     name: 'Battlenet',

@@ -12,6 +12,13 @@ export default platform('bamboohr', {
     authParams: {
       request: 'authorize',
     },
+    questions: [
+      {
+        type: 'text',
+        id: 'subdomain',
+        label: 'What is your BambooHR subdomain?',
+      },
+    ],
   }),
   display: {
     name: 'BambooHR',

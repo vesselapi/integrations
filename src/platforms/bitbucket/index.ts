@@ -7,6 +7,13 @@ export default platform('bitbucket', {
   auth: auth.oauth2({
     authUrl: 'https://bitbucket.org/site/oauth2/authorize',
     tokenUrl: 'https://bitbucket.org/site/oauth2/access_token',
+    questions: [
+      {
+        type: 'text',
+        id: 'subdomain',
+        label: 'What is your Bitbucket subdomain?',
+      },
+    ],
   }),
   display: {
     name: 'Bitbucket',
