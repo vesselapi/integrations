@@ -9,7 +9,6 @@ import apollo from '@/platforms/apollo';
 import asana from '@/platforms/asana';
 import atlassian from '@/platforms/atlassian';
 import bamboohr from '@/platforms/bamboohr';
-import battlenet from '@/platforms/battlenet';
 import bitbucket from '@/platforms/bitbucket';
 import boldsign from '@/platforms/boldsign';
 import box from '@/platforms/box';
@@ -56,7 +55,6 @@ export { default as apollo, types as apolloTypes } from '@/platforms/apollo';
 export { default as asana } from '@/platforms/asana';
 export { default as atlassian } from '@/platforms/atlassian';
 export { default as bamboohr } from '@/platforms/bamboohr';
-export { default as battlenet } from '@/platforms/battlenet';
 export { default as bitbucket } from '@/platforms/bitbucket';
 export { default as boldsign } from '@/platforms/boldsign';
 export { default as box } from '@/platforms/box';
@@ -107,7 +105,6 @@ export { default as mixpanel } from './mixpanel';
 export const integrationsList: Platform<any, any, any, any, any, any>[] = [
   atlassian,
   bamboohr,
-  battlenet,
   bitbucket,
   boldsign,
   box,
