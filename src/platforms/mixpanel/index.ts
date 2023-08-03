@@ -4,7 +4,7 @@ import fullIcon from '@/platforms/mixpanel/icons/full';
 import { auth, platform } from '@/sdk';
 
 export default platform('mixpanel', {
-  auth: [auth.basic({})],
+  auth: auth.basic(),
   display: {
     name: 'Mixpanel',
     logos: {

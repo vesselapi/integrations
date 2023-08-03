@@ -4,7 +4,7 @@ import fullIcon from '@/platforms/gong/icons/full';
 import { auth, platform } from '@/sdk';
 
 export default platform('gong', {
-  auth: [auth.basic({})],
+  auth: auth.basic(),
   display: {
     name: 'Gong',
     logos: {

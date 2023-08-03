@@ -4,7 +4,7 @@ import fullIcon from '@/platforms/amplitude/icons/full';
 import { auth, platform } from '@/sdk';
 
 export default platform('amplitude', {
-  auth: [auth.basic({})],
+  auth: auth.basic(),
   display: {
     name: 'Amplitude',
     logos: {
