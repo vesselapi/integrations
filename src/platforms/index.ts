@@ -60,6 +60,7 @@ import zendesk from '@/platforms/zendesk';
 import zoho from '@/platforms/zoho';
 import zoom from '@/platforms/zoom';
 import { Platform } from '@/sdk';
+import stripe from './stripe';
 
 export { default as accelo } from '@/platforms/accelo';
 export {
@@ -141,8 +142,10 @@ export { default as amplitude } from './amplitude';
 export { default as ashby } from './ashby';
 export { default as gong } from './gong';
 export { default as mixpanel } from './mixpanel';
+export { default as stripe } from './stripe';
 
 export const integrationsList: Platform<any, any, any, any, any, any>[] = [
+  stripe,
   confluence,
   exactOnline,
   freshbooks,
