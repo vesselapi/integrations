@@ -1,8 +1,7 @@
 import { client } from '@/platforms/mixpanel/client';
-import fullIcon from '@/platforms/mixpanel/icons/full';
 import boxIcon from '@/platforms/mixpanel/icons/box';
+import fullIcon from '@/platforms/mixpanel/icons/full';
 import { auth, platform } from '@/sdk';
-
 
 export default platform('mixpanel', {
   auth: [auth.basic({})],

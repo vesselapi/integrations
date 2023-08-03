@@ -1,8 +1,7 @@
 import { client } from '@/platforms/ashby/client';
-import fullIcon from '@/platforms/ashby/icons/full';
 import boxIcon from '@/platforms/ashby/icons/box';
+import fullIcon from '@/platforms/ashby/icons/full';
 import { auth, platform } from '@/sdk';
-
 
 export default platform('ashby', {
   auth: [auth.basic({})],
