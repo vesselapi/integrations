@@ -1,8 +1,10 @@
 # Exact Online
 
 ## Description
-EXACT ONLINE VERENIGING Onafhankelijke vereniging voor partners en gebruikers van Exact Online Een greep uit ons partnerbestand. Onafhankelijke vereniging voor partners en gebruikers van Exact Online Ben jij -net als wij- een tevreden partner en/of gebruiker van Exact Online maar wéét je dat je nog veel meer van betekenis kan zijn voor je klanten als […]
+
+Numbers are the key to any business. Having the right numbers allows you to manage costs, improve efficiency and grow. More than 675,000 businesses and accountants are already using our innovative cloud-based software to manage their numbers. Come on in and see what Exact can do for you.
 
 ## Resources
-* [Docs](https://start.exactonline.nl/docs/HlpRestAPIResources.aspx)
-* [Website](exactonlinevereniging.nl)
+
+- [Docs](https://start.exactonline.nl/docs/HlpRestAPIResources.aspx)
+- [Website](exactonlinevereniging.nl)
