@@ -35,6 +35,11 @@ import woocommerce from '@/platforms/woocommerce';
 import workable from '@/platforms/workable';
 import zendesk from '@/platforms/zendesk';
 import zoho from '@/platforms/zoho';
+import calendly from '@/platforms/calendly';
+import clickup from '@/platforms/clickup';
+import confluence from '@/platforms/confluence';
+import dropbox from '@/platforms/dropbox';
+import factorial from '@/platforms/factorial';
 import { Platform } from '@/sdk';
 import amplitude from './amplitude';
 import ashby from './ashby';
@@ -101,8 +106,18 @@ export { default as amplitude } from './amplitude';
 export { default as ashby } from './ashby';
 export { default as gong } from './gong';
 export { default as mixpanel } from './mixpanel';
+export { default as calendly } from '@/platforms/calendly';
+export { default as clickup } from '@/platforms/clickup';
+export { default as confluence } from '@/platforms/confluence';
+export { default as dropbox } from '@/platforms/dropbox';
+export { default as factorial } from '@/platforms/factorial';
 
 export const integrationsList: Platform<any, any, any, any, any, any>[] = [
+  calendly,
+  clickup,
+  confluence,
+  dropbox,
+  factorial,
   atlassian,
   bamboohr,
   bitbucket,
