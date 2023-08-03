@@ -19,7 +19,7 @@ export default platform('airtable', {
     colors: {
       primary: '#333333',
     },
-    categories: ['crm'],
+    categories: [],
   },
   client,
   constants: {},
