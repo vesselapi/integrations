@@ -4,7 +4,15 @@ import fullIcon from '@/platforms/workable/logos/full';
 import { auth, platform } from '@/sdk';
 
 export default platform('workable', {
-  auth: auth.apiToken(),
+  auth: auth.apiToken({
+    questions: [
+      {
+        type: 'text',
+        id: 'subdomain',
+        label: 'What is your Workable subdomain?',
+      },
+    ],
+  }),
   display: {
     name: 'Workable',
     logos: {
