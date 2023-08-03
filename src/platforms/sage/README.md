@@ -1,7 +1,9 @@
 # Sage
 
 ## Description
-Sage is an open-source mathematics software system that combines the power of many existing open-source packages into a common Python-based interface. It is designed to cover many aspects of mathematics, including algebra, combinatorics, numerical mathematics, number theory, and calculus.
+
+Sage is a popular accounting software that offers comprehensive financial management solutions for businesses of all sizes. It streamlines bookkeeping, invoicing, payroll, and reporting processes, empowering users to make informed decisions and maintain financial clarity.
 
 ## Resources
-* [Website](sage.com)
+
+- [Website](sage.com)

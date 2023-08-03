@@ -47,36 +47,36 @@ import lever from '@/platforms/lever';
 import linear from '@/platforms/linear';
 import linkedin from '@/platforms/linkedin';
 import mailchimp from '@/platforms/mailchimp';
+import miro from '@/platforms/miro';
 import mixpanel from '@/platforms/mixpanel';
 import monday from '@/platforms/monday';
+import mural from '@/platforms/mural';
 import netsuite from '@/platforms/netsuite';
 import notion from '@/platforms/notion';
 import oneDrive from '@/platforms/one-drive';
 import outreach from '@/platforms/outreach';
+import pandadoc from '@/platforms/pandadoc';
+import payfit from '@/platforms/payfit';
 import pipedrive from '@/platforms/pipedrive';
 import ringcentral from '@/platforms/ringcentral';
+import sage from '@/platforms/sage';
 import salesforce from '@/platforms/salesforce';
 import salesloft from '@/platforms/salesloft';
 import shopify from '@/platforms/shopify';
 import shortcut from '@/platforms/shortcut';
 import slack from '@/platforms/slack';
 import teams from '@/platforms/teams';
-import todoist from '@/platforms/todoist';
-import woocommerce from '@/platforms/woocommerce';
-import workable from '@/platforms/workable';
-import zendesk from '@/platforms/zendesk';
-import zoho from '@/platforms/zoho';
-import zoom from '@/platforms/zoom';
-import miro from '@/platforms/miro';
-import mural from '@/platforms/mural';
-import pandadoc from '@/platforms/pandadoc';
-import payfit from '@/platforms/payfit';
-import sage from '@/platforms/sage';
 import teamwork from '@/platforms/teamwork';
+import todoist from '@/platforms/todoist';
 import twinfield from '@/platforms/twinfield';
 import waveAccounting from '@/platforms/wave-accounting';
+import woocommerce from '@/platforms/woocommerce';
+import workable from '@/platforms/workable';
 import xero from '@/platforms/xero';
+import zendesk from '@/platforms/zendesk';
 import zenefits from '@/platforms/zenefits';
+import zoho from '@/platforms/zoho';
+import zoom from '@/platforms/zoom';
 import { Platform } from '@/sdk';
 import stripe from './stripe';
 
@@ -132,7 +132,9 @@ export {
   default as mailchimp,
   types as mailchimpTypes,
 } from '@/platforms/mailchimp';
+export { default as miro } from '@/platforms/miro';
 export { default as monday, types as mondayTypes } from '@/platforms/monday';
+export { default as mural } from '@/platforms/mural';
 export { default as netsuite } from '@/platforms/netsuite';
 export { default as notion } from '@/platforms/notion';
 export { default as oneDrive } from '@/platforms/one-drive';
@@ -140,6 +142,8 @@ export {
   default as outreach,
   types as outreachTypes,
 } from '@/platforms/outreach';
+export { default as pandadoc } from '@/platforms/pandadoc';
+export { default as payfit } from '@/platforms/payfit';
 export {
   default as pipedrive,
   types as pipedriveTypes,
@@ -148,6 +152,7 @@ export {
   default as ringcentral,
   types as ringcentralTypes,
 } from '@/platforms/ringcentral';
+export { default as sage } from '@/platforms/sage';
 export {
   default as salesforce,
   types as salesforceTypes,
@@ -159,9 +164,14 @@ export {
 export { default as shortcut } from '@/platforms/shortcut';
 export { default as slack, types as slackTypes } from '@/platforms/slack';
 export { default as teams, types as teamsTypes } from '@/platforms/teams';
+export { default as teamwork } from '@/platforms/teamwork';
 export { default as todoist } from '@/platforms/todoist';
+export { default as twinfield } from '@/platforms/twinfield';
+export { default as waveAccounting } from '@/platforms/wave-accounting';
 export { default as workable } from '@/platforms/workable';
+export { default as xero } from '@/platforms/xero';
 export { default as zendesk } from '@/platforms/zendesk';
+export { default as zenefits } from '@/platforms/zenefits';
 export { default as zoho } from '@/platforms/zoho';
 export { default as zoom } from '@/platforms/zoom';
 export { default as amplitude } from './amplitude';
@@ -169,16 +179,6 @@ export { default as ashby } from './ashby';
 export { default as gong } from './gong';
 export { default as mixpanel } from './mixpanel';
 export { default as stripe } from './stripe';
-export { default as miro } from '@/platforms/miro';
-export { default as mural } from '@/platforms/mural';
-export { default as pandadoc } from '@/platforms/pandadoc';
-export { default as payfit } from '@/platforms/payfit';
-export { default as sage } from '@/platforms/sage';
-export { default as teamwork } from '@/platforms/teamwork';
-export { default as twinfield } from '@/platforms/twinfield';
-export { default as waveAccounting } from '@/platforms/wave-accounting';
-export { default as xero } from '@/platforms/xero';
-export { default as zenefits } from '@/platforms/zenefits';
 
 export const integrationsList: Platform<any, any, any, any, any, any>[] = [
   miro,
