@@ -5,22 +5,30 @@ import affinity from '@/platforms/affinity';
 import aircall from '@/platforms/aircall';
 import airtable from '@/platforms/airtable';
 import amazon from '@/platforms/amazon';
+import amplitude from '@/platforms/amplitude';
 import apollo from '@/platforms/apollo';
 import asana from '@/platforms/asana';
+import ashby from '@/platforms/ashby';
 import atlassian from '@/platforms/atlassian';
 import bamboohr from '@/platforms/bamboohr';
 import bitbucket from '@/platforms/bitbucket';
 import boldsign from '@/platforms/boldsign';
 import box from '@/platforms/box';
+import calendly from '@/platforms/calendly';
+import clickup from '@/platforms/clickup';
 import close from '@/platforms/close';
 import customerIo from '@/platforms/customer.io';
 import dialpad from '@/platforms/dialpad';
+import dropbox from '@/platforms/dropbox';
 import dynamicsSales from '@/platforms/dynamics-sales';
+import factorial from '@/platforms/factorial';
 import freshdesk from '@/platforms/freshdesk';
 import freshsales from '@/platforms/freshsales';
+import gong from '@/platforms/gong';
 import hubspot from '@/platforms/hubspot';
 import intercom from '@/platforms/intercom';
 import mailchimp from '@/platforms/mailchimp';
+import mixpanel from '@/platforms/mixpanel';
 import monday from '@/platforms/monday';
 import outreach from '@/platforms/outreach';
 import pipedrive from '@/platforms/pipedrive';
@@ -35,16 +43,7 @@ import woocommerce from '@/platforms/woocommerce';
 import workable from '@/platforms/workable';
 import zendesk from '@/platforms/zendesk';
 import zoho from '@/platforms/zoho';
-import calendly from '@/platforms/calendly';
-import clickup from '@/platforms/clickup';
-import confluence from '@/platforms/confluence';
-import dropbox from '@/platforms/dropbox';
-import factorial from '@/platforms/factorial';
 import { Platform } from '@/sdk';
-import amplitude from './amplitude';
-import ashby from './ashby';
-import gong from './gong';
-import mixpanel from './mixpanel';
 
 export { default as accelo } from '@/platforms/accelo';
 export {
@@ -63,10 +62,14 @@ export { default as bamboohr } from '@/platforms/bamboohr';
 export { default as bitbucket } from '@/platforms/bitbucket';
 export { default as boldsign } from '@/platforms/boldsign';
 export { default as box } from '@/platforms/box';
+export { default as calendly } from '@/platforms/calendly';
+export { default as clickup } from '@/platforms/clickup';
 export { default as close } from '@/platforms/close';
 export { default as customerIo } from '@/platforms/customer.io';
 export { default as dialpad, types as dialpadTypes } from '@/platforms/dialpad';
+export { default as dropbox } from '@/platforms/dropbox';
 export { default as dynamicsSales } from '@/platforms/dynamics-sales';
+export { default as factorial } from '@/platforms/factorial';
 export { default as freshdesk } from '@/platforms/freshdesk';
 export { default as freshsales } from '@/platforms/freshsales';
 export { default as hubspot, types as hubspotTypes } from '@/platforms/hubspot';
@@ -106,16 +109,10 @@ export { default as amplitude } from './amplitude';
 export { default as ashby } from './ashby';
 export { default as gong } from './gong';
 export { default as mixpanel } from './mixpanel';
-export { default as calendly } from '@/platforms/calendly';
-export { default as clickup } from '@/platforms/clickup';
-export { default as confluence } from '@/platforms/confluence';
-export { default as dropbox } from '@/platforms/dropbox';
-export { default as factorial } from '@/platforms/factorial';
 
 export const integrationsList: Platform<any, any, any, any, any, any>[] = [
   calendly,
   clickup,
-  confluence,
   dropbox,
   factorial,
   atlassian,
