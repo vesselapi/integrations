@@ -43,6 +43,22 @@ import woocommerce from '@/platforms/woocommerce';
 import workable from '@/platforms/workable';
 import zendesk from '@/platforms/zendesk';
 import zoho from '@/platforms/zoho';
+import confluence from '@/platforms/confluence';
+import exactOnline from '@/platforms/exact-online';
+import freshbooks from '@/platforms/freshbooks';
+import front from '@/platforms/front';
+import github from '@/platforms/github';
+import gitlab from '@/platforms/gitlab';
+import greenhouse from '@/platforms/greenhouse';
+import gumroad from '@/platforms/gumroad';
+import gusto from '@/platforms/gusto';
+import jira from '@/platforms/jira';
+import linear from '@/platforms/linear';
+import netsuite from '@/platforms/netsuite';
+import notion from '@/platforms/notion';
+import oneDrive from '@/platforms/one-drive';
+import todoist from '@/platforms/todoist';
+import zoom from '@/platforms/zoom';
 import { Platform } from '@/sdk';
 
 export { default as accelo } from '@/platforms/accelo';
@@ -109,8 +125,40 @@ export { default as amplitude } from './amplitude';
 export { default as ashby } from './ashby';
 export { default as gong } from './gong';
 export { default as mixpanel } from './mixpanel';
+export { default as confluence } from '@/platforms/confluence';
+export { default as exactOnline } from '@/platforms/exact-online';
+export { default as freshbooks } from '@/platforms/freshbooks';
+export { default as front } from '@/platforms/front';
+export { default as github } from '@/platforms/github';
+export { default as gitlab } from '@/platforms/gitlab';
+export { default as greenhouse } from '@/platforms/greenhouse';
+export { default as gumroad } from '@/platforms/gumroad';
+export { default as gusto } from '@/platforms/gusto';
+export { default as jira } from '@/platforms/jira';
+export { default as linear } from '@/platforms/linear';
+export { default as netsuite } from '@/platforms/netsuite';
+export { default as notion } from '@/platforms/notion';
+export { default as oneDrive } from '@/platforms/one-drive';
+export { default as todoist } from '@/platforms/todoist';
+export { default as zoom } from '@/platforms/zoom';
 
 export const integrationsList: Platform<any, any, any, any, any, any>[] = [
+  confluence,
+  exactOnline,
+  freshbooks,
+  front,
+  github,
+  gitlab,
+  greenhouse,
+  gumroad,
+  gusto,
+  jira,
+  linear,
+  netsuite,
+  notion,
+  oneDrive,
+  todoist,
+  zoom,
   calendly,
   clickup,
   dropbox,
