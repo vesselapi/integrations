@@ -15,6 +15,9 @@ export default platform('freshsales', {
   display: {
     name: 'Freshsales',
     iconURI: icon,
+    logos: {
+      defaultURI: icon,
+    },
     categories: ['crm'],
   },
   client,

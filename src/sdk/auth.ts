@@ -1,4 +1,4 @@
-import { isFunction, isString } from 'radash';
+import { isFunction, isString, unique } from 'radash';
 import { z } from 'zod';
 import {
   ApiKeyAuthConfig,
@@ -41,6 +41,8 @@ export const auth = {
     scopeSeparator?: OAuth2AuthConfig<TAnswers>['scopeSeparator'];
     tokenAuth?: OAuth2AuthConfig<TAnswers>['tokenAuth'];
     oauthBodyFormat?: OAuth2AuthConfig<TAnswers>['oauthBodyFormat'];
+    authParams?: OAuth2AuthConfig<TAnswers>['authParams'];
+    requiredScopes?: OAuth2AuthConfig<TAnswers>['requiredScopes'];
     url?: OAuth2AuthConfig<TAnswers>['url'];
     isRetryable?: RetryableCheckFunction;
     display?: OAuth2AuthConfig<TAnswers>['display'];
@@ -63,8 +65,10 @@ export const auth = {
     tokenAuth: options.tokenAuth ?? 'body',
     default: options.default ?? false,
     scopeSeparator: options.scopeSeparator ?? ' ',
+    requiredScopes: options.requiredScopes ?? [],
     questions: options.questions ?? [],
     oauthBodyFormat: options.oauthBodyFormat ?? 'form',
+    authParams: options.authParams ?? {},
     display: options.display ?? {
       markdown: (
         platform,
@@ -77,9 +81,12 @@ export const auth = {
         const query: Record<string, string> = {
           client_id: clientId,
           redirect_uri: redirectUrl,
-          scope: scopes.join(options.scopeSeparator ?? ' '),
+          scope: unique([...scopes, ...(options.requiredScopes ?? [])]).join(
+            options.scopeSeparator ?? ' ',
+          ),
           state,
           response_type: 'code',
+          ...(options.authParams ?? {}),
         };
         return `${
           isFunction(options.authUrl)

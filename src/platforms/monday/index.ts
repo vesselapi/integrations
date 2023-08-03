@@ -26,7 +26,14 @@ export default platform('monday', {
       isRetryable: async ({ status }) => status === 401,
     }),
   ],
-  display: { name: 'monday.com', iconURI: icon, categories: ['crm'] },
+  display: {
+    name: 'monday.com',
+    iconURI: icon,
+    logos: {
+      defaultURI: icon,
+    },
+    categories: ['crm'],
+  },
   constants,
   client,
   actions: {
