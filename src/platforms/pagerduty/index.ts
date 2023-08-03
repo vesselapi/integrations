@@ -4,14 +4,14 @@ import { auth, platform } from '@/sdk';
 
 export default platform('pagerduty', {
   auth: auth.oauth2({
-   authUrl: "https://app.pagerduty.com/oauth/authorize",
-   tokenUrl: "https://app.pagerduty.com/oauth/token"
-    }),
+    authUrl: 'https://app.pagerduty.com/oauth/authorize',
+    tokenUrl: 'https://app.pagerduty.com/oauth/token',
+  }),
   display: {
     name: 'Pagerduty',
     logos: {
-     defaultURI: fullIcon,
-     fullURI: fullIcon,
+      defaultURI: fullIcon,
+      fullURI: fullIcon,
     },
     colors: {
       primary: '#038a24',
