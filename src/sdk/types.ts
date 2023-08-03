@@ -162,7 +162,7 @@ export type OAuth2AuthConfig<
   /**
    * Additional Auth Params to pass when the `authUrl` is called.
    */
-  authParams: Record<string, string>;
+  authParams: Record<string, any>;
   url: (arg: {
     answers: TAnswers;
     scopes: string[];
