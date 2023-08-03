@@ -15,7 +15,7 @@ export default platform('shortcut', {
     colors: {
       primary: '#452B5B',
     },
-    categories: ['other'],
+    categories: [],
   },
   client,
   constants: {},

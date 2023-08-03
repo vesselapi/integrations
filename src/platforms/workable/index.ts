@@ -15,7 +15,7 @@ export default platform('workable', {
     colors: {
       primary: '#00766a',
     },
-    categories: ['other'],
+    categories: [],
   },
   client,
   constants: {},
