@@ -59,6 +59,15 @@ import workable from '@/platforms/workable';
 import zendesk from '@/platforms/zendesk';
 import zoho from '@/platforms/zoho';
 import zoom from '@/platforms/zoom';
+import google from '@/platforms/google';
+import googleCalendar from '@/platforms/google-calendar';
+import googleMail from '@/platforms/google-mail';
+import googleSheet from '@/platforms/google-sheet';
+import healthGorilla from '@/platforms/health-gorilla';
+import intuit from '@/platforms/intuit';
+import keap from '@/platforms/keap';
+import lever from '@/platforms/lever';
+import linkedin from '@/platforms/linkedin';
 import { Platform } from '@/sdk';
 import stripe from './stripe';
 
@@ -143,8 +152,26 @@ export { default as ashby } from './ashby';
 export { default as gong } from './gong';
 export { default as mixpanel } from './mixpanel';
 export { default as stripe } from './stripe';
+export { default as google } from '@/platforms/google';
+export { default as googleCalendar } from '@/platforms/google-calendar';
+export { default as googleMail } from '@/platforms/google-mail';
+export { default as googleSheet } from '@/platforms/google-sheet';
+export { default as healthGorilla } from '@/platforms/health-gorilla';
+export { default as intuit } from '@/platforms/intuit';
+export { default as keap } from '@/platforms/keap';
+export { default as lever } from '@/platforms/lever';
+export { default as linkedin } from '@/platforms/linkedin';
 
 export const integrationsList: Platform<any, any, any, any, any, any>[] = [
+  google,
+  googleCalendar,
+  googleMail,
+  googleSheet,
+  healthGorilla,
+  intuit,
+  keap,
+  lever,
+  linkedin,
   stripe,
   confluence,
   exactOnline,
