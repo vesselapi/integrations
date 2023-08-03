@@ -77,6 +77,15 @@ import zendesk from '@/platforms/zendesk';
 import zenefits from '@/platforms/zenefits';
 import zoho from '@/platforms/zoho';
 import zoom from '@/platforms/zoom';
+import brex from '@/platforms/brex';
+import contentstack from '@/platforms/contentstack';
+import facebook from '@/platforms/facebook';
+import pagerduty from '@/platforms/pagerduty';
+import qualtrics from '@/platforms/qualtrics';
+import ramp from '@/platforms/ramp';
+import squareup from '@/platforms/squareup';
+import surveyMonkey from '@/platforms/survey-monkey';
+import typeform from '@/platforms/typeform';
 import { Platform } from '@/sdk';
 import stripe from './stripe';
 
@@ -179,8 +188,26 @@ export { default as ashby } from './ashby';
 export { default as gong } from './gong';
 export { default as mixpanel } from './mixpanel';
 export { default as stripe } from './stripe';
+export { default as brex } from '@/platforms/brex';
+export { default as contentstack } from '@/platforms/contentstack';
+export { default as facebook } from '@/platforms/facebook';
+export { default as pagerduty } from '@/platforms/pagerduty';
+export { default as qualtrics } from '@/platforms/qualtrics';
+export { default as ramp } from '@/platforms/ramp';
+export { default as squareup } from '@/platforms/squareup';
+export { default as surveyMonkey } from '@/platforms/survey-monkey';
+export { default as typeform } from '@/platforms/typeform';
 
 export const integrationsList: Platform<any, any, any, any, any, any>[] = [
+  brex,
+  contentstack,
+  facebook,
+  pagerduty,
+  qualtrics,
+  ramp,
+  squareup,
+  surveyMonkey,
+  typeform,
   miro,
   mural,
   pandadoc,
