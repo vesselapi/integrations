@@ -67,6 +67,16 @@ import workable from '@/platforms/workable';
 import zendesk from '@/platforms/zendesk';
 import zoho from '@/platforms/zoho';
 import zoom from '@/platforms/zoom';
+import miro from '@/platforms/miro';
+import mural from '@/platforms/mural';
+import pandadoc from '@/platforms/pandadoc';
+import payfit from '@/platforms/payfit';
+import sage from '@/platforms/sage';
+import teamwork from '@/platforms/teamwork';
+import twinfield from '@/platforms/twinfield';
+import waveAccounting from '@/platforms/wave-accounting';
+import xero from '@/platforms/xero';
+import zenefits from '@/platforms/zenefits';
 import { Platform } from '@/sdk';
 import stripe from './stripe';
 
@@ -159,8 +169,28 @@ export { default as ashby } from './ashby';
 export { default as gong } from './gong';
 export { default as mixpanel } from './mixpanel';
 export { default as stripe } from './stripe';
+export { default as miro } from '@/platforms/miro';
+export { default as mural } from '@/platforms/mural';
+export { default as pandadoc } from '@/platforms/pandadoc';
+export { default as payfit } from '@/platforms/payfit';
+export { default as sage } from '@/platforms/sage';
+export { default as teamwork } from '@/platforms/teamwork';
+export { default as twinfield } from '@/platforms/twinfield';
+export { default as waveAccounting } from '@/platforms/wave-accounting';
+export { default as xero } from '@/platforms/xero';
+export { default as zenefits } from '@/platforms/zenefits';
 
 export const integrationsList: Platform<any, any, any, any, any, any>[] = [
+  miro,
+  mural,
+  pandadoc,
+  payfit,
+  sage,
+  teamwork,
+  twinfield,
+  waveAccounting,
+  xero,
+  zenefits,
   google,
   googleCalendar,
   googleMail,
