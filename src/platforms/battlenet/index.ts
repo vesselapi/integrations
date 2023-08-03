@@ -1,5 +1,6 @@
 import { client } from '@/platforms/battlenet/client';
 import { auth, platform } from '@/sdk';
+import { defaultIcon } from '../defaultIcon';
 
 export default platform('battlenet', {
   auth: auth.oauth2({
@@ -11,7 +12,7 @@ export default platform('battlenet', {
   display: {
     name: 'Battlenet',
     logos: {
-      defaultURI: fullIcon,
+      defaultURI: defaultIcon,
     },
     colors: {
       primary: '#0e162d',

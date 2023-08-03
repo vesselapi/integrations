@@ -1,4 +1,5 @@
 import { client } from '@/platforms/boldsign/client';
+import boxIcon from '@/platforms/boldsign/logos/box';
 import { auth, platform } from '@/sdk';
 
 export default platform('boldsign', {
@@ -9,10 +10,11 @@ export default platform('boldsign', {
   display: {
     name: 'Boldsign',
     logos: {
-      defaultURI: fullIcon,
+      defaultURI: boxIcon,
+      boxURI: boxIcon,
     },
     colors: {
-      primary: '#000000',
+      primary: '#fe4802',
     },
     categories: [],
   },
