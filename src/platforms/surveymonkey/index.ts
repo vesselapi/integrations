@@ -1,15 +1,15 @@
-import { client } from '@/platforms/survey-monkey/client';
-import boxIcon from '@/platforms/survey-monkey/logos/box';
-import fullIcon from '@/platforms/survey-monkey/logos/full';
+import { client } from '@/platforms/surveymonkey/client';
+import boxIcon from '@/platforms/surveymonkey/logos/box';
+import fullIcon from '@/platforms/surveymonkey/logos/full';
 import { auth, platform } from '@/sdk';
 
-export default platform('survey-monkey', {
+export default platform('surveymonkey', {
   auth: auth.oauth2({
     authUrl: 'https://api.surveymonkey.com/oauth/authorize',
     tokenUrl: 'https://api.surveymonkey.com/oauth/token',
   }),
   display: {
-    name: 'Survey Monkey',
+    name: 'SurveyMonkey',
     logos: {
       defaultURI: fullIcon ?? boxIcon,
       fullURI: fullIcon,

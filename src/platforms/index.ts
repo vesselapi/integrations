@@ -71,8 +71,8 @@ import salesloft from '@/platforms/salesloft';
 import shopify from '@/platforms/shopify';
 import shortcut from '@/platforms/shortcut';
 import slack from '@/platforms/slack';
-import squareup from '@/platforms/squareup';
-import surveyMonkey from '@/platforms/survey-monkey';
+import square from '@/platforms/square';
+import surveyMonkey from '@/platforms/surveymonkey';
 import teams from '@/platforms/teams';
 import teamwork from '@/platforms/teamwork';
 import todoist from '@/platforms/todoist';
@@ -178,8 +178,8 @@ export {
 } from '@/platforms/salesloft';
 export { default as shortcut } from '@/platforms/shortcut';
 export { default as slack, types as slackTypes } from '@/platforms/slack';
-export { default as squareup } from '@/platforms/squareup';
-export { default as surveyMonkey } from '@/platforms/survey-monkey';
+export { default as square } from '@/platforms/square';
+export { default as surveyMonkey } from '@/platforms/surveymonkey';
 export { default as teams, types as teamsTypes } from '@/platforms/teams';
 export { default as teamwork } from '@/platforms/teamwork';
 export { default as todoist } from '@/platforms/todoist';
@@ -205,7 +205,7 @@ export const integrationsList: Platform<any, any, any, any, any, any>[] = [
   pagerduty,
   qualtrics,
   ramp,
-  squareup,
+  square,
   surveyMonkey,
   typeform,
   miro,

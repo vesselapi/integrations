@@ -1,9 +1,9 @@
-import { client } from '@/platforms/squareup/client';
-import boxIcon from '@/platforms/squareup/logos/box';
-import fullIcon from '@/platforms/squareup/logos/full';
+import { client } from '@/platforms/square/client';
+import boxIcon from '@/platforms/square/logos/box';
+import fullIcon from '@/platforms/square/logos/full';
 import { auth, platform } from '@/sdk';
 
-export default platform('squareup', {
+export default platform('square', {
   auth: auth.oauth2({
     authUrl: 'https://connect.squareup.com/oauth2/authorize',
     tokenUrl: 'https://connect.squareup.com/oauth2/token',
@@ -13,7 +13,7 @@ export default platform('squareup', {
     },
   }),
   display: {
-    name: 'Squareup',
+    name: 'Square',
     logos: {
       defaultURI: fullIcon ?? boxIcon,
       fullURI: fullIcon,
