@@ -25,6 +25,11 @@ import woocommerce from '@/platforms/woocommerce';
 import workable from '@/platforms/workable';
 import zendesk from '@/platforms/zendesk';
 import zoho from '@/platforms/zoho';
+import accelo from '@/platforms/accelo';
+import adobe from '@/platforms/adobe';
+import airtable from '@/platforms/airtable';
+import amazon from '@/platforms/amazon';
+import asana from '@/platforms/asana';
 import { Platform } from '@/sdk';
 import amplitude from './amplitude';
 import ashby from './ashby';
@@ -81,8 +86,18 @@ export { default as amplitude } from './amplitude';
 export { default as ashby } from './ashby';
 export { default as gong } from './gong';
 export { default as mixpanel } from './mixpanel';
+export { default as accelo } from '@/platforms/accelo';
+export { default as adobe } from '@/platforms/adobe';
+export { default as airtable } from '@/platforms/airtable';
+export { default as amazon } from '@/platforms/amazon';
+export { default as asana } from '@/platforms/asana';
 
 export const integrationsList: Platform<any, any, any, any, any, any>[] = [
+  accelo,
+  adobe,
+  airtable,
+  amazon,
+  asana,
   shortcut,
   workable,
   gong,
