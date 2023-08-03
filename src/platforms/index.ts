@@ -31,13 +31,21 @@ import front from '@/platforms/front';
 import github from '@/platforms/github';
 import gitlab from '@/platforms/gitlab';
 import gong from '@/platforms/gong';
+import google from '@/platforms/google';
+import googleCalendar from '@/platforms/google-calendar';
+import googleMail from '@/platforms/google-mail';
+import googleSheet from '@/platforms/google-sheet';
 import greenhouse from '@/platforms/greenhouse';
 import gumroad from '@/platforms/gumroad';
 import gusto from '@/platforms/gusto';
 import hubspot from '@/platforms/hubspot';
 import intercom from '@/platforms/intercom';
+import intuit from '@/platforms/intuit';
 import jira from '@/platforms/jira';
+import keap from '@/platforms/keap';
+import lever from '@/platforms/lever';
 import linear from '@/platforms/linear';
+import linkedin from '@/platforms/linkedin';
 import mailchimp from '@/platforms/mailchimp';
 import mixpanel from '@/platforms/mixpanel';
 import monday from '@/platforms/monday';
@@ -59,15 +67,6 @@ import workable from '@/platforms/workable';
 import zendesk from '@/platforms/zendesk';
 import zoho from '@/platforms/zoho';
 import zoom from '@/platforms/zoom';
-import google from '@/platforms/google';
-import googleCalendar from '@/platforms/google-calendar';
-import googleMail from '@/platforms/google-mail';
-import googleSheet from '@/platforms/google-sheet';
-import healthGorilla from '@/platforms/health-gorilla';
-import intuit from '@/platforms/intuit';
-import keap from '@/platforms/keap';
-import lever from '@/platforms/lever';
-import linkedin from '@/platforms/linkedin';
 import { Platform } from '@/sdk';
 import stripe from './stripe';
 
@@ -104,13 +103,21 @@ export { default as freshsales } from '@/platforms/freshsales';
 export { default as front } from '@/platforms/front';
 export { default as github } from '@/platforms/github';
 export { default as gitlab } from '@/platforms/gitlab';
+export { default as google } from '@/platforms/google';
+export { default as googleCalendar } from '@/platforms/google-calendar';
+export { default as googleMail } from '@/platforms/google-mail';
+export { default as googleSheet } from '@/platforms/google-sheet';
 export { default as greenhouse } from '@/platforms/greenhouse';
 export { default as gumroad } from '@/platforms/gumroad';
 export { default as gusto } from '@/platforms/gusto';
 export { default as hubspot, types as hubspotTypes } from '@/platforms/hubspot';
 export { default as intercom } from '@/platforms/intercom';
+export { default as intuit } from '@/platforms/intuit';
 export { default as jira } from '@/platforms/jira';
+export { default as keap } from '@/platforms/keap';
+export { default as lever } from '@/platforms/lever';
 export { default as linear } from '@/platforms/linear';
+export { default as linkedin } from '@/platforms/linkedin';
 export {
   default as mailchimp,
   types as mailchimpTypes,
@@ -152,22 +159,12 @@ export { default as ashby } from './ashby';
 export { default as gong } from './gong';
 export { default as mixpanel } from './mixpanel';
 export { default as stripe } from './stripe';
-export { default as google } from '@/platforms/google';
-export { default as googleCalendar } from '@/platforms/google-calendar';
-export { default as googleMail } from '@/platforms/google-mail';
-export { default as googleSheet } from '@/platforms/google-sheet';
-export { default as healthGorilla } from '@/platforms/health-gorilla';
-export { default as intuit } from '@/platforms/intuit';
-export { default as keap } from '@/platforms/keap';
-export { default as lever } from '@/platforms/lever';
-export { default as linkedin } from '@/platforms/linkedin';
 
 export const integrationsList: Platform<any, any, any, any, any, any>[] = [
   google,
   googleCalendar,
   googleMail,
   googleSheet,
-  healthGorilla,
   intuit,
   keap,
   lever,
