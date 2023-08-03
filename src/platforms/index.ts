@@ -23,6 +23,8 @@ import teams from '@/platforms/teams';
 import woocommerce from '@/platforms/woocommerce';
 import zendesk from '@/platforms/zendesk';
 import zoho from '@/platforms/zoho';
+import shortcut from '@/platforms/shortcut';
+import workable from '@/platforms/workable';
 import { Platform } from '@/sdk';
 
 export {
@@ -69,8 +71,12 @@ export { default as slack, types as slackTypes } from '@/platforms/slack';
 export { default as teams, types as teamsTypes } from '@/platforms/teams';
 export { default as zendesk } from '@/platforms/zendesk';
 export { default as zoho } from '@/platforms/zoho';
+export { default as shortcut } from '@/platforms/shortcut';
+export { default as workable } from '@/platforms/workable';
 
 export const integrationsList: Platform<any, any, any, any, any, any>[] = [
+  shortcut,
+  workable
   activeCampaign,
   affinity,
   aircall,
