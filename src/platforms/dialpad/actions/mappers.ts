@@ -48,7 +48,7 @@ export const transformCall = (call: DialpadCall) => {
     callId: call.call_id,
     callRecordingIds: call.call_recording_ids,
     callRecordingShareLinks: call.call_recording_share_links,
-    contact: transformContact(call.contact),
+    contact: call.contact ? transformContact(call.contact) : null,
     csatRecordingUrls: call.csat_recording_urls,
     csatScore: call.csat_score,
     csatTranscriptions: call.csat_transcriptions,
@@ -72,9 +72,8 @@ export const transformCall = (call: DialpadCall) => {
     operatorCallId: call.operator_call_id,
     proxyTarget: call.proxy_target,
     recordingUrl: call.recording_url,
-    routingBreadcrumbs: call.routing_breadcrumbs.map(
-      transformRoutingBreadcrumb,
-    ),
+    routingBreadcrumbs:
+      call.routing_breadcrumbs?.map(transformRoutingBreadcrumb) ?? null,
     screenRecordingUrls: call.screen_recording_urls,
     state: call.state,
     target: call.target,
