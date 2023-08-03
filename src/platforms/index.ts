@@ -1,7 +1,12 @@
+import accelo from '@/platforms/accelo';
 import activeCampaign from '@/platforms/active-campaign';
+import adobe from '@/platforms/adobe';
 import affinity from '@/platforms/affinity';
 import aircall from '@/platforms/aircall';
+import airtable from '@/platforms/airtable';
+import amazon from '@/platforms/amazon';
 import apollo from '@/platforms/apollo';
+import asana from '@/platforms/asana';
 import close from '@/platforms/close';
 import customerIo from '@/platforms/customer.io';
 import dialpad from '@/platforms/dialpad';
@@ -31,13 +36,18 @@ import ashby from './ashby';
 import gong from './gong';
 import mixpanel from './mixpanel';
 
+export { default as accelo } from '@/platforms/accelo';
 export {
   default as activeCampaign,
   types as activeCampaignType,
 } from '@/platforms/active-campaign';
+export { default as adobe } from '@/platforms/adobe';
 export { default as affinity } from '@/platforms/affinity';
 export { default as aircall, types as aircallTypes } from '@/platforms/aircall';
+export { default as airtable } from '@/platforms/airtable';
+export { default as amazon } from '@/platforms/amazon';
 export { default as apollo, types as apolloTypes } from '@/platforms/apollo';
+export { default as asana } from '@/platforms/asana';
 export { default as close } from '@/platforms/close';
 export { default as customerIo } from '@/platforms/customer.io';
 export { default as dialpad, types as dialpadTypes } from '@/platforms/dialpad';
@@ -83,6 +93,11 @@ export { default as gong } from './gong';
 export { default as mixpanel } from './mixpanel';
 
 export const integrationsList: Platform<any, any, any, any, any, any>[] = [
+  accelo,
+  adobe,
+  airtable,
+  amazon,
+  asana,
   shortcut,
   workable,
   gong,
