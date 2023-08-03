@@ -3,7 +3,7 @@ const request = makeRequestFactory(async (auth, options) => {
   const { answers } = await auth.getMetadata();
   return {
     ...options,
-    url: formatUrl(`http://${answers.url}/rest/api`, options.url),
+    url: formatUrl(`https://${answers.url}/rest/api`, options.url),
     headers: {
       ...options.headers,
       Authorization: `Bearer ${await auth.getToken()}`,

@@ -17,7 +17,7 @@ export default platform('exact-online', {
         type: 'text',
       },
     ],
-    tokenRefreshAt: () => add(Date.now(), { seconds: 30 }),
+    refreshTokenExpiresAt: () => add(Date.now(), { seconds: 30 }),
   }),
   display: {
     name: 'Exact Online',
