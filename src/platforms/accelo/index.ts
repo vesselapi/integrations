@@ -3,15 +3,25 @@ import boxIcon from '@/platforms/accelo/logos/box';
 import { auth, platform } from '@/sdk';
 
 export default platform('accelo', {
-  auth: auth.oauth2({ authUr: ({ answers }) => https://${answers.subdomain}.api.accelo.com/oauth2/v0/authorize,
- tokenUrl: ({ answers }) => https://${answers.subdomain}.api.accelo.com/oauth2/v0/token,
- scopeSeparator: ,,
- authParams: {"response_type":"code"}),
+  auth: auth.oauth2({
+    authUrl: ({ answers }) =>
+      `https://${answers.subdomain}.api.accelo.com/oauth2/v0/authorize`,
+    tokenUrl: ({ answers }) =>
+      `https://${answers.subdomain}.api.accelo.com/oauth2/v0/token`,
+    scopeSeparator: ',',
+    questions: [
+      {
+        type: 'text',
+        id: 'subdomain',
+        label: 'What is your Accelo subdomain?',
+      },
+    ],
+  }),
   display: {
     name: 'Accelo',
     logos: {
-     defaultURI: boxIcon,
-     boxURI: boxIcon,
+      defaultURI: boxIcon,
+      boxURI: boxIcon,
     },
     colors: {
       primary: '#eca53d',
