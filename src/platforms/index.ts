@@ -18,14 +18,18 @@ import ringcentral from '@/platforms/ringcentral';
 import salesforce from '@/platforms/salesforce';
 import salesloft from '@/platforms/salesloft';
 import shopify from '@/platforms/shopify';
+import shortcut from '@/platforms/shortcut';
 import slack from '@/platforms/slack';
 import teams from '@/platforms/teams';
 import woocommerce from '@/platforms/woocommerce';
+import workable from '@/platforms/workable';
 import zendesk from '@/platforms/zendesk';
 import zoho from '@/platforms/zoho';
-import shortcut from '@/platforms/shortcut';
-import workable from '@/platforms/workable';
 import { Platform } from '@/sdk';
+import amplitude from './amplitude';
+import ashby from './ashby';
+import gong from './gong';
+import mixpanel from './mixpanel';
 
 export {
   default as activeCampaign,
@@ -67,16 +71,24 @@ export {
   default as salesloft,
   types as salesloftTypes,
 } from '@/platforms/salesloft';
+export { default as shortcut } from '@/platforms/shortcut';
 export { default as slack, types as slackTypes } from '@/platforms/slack';
 export { default as teams, types as teamsTypes } from '@/platforms/teams';
+export { default as workable } from '@/platforms/workable';
 export { default as zendesk } from '@/platforms/zendesk';
 export { default as zoho } from '@/platforms/zoho';
-export { default as shortcut } from '@/platforms/shortcut';
-export { default as workable } from '@/platforms/workable';
+export { default as amplitude } from './amplitude';
+export { default as ashby } from './ashby';
+export { default as gong } from './gong';
+export { default as mixpanel } from './mixpanel';
 
 export const integrationsList: Platform<any, any, any, any, any, any>[] = [
   shortcut,
-  workable
+  workable,
+  gong,
+  amplitude,
+  ashby,
+  mixpanel,
   activeCampaign,
   affinity,
   aircall,
