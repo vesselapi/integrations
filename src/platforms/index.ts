@@ -7,6 +7,11 @@ import airtable from '@/platforms/airtable';
 import amazon from '@/platforms/amazon';
 import apollo from '@/platforms/apollo';
 import asana from '@/platforms/asana';
+import atlassian from '@/platforms/atlassian';
+import bamboohr from '@/platforms/bamboohr';
+import bitbucket from '@/platforms/bitbucket';
+import boldsign from '@/platforms/boldsign';
+import box from '@/platforms/box';
 import close from '@/platforms/close';
 import customerIo from '@/platforms/customer.io';
 import dialpad from '@/platforms/dialpad';
@@ -48,6 +53,11 @@ export { default as airtable } from '@/platforms/airtable';
 export { default as amazon } from '@/platforms/amazon';
 export { default as apollo, types as apolloTypes } from '@/platforms/apollo';
 export { default as asana } from '@/platforms/asana';
+export { default as atlassian } from '@/platforms/atlassian';
+export { default as bamboohr } from '@/platforms/bamboohr';
+export { default as bitbucket } from '@/platforms/bitbucket';
+export { default as boldsign } from '@/platforms/boldsign';
+export { default as box } from '@/platforms/box';
 export { default as close } from '@/platforms/close';
 export { default as customerIo } from '@/platforms/customer.io';
 export { default as dialpad, types as dialpadTypes } from '@/platforms/dialpad';
@@ -93,6 +103,11 @@ export { default as gong } from './gong';
 export { default as mixpanel } from './mixpanel';
 
 export const integrationsList: Platform<any, any, any, any, any, any>[] = [
+  atlassian,
+  bamboohr,
+  bitbucket,
+  boldsign,
+  box,
   accelo,
   adobe,
   airtable,
