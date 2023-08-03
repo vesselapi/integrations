@@ -3,15 +3,15 @@ import { auth, platform } from '@/sdk';
 
 export default platform('battlenet', {
   auth: auth.oauth2({
-   authUrl: ({ answers }) => `${reg.clean(
-        auth.authorization_url
-      )}`,
-   tokenUrl: ({ answers }) => `${reg.clean(auth.token_url)}`,
-   authParams: {}}),
+    authUrl: ({ answers }) =>
+      `https://oauth.battle.${answers.extension}/authorize`,
+    tokenUrl: ({ answers }) =>
+      `https://oauth.battle.${answers.extension}/token`,
+  }),
   display: {
     name: 'Battlenet',
     logos: {
-     defaultURI: fullIcon,
+      defaultURI: fullIcon,
     },
     colors: {
       primary: '#0e162d',
