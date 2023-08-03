@@ -30,6 +30,11 @@ import woocommerce from '@/platforms/woocommerce';
 import workable from '@/platforms/workable';
 import zendesk from '@/platforms/zendesk';
 import zoho from '@/platforms/zoho';
+import atlassian from '@/platforms/atlassian';
+import bamboohr from '@/platforms/bamboohr';
+import battlenet from '@/platforms/battlenet';
+import bitbucket from '@/platforms/bitbucket';
+import boldsign from '@/platforms/boldsign';
 import { Platform } from '@/sdk';
 import amplitude from './amplitude';
 import ashby from './ashby';
@@ -91,8 +96,18 @@ export { default as amplitude } from './amplitude';
 export { default as ashby } from './ashby';
 export { default as gong } from './gong';
 export { default as mixpanel } from './mixpanel';
+export { default as atlassian } from '@/platforms/atlassian';
+export { default as bamboohr } from '@/platforms/bamboohr';
+export { default as battlenet } from '@/platforms/battlenet';
+export { default as bitbucket } from '@/platforms/bitbucket';
+export { default as boldsign } from '@/platforms/boldsign';
 
 export const integrationsList: Platform<any, any, any, any, any, any>[] = [
+  atlassian,
+  bamboohr,
+  battlenet,
+  bitbucket,
+  boldsign,
   accelo,
   adobe,
   airtable,
