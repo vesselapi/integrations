@@ -1,8 +1,6 @@
-# About
+# Apollo
+## Description
+Apollo is a sales engagement platform that empowers sales teams to automate and personalize their outreach efforts. It offers features such as email automation, multi-channel communication, and advanced analytics to help sales representatives effectively engage with prospects and drive more revenue.
 
-Apollo is an all-in-one sales intelligence platform with tools to help you prospect, engage, and drive more revenue
-
-## References
-
-- API: https://apolloio.github.io/apollo-api-docs/?shell#introduction
-- Rate Limits: https://apolloio.github.io/apollo-api-docs/?shell#rate-limits
+## Resources
+* [Website](apollo.io)
