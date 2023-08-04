@@ -1,7 +1,7 @@
 import { client } from '@/platforms/shopify/client';
 import * as constants from '@/platforms/shopify/constants';
-import fullIcon from '@/platforms/shopify/logos/full';
 import boxIcon from '@/platforms/shopify/logos/box';
+import fullIcon from '@/platforms/shopify/logos/full';
 import { auth, platform } from '@/sdk';
 
 export default platform('shopify', {
@@ -15,15 +15,15 @@ export default platform('shopify', {
   display: {
     name: 'Shopify',
     logos: {
-        defaultURI: fullIcon ?? boxIcon,
-        fullURI: fullIcon,
-        boxURI: boxIcon,
+      defaultURI: fullIcon ?? boxIcon,
+      fullURI: fullIcon,
+      boxURI: boxIcon,
     },
     colors: {
-        primary: '#008060',
+      primary: '#008060',
     },
-    categories: ["commerce"],
-    },
+    categories: ['commerce'],
+  },
   client,
   constants,
   actions: {},

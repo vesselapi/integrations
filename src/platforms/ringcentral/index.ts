@@ -1,3 +1,5 @@
+import boxIcon from '@/platforms/ringcentral/logos/box';
+import fullIcon from '@/platforms/ringcentral/logos/full';
 import { auth, platform } from '../../sdk';
 import callLogsFind from './actions/call-logs/find';
 import callLogsList from './actions/call-logs/list';
@@ -10,8 +12,6 @@ import extensionsList from './actions/extensions/list';
 import extensionsRingOut from './actions/extensions/ring-out';
 import client from './client';
 import * as constants from './constants';
-import fullIcon from '@/platforms/ringcentral/logos/full';
-import boxIcon from '@/platforms/ringcentral/logos/box';
 import {
   RingcentralAuthAnswers,
   ringcentralUrlsByAccountType,
@@ -43,15 +43,15 @@ export default platform('ringcentral', {
   display: {
     name: 'Ringcentral',
     logos: {
-        defaultURI: fullIcon ?? boxIcon,
-        fullURI: fullIcon,
-        boxURI: boxIcon,
+      defaultURI: fullIcon ?? boxIcon,
+      fullURI: fullIcon,
+      boxURI: boxIcon,
     },
     colors: {
-        primary: '#eb6321',
+      primary: '#eb6321',
     },
-    categories: ["dialer"],
-    },
+    categories: ['dialer'],
+  },
   constants,
   client,
   actions: {

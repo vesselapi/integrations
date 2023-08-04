@@ -1,9 +1,9 @@
 import { auth, platform } from '@/sdk';
 
+import boxIcon from '@/platforms/monday/logos/box';
+import fullIcon from '@/platforms/monday/logos/full';
 import client from './client';
 import * as constants from './constants';
-import fullIcon from '@/platforms/monday/logos/full';
-import boxIcon from '@/platforms/monday/logos/box';
 
 import query from '@/platforms/monday/actions/graphql/query';
 
@@ -30,15 +30,15 @@ export default platform('monday', {
   display: {
     name: 'monday.com',
     logos: {
-        defaultURI: fullIcon ?? boxIcon,
-        fullURI: fullIcon,
-        boxURI: boxIcon,
+      defaultURI: fullIcon ?? boxIcon,
+      fullURI: fullIcon,
+      boxURI: boxIcon,
     },
     colors: {
-        primary: '#f62b54',
+      primary: '#f62b54',
     },
-    categories: ["crm"],
-    },
+    categories: ['crm'],
+  },
   constants,
   client,
   actions: {

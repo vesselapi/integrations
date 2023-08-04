@@ -7,8 +7,8 @@ import searchMember from '@/platforms/mailchimp/actions/members/search';
 import updateMember from '@/platforms/mailchimp/actions/members/update';
 import { client } from '@/platforms/mailchimp/client';
 import * as constants from '@/platforms/mailchimp/constants';
-import fullIcon from '@/platforms/mailchimp/logos/full';
 import boxIcon from '@/platforms/mailchimp/logos/box';
+import fullIcon from '@/platforms/mailchimp/logos/full';
 
 export * as types from './schemas';
 export default platform('mailchimp', {
@@ -21,15 +21,15 @@ export default platform('mailchimp', {
   display: {
     name: 'Mailchimp',
     logos: {
-        defaultURI: fullIcon ?? boxIcon,
-        fullURI: fullIcon,
-        boxURI: boxIcon,
+      defaultURI: fullIcon ?? boxIcon,
+      fullURI: fullIcon,
+      boxURI: boxIcon,
     },
     colors: {
-        primary: '#ffe01b',
+      primary: '#ffe01b',
     },
-    categories: ["marketing-automation"],
-    },
+    categories: ['marketing-automation'],
+  },
   client,
   constants,
   actions: {

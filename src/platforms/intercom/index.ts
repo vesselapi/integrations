@@ -1,8 +1,8 @@
 import { auth, platform } from '../../sdk';
 
-import { client } from './client';
-import fullIcon from '@/platforms/intercom/logos/full';
 import boxIcon from '@/platforms/intercom/logos/box';
+import fullIcon from '@/platforms/intercom/logos/full';
+import { client } from './client';
 
 export default platform('intercom', {
   auth: [
@@ -14,15 +14,15 @@ export default platform('intercom', {
   display: {
     name: 'Intercom',
     logos: {
-        defaultURI: fullIcon ?? boxIcon,
-        fullURI: fullIcon,
-        boxURI: boxIcon,
+      defaultURI: fullIcon ?? boxIcon,
+      fullURI: fullIcon,
+      boxURI: boxIcon,
     },
     colors: {
-        primary: '#1f8ded',
+      primary: '#1f8ded',
     },
-    categories: ["ticketing"],
-    },
+    categories: ['ticketing'],
+  },
   client,
   constants: {},
   actions: {},

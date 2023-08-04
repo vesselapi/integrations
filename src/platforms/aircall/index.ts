@@ -1,8 +1,8 @@
+import boxIcon from '@/platforms/aircall/logos/box';
+import fullIcon from '@/platforms/aircall/logos/full';
 import { auth, platform } from '../../sdk';
 import { client } from './client';
 import * as constants from './constants';
-import fullIcon from '@/platforms/aircall/logos/full';
-import boxIcon from '@/platforms/aircall/logos/box';
 
 import findUser from './actions/user/find';
 import listUser from './actions/user/list';
@@ -37,15 +37,15 @@ export default platform('aircall', {
   display: {
     name: 'Aircall',
     logos: {
-        defaultURI: fullIcon ?? boxIcon,
-        fullURI: fullIcon,
-        boxURI: boxIcon,
+      defaultURI: fullIcon ?? boxIcon,
+      fullURI: fullIcon,
+      boxURI: boxIcon,
     },
     colors: {
-        primary: '#00b388',
+      primary: '#00b388',
     },
-    categories: ["dialer"],
-    },
+    categories: ['dialer'],
+  },
   constants,
   client,
   actions: {

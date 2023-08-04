@@ -1,8 +1,8 @@
+import boxIcon from '@/platforms/pipedrive/logos/box';
+import fullIcon from '@/platforms/pipedrive/logos/full';
 import { auth, platform } from '@/sdk';
 import client from './client';
 import * as constants from './constants';
-import fullIcon from '@/platforms/pipedrive/logos/full';
-import boxIcon from '@/platforms/pipedrive/logos/box';
 
 export * as types from './schemas';
 export default platform('pipedrive', {
@@ -16,15 +16,15 @@ export default platform('pipedrive', {
   display: {
     name: 'Pipedrive',
     logos: {
-        defaultURI: fullIcon ?? boxIcon,
-        fullURI: fullIcon,
-        boxURI: boxIcon,
+      defaultURI: fullIcon ?? boxIcon,
+      fullURI: fullIcon,
+      boxURI: boxIcon,
     },
     colors: {
-        primary: '#08a742',
+      primary: '#08a742',
     },
-    categories: ["crm"],
-    },
+    categories: ['crm'],
+  },
   constants,
   client,
   actions: {},

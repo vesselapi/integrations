@@ -1,6 +1,6 @@
 import { client } from '@/platforms/affinity/client';
-import fullIcon from '@/platforms/affinity/logos/full';
 import boxIcon from '@/platforms/affinity/logos/box';
+import fullIcon from '@/platforms/affinity/logos/full';
 import { auth, platform } from '@/sdk';
 
 export default platform('affinity', {
@@ -10,15 +10,15 @@ export default platform('affinity', {
   display: {
     name: 'Affinity',
     logos: {
-        defaultURI: fullIcon ?? boxIcon,
-        fullURI: fullIcon,
-        boxURI: boxIcon,
+      defaultURI: fullIcon ?? boxIcon,
+      fullURI: fullIcon,
+      boxURI: boxIcon,
     },
     colors: {
-        primary: '#1050d6',
+      primary: '#1050d6',
     },
-    categories: ["crm"],
-    },
+    categories: ['crm'],
+  },
   client,
   constants: {},
   actions: {},
