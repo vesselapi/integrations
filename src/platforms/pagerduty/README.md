@@ -1,7 +1,7 @@
 # Pagerduty
 
 ## Description
-PagerDuty is a software company that provides a real-time incident management platform for businesses. Its platform helps businesses to identify issues and opportunities in real time and bring together the right people to fix problems faster and prevent them in the future.
+PagerDuty is a digital operations management platform that empowers businesses to take real-time action on critical opportunities and incidents. It integrates machine data and human intelligence to improve visibility and agility across organizations, thereby increasing efficiency and reducing costs.
 
 ## Resources
 * [Docs](https://developer.pagerduty.com/api-reference)
