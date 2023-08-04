@@ -1,7 +1,7 @@
 # BambooHR
 
 ## Description
-BambooHR brings a modern approach to hiring, with applicant tracking tools that improve everything from job posting to offer letters.a
+BambooHR is a technology company that specializes in online human resources software. Their services primarily focus on small and medium-sized businesses, offering tools for hiring, onboarding, compensation, and performance management.
 
 ## Resources
 * [Docs](https://documentation.bamboohr.com/docs)
