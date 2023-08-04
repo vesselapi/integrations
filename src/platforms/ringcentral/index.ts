@@ -10,7 +10,8 @@ import extensionsList from './actions/extensions/list';
 import extensionsRingOut from './actions/extensions/ring-out';
 import client from './client';
 import * as constants from './constants';
-import { icon } from './icon';
+import fullIcon from '@/platforms/ringcentral/logos/full';
+import boxIcon from '@/platforms/ringcentral/logos/box';
 import {
   RingcentralAuthAnswers,
   ringcentralUrlsByAccountType,
@@ -41,12 +42,16 @@ export default platform('ringcentral', {
   }),
   display: {
     name: 'Ringcentral',
-    iconURI: icon,
     logos: {
-      defaultURI: icon,
+        defaultURI: fullIcon ?? boxIcon,
+        fullURI: fullIcon,
+        boxURI: boxIcon,
     },
-    categories: ['dialer'],
-  },
+    colors: {
+        primary: '#eb6321',
+    },
+    categories: ["dialer"],
+    },
   constants,
   client,
   actions: {
