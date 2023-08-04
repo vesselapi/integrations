@@ -1,7 +1,7 @@
 # Clickup
 
 ## Description
-ClickUp is one app to replace them all. It's the future of work. More than just task management - ClickUp offers docs, reminders, goals, calendars, and even an inbox.
+ClickUp is a cloud-based productivity platform that provides tools for task management, project management, and team collaboration. It aims to centralize all work-related tasks and documents in one place, improving efficiency and productivity in workspaces.
 
 ## Resources
 * [Docs](https://clickup.com/api/)
