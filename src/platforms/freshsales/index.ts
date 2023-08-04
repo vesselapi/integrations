@@ -1,6 +1,7 @@
 import { auth, platform } from '@/sdk';
 import { client } from './client';
-import { icon } from './icon';
+import fullIcon from '@/platforms/freshsales/logos/full';
+import boxIcon from '@/platforms/freshsales/logos/box';
 
 export default platform('freshsales', {
   auth: auth.apiToken({
@@ -14,12 +15,16 @@ export default platform('freshsales', {
   }),
   display: {
     name: 'Freshsales',
-    iconURI: icon,
     logos: {
-      defaultURI: icon,
+        defaultURI: fullIcon ?? boxIcon,
+        fullURI: fullIcon,
+        boxURI: boxIcon,
     },
-    categories: ['crm'],
-  },
+    colors: {
+        primary: '#e47302',
+    },
+    categories: ["crm"],
+    },
   client,
   constants: {},
   actions: {},
