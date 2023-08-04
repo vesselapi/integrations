@@ -1,7 +1,7 @@
 # Twinfield
 
 ## Description
-Twinfield is a cloud-based accounting software designed for businesses of all sizes to manage their financial operations. It offers features such as invoicing, expense tracking, bank reconciliation, and financial reporting.
+Twinfield is a company that provides online accounting software services, catering to businesses of all sizes. Their cloud-based solutions offer a range of features including invoicing, real-time banking, and financial reporting.
 
 ## Resources
 * [Website](twinfield.com)
