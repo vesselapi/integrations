@@ -1,7 +1,7 @@
 # Xero
 
 ## Description
-Xero is a New Zealand-based software company that develops cloud-based accounting software for small and medium-sized businesses. The platform offers features such as invoicing, bank reconciliation, bookkeeping, and more, enabling businesses to manage their finances efficiently.
+Xero is a cloud-based software company that provides a platform for small to medium-sized businesses to manage their accounting, payroll, bank reconciliation, and bookkeeping. The company's services also include invoicing, expense tracking, inventory management, and purchasing.
 
 ## Resources
 * [Docs](https://developer.xero.com/)
