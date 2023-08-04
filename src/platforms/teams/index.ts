@@ -1,6 +1,7 @@
 import { client } from '@/platforms/microsoft/client';
 import * as constants from '@/platforms/microsoft/constants';
-import { icon } from '@/platforms/teams/icon';
+import fullIcon from '@/platforms/teams/logos/full';
+import boxIcon from '@/platforms/teams/logos/box';
 import { auth, platform } from '@/sdk';
 import { add } from 'date-fns';
 import { z } from 'zod';
@@ -33,12 +34,16 @@ export default platform('teams', {
   }),
   display: {
     name: 'Microsoft Teams',
-    iconURI: icon,
     logos: {
-      defaultURI: icon,
+        defaultURI: fullIcon ?? boxIcon,
+        fullURI: fullIcon,
+        boxURI: boxIcon,
     },
-    categories: ['chat'],
-  },
+    colors: {
+        primary: '#444cb7',
+    },
+    categories: ["chat"],
+    },
   client,
   constants,
   actions: {
