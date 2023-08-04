@@ -1,5 +1,6 @@
 import { client } from '@/platforms/woocommerce/client';
-import { icon } from '@/platforms/woocommerce/icon';
+import fullIcon from '@/platforms/woocommerce/logos/full';
+import boxIcon from '@/platforms/woocommerce/logos/box';
 import { auth, platform } from '@/sdk';
 import * as constants from './constants';
 
@@ -13,12 +14,16 @@ export default platform('woocommerce', {
   }),
   display: {
     name: 'WooCommerce',
-    iconURI: icon,
     logos: {
-      defaultURI: icon,
+        defaultURI: fullIcon ?? boxIcon,
+        fullURI: fullIcon,
+        boxURI: boxIcon,
     },
-    categories: ['commerce'],
-  },
+    colors: {
+        primary: '#7f54b3',
+    },
+    categories: ["commerce"],
+    },
   client,
   constants,
   actions: {},
