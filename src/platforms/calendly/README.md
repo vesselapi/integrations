@@ -1,7 +1,7 @@
 # Calendly
 
 ## Description
-Calendly is the modern scheduling platform that makes “finding time” a breeze. When connecting is easy, your teams can get more done.
+Calendly is a digital platform that offers simple, user-friendly scheduling solutions to reduce administrative tasks related to meeting coordination. It allows individuals and businesses to set preferences, share their availability, and seamlessly schedule appointments, interviews, consultations, and more.
 
 ## Resources
 * [Docs](https://developer.calendly.com/api-docs)
