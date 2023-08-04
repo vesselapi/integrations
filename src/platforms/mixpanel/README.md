@@ -1,5 +1,5 @@
 # Mixpanel
 
 ## Description
-Mixpanel lets you explore data freely, without SQL. Set up your metrics to measure growth and retention. Slice and dice data to uncover trends and see live updates on how people are using your app.
+Mixpanel is a business analytics service company that provides user behavior analytics for websites and mobile applications. It offers tools for tracking user interactions with web and mobile applications and provides insights based on the results.
 
