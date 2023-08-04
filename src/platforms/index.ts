@@ -14,15 +14,18 @@ import bamboohr from '@/platforms/bamboohr';
 import bitbucket from '@/platforms/bitbucket';
 import boldsign from '@/platforms/boldsign';
 import box from '@/platforms/box';
+import brex from '@/platforms/brex';
 import calendly from '@/platforms/calendly';
 import clickup from '@/platforms/clickup';
 import close from '@/platforms/close';
 import confluence from '@/platforms/confluence';
+import contentstack from '@/platforms/contentstack';
 import customerIo from '@/platforms/customer.io';
 import dialpad from '@/platforms/dialpad';
 import dropbox from '@/platforms/dropbox';
 import dynamicsSales from '@/platforms/dynamics-sales';
 import exactOnline from '@/platforms/exact-online';
+import facebook from '@/platforms/facebook';
 import factorial from '@/platforms/factorial';
 import freshbooks from '@/platforms/freshbooks';
 import freshdesk from '@/platforms/freshdesk';
@@ -55,9 +58,12 @@ import netsuite from '@/platforms/netsuite';
 import notion from '@/platforms/notion';
 import oneDrive from '@/platforms/one-drive';
 import outreach from '@/platforms/outreach';
+import pagerduty from '@/platforms/pagerduty';
 import pandadoc from '@/platforms/pandadoc';
 import payfit from '@/platforms/payfit';
 import pipedrive from '@/platforms/pipedrive';
+import qualtrics from '@/platforms/qualtrics';
+import ramp from '@/platforms/ramp';
 import ringcentral from '@/platforms/ringcentral';
 import sage from '@/platforms/sage';
 import salesforce from '@/platforms/salesforce';
@@ -65,10 +71,13 @@ import salesloft from '@/platforms/salesloft';
 import shopify from '@/platforms/shopify';
 import shortcut from '@/platforms/shortcut';
 import slack from '@/platforms/slack';
+import square from '@/platforms/square';
+import surveyMonkey from '@/platforms/surveymonkey';
 import teams from '@/platforms/teams';
 import teamwork from '@/platforms/teamwork';
 import todoist from '@/platforms/todoist';
 import twinfield from '@/platforms/twinfield';
+import typeform from '@/platforms/typeform';
 import waveAccounting from '@/platforms/wave-accounting';
 import woocommerce from '@/platforms/woocommerce';
 import workable from '@/platforms/workable';
@@ -97,15 +106,18 @@ export { default as bamboohr } from '@/platforms/bamboohr';
 export { default as bitbucket } from '@/platforms/bitbucket';
 export { default as boldsign } from '@/platforms/boldsign';
 export { default as box } from '@/platforms/box';
+export { default as brex } from '@/platforms/brex';
 export { default as calendly } from '@/platforms/calendly';
 export { default as clickup } from '@/platforms/clickup';
 export { default as close } from '@/platforms/close';
 export { default as confluence } from '@/platforms/confluence';
+export { default as contentstack } from '@/platforms/contentstack';
 export { default as customerIo } from '@/platforms/customer.io';
 export { default as dialpad, types as dialpadTypes } from '@/platforms/dialpad';
 export { default as dropbox } from '@/platforms/dropbox';
 export { default as dynamicsSales } from '@/platforms/dynamics-sales';
 export { default as exactOnline } from '@/platforms/exact-online';
+export { default as facebook } from '@/platforms/facebook';
 export { default as factorial } from '@/platforms/factorial';
 export { default as freshbooks } from '@/platforms/freshbooks';
 export { default as freshdesk } from '@/platforms/freshdesk';
@@ -142,12 +154,15 @@ export {
   default as outreach,
   types as outreachTypes,
 } from '@/platforms/outreach';
+export { default as pagerduty } from '@/platforms/pagerduty';
 export { default as pandadoc } from '@/platforms/pandadoc';
 export { default as payfit } from '@/platforms/payfit';
 export {
   default as pipedrive,
   types as pipedriveTypes,
 } from '@/platforms/pipedrive';
+export { default as qualtrics } from '@/platforms/qualtrics';
+export { default as ramp } from '@/platforms/ramp';
 export {
   default as ringcentral,
   types as ringcentralTypes,
@@ -163,10 +178,13 @@ export {
 } from '@/platforms/salesloft';
 export { default as shortcut } from '@/platforms/shortcut';
 export { default as slack, types as slackTypes } from '@/platforms/slack';
+export { default as square } from '@/platforms/square';
+export { default as surveyMonkey } from '@/platforms/surveymonkey';
 export { default as teams, types as teamsTypes } from '@/platforms/teams';
 export { default as teamwork } from '@/platforms/teamwork';
 export { default as todoist } from '@/platforms/todoist';
 export { default as twinfield } from '@/platforms/twinfield';
+export { default as typeform } from '@/platforms/typeform';
 export { default as waveAccounting } from '@/platforms/wave-accounting';
 export { default as workable } from '@/platforms/workable';
 export { default as xero } from '@/platforms/xero';
@@ -181,6 +199,15 @@ export { default as mixpanel } from './mixpanel';
 export { default as stripe } from './stripe';
 
 export const integrationsList: Platform<any, any, any, any, any, any>[] = [
+  brex,
+  contentstack,
+  facebook,
+  pagerduty,
+  qualtrics,
+  ramp,
+  square,
+  surveyMonkey,
+  typeform,
   miro,
   mural,
   pandadoc,
