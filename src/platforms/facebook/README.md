@@ -1,7 +1,7 @@
 # Facebook
 
 ## Description
-Facebook is a global social networking platform that allows users to create profiles, share photos and videos, send messages, and keep in touch with friends, family, and colleagues. The company, founded by Mark Zuckerberg in 2004, also provides other services and platforms including Instagram, WhatsApp, and Oculus VR.
+Facebook is a social networking service that allows users to connect with friends, family, and other individuals worldwide by sharing status updates, photos, and other types of content. The platform also provides various features such as groups, marketplace, and virtual reality environments, enhancing online communication and interaction.
 
 ## Resources
 * [Docs](https://developers.facebook.com/docs/)
