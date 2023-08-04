@@ -1,8 +1,7 @@
 # Square
 
 ## Description
-
-Square, also known as Square, Inc., is a financial services and digital payments company that provides a variety of business solutions, including point-of-sale systems, online payments, and financial tools. The company's products are designed to help businesses of all sizes manage their operations, from accepting credit cards and tracking sales and inventory to real-time analytics and invoicing.
+Square, Inc. is a financial services and mobile payment company that offers a variety of business software, payment hardware products, and small business services. The company's key offering is a credit card reader that enables transactions on mobile devices.
 
 ## Resources
 
