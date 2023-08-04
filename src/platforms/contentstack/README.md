@@ -1,7 +1,8 @@
 # Contentstack
 
 ## Description
-Contentstack is a headless content management system (CMS) that provides businesses with the ability to create, manage, and distribute content across multiple digital channels. It offers features such as content modeling, real-time editing, and multi-channel publishing, enabling businesses to deliver personalized content experiences to their audience.
+
+Contentstack is a technology company that provides a headless content management system, enabling businesses to deliver digital content across any channel or device. Their platform helps organizations to manage and publish content for web-based applications, mobile apps, and other digital experiences.
 
 ## Resources
 * [Docs](https://www.contentstack.com/docs)
