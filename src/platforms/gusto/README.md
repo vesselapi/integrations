@@ -1,7 +1,7 @@
 # Gusto
 
 ## Description
-Serving 200,000+ new and growing businesses with modern payroll, benefits, and HR tools.
+Gusto is a cloud-based platform that provides extensive tools for businesses to manage payroll, benefits, and human resources. It aims to streamline and simplify these processes, making it easier for companies to handle administrative tasks and compliance.
 
 ## Resources
 * [Docs](https://docs.gusto.com/)
