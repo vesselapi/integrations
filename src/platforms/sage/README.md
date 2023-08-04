@@ -1,8 +1,7 @@
 # Sage
 
 ## Description
-
-Sage is a popular accounting software that offers comprehensive financial management solutions for businesses of all sizes. It streamlines bookkeeping, invoicing, payroll, and reporting processes, empowering users to make informed decisions and maintain financial clarity.
+Sage is a technology company that specializes in creating business management software and services for businesses of all sizes. Their product portfolio includes solutions for accounting, payroll, customer relationship management (CRM), and human resource management.
 
 ## Resources
 
