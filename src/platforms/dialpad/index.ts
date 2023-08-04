@@ -10,7 +10,8 @@ import usersFind from './actions/users/find';
 import usersList from './actions/users/list';
 import client from './client';
 import * as constants from './constants';
-import { icon } from './icon';
+import fullIcon from '@/platforms/dialpad/logos/full';
+import boxIcon from '@/platforms/dialpad/logos/box';
 import { DialpadAuthAnswers, dialpadUrlsByAccountType } from './schemas';
 
 const accountTypeQuestion: SelectAuthQuestion = {
@@ -41,12 +42,16 @@ export default platform('dialpad', {
   ],
   display: {
     name: 'Dialpad',
-    iconURI: icon,
     logos: {
-      defaultURI: icon,
+        defaultURI: fullIcon ?? boxIcon,
+        fullURI: fullIcon,
+        boxURI: boxIcon,
     },
-    categories: ['dialer'],
-  },
+    colors: {
+        primary: '#314fff',
+    },
+    categories: ["dialer"],
+    },
   constants,
   client,
   actions: {
