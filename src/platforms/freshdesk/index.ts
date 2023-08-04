@@ -1,6 +1,7 @@
 import { auth, platform } from '@/sdk';
 import { client } from './client';
-import { icon } from './icon';
+import fullIcon from '@/platforms/freshdesk/logos/full';
+import boxIcon from '@/platforms/freshdesk/logos/box';
 
 export default platform('freshdesk', {
   auth: auth.basic({
@@ -15,12 +16,16 @@ export default platform('freshdesk', {
   }),
   display: {
     name: 'Freshdesk',
-    iconURI: icon,
     logos: {
-      defaultURI: icon,
+        defaultURI: fullIcon ?? boxIcon,
+        fullURI: fullIcon,
+        boxURI: boxIcon,
     },
-    categories: ['crm'],
-  },
+    colors: {
+        primary: '#d82b00',
+    },
+    categories: ["crm"],
+    },
   client,
   constants: {},
   actions: {},
