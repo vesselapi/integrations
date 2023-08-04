@@ -1,7 +1,7 @@
 # GSheet
 
 ## Description
-GSheet, also known as Google Sheets, is a web-based spreadsheet program offered by Google within its Google Drive service. It allows users to create, edit, and collaborate on spreadsheets online while also providing real-time updates and the ability to share with multiple users.
+Google Sheets is a cloud-based spreadsheet program that allows users to create, edit, and share spreadsheets online. It supports real-time collaboration, features charting tools, pivot tables, and a variety of data analysis functions.
 
 ## Resources
 * [Docs](https://developers.google.com/sheets/api/reference/rest)
