@@ -1,7 +1,7 @@
 # Payfit
 
 ## Description
-Payfit is a cloud-based payroll and HR management solution designed to simplify and automate payroll processes for small to medium-sized businesses. It offers features such as employee onboarding, time tracking, expense management, and provides a self-service portal for employees.
+Payfit is a cloud-based payroll management and HR software provider that simplifies and automates payroll and HR processes for small and medium-sized businesses. The company offers a range of services including payroll management, leave and absence tracking, expense management, and employee onboarding.
 
 ## Resources
 * [Docs](https://developers.payfit.io/)
