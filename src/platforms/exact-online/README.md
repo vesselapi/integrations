@@ -1,8 +1,7 @@
 # Exact Online
 
 ## Description
-
-Numbers are the key to any business. Having the right numbers allows you to manage costs, improve efficiency and grow. More than 675,000 businesses and accountants are already using our innovative cloud-based software to manage their numbers. Come on in and see what Exact can do for you.
+Exact Online is a cloud-based software provider that offers business solutions in areas such as accounting, ERP, HRM, CRM, and industry-specific solutions. It caters to small and medium-sized businesses, helping them streamline their processes and improve efficiency.
 
 ## Resources
 
