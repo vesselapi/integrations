@@ -2,7 +2,7 @@
 
 ## Description
 
-More than an applicant tracking system, Workable's talent acquisition software helps teams find candidates, evaluate applicants and make the right hire, faster.
+Workable is a cloud-based recruitment platform designed to help businesses streamline their hiring process. It provides tools for job posting, candidate tracking, team collaboration, and reporting, simplifying recruitment tasks and improving hiring efficiency.
 
 ## Resources
 

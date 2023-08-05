@@ -2,7 +2,7 @@
 
 ## Description
 
-Mural is a digital workspace for visual collaboration, enabling teams to brainstorm, plan, and design projects together in real-time. It offers tools for drawing, writing, and adding sticky notes, images, and other digital content on a shared virtual whiteboard.
+Mural is a digital workspace designed to enhance visual collaboration among teams. The platform offers tools for brainstorming, planning, designing and managing projects, facilitating remote and distributed team engagement.
 
 ## Resources
 

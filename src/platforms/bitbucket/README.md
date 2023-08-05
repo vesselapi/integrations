@@ -2,7 +2,7 @@
 
 ## Description
 
-Bitbucket Cloud is a Git-based code and CI/CD tool optimized for teams using Jira.
+Bitbucket is a web-based platform that provides Git code management for professional teams, enabling them to collaborate on code in real time. The platform also offers features like pull requests, advanced file management, and issue tracking to streamline and optimize the software development process.
 
 ## Resources
 

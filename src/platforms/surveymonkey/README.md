@@ -2,7 +2,7 @@
 
 ## Description
 
-SurveyMonkey is a global online survey development company that provides free, customizable survey and questionnaire tools. It offers data analysis, sample selection, bias elimination, and data representation tools to individuals, companies, and organizations for gathering and interpreting data.
+SurveyMonkey is an online service that enables customizable survey creation, distribution, and analysis. It serves a wide range of sectors, including education, business, and health, providing tools for market research, customer satisfaction, and employee engagement surveys.
 
 ## Resources
 

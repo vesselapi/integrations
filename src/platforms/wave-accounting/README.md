@@ -2,7 +2,7 @@
 
 ## Description
 
-Wave Accounting is a free, cloud-based accounting software designed specifically for small businesses, freelancers, and consultants. It offers features such as invoicing, receipt scanning, and direct bank data imports, making it easier to manage and track income and expenses.
+Wave Accounting is a software company that provides a suite of financial services and online software for small businesses. Their offerings include tools for invoicing, accounting, payroll, payments processing, and personal finance.
 
 ## Resources
 

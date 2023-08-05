@@ -2,7 +2,7 @@
 
 ## Description
 
-PandaDoc is a digital document automation software that allows businesses to create, send, track, and eSign documents. It streamlines the process of document approval and signing, enhancing efficiency and productivity.
+PandaDoc is a software company that specializes in automating the process of creating, approving, and eSigning proposals, quotes, and contracts. The platform also provides capabilities to track document analytics, collaboration tools, and CRM integrations.
 
 ## Resources
 

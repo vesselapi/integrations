@@ -2,7 +2,7 @@
 
 ## Description
 
-Typeform is a technology company that specializes in online form building and online surveys. Its main software creates dynamic forms based on user interaction, making it easier for businesses to collect data and engage with their customers.
+Typeform is a technology company that specializes in online form building and surveys. It provides an interactive platform that allows businesses and organizations to create customizable and engaging forms for data collection and customer engagement.
 
 ## Resources
 

@@ -2,7 +2,7 @@
 
 ## Description
 
-The best cloud based small business accounting software. Send invoices, track time, manage receipts, expenses, and accept credit cards.
+Freshbooks is a cloud-based accounting software designed to assist small businesses and self-employed professionals with their invoicing and billing needs. The platform provides features such as expense tracking, time tracking, and financial reporting to streamline financial management tasks.
 
 ## Resources
 

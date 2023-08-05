@@ -2,7 +2,7 @@
 
 ## Description
 
-Miro is a collaborative online whiteboard platform designed to facilitate team work and brainstorming sessions. It offers tools for drawing, writing, sticky notes, and importing images or documents, making it ideal for project planning, user experience research, agile processes, and design.
+Miro is a digital platform that provides an interactive online whiteboard for collaboration and brainstorming. It offers tools for team ideation, visual project management, agile workflows, and design thinking.
 
 ## Resources
 

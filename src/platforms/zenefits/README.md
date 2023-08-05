@@ -2,7 +2,7 @@
 
 ## Description
 
-Zenefits is a cloud-based software platform designed to assist small and mid-sized businesses with human resources, payroll, benefits, and time and schedule management. It provides a comprehensive suite of tools to streamline administrative processes, maintain compliance, and maximize employee engagement.
+Zenefits is a cloud-based software company that provides a platform for businesses to manage their human resources. The company offers services for employee benefits, payroll, time tracking, compliance, and more.
 
 ## Resources
 

@@ -2,7 +2,7 @@
 
 ## Description
 
-We are are a global leader in data-driven investment management solutions delivering products and services to optimize efficiency and control.
+Confluence is a technology firm that offers innovative solutions for data management, automation, and regulatory reporting to the global investment industry. It aims to streamline and simplify operations management, allowing businesses to focus on their core activities.
 
 ## Resources
 

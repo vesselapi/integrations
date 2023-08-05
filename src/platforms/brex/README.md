@@ -2,7 +2,7 @@
 
 ## Description
 
-Brex is a fintech company that provides corporate credit cards and cash management accounts for startups and other businesses. The company's products are designed to help businesses manage and track their expenses more efficiently.
+Brex is a technology company that provides business credit cards and cash management accounts to technology companies, startups, and other businesses. Their products are designed to simplify and automate expense management and budgeting processes.
 
 ## Resources
 

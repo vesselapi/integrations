@@ -2,7 +2,7 @@
 
 ## Description
 
-Ramp is a fintech company that provides corporate cards and spend management solutions for businesses. It offers a platform that helps companies save money, simplify expense management, and gain better visibility into their spending.
+Ramp is a technology company that provides a corporate card designed to help businesses save money. It offers features such as automated expense management and real-time reporting to provide insights on company spend and opportunities for savings.
 
 ## Resources
 
