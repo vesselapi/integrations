@@ -19,7 +19,8 @@ import findUser from '@/platforms/outreach/actions/users/find';
 import listUsers from '@/platforms/outreach/actions/users/list';
 import { client } from '@/platforms/outreach/client';
 import * as constants from '@/platforms/outreach/constants';
-import { icon } from '@/platforms/outreach/icon';
+import boxIcon from '@/platforms/outreach/logos/box';
+import fullIcon from '@/platforms/outreach/logos/full';
 import listTags from './actions/tags/list';
 
 export * as types from './schemas';
@@ -33,9 +34,13 @@ export default platform('outreach', {
   }),
   display: {
     name: 'Outreach',
-    iconURI: icon,
     logos: {
-      defaultURI: icon,
+      defaultURI: fullIcon ?? boxIcon,
+      fullURI: fullIcon,
+      boxURI: boxIcon,
+    },
+    colors: {
+      primary: '#5951ff',
     },
     categories: ['engagement'],
   },
