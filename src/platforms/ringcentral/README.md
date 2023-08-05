@@ -1,15 +1,9 @@
-# About
+# Ringcentral
 
-Ringcentral provides an integrated, easy to use, cloud-based phone solution.
+## Description
 
-## References
+RingCentral is a leading provider of global enterprise cloud communications and collaboration solutions, offering a comprehensive suite of services including voice, video conferencing, team messaging, and contact center solutions. It empowers modern workplaces with seamless, reliable, and secure communication tools for effective business connectivity and collaboration.
 
-- API: https://developers.ringcentral.com/guide/voice
-- Rate Limits: https://developers.ringcentral.com/guide/basics/rate-limits
+## Resources
 
-## Call-outs
-
-- What other dialers refer to as "Users", Ringcentral refers to them as "Extensions".
-- Ringcentral doesn't have created or modified timestamps for objects
-- Most endpoint require an `accountId` and `extensionId` path parameter, however, they can be replaced by `~` to refer to the currently authorized account and user.
-- Scopes can only be defined at the OAuth app level. That means when creating an OAuth app, you must specify your scopes then and there, and those values will be used for each new connection. Passing the scopes parameter through the oauth callback will be ignored.
+- [Website](ringcentral.com)

@@ -1,13 +1,9 @@
-# About
+# Aircall
 
-Aircall provides an integrated, easy to use, cloud-based phone solution.
+## Description
 
-## References
+Aircall is a cloud-based phone system and call center software solution that seamlessly integrates with popular productivity and helpdesk tools. It's designed to enable teams to have meaningful and efficient phone conversations with their customers.
 
-- API: https://developer.aircall.io/api-references/#authentication
-- Rate Limits: https://developer.aircall.io/api-references/#rate-limiting
+## Resources
 
-## Call-outs
-
-- Auth: integrations are enabled at the Company level, which means they can only be set by an Admin user.
-- Calls and Contacts are limited to 10,000 items, even with pagination on.
+- [Website](aircall.io)

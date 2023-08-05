@@ -1,11 +1,9 @@
-# About
+# Mailchimp
 
-Mailchimp allows you to manage email campaigns.
+## Description
 
-## References
+Mailchimp is a leading all-in-one marketing platform that provides tools for email marketing, ads, landing pages, and CRM to help businesses grow on their terms. It's designed to empower small businesses to market smarter so they can grow faster.
 
-- API: https://mailchimp.com/developer/marketing/api/
+## Resources
 
-## Call-outs
-
-- Creating a Member sends an email on behalf of the list contact. The member will not show up on the list until they have opted in.
+- [Website](mailchimp.com)

@@ -1,8 +1,9 @@
-# About
+# Dialpad
 
-Dialpad provides an integrated, easy to use, cloud-based phone solution.
+## Description
 
-## References
+Dialpad is a cloud-based communication platform that provides businesses with a unified system for voice, video, messaging, and meetings, enhancing team collaboration and customer engagement. It's designed to integrate seamlessly with other popular business tools, making communication more efficient and streamlined.
 
-- API: https://developers.dialpad.com/reference/download-api-collection
-- Rate Limits: https://developers.dialpad.com/docs/rate-limits
+## Resources
+
+- [Website](dialpad.com)

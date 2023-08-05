@@ -1,8 +1,9 @@
-# About
+# monday.com
 
-Monday.com is a Work OS that provides you with all of the no-code building blocks so you can shape your workflows, your way.
+## Description
 
-## References
+Monday.com is a versatile project management tool that enables teams to plan, track, and collaborate on projects in a single, visual, and intuitive workspace. It's designed to simplify complex workflows and improve productivity across various team sizes and industries.
 
-- API: https://developer.monday.com/api-reference/docs/basics
-- Rate Limits: https://developer.monday.com/api-reference/docs/rate-limits
+## Resources
+
+- [Website](monday.com)
