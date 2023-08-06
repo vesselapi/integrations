@@ -17,6 +17,11 @@ const requiredFields = {
 // -
 // SObjects
 // -
+export const isSalesforceSupportedObjectType = (
+  value: unknown,
+): value is SalesforceSupportedObjectType =>
+  SALESFORCE_SUPPORTED_OBJECT_TYPE.includes(value as any);
+
 export const salesforceSupportedObjectType = z.enum(
   SALESFORCE_SUPPORTED_OBJECT_TYPE,
 );
@@ -68,6 +73,9 @@ export const salesforceField = z.object({
 
 export const salesforceDescribeResponse = z.object({
   fields: z.array(salesforceField),
+  createable: z.boolean(),
+  updateable: z.boolean(),
+  retrieveable: z.boolean(),
 });
 
 // -
@@ -84,6 +92,15 @@ export const salesforceQueryResponse = z.object({
   records: z.array(salesforceQueryRecord),
   totalSize: z.number(),
 });
+
+// -
+// Permissions
+// -
+export const salesforceUserPermissions = z
+  .object({
+    permissionsApiEnabled: z.boolean().nullable(),
+  })
+  .partial();
 
 // -
 // Jobs
@@ -988,6 +1005,9 @@ export const salesforceOAuthUrlsByAccountType: Record<
 export type SalesforceSupportedObjectType =
   (typeof SALESFORCE_SUPPORTED_OBJECT_TYPE)[number];
 export type SalesforceSObject = z.infer<typeof salesforceSObject>;
+export type SalesforceUserPermissions = z.infer<
+  typeof salesforceUserPermissions
+>;
 export type SalesforceField = z.infer<typeof salesforceField>;
 export type SalesforceQueryRecord = z.infer<typeof salesforceQueryRecord>;
 export type SalesforceUser = z.infer<typeof salesforceUser>;

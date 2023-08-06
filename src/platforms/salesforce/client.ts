@@ -67,6 +67,7 @@ import {
   salesforceTaskRelationalSelect,
   SalesforceTaskUpdate,
   salesforceUser,
+  salesforceUserPermissions,
 } from './schemas';
 
 const request = makeRequestFactory(async (auth, options) => {
@@ -246,6 +247,17 @@ export const client = {
       schema: salesforceConnectOrganizationResponse,
     })),
   },
+  userPermissions: request(({}) => ({
+    url: `/query/`,
+    method: 'GET',
+    query: {
+      q: formatQuery(`SELECT FIELDS(ALL) FROM UserPermissionAccess LIMIT 1`),
+    },
+    schema: z.object({
+      records: z.array(salesforceUserPermissions),
+      totalSize: z.number(),
+    }),
+  })),
   query: request(({ query }: { query: string }) => ({
     url: `/query/`,
     method: 'GET',

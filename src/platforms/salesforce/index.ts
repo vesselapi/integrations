@@ -2,6 +2,7 @@ import { client } from '@/platforms/salesforce/client';
 import * as constants from '@/platforms/salesforce/constants';
 import boxIcon from '@/platforms/salesforce/logos/box';
 import fullIcon from '@/platforms/salesforce/logos/full';
+import { permissions } from '@/platforms/salesforce/permissions';
 import { auth, platform } from '@/sdk';
 import {
   SalesforceAccountType,
@@ -67,6 +68,7 @@ export default platform('salesforce', {
     categories: ['crm'],
   },
   client,
+  permissions,
   constants,
   actions: {
     query,
