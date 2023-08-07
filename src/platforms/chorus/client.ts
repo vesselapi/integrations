@@ -6,7 +6,7 @@ const request = makeRequestFactory(async (auth, options) => {
     url: formatUrl(`https://chorus.ai/api`, options.url),
     headers: {
       ...options.headers,
-      
+      Authorization: `${await auth.getToken()}`,
     },
   };
 });
