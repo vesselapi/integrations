@@ -16,6 +16,7 @@ import boldsign from '@/platforms/boldsign';
 import box from '@/platforms/box';
 import brex from '@/platforms/brex';
 import calendly from '@/platforms/calendly';
+import chorus from '@/platforms/chorus';
 import clickup from '@/platforms/clickup';
 import close from '@/platforms/close';
 import confluence from '@/platforms/confluence';
@@ -108,6 +109,7 @@ export { default as boldsign } from '@/platforms/boldsign';
 export { default as box } from '@/platforms/box';
 export { default as brex } from '@/platforms/brex';
 export { default as calendly } from '@/platforms/calendly';
+export { default as chorus } from '@/platforms/chorus';
 export { default as clickup } from '@/platforms/clickup';
 export { default as close } from '@/platforms/close';
 export { default as confluence } from '@/platforms/confluence';
@@ -199,6 +201,7 @@ export { default as mixpanel } from './mixpanel';
 export { default as stripe } from './stripe';
 
 export const integrationsList: Platform<any, any, any, any, any, any>[] = [
+  chorus,
   brex,
   contentstack,
   facebook,
