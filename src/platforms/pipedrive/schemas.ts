@@ -17,6 +17,7 @@ export type BatchReadObjectInput = {
 } & ListObjectInput;
 export type SearchObjectInput = {
   term: string;
+  fields?: string[];
   exact_match: 0 | 1;
 } & ListObjectInput;
 export type FindOutput<T> = {

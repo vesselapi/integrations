@@ -72,13 +72,13 @@ const makeClient = () => {
     module: PipedriveModule,
     schema: z.ZodSchema,
   ): requestFunctionType<ListObjectInput, ListOutput<TOutput>> =>
-    request(({ start, limit = PIPEDRIVE_MAX_PAGE_SIZE }: ListObjectInput) => ({
+    request(({ start, limit }: ListObjectInput) => ({
       url: `/${API_VERSION}/${module}`,
       method: 'GET',
-      query: shake({
-        start,
-        limit,
-      }),
+      query: {
+        start: `${start ?? 0}`,
+        limit: `${limit ?? PIPEDRIVE_MAX_PAGE_SIZE}`,
+      },
       schema: listResponseSchema(schema),
     }));
 
@@ -126,8 +126,8 @@ const makeClient = () => {
         query: {
           term: `id:${ids.join(',')}`,
           exact_match: `${1}`,
-          start: `${start}`,
-          limit: `${limit}`,
+          start: `${start ?? 0}`,
+          limit: `${limit ?? PIPEDRIVE_MAX_PAGE_SIZE}`,
         },
         schema: searchResponseSchema(schema),
       }),
@@ -140,18 +140,20 @@ const makeClient = () => {
     request(
       ({
         term,
+        fields,
         exact_match,
         start,
         limit = PIPEDRIVE_MAX_PAGE_SIZE,
       }: SearchObjectInput) => ({
         url: `/${API_VERSION}/${module}/search`,
         method: 'GET',
-        query: {
+        query: shake({
           term: term,
+          fields: fields?.join(','),
           exact_match: `${exact_match}`,
-          start: `${start}`,
-          limit: `${limit}`,
-        },
+          start: `${start ?? 0}`,
+          limit: `${limit ?? PIPEDRIVE_MAX_PAGE_SIZE}`,
+        }),
         schema: searchResponseSchema(schema),
       }),
     );
