@@ -103,6 +103,17 @@ export type ApolloContactCreate = z.infer<typeof apolloContactCreate>;
 
 export type ApolloContactUpdate = z.infer<typeof apolloContactUpdate>;
 
+export const apolloContactDeployability = z.object({
+  num_active_in_other_campaigns: z.number().nullish(),
+  num_finished_in_other_campaigns: z.number().nullish(),
+  num_no_email: z.number().nullish(),
+  num_same_company: z.number().nullish(),
+  num_total_dangerous_contacts: z.number().nullish(),
+  num_with_job_change_contacts: z.number().nullish(),
+  num_without_ownership_permission: z.number().nullish(),
+  show_warning: z.boolean().nullish(),
+});
+
 export const apolloLabel = z.object({
   id: z.string(),
   name: z.string(),
