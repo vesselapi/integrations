@@ -86,6 +86,7 @@ import zendesk from '@/platforms/zendesk';
 import zenefits from '@/platforms/zenefits';
 import zoho from '@/platforms/zoho';
 import zoom from '@/platforms/zoom';
+import chorus from '@/platforms/chorus';
 import { Platform } from '@/sdk';
 import stripe from './stripe';
 
@@ -197,8 +198,10 @@ export { default as ashby } from './ashby';
 export { default as gong } from './gong';
 export { default as mixpanel } from './mixpanel';
 export { default as stripe } from './stripe';
+export { default as chorus } from '@/platforms/chorus';
 
 export const integrationsList: Platform<any, any, any, any, any, any>[] = [
+  chorus,
   brex,
   contentstack,
   facebook,
