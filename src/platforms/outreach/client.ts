@@ -279,15 +279,15 @@ export const client = {
           name: string;
           sequenceType: 'date' | 'interval';
           shareType: 'private' | 'read_only' | 'shared';
-          $native?: Record<string, unknown>;
         };
+        $native?: Record<string, unknown>;
       }) => ({
         url: `/sequences`,
         method: 'POST',
         json: {
           data: {
             type: 'sequence',
-            attributes: formatUpsertInputWithNative(sequence.attributes),
+            ...formatUpsertInputWithNative(sequence),
           },
         },
         schema: z.object({
