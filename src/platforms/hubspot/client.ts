@@ -51,6 +51,7 @@ import {
   HubspotMeetingCreate,
   hubspotMeetingSchema,
   HubspotMeetingUpdate,
+  hubspotMeOutputSchema,
   HubspotModule,
   HubspotNote,
   HubspotNoteCreate,
@@ -447,6 +448,11 @@ const makeClient = () => {
       url: `/oauth/v1/access-tokens/${await auth.getToken()}`,
       method: 'GET',
       schema: hubspotAccessTokenOutputSchema,
+    })),
+    me: request(({}) => ({
+      url: `/integrations/v1/me`,
+      method: 'GET',
+      schema: hubspotMeOutputSchema,
     })),
     passthrough: request.passthrough(),
   };
