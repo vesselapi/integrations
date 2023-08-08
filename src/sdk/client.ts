@@ -2,6 +2,7 @@ import { IntegrationError } from '@/sdk/error';
 import { Auth, ClientResult, HttpsUrl } from '@/sdk/types';
 import axios, { AxiosError } from 'axios';
 import {
+  assign,
   guard,
   isArray,
   isFunction,
@@ -27,10 +28,14 @@ export const formatUpsertInputWithNative = <
 >(
   input: T,
 ): Omit<T, '$native'> => {
+  // Take keys from $native that overlap with the input and assign them to the input, recursively
+  const assigned = assign(omit(input, ['$native']), input.$native ?? {});
+
+  // Spread $native first so that the assigned (merged) values take precedence
   return {
-    ...omit(input, ['$native']),
-    ...(input.$native ?? {}),
-  };
+    ...input.$native,
+    ...assigned,
+  } as Omit<T, '$native'>;
 };
 
 export type FetchOptions<TQueryString extends qs.Any = qs.Any> =
