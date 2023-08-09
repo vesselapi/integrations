@@ -214,6 +214,7 @@ const dealPropertiesSchema = z.object({
     )
     .nullable(),
   dealstage: z.string().nullable(),
+  deal_currency_code: z.string().nullable().optional(),
   hs_deal_stage_probability: z.union([z.string(), z.number()]).nullable(),
   hs_projected_amount: z.union([z.string(), z.number()]).nullable(),
   hs_is_closed_won: hubspotBooleanSchema.nullable(),
@@ -715,3 +716,11 @@ export const hubspotAccessTokenOutputSchema = z.object({
 export type HubspotAccessTokenOutputSchema = z.infer<
   typeof hubspotAccessTokenOutputSchema
 >;
+
+export const hubspotMeOutputSchema = z.object({
+  portalId: hubspotIdSchema.nullable(),
+  timeZone: z.string().nullable(),
+  currency: z.string().nullable(),
+  utcOffsetMilliseconds: z.number().nullable(),
+  utcOffset: z.string().nullable(),
+});

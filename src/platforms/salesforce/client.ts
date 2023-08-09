@@ -10,6 +10,7 @@ import {
   salesforceAccountCreateResponse,
   salesforceAccountRelationalSelect,
   SalesforceAccountUpdate,
+  salesforceConnectOrganizationResponse,
   salesforceContact,
   SalesforceContactCreate,
   salesforceContactCreateResponse,
@@ -237,6 +238,13 @@ export const client = {
         schema: salesforceDescribeResponse,
       }),
     ),
+  },
+  connect: {
+    organization: request(({}) => ({
+      url: `/connect/organization`,
+      method: 'GET',
+      schema: salesforceConnectOrganizationResponse,
+    })),
   },
   query: request(({ query }: { query: string }) => ({
     url: `/query/`,
