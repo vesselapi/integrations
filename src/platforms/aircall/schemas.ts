@@ -90,7 +90,7 @@ export type AircallContactUpdate = {
   $native?: Record<string, unknown>;
 };
 
-const aircallNumber = z.object({
+export const aircallNumber = z.object({
   id: z.number(),
   name: z.string().nullable(),
   digits: z.string().nullable(),
@@ -124,3 +124,50 @@ export const aircallCall = z.object({
 });
 
 export type AircallCall = z.infer<typeof aircallCall>;
+
+export const aircallWebhook = z.object({
+  webhook_id: z.string(),
+  direct_link: z.string(),
+  created_at: z.string(),
+  url: z.string(),
+  active: z.boolean(),
+  events: z.array(z.string()),
+  token: z.string(),
+});
+
+export type AircallWebhook = z.infer<typeof aircallWebhook>;
+
+export type AircallResource = 'user' | 'number' | 'call' | 'contact';
+
+export type AircallWebhookEvent =
+  | 'user.created'
+  | 'user.deleted'
+  | 'user.connected'
+  | 'user.disconnected'
+  | 'user.opened'
+  | 'user.closed'
+  | 'user.wut_start'
+  | 'user.wut_end'
+  | 'number.created'
+  | 'number.deleted'
+  | 'number.opened'
+  | 'number.closed'
+  | 'call.created'
+  | 'call.ringing_on_agent'
+  | 'call.agent_declined'
+  | 'call.answered'
+  | 'call.transferred'
+  | 'call.unsuccessful_transfer'
+  | 'call.hungup'
+  | 'call.ended'
+  | 'call.voicemail_left'
+  | 'call.assigned'
+  | 'call.archived'
+  | 'call.tagged'
+  | 'call.untagged'
+  | 'call.commented'
+  | 'call.hold'
+  | 'call.unhold'
+  | 'contact.created'
+  | 'contact.updated'
+  | 'contact.deleted';
