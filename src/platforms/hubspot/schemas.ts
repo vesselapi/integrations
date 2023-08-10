@@ -470,7 +470,7 @@ const callPropertiesSchema = z.object({
   hs_timestamp: custom.date().nullable(),
   hs_call_body: z.string().nullable(),
   hs_call_title: z.string().nullable(),
-  hs_call_recording_url: z.string().url().nullable(),
+  hs_call_recording_url: z.string().nullable(),
   hubspot_owner_id: hubspotIdSchema.nullable(),
 });
 export const callProperties = Object.keys(callPropertiesSchema.shape);
