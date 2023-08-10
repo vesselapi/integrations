@@ -28,6 +28,8 @@ export const formatUpsertInputWithNative = <
 >(
   input: T,
 ): Omit<T, '$native'> => {
+  if (!input.$native) return input;
+
   // Take keys from $native that overlap with the input and assign them to the input, recursively
   const assigned = assign(omit(input, ['$native']), input.$native ?? {});
 
