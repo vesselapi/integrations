@@ -1,9 +1,10 @@
 import { auth, platform } from '@/sdk';
 import { isArray, isObject } from 'radash';
 
+import boxIcon from '@/platforms/hubspot/logos/box';
+import fullIcon from '@/platforms/hubspot/logos/full';
 import client from './client';
 import * as constants from './constants';
-import { icon } from './icon';
 export * as types from './schemas';
 
 import associationsCreate from '@/platforms/hubspot/actions/associations/create';
@@ -79,7 +80,18 @@ export default platform('hubspot', {
     },
     default: true,
   }),
-  display: { name: 'HubSpot', iconURI: icon, categories: ['crm'] },
+  display: {
+    name: 'HubSpot',
+    logos: {
+      defaultURI: fullIcon ?? boxIcon,
+      fullURI: fullIcon,
+      boxURI: boxIcon,
+    },
+    colors: {
+      primary: '#ff7a59',
+    },
+    categories: ['crm'],
+  },
   constants,
   client,
   actions: {

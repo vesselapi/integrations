@@ -1,7 +1,8 @@
+import boxIcon from '@/platforms/apollo/logos/box';
+import fullIcon from '@/platforms/apollo/logos/full';
 import { auth, platform } from '../../sdk';
 import { client } from './client';
 import * as constants from './constants';
-import { icon } from './icon';
 
 import createAccount from './actions/accounts/create';
 import searchAccounts from './actions/accounts/search';
@@ -54,7 +55,14 @@ export default platform('apollo', {
   ],
   display: {
     name: 'Apollo',
-    iconURI: icon,
+    logos: {
+      defaultURI: fullIcon ?? boxIcon,
+      fullURI: fullIcon,
+      boxURI: boxIcon,
+    },
+    colors: {
+      primary: '#FFC127',
+    },
     categories: ['engagement'],
   },
   constants,

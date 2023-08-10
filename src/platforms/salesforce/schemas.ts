@@ -25,6 +25,19 @@ export const salesforceSObject = z.object({
 });
 
 // -
+// Connect Organization
+// -
+export const salesforceConnectOrganizationResponse = z
+  .object({
+    features: z
+      .object({
+        defaultCurrencyIsoCode: z.string().nullable(),
+      })
+      .partial(),
+  })
+  .partial();
+
+// -
 // SObject Describe
 //  -
 export type SalesforceFieldType = (typeof SALESFORCE_FIELD_TYPES)[number];
@@ -35,6 +48,11 @@ export const salesforceField = z.object({
   custom: z.boolean(),
   createable: z.boolean(),
   updateable: z.boolean(),
+  defaultValue: z
+    .object({
+      value: z.string().nullish(),
+    })
+    .nullish(),
   picklistValues: z
     .array(
       z.object({
@@ -269,6 +287,7 @@ export const salesforceOpportunity = custom.addNativeToZodSchema(
       IsClosed: z.boolean().nullable(),
       ContactId: z.string().nullable(),
       AccountId: z.string().nullable(),
+      CurrencyIsoCode: z.string().nullable(),
       CreatedDate: custom.date(),
       OwnerId: z.string().nullable(),
       LastModifiedDate: custom.date(),

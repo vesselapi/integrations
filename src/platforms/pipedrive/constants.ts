@@ -1,6 +1,6 @@
 export const API_VERSION = 'v1';
 export const BASE_URL = `https://api.pipedrive.com`;
-export const PIPEDRIVE_MAX_PAGE_SIZE = 500;
+export const PIPEDRIVE_MAX_PAGE_SIZE = 100;
 export const PIPEDRIVE_MODULES = [
   'persons',
   'users',

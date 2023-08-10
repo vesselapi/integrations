@@ -1,7 +1,8 @@
+import boxIcon from '@/platforms/dynamics-sales/logos/box';
+import fullIcon from '@/platforms/dynamics-sales/logos/full';
 import { auth, platform, toQueryString } from '@/sdk';
 import { client } from './client';
 import * as constants from './constants';
-import { icon } from './icon';
 
 const authUrl =
   'https://login.microsoftonline.com/common/oauth2/v2.0/authorize';
@@ -31,8 +32,15 @@ export default platform('dynamics-sales', {
     },
   }),
   display: {
-    name: 'Microsoft Dynamics Sales',
-    iconURI: icon,
+    name: 'Dynamics Sales',
+    logos: {
+      defaultURI: fullIcon ?? boxIcon,
+      fullURI: fullIcon,
+      boxURI: boxIcon,
+    },
+    colors: {
+      primary: '#0067b8',
+    },
     categories: ['crm'],
   },
   constants,

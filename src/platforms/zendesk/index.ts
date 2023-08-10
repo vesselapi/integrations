@@ -1,7 +1,8 @@
 import { auth, platform } from '../../sdk';
 
+import boxIcon from '@/platforms/zendesk/logos/box';
+import fullIcon from '@/platforms/zendesk/logos/full';
 import { client } from './client';
-import { icon } from './icon';
 
 export default platform('zendesk', {
   auth: [
@@ -35,7 +36,14 @@ export default platform('zendesk', {
   ],
   display: {
     name: 'Zendesk',
-    iconURI: icon,
+    logos: {
+      defaultURI: fullIcon ?? boxIcon,
+      fullURI: fullIcon,
+      boxURI: boxIcon,
+    },
+    colors: {
+      primary: '#17494D',
+    },
     categories: ['ticketing'],
   },
   client,

@@ -1,6 +1,7 @@
+import boxIcon from '@/platforms/freshsales/logos/box';
+import fullIcon from '@/platforms/freshsales/logos/full';
 import { auth, platform } from '@/sdk';
 import { client } from './client';
-import { icon } from './icon';
 
 export default platform('freshsales', {
   auth: auth.apiToken({
@@ -14,7 +15,14 @@ export default platform('freshsales', {
   }),
   display: {
     name: 'Freshsales',
-    iconURI: icon,
+    logos: {
+      defaultURI: fullIcon ?? boxIcon,
+      fullURI: fullIcon,
+      boxURI: boxIcon,
+    },
+    colors: {
+      primary: '#e47302',
+    },
     categories: ['crm'],
   },
   client,

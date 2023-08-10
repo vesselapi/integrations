@@ -2,7 +2,8 @@ import { auth, platform } from '@/sdk';
 
 import { client } from '@/platforms/salesloft/client';
 import * as constants from '@/platforms/salesloft/constants';
-import { icon } from '@/platforms/salesloft/icon';
+import boxIcon from '@/platforms/salesloft/logos/box';
+import fullIcon from '@/platforms/salesloft/logos/full';
 
 import createCadenceMembership from './actions/cadence-memberships/create';
 
@@ -38,7 +39,14 @@ export default platform('salesloft', {
   ],
   display: {
     name: 'Salesloft',
-    iconURI: icon,
+    logos: {
+      defaultURI: fullIcon ?? boxIcon,
+      fullURI: fullIcon,
+      boxURI: boxIcon,
+    },
+    colors: {
+      primary: '#06492E',
+    },
     categories: ['engagement'],
   },
   client,

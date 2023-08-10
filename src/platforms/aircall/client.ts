@@ -15,6 +15,8 @@ import {
   aircallPagination,
   AircallStartUserCall,
   aircallUser,
+  aircallWebhook,
+  AircallWebhookEvent,
 } from './schemas';
 
 const request = makeRequestFactory(async (auth, options) => {
@@ -143,6 +145,27 @@ export const client = {
         }),
       }),
     ),
+  },
+  webhooks: {
+    create: request(
+      (args: { url: string; name: string; events: AircallWebhookEvent[] }) => ({
+        url: `/webhooks`,
+        method: 'POST',
+        json: {
+          custom_name: args.name,
+          url: args.url,
+          events: args.events,
+        },
+        schema: z.object({
+          webhook: aircallWebhook,
+        }),
+      }),
+    ),
+    delete: request((args: { id: string }) => ({
+      url: `/webhooks/${args.id}`,
+      method: 'DELETE',
+      schema: z.any(),
+    })),
   },
   passthrough: request.passthrough(),
 };

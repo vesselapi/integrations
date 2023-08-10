@@ -1,7 +1,8 @@
+import boxIcon from '@/platforms/pipedrive/logos/box';
+import fullIcon from '@/platforms/pipedrive/logos/full';
 import { auth, platform } from '@/sdk';
 import client from './client';
 import * as constants from './constants';
-import { icon } from './icon';
 
 export * as types from './schemas';
 export default platform('pipedrive', {
@@ -12,7 +13,18 @@ export default platform('pipedrive', {
     isRetryable: async ({ status }) => status === 401,
     default: true,
   }),
-  display: { name: 'Pipedrive', iconURI: icon, categories: ['crm'] },
+  display: {
+    name: 'Pipedrive',
+    logos: {
+      defaultURI: fullIcon ?? boxIcon,
+      fullURI: fullIcon,
+      boxURI: boxIcon,
+    },
+    colors: {
+      primary: '#08a742',
+    },
+    categories: ['crm'],
+  },
   constants,
   client,
   actions: {},

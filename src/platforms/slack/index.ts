@@ -4,7 +4,8 @@ import updateMessage from '@/platforms/slack/actions/messages/update';
 import listUsers from '@/platforms/slack/actions/users/list';
 import { client } from '@/platforms/slack/client';
 import * as constants from '@/platforms/slack/constants';
-import { icon } from '@/platforms/slack/icon';
+import boxIcon from '@/platforms/slack/logos/box';
+import fullIcon from '@/platforms/slack/logos/full';
 import { slackExpiredAuth } from '@/platforms/slack/schemas';
 import { auth, platform } from '@/sdk';
 
@@ -24,7 +25,14 @@ export default platform('slack', {
   }),
   display: {
     name: 'Slack',
-    iconURI: icon,
+    logos: {
+      defaultURI: fullIcon ?? boxIcon,
+      fullURI: fullIcon,
+      boxURI: boxIcon,
+    },
+    colors: {
+      primary: '#611f69',
+    },
     categories: ['chat'],
   },
   client,

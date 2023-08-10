@@ -1,8 +1,9 @@
+import boxIcon from '@/platforms/zoho/logos/box';
+import fullIcon from '@/platforms/zoho/logos/full';
 import { auth, HttpsUrl, platform } from '@/sdk';
 import { z } from 'zod';
 import { client } from './client';
 import * as constants from './constants';
-import { icon } from './icon';
 
 export default platform('zoho', {
   auth: auth.oauth2({
@@ -13,7 +14,18 @@ export default platform('zoho', {
       'accounts-server': z.string().url().optional(),
     }),
   }),
-  display: { name: 'Zoho', iconURI: icon, categories: ['crm'] },
+  display: {
+    name: 'Zoho',
+    logos: {
+      defaultURI: fullIcon ?? boxIcon,
+      fullURI: fullIcon,
+      boxURI: boxIcon,
+    },
+    colors: {
+      primary: '#F60014',
+    },
+    categories: ['crm'],
+  },
   constants,
   client,
   actions: {},

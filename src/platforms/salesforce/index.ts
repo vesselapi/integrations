@@ -1,6 +1,7 @@
 import { client } from '@/platforms/salesforce/client';
 import * as constants from '@/platforms/salesforce/constants';
-import { icon } from '@/platforms/salesforce/icon';
+import boxIcon from '@/platforms/salesforce/logos/box';
+import fullIcon from '@/platforms/salesforce/logos/full';
 import { auth, platform } from '@/sdk';
 import {
   SalesforceAccountType,
@@ -55,7 +56,14 @@ export default platform('salesforce', {
   }),
   display: {
     name: 'Salesforce',
-    iconURI: icon,
+    logos: {
+      defaultURI: fullIcon ?? boxIcon,
+      fullURI: fullIcon,
+      boxURI: boxIcon,
+    },
+    colors: {
+      primary: '#00a1e0',
+    },
     categories: ['crm'],
   },
   client,

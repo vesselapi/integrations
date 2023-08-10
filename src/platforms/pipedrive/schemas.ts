@@ -17,6 +17,7 @@ export type BatchReadObjectInput = {
 } & ListObjectInput;
 export type SearchObjectInput = {
   term: string;
+  fields?: string[];
   exact_match: 0 | 1;
 } & ListObjectInput;
 export type FindOutput<T> = {
@@ -195,6 +196,7 @@ export const pipedriveDealSchema = custom.addNativeToZodSchema(
     update_time: custom.date(),
     add_time: custom.date(),
     deleted: z.boolean().nullable(),
+    currency: z.string().nullable(),
     person_id: z.object({ value: z.number() }).nullable(),
     org_id: z.object({ value: z.number() }).nullable(),
     user_id: z.object({ value: z.number() }).nullable(),
