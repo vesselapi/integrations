@@ -11,7 +11,7 @@ export const hubspotCommonAssociationsSchema = z.enum(
   HUBSPOT_COMMON_ASSOCIATIONS,
 );
 export type HubspotCommonAssociations =
-  typeof HUBSPOT_COMMON_ASSOCIATIONS[number];
+  (typeof HUBSPOT_COMMON_ASSOCIATIONS)[number];
 
 export const HUBSPOT_TASK_STATUS_COMPLETED = 'COMPLETED';
 
@@ -94,7 +94,7 @@ export const listResponseSchema = (itemSchema: z.ZodSchema) =>
   });
 
 export const hubspotModuleSchema = z.enum(HUBSPOT_MODULES);
-export type HubspotModule = typeof HUBSPOT_MODULES[number];
+export type HubspotModule = (typeof HUBSPOT_MODULES)[number];
 
 export const hubspotIdSchema = z.union([z.string(), z.number()]);
 
@@ -547,13 +547,13 @@ export type ListResponseHubspotContactListContacts = z.infer<
 // Properties
 // -
 export const hubspotPropertyTypeSchema = z.enum(HUBSPOT_PROPERTY_TYPES);
-export type HubspotPropertyType = typeof HUBSPOT_PROPERTY_TYPES[number];
+export type HubspotPropertyType = (typeof HUBSPOT_PROPERTY_TYPES)[number];
 
 export const hubspotPropertyFieldTypeSchema = z.enum(
   HUBSPOT_PROPERTY_FIELD_TYPES,
 );
 export type HubspotPropertyFieldType =
-  typeof HUBSPOT_PROPERTY_FIELD_TYPES[number];
+  (typeof HUBSPOT_PROPERTY_FIELD_TYPES)[number];
 
 export const hubspotPropertyOptionSchema = z.object({
   label: z.string(),
