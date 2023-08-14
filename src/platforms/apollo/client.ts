@@ -8,21 +8,19 @@ import { objectify, shake } from 'radash';
 import { z } from 'zod';
 import { BASE_URL, DEFAULT_PAGE_SIZE } from './constants';
 import {
+  apolloAccount,
   ApolloAccountCreate,
   ApolloAccountUpdate,
+  apolloBootstrappedDataSchema,
+  apolloCall,
   ApolloCallCreate,
+  apolloContact,
   ApolloContactCreate,
+  apolloContactDeployability,
   ApolloContactUpdate,
   ApolloCreateCustomField,
   ApolloCreateSequence,
   ApolloCreateSequenceStep,
-  ApolloTaskBulkCompleteInput,
-  ApolloUpdateSequenceTemplate,
-  apolloAccount,
-  apolloBootstrappedDataSchema,
-  apolloCall,
-  apolloContact,
-  apolloContactDeployability,
   apolloCustomField,
   apolloEmailAccount,
   apolloEmailActivity,
@@ -35,7 +33,9 @@ import {
   apolloSequenceStep,
   apolloSequenceTemplate,
   apolloTask,
+  ApolloTaskBulkCompleteInput,
   apolloTaskBulkCompleteResponse,
+  ApolloUpdateSequenceTemplate,
   apolloUser,
 } from './schemas';
 
