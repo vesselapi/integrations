@@ -16,6 +16,7 @@ export default action(
       emailerCampaignId: z.string(),
       contactIds: z.array(z.string()),
       sendEmailFromEmailAccountId: z.string().optional(),
+      alwaysSequence: z.boolean().optional(),
     }),
     scopes: [],
   },
@@ -24,6 +25,7 @@ export default action(
       emailer_campaign_id: input.emailerCampaignId,
       contact_ids: input.contactIds,
       send_email_from_email_account_id: input.sendEmailFromEmailAccountId,
+      always_sequence: input.alwaysSequence,
     });
 
     return {

@@ -10,6 +10,7 @@ import updateAccount from './actions/accounts/update';
 
 import listActivities from './actions/activities/list';
 
+import checkDeployabilityContact from './actions/contacts/check-deployability';
 import createContact from './actions/contacts/create';
 import searchContacts from './actions/contacts/search';
 import updateContact from './actions/contacts/update';
@@ -77,6 +78,7 @@ export default platform('apollo', {
     createContact,
     searchContacts,
     updateContact,
+    checkDeployabilityContact,
 
     createCustomField,
     listCustomFields,

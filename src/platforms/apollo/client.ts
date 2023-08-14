@@ -16,6 +16,7 @@ import {
   ApolloCallCreate,
   apolloContact,
   ApolloContactCreate,
+  apolloContactDeployability,
   ApolloContactUpdate,
   ApolloCreateCustomField,
   ApolloCreateSequence,
@@ -165,6 +166,20 @@ export const client = {
         contact: apolloContact,
       }),
     })),
+    isDeployable: request(
+      ({
+        contact_ids,
+        emailer_campaign_id,
+      }: {
+        contact_ids: string[];
+        emailer_campaign_id: string;
+      }) => ({
+        url: `/emailer_campaigns/check_contacts_deployability`,
+        method: 'POST',
+        json: { contact_ids, emailer_campaign_id },
+        schema: apolloContactDeployability,
+      }),
+    ),
   },
   emails: {
     search: request(
@@ -252,11 +267,13 @@ export const client = {
         emailer_campaign_id,
         contact_ids,
         send_email_from_email_account_id,
+        always_sequence,
         $native,
       }: {
         emailer_campaign_id: string;
         contact_ids: string[];
         send_email_from_email_account_id?: string;
+        always_sequence?: boolean;
         $native?: Record<string, unknown>;
       }) => ({
         url: `/emailer_campaigns/${emailer_campaign_id}/add_contact_ids`,
@@ -265,6 +282,15 @@ export const client = {
           contact_ids,
           emailer_campaign_id,
           send_email_from_email_account_id,
+          ...(always_sequence
+            ? {
+                sequence_active_in_other_campaigns: true,
+                sequence_finished_in_other_campaigns: true,
+                sequence_no_email: true,
+                sequence_job_change: true,
+                sequence_same_company_in_same_campaign: true,
+              }
+            : {}),
           ...($native ?? {}),
         }),
         schema: z.object({
