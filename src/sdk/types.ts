@@ -256,7 +256,7 @@ export type PlatformPermissions = {
     resources: string[];
     auth: Auth;
   }) => Promise<{
-    error: string | null;
+    errorMessage: string | null;
     valid: boolean;
   }>;
 };

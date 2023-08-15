@@ -24,7 +24,7 @@ export const makePermissions = (): PlatformPermissions => {
           },
         });
         return {
-          error: USER_PERMISSIONS_API_DISABLED_ERROR_MESSAGE,
+          errorMessage: USER_PERMISSIONS_API_DISABLED_ERROR_MESSAGE,
           valid: false,
         };
       }
@@ -33,7 +33,7 @@ export const makePermissions = (): PlatformPermissions => {
       } = result;
       if (!first(records)?.permissionsApiEnabled) {
         return {
-          error: USER_PERMISSIONS_API_DISABLED_ERROR_MESSAGE,
+          errorMessage: USER_PERMISSIONS_API_DISABLED_ERROR_MESSAGE,
           valid: false,
         };
       }
@@ -47,7 +47,7 @@ export const makePermissions = (): PlatformPermissions => {
           if (
             !['INVALID_TYPE', 'OBJECT_NOT_FOUND', 'NOT_FOUND'].includes(error)
           ) {
-            console.error({
+            console.warn({
               message: `Unknown permissions error for ${objectType}`,
               error,
               metadata: {
@@ -79,11 +79,11 @@ export const makePermissions = (): PlatformPermissions => {
 
       const missingObjects = sift(await parallel(5, resources, check));
       if (missingObjects.length === 0) {
-        return { error: null, valid: true };
+        return { errorMessage: null, valid: true };
       }
 
       return {
-        error: MISSING_OBJECTS_ERROR_MESSAGE + missingObjects.join(', '),
+        errorMessage: MISSING_OBJECTS_ERROR_MESSAGE + missingObjects.join(', '),
         valid: false,
       };
     },
