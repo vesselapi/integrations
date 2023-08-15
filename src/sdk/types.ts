@@ -248,6 +248,19 @@ export type PlatformDisplayConfig = {
   categories: Category[];
 };
 
+export type PlatformPermissions = {
+  validate: ({
+    resources,
+    auth,
+  }: {
+    resources: string[];
+    auth: Auth;
+  }) => Promise<{
+    errorMessage: string | null;
+    valid: boolean;
+  }>;
+};
+
 export type PlatformConstants = Record<string, any>;
 export type Platform<
   TActions extends Record<string, Action<string, any, any>>,
@@ -270,6 +283,7 @@ export type Platform<
   constants: TConstants;
   actions: TActions;
   display: PlatformDisplayConfig;
+  permissions?: PlatformPermissions;
 };
 
 export type ActionFunction<

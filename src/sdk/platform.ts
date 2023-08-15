@@ -8,6 +8,7 @@ import {
   PlatformClient,
   PlatformConstants,
   PlatformDisplayConfig,
+  PlatformPermissions,
 } from './types';
 
 export type PlatformOptions<
@@ -40,6 +41,7 @@ export type PlatformOptions<
   actions: TActions;
   display: PlatformDisplayConfig;
   client: TClient;
+  permissions?: PlatformPermissions;
 };
 
 export const platform = <
@@ -110,6 +112,7 @@ export const platform = <
     id,
     client: options.client,
     auth: authConfigs,
+    permissions: options.permissions,
     display: options.display,
     rawActions: Object.values(options.actions),
     constants: options.constants,
