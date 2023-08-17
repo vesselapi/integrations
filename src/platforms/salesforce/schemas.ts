@@ -98,7 +98,7 @@ export const salesforceQueryResponse = z.object({
 // -
 export const salesforceUserPermissions = z
   .object({
-    permissionsApiEnabled: z.boolean().nullable(),
+    PermissionsApiEnabled: z.boolean().nullable(),
   })
   .partial();
 
