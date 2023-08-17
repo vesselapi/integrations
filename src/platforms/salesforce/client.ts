@@ -1,6 +1,6 @@
-import { Auth, HttpsUrl } from '@/sdk';
+import { Auth, HttpsUrl, IntegrationError } from '@/sdk';
 import { formatUpsertInputWithNative, makeRequestFactory } from '@/sdk/client';
-import { shake } from 'radash';
+import { guard, shake } from 'radash';
 import { z } from 'zod';
 import { formatQuery, salesforceQueryBuilder } from './actions/query-builder';
 import { SALESFORCE_API_VERSION } from './constants';
@@ -85,7 +85,7 @@ const request = makeRequestFactory(async (auth, options) => {
   } else {
     throw new Error('Salesforce only supports OAuth2 authentication');
   }
-});
+}, errorMapper);
 
 const query = {
   list: <T extends z.ZodType>({
@@ -775,3 +775,59 @@ export const client = {
   passthrough: request.passthrough(),
   fetch: request.fetch(),
 };
+
+const SalesforceErrorCodes = {
+  INVALID_TYPE: 'Insufficient Permissions',
+  INVALID_QUERY_FILTER_OPERATOR: 'Invalid value provided',
+  DUPLICATES_DETECTED: 'Duplicate CRM object(s)',
+  DUPLICATE_VALUE: 'Duplicate CRM object(s)',
+  REQUIRED_FIELD_MISSING: 'Required field(s) missing',
+  MALFORMED_ID:
+    'The supplied association id is either malformed or for the wrong object type',
+  INVALID_CROSS_REFERENCE_KEY: 'Invalid association id(s)',
+  INVALID_EMAIL_ADDRESS: 'Invalid email address',
+  OBJECT_NOT_FOUND:
+    'CRM object not found. Either it does not exist, or is not accessible',
+  NOT_FOUND:
+    'CRM object not found. Either it does not exist, or is not accessible',
+  INSUFFICIENT_ACCESS: 'Insufficient permissions or read-only',
+  INSUFFICIENT_ACCESS_OR_READONLY: 'Insufficient permissions or read-only',
+  INVALID_FIELD_FOR_INSERT_UPDATE: 'Field value(s) are invalid',
+  INVALID_FIELD: 'Field value(s) are invalid',
+  FIELD_INTEGRITY_EXCEPTION: 'Field value(s) are invalid',
+  JSON_PARSER_ERROR: 'Field value(s) are invalid',
+  INVALID_OR_NULL_FOR_RESTRICTED_PICKLIST: 'Field value(s) are invalid',
+  // Happens when someone tries to set an event attendee
+  // response status back to NEW for an existing invitee.
+  INVALID_STATUS: 'Field value(s) are invalid',
+  STORAGE_LIMIT_EXCEEDED:
+    'Storage limit exceeded for Salesforce instance. Delete some records before creating new ones',
+  CANNOT_INSERT_UPDATE_ACTIVATE_ENTITY: 'CRM object update failed',
+  // Happens when you try to delete a record
+  // that was already deleted.
+  ENTITY_IS_DELETED: 'CRM object is deleted',
+  // Happens when you try to perform a CRUD
+  // operation on an entity that is associated with
+  // an object you don't have access to.
+  INSUFFICIENT_ACCESS_ON_CROSS_REFERENCE_ENTITY:
+    'Insufficient permissions to access an object associated with this object',
+  STRING_TOO_LONG: 'String field value(s) are too long',
+};
+
+function errorMapper(error: any) {
+  const str = guard(() => JSON.stringify(error)) ?? `${error}`;
+  const errorKey =
+    (Object.keys(SalesforceErrorCodes).find((key) =>
+      str.includes(key),
+    ) as keyof typeof SalesforceErrorCodes) ?? null;
+
+  if (!errorKey) return;
+
+  return new IntegrationError(SalesforceErrorCodes[errorKey], {
+    type: 'client' as const,
+    cause: error,
+    // We don't want to alert on these because
+    // they are known issues/errors
+    alert: false,
+  });
+}

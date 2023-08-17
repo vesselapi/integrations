@@ -22,6 +22,12 @@ export type HttpErrorMeta = {
 export type ClientErrorMeta = {
   type: 'client';
   cause?: unknown;
+  /**
+   * If set to true this error will be treated
+   * as an issue that needs attention, causing
+   * an alert.
+   */
+  alert?: boolean;
 };
 
 export class IntegrationError extends Error {
