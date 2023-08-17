@@ -1,6 +1,6 @@
 import { Auth, HttpsUrl, IntegrationError } from '@/sdk';
 import { formatUpsertInputWithNative, makeRequestFactory } from '@/sdk/client';
-import { guard, shake } from 'radash';
+import { crush, guard, shake } from 'radash';
 import { z } from 'zod';
 import { formatQuery, salesforceQueryBuilder } from './actions/query-builder';
 import { SALESFORCE_API_VERSION } from './constants';
@@ -814,8 +814,23 @@ const SalesforceErrorCodes = {
   STRING_TOO_LONG: 'String field value(s) are too long',
 };
 
+const serializeError = (error: any) => {
+  return (
+    guard(() =>
+      JSON.stringify({
+        name: error.name,
+        message: error.message,
+        code: error.code,
+        stack: error.stack,
+        cause: error.cause,
+        ...crush(error),
+      }),
+    ) ?? `${error}`
+  );
+};
+
 function errorMapper(error: any) {
-  const str = guard(() => JSON.stringify(error)) ?? `${error}`;
+  const str = serializeError(error);
   const errorKey =
     (Object.keys(SalesforceErrorCodes).find((key) =>
       str.includes(key),
