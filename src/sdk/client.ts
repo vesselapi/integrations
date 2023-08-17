@@ -158,6 +158,11 @@ export const makeRequestFactory = (
       query: qs.List;
     }
   >,
+  /**
+   * Used to catch errors thrown during a request. Can
+   * optionally return a different error to throw instead
+   */
+  errorTransformer?: (error: any) => IntegrationError | undefined,
 ) => {
   function createRequest<
     TArgs extends {},
@@ -201,17 +206,24 @@ export const makeRequestFactory = (
               Accept: 'application/json',
             };
 
-        return (
-          options.method === 'GET' && options.json
-            ? _requestWithAxios
-            : _requestWithFetch
-        )({
-          options: {
-            ...options,
-            headers,
-          },
-          url,
-        });
+        try {
+          return (
+            options.method === 'GET' && options.json
+              ? _requestWithAxios
+              : _requestWithFetch
+          )({
+            options: {
+              ...options,
+              headers,
+            },
+            url,
+          });
+        } catch (err) {
+          // Run the error through the error transformer
+          // it may return a different error, if not we
+          // throw the original error
+          throw errorTransformer?.(err) ?? err;
+        }
       });
     const makeValidatedRequest = async (
       auth: Auth,
