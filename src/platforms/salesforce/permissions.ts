@@ -31,7 +31,7 @@ export const makePermissions = (): PlatformPermissions => {
       const {
         data: { records },
       } = result;
-      if (!first(records)?.permissionsApiEnabled) {
+      if (!first(records)?.PermissionsApiEnabled) {
         return {
           errorMessage: USER_PERMISSIONS_API_DISABLED_ERROR_MESSAGE,
           valid: false,
