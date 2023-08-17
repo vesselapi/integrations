@@ -24,7 +24,7 @@ export type FindOutput<T> = {
   data: T;
 };
 export type ListOutput<T> = {
-  data?: T[];
+  data?: T[] | null;
   additional_data?: {
     pagination?: { more_items_in_collection?: boolean; start?: number };
   };
@@ -39,7 +39,7 @@ export const listResponseSchema = <TOutput>(
   itemSchema: z.ZodType<TOutput, any, any>,
 ) =>
   z.object({
-    data: z.array(itemSchema).optional(),
+    data: z.array(itemSchema).optional().nullable(),
     additional_data: z
       .object({
         pagination: z
@@ -118,6 +118,8 @@ export const pipedriveAssociationId = z.object({
   value: z.number(),
   name: z.string(),
 });
+
+export const pipedriveStringOrNumber = () => z.union([z.string(), z.number()]);
 
 // -
 // Users
@@ -262,12 +264,12 @@ export const pipedriveNoteSchema = custom.addNativeToZodSchema(
     add_time: custom.date(),
     update_time: custom.date(),
     content: z.string().nullable(),
-    user_id: z.number().nullable(),
+    user_id: pipedriveStringOrNumber().nullable(),
     active_flag: z.boolean().nullable(),
-    deal_id: z.number().optional().nullable(),
-    person_id: z.number().optional().nullable(),
-    org_id: z.number().optional().nullable(),
-    lead_id: z.number().optional().nullable(),
+    deal_id: pipedriveStringOrNumber().optional().nullable(),
+    person_id: pipedriveStringOrNumber().optional().nullable(),
+    org_id: pipedriveStringOrNumber().optional().nullable(),
+    lead_id: pipedriveStringOrNumber().optional().nullable(),
   }),
 );
 export type PipedriveNote = z.infer<typeof pipedriveNoteSchema>;
