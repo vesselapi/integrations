@@ -839,7 +839,7 @@ function errorMapper(error: any) {
   if (!errorKey) return;
 
   return new IntegrationError(SalesforceErrorCodes[errorKey], {
-    type: 'client' as const,
+    type: 'client',
     cause: error,
     // We don't want to alert on these because
     // they are known issues/errors
