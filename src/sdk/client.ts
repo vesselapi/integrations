@@ -160,7 +160,7 @@ export const makeRequestFactory = (
   >,
   /**
    * Used to catch errors thrown during a request. Can
-   * optionally rethrow a different error.
+   * optionally return a different error to throw instead
    */
   errorTransformer?: (error: any) => IntegrationError | undefined,
 ) => {
