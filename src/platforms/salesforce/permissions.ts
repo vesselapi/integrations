@@ -1,4 +1,4 @@
-import { first, isArray, parallel, sift, tryit } from 'radash';
+import { first, parallel, sift, tryit } from 'radash';
 import { PlatformPermissions } from '../../sdk';
 import { client } from './client';
 import {
@@ -39,26 +39,23 @@ export const makePermissions = (): PlatformPermissions => {
       }
 
       const describe = async (objectType: SalesforceSupportedObjectType) => {
-        try {
-          return await client.sobjects.describe(auth, { objectType });
-        } catch (err) {
-          const errBody = (err as any).body;
-          const { error } = isArray(errBody) ? errBody[0] : errBody;
-          if (
-            !['INVALID_TYPE', 'OBJECT_NOT_FOUND', 'NOT_FOUND'].includes(error)
-          ) {
-            console.warn({
-              message: `Unknown permissions error for ${objectType}`,
-              error,
-              metadata: {
-                context: err,
-              },
-            });
-          }
-          return {
-            data: { createable: false, updateable: false, retrieveable: false },
-          };
+        const [error, result] = await tryit(client.sobjects.describe)(auth, {
+          objectType,
+        });
+        if (result) return result;
+        if (
+          !['INVALID_TYPE', 'OBJECT_NOT_FOUND', 'NOT_FOUND'].includes(
+            (error?.cause as any)?.body?.error,
+          )
+        ) {
+          console.warn('unknown salesforce error', {
+            objectType,
+            error,
+          });
         }
+        return {
+          data: { createable: false, updateable: false, retrieveable: false },
+        };
       };
 
       const check = async (objectType: string) => {
