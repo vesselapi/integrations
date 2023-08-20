@@ -30,6 +30,7 @@ export const outreachProspect = custom.addNativeToZodSchema(
       firstName: z.string().nullable(),
       lastName: z.string().nullable(),
       occupation: z.string().nullable(),
+      title: z.string().nullable(),
       addressCity: z.string().nullable(),
       addressCountry: z.string().nullable(),
       addressState: z.string().nullable(),
