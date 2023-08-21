@@ -58,6 +58,17 @@ const request = makeRequestFactory(async (auth, options) => {
 });
 
 export const client = {
+  auth: {
+    health: request(() => ({
+      url: `/auth/health`,
+      method: 'GET',
+      schema: z
+        .object({
+          is_logged_in: z.boolean().nullable(),
+        })
+        .partial(),
+    })),
+  },
   users: {
     search: request(
       ({
