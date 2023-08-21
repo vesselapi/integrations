@@ -42,6 +42,7 @@ import searchUsers from './actions/users/search';
 import searchLabels from './actions/labels/search';
 
 import searchPeople from './actions/people/search';
+import { permissions } from './permissions';
 
 export * as types from './schemas';
 export default platform('apollo', {
@@ -68,6 +69,7 @@ export default platform('apollo', {
   },
   constants,
   client,
+  permissions,
   actions: {
     createAccount,
     searchAccounts,
