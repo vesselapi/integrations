@@ -78,15 +78,17 @@ export const client = {
     list: request(
       ({
         cursor,
+        pageSize,
         filters,
       }: {
         cursor?: `${typeof BASE_URL}/${string}`;
+        pageSize?: string;
         filters?: { emails?: string; tags?: string; sequenceIds?: string };
       }) => ({
         url: cursor ?? `/prospects`,
         query: shake({
           count: 'false',
-          'page[size]': `${DEFAULT_PAGE_SIZE}`,
+          'page[size]': pageSize ?? `${DEFAULT_PAGE_SIZE}`,
           'filter[sequenceStates][sequence][id]': filters?.sequenceIds,
           ...(filters
             ? mapKeys<any, any, any>(
