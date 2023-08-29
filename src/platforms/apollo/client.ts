@@ -3,8 +3,9 @@ import {
   formatUrl,
   makeRequestFactory,
 } from '@/sdk/client';
+import { IntegrationError } from '@/sdk/error';
 import * as custom from '@/sdk/validators';
-import { objectify, shake } from 'radash';
+import { crush, guard, objectify, shake } from 'radash';
 import { z } from 'zod';
 import { BASE_URL, DEFAULT_PAGE_SIZE } from './constants';
 import {
@@ -55,7 +56,7 @@ const request = makeRequestFactory(async (auth, options) => {
         }
       : undefined,
   };
-});
+}, errorMapper);
 
 export const client = {
   auth: {
@@ -489,3 +490,38 @@ export const client = {
   },
   passthrough: request.passthrough(),
 };
+
+const ErrorCodes = {
+  '502: Bad gateway': 'Bad gateway, apollo api did not respond',
+};
+
+const serializeError = (error: any) => {
+  return (
+    guard(() =>
+      JSON.stringify({
+        name: error.name,
+        message: error.message,
+        code: error.code,
+        stack: error.stack,
+        cause: error.cause,
+        ...crush(error),
+      }),
+    ) ?? `${error}`
+  );
+};
+
+function errorMapper(error: any) {
+  const err = serializeError(error);
+  const errorKey =
+    Object.keys(ErrorCodes).find((key) => err.includes(key)) ?? null;
+
+  if (!errorKey) return;
+
+  return new IntegrationError(ErrorCodes[errorKey as keyof typeof ErrorCodes], {
+    type: 'client',
+    cause: error,
+    // We don't want to alert on these because
+    // they are known issues/errors
+    alert: false,
+  });
+}
