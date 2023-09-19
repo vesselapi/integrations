@@ -94,15 +94,13 @@ export const client = {
       ({
         q_organization_name,
         page,
-        perPage = DEFAULT_PAGE_SIZE,
       }: {
         q_organization_name?: string;
         page?: number;
-        perPage?: number;
       }) => ({
         url: `/accounts/search`,
         method: 'POST',
-        json: shake({ page, q_organization_name, per_page: perPage }),
+        json: shake({ page, q_organization_name }),
         schema: z.object({
           accounts: z.array(apolloAccount),
           pagination: apolloPaginatedResponse,
@@ -131,7 +129,6 @@ export const client = {
       ({
         q_keywords,
         page,
-        perPage = DEFAULT_PAGE_SIZE,
         contact_label_ids,
         emailer_campaign_ids,
         sort_by_field,
@@ -139,7 +136,6 @@ export const client = {
       }: {
         q_keywords?: string;
         page?: number;
-        perPage?: number;
         contact_label_ids?: string[];
         emailer_campaign_ids?: string[];
         sort_by_field?: string;
@@ -154,7 +150,6 @@ export const client = {
           emailer_campaign_ids,
           sort_by_field,
           sort_ascending,
-          per_page: perPage,
         }),
         schema: z.object({
           contacts: z.array(apolloContact),
@@ -198,15 +193,13 @@ export const client = {
       ({
         emailer_campaign_id,
         page,
-        perPage = DEFAULT_PAGE_SIZE,
       }: {
         emailer_campaign_id?: string;
         page?: number;
-        perPage?: number;
       }) => ({
         url: `/emailer_messages/search`,
         method: 'POST',
-        json: shake({ page, emailer_campaign_id, per_page: perPage }),
+        json: shake({ page, emailer_campaign_id }),
         schema: z.object({
           emailer_messages: z.array(apolloEmailMessage),
         }),
@@ -248,18 +241,10 @@ export const client = {
       ),
     })),
     search: request(
-      ({
-        q_keywords,
-        page,
-        perPage = DEFAULT_PAGE_SIZE,
-      }: {
-        q_keywords?: string;
-        page?: number;
-        perPage?: number;
-      }) => ({
+      ({ q_keywords, page }: { q_keywords?: string; page?: number }) => ({
         url: `/emailer_campaigns/search`,
         method: 'POST',
-        json: shake({ page, q_keywords, per_page: perPage }),
+        json: shake({ page, q_keywords }),
         schema: z.object({
           emailer_campaigns: z.array(apolloSequence),
           pagination: apolloPaginatedResponse,
@@ -377,13 +362,11 @@ export const client = {
         contact_label_ids,
         emailer_campaign_ids,
         page,
-        perPage = DEFAULT_PAGE_SIZE,
       }: {
         q_keywords?: string;
         contact_label_ids?: string[];
         emailer_campaign_ids?: string[];
         page?: number;
-        perPage?: number;
       }) => ({
         url: `/mixed_people/search`,
         method: 'POST',
@@ -392,7 +375,6 @@ export const client = {
           contact_label_ids,
           q_keywords,
           emailer_campaign_ids,
-          per_page: perPage,
         }),
         schema: z.object({
           contacts: z.array(apolloContact),
@@ -410,14 +392,12 @@ export const client = {
         page,
         sort_ascending,
         sort_by_field,
-        perPage = DEFAULT_PAGE_SIZE,
       }: {
         user_ids?: string[];
         emailer_campaign_ids?: string[];
         sort_ascending?: boolean;
         sort_by_field?: string;
         page?: number;
-        perPage?: number;
       }) => ({
         url: `/tasks/search`,
         method: 'POST',
@@ -428,7 +408,6 @@ export const client = {
           sort_by_field,
           open_factor_names: ['task_types'],
           show_suggestions: false,
-          per_page: perPage,
           emailer_campaign_ids,
         }),
         schema: z.object({
